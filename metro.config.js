@@ -3,11 +3,11 @@ module.exports = {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: false,
-      },
-    }),
+        inlineRequires: false
+      }
+    })
   },
   resolver: {
-    sourceExts: ['jsx', 'js', 'json', 'ts', 'tsx', 'png', 'jpeg', 'jpg']
+    sourceExts: ['jsx', 'js', 'json', 'png', 'jpeg', 'jpg']
   }
-};
+}
