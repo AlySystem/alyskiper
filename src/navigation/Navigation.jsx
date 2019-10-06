@@ -1,17 +1,16 @@
-import { createStackNavigator } from 'react-navigation-stack'
-import { createAppContainer } from 'react-navigation'
+import { createSwitchNavigator, createAppContainer } from 'react-navigation'
 
-// Import screens
-import HomeScreen from '../screens/Home/HomeScreen'
-import SignInScreen from '../screens/SignIn/SignInScreen'
+// Import stacks
+import PublicStack from './stacks/PublicStack'
+import PrivateStack from './stacks/PrivateStack'
 
-const STACKS = createStackNavigator({
-  Home: {
-    screen: HomeScreen
-  },
-  SignIn: {
-    screen: SignInScreen
-  }
-})
+// INITIAL SCREEN
+import StartupScreen from '../StartupScreen'
+
+const STACKS = createSwitchNavigator({
+  Public: PublicStack,
+  Private: PrivateStack,
+  Loader: StartupScreen
+}, { initialRouteName: 'Loader' })
 
 export default createAppContainer(STACKS)
