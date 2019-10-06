@@ -1,3 +1,16 @@
 import { createStackNavigator } from 'react-navigation-stack'
 
-const StackNavigation = createStackNavigator()
+// Import drawer
+import DrawerStack from '../drawer/DrawerStack'
+
+// Import screens
+
+const StackNavigation = createStackNavigator({
+  Home: {
+    screen: DrawerStack
+  }
+}, {
+
+})
+
+export default StackNavigation
