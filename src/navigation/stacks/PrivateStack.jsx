@@ -5,6 +5,7 @@ import DrawerStack from '../drawer/DrawerStack'
 
 // Import screens
 import CommerceScreen from '../../screens/Commerce/CommerceScreen'
+import ProfileCommerceScreen from '../../screens/Profile/ProfileCommerceScreen'
 
 const StackNavigation = createStackNavigator({
   Home: {
@@ -12,6 +13,9 @@ const StackNavigation = createStackNavigator({
   },
   Commerce: {
     screen: CommerceScreen
+  },
+  ProfileCommerce: {
+    screen: ProfileCommerceScreen
   }
 }, {
 
