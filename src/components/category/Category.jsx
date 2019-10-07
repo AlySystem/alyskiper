@@ -46,13 +46,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Lato-Bold',
-    fontSize: Theme.SIZES.small,
-    color: Theme.COLORS.colorParagraph
+    fontSize: Theme.SIZES.xsmall,
+    color: Theme.COLORS.colorParagraph,
+    textAlign: 'center'
   },
   image: {
-    width: 120,
-    height: 120,
-    resizeMode: 'cover'
+    width: 85,
+    height: 85,
+    resizeMode: 'cover',
+    borderRadius: 100
   }
 })
 

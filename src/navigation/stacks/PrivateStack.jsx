@@ -1,3 +1,7 @@
+import React from 'react'
+import {
+  StyleSheet
+} from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
 
 // Import drawer
@@ -7,18 +11,52 @@ import DrawerStack from '../drawer/DrawerStack'
 import CommerceScreen from '../../screens/Commerce/CommerceScreen'
 import ProfileCommerceScreen from '../../screens/Profile/ProfileCommerceScreen'
 
+// Import components
+import Picture from '../../components/picture/Picture'
+
+// Import image
+import logo from '../../../assets/images/logo.png'
+
+// Import theme
+import { Theme } from '../../constants/Theme'
+
+const navigationOptions = ({ navigation }) => {
+  return {
+    headerTintColor: Theme.COLORS.colorSecondary,
+    headerStyle: {
+      backgroundColor: Theme.COLORS.colorMainAlt
+    },
+    headerRight: (
+      <Picture
+        source={logo}
+        styles={styles.logo}
+      />
+    )
+  }
+}
+
 const StackNavigation = createStackNavigator({
   Home: {
     screen: DrawerStack
   },
   Commerce: {
-    screen: CommerceScreen
+    screen: CommerceScreen,
+    navigationOptions
   },
   ProfileCommerce: {
     screen: ProfileCommerceScreen
   }
 }, {
+  initialRouteName: 'Commerce'
+})
 
+const styles = StyleSheet.create({
+  logo: {
+    resizeMode: 'contain',
+    width: 130,
+    height: 40,
+    marginHorizontal: 20
+  }
 })
 
 export default StackNavigation

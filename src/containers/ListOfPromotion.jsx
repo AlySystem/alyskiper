@@ -6,21 +6,27 @@ import {
 } from 'react-native'
 
 // Import components
-import Category from '../components/category/Category'
+import Promotion from '../components/promotion/Promotion'
+import Title from '../components/title/Title'
 
 // Import theme
 import { Theme } from '../constants/Theme'
 
-const ListOfCategory = props => {
+const ListOfPromotion = props => {
   return (
     <View style={styles.container}>
+      <Title
+        title='Promociones'
+        styles={styles.title}
+      />
       <ScrollView
         horizontal
         keyboardShouldPersistTaps='always'
       >
-        {[1, 2, 3, 4, 5, 6].map((item, index) => (
-          <Category
+        {[1, 2, 3, 4, 5].map((item, index) => (
+          <Promotion
             key={index}
+            source={{ uri: 'https://irt-cdn.multiscreensite.com/faded135fdb94f2580e44d784d28bfea/dms3rep/multi/339.jpg' }}
           />
         ))}
       </ScrollView>
@@ -29,9 +35,6 @@ const ListOfCategory = props => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20
-  },
   title: {
     color: Theme.COLORS.colorSecondary,
     fontSize: Theme.SIZES.title,
@@ -39,4 +42,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ListOfCategory
+export default ListOfPromotion

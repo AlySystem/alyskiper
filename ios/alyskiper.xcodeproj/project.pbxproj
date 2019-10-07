@@ -33,6 +33,7 @@
 		8FBE7B98009745C3B3F21A29 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD72742D22C54C708FF5BF9A /* Octicons.ttf */; };
 		2DF36F366BB544B7B3D6B9D5 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92A87FC3DC5A4C799172CFD0 /* SimpleLineIcons.ttf */; };
 		B591CCD74B0D42EA9FAFC5A6 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC6AE52B5919418CB91F0D15 /* Zocial.ttf */; };
+		20A8CFDFDCB34F10AAF46C64 /* matura-mt-script-capitals_[allfont.es].ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48E22F68FE3F4C54A3AF7879 /* matura-mt-script-capitals_[allfont.es].ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		CD72742D22C54C708FF5BF9A /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		92A87FC3DC5A4C799172CFD0 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		FC6AE52B5919418CB91F0D15 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		48E22F68FE3F4C54A3AF7879 /* matura-mt-script-capitals_[allfont.es].ttf */ = {isa = PBXFileReference; name = "matura-mt-script-capitals_[allfont.es].ttf"; path = "../assets/fonts/matura-mt-script-capitals_[allfont.es].ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +216,7 @@
 				CD72742D22C54C708FF5BF9A /* Octicons.ttf */,
 				92A87FC3DC5A4C799172CFD0 /* SimpleLineIcons.ttf */,
 				FC6AE52B5919418CB91F0D15 /* Zocial.ttf */,
+				48E22F68FE3F4C54A3AF7879 /* matura-mt-script-capitals_[allfont.es].ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				8FBE7B98009745C3B3F21A29 /* Octicons.ttf in Resources */,
 				2DF36F366BB544B7B3D6B9D5 /* SimpleLineIcons.ttf in Resources */,
 				B591CCD74B0D42EA9FAFC5A6 /* Zocial.ttf in Resources */,
+				20A8CFDFDCB34F10AAF46C64 /* matura-mt-script-capitals_[allfont.es].ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
