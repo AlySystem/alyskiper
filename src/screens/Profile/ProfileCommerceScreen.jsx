@@ -21,13 +21,13 @@ const ProfileCommerceScreen = props => {
           sourceImage={{ uri: 'https://userscontent2.emaze.com/images/50a47c7f-0ab5-4038-af60-a822eec00dd8/652296452549ce574b272fcd57c1fcfc.jpg' }}
         />
         <View style={{ paddingVertical: 8 }} />
-        <View style={styles.containerTitle}>
-          <Text style={styles.name}>McDonals</Text>
+        <View style={styles.container}>
+          <Text style={styles.name}>McDonalds</Text>
           <Text style={styles.description}>Hamburguesas - postres</Text>
         </View>
         <View style={styles.containerHour}>
           <Text style={styles.hourTitle}>Horarios</Text>
-          <Text style={styles.hour}>11:00 am / 6:00 pm</Text>
+          <Text style={styles.description}>11:00 am / 6:00 pm</Text>
         </View>
       </View>
     </Background>
@@ -39,18 +39,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.5)'
   },
-  containerTitle: {
+  container: {
+    paddingHorizontal: 10
+  },
+  containerHour: {
+    paddingVertical: 15,
     paddingHorizontal: 10
   },
   name: {
     color: Theme.COLORS.colorParagraph,
-    fontSize: Theme.SIZES.title,
+    fontSize: Theme.SIZES.h1,
     fontFamily: 'Lato-Bold'
   },
   description: {
     color: Theme.COLORS.colorParagraphSecondary,
     fontSize: Theme.SIZES.small,
-    fontFamily: 'Lato-Regular'
+    fontFamily: 'Lato-Regular',
+    paddingVertical: 5
+  },
+  hourTitle: {
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.normal,
+    fontFamily: 'Lato-Bold'
   }
 })
 
