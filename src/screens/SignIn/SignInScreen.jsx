@@ -10,6 +10,7 @@ import Background from '../../components/background/Background'
 import Picture from '../../components/picture/Picture'
 import Title from '../../components/title/Title'
 import InputControl from '../../components/input/InputControl'
+import IconButton from '../../components/button/IconButton'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -60,6 +61,14 @@ const HomeScreen = () => {
               iconName='lock'
             />
           </View>
+          <View style={styles.containerButton}>
+            <IconButton
+              message='INICIAR SESION'
+              isActiveIcon
+              iconName='person'
+              stylesMessage={styles.message}
+            />
+          </View>
         </ScrollView>
       </View>
     </Background>
@@ -81,6 +90,17 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 10
+  },
+  containerButton: {
+    width: '100%',
+    paddingVertical: 10,
+    alignItems: 'center'
+  },
+  message: {
+    color: '#fff',
+    fontSize: Theme.SIZES.small,
+    fontFamily: 'Lato-Bold',
+    marginLeft: 8
   }
 })
 
