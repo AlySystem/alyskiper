@@ -14,6 +14,9 @@ import Picture from '../picture/Picture'
 import logo from '../../../assets/images/img-logo-alycoin.png'
 import image from '../../../assets/images/img-background-alt.png'
 
+// Import theme
+import { Theme } from '../../constants/Theme'
+
 const Card = props => {
   return (
     <TouchableOpacity
@@ -40,33 +43,46 @@ const Card = props => {
 }
 
 Card.defaultProps = {
-  sourceLogo: ,
-  sourceImage: ,
+  sourceLogo: logo,
+  sourceImage: image,
   name: 'Undefined',
   description: 'Undefined'
 }
 
 const styles = StyleSheet.create({
   container: {
-
+    paddingHorizontal: 10,
+    marginBottom: 20
   },
   containerHeader: {
-
+    flexDirection: 'row',
+    paddingVertical: 5,
+    alignItems: 'center'
   },
   logo: {
-
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+    marginRight: 15
   },
   containerTitle: {
-
+    justifyContent: 'space-between'
   },
   name: {
-
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.small
   },
   description: {
-
+    color: Theme.COLORS.colorParagraphSecondary,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.xsmall
   },
   image: {
-
+    width: '100%',
+    maxWidth: 420,
+    height: 260,
+    borderRadius: 10
   }
 })
 

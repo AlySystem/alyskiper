@@ -44,7 +44,8 @@ const StackNavigation = createStackNavigator({
     navigationOptions
   },
   ProfileCommerce: {
-    screen: ProfileCommerceScreen
+    screen: ProfileCommerceScreen,
+    navigationOptions
   }
 }, {
   initialRouteName: 'Commerce'
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: 130,
     height: 40,
-    marginHorizontal: 20
+    marginHorizontal: 10
   }
 })
 
