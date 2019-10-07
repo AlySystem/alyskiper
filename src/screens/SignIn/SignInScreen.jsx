@@ -26,48 +26,50 @@ const HomeScreen = () => {
           contentContainerStyle={styles.scrollView}
           keyboardShouldPersistTaps='always'
         >
-          <Picture />
-          <Title
-            title='SING IN'
-            styles={styles.title}
-          />
-          <View style={{ paddingVertical: 8 }} />
-          <View style={styles.container}>
-            <InputControl
-              stylesInput={styles.stylesInput}
-              value={email}
-              placeholder='Correo'
-              placeholderTextColor={Theme.COLORS.colorParagraph}
-              onChangeText={value => setEmail(value)}
-              keyboardType='email-address'
-              isActiveButton
-              isActiveIcon
-              iconSize={25}
-              iconColor={Theme.COLORS.colorSecondary}
-              iconName='mail'
+          <View style={styles.layout}>
+            <Picture />
+            <Title
+              title='SING IN'
+              styles={styles.title}
             />
+            <View style={{ paddingVertical: 8 }} />
+            <View style={styles.container}>
+              <InputControl
+                stylesInput={styles.stylesInput}
+                value={email}
+                placeholder='Correo'
+                placeholderTextColor={Theme.COLORS.colorParagraph}
+                onChangeText={value => setEmail(value)}
+                keyboardType='email-address'
+                isActiveButton
+                isActiveIcon
+                iconSize={25}
+                iconColor={Theme.COLORS.colorSecondary}
+                iconName='mail'
+              />
 
-            <InputControl
-              stylesInput={styles.stylesInput}
-              value={password}
-              placeholder='Contraseña'
-              placeholderTextColor={Theme.COLORS.colorParagraph}
-              onChangeText={value => setPassword(value)}
-              secureTextEntry
-              isActiveButton
-              isActiveIcon
-              iconSize={25}
-              iconColor={Theme.COLORS.colorSecondary}
-              iconName='lock'
-            />
-          </View>
-          <View style={styles.containerButton}>
-            <IconButton
-              message='INICIAR SESION'
-              isActiveIcon
-              iconName='person'
-              stylesMessage={styles.message}
-            />
+              <InputControl
+                stylesInput={styles.stylesInput}
+                value={password}
+                placeholder='Contraseña'
+                placeholderTextColor={Theme.COLORS.colorParagraph}
+                onChangeText={value => setPassword(value)}
+                secureTextEntry
+                isActiveButton
+                isActiveIcon
+                iconSize={25}
+                iconColor={Theme.COLORS.colorSecondary}
+                iconName='lock'
+              />
+            </View>
+            <View style={styles.containerButton}>
+              <IconButton
+                message='INICIAR SESION'
+                isActiveIcon
+                iconName='person'
+                stylesMessage={styles.message}
+              />
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -83,13 +85,20 @@ const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1
   },
+  layout: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    flex: 1
+  },
   title: {
     fontFamily: 'Lato-Regular',
     color: Theme.COLORS.colorParagraph,
     fontSize: Theme.SIZES.title
   },
   container: {
-    paddingHorizontal: 10
+    paddingHorizontal: 20,
+    width: '100%'
   },
   containerButton: {
     width: '100%',
