@@ -13,6 +13,10 @@ const Title = props => {
   )
 }
 
+Title.defaultProps = {
+  title: 'Undefined'
+}
+
 const styles = StyleSheet.create({
   title: {
     color: Theme.COLORS.colorParagraph,
