@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: 'absolute',
-    top: 12,
+    top: 13,
     left: 18
   },
   containerError: {
