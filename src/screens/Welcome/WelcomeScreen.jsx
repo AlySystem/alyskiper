@@ -22,7 +22,8 @@ const WelcomeScreen = props => {
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,.5)'
   }
 })
 

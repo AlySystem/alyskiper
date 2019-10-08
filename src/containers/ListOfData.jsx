@@ -1,17 +1,27 @@
 import React from 'react'
 import {
   View,
+  Text,
+  Dimensions,
   StyleSheet
 } from 'react-native'
 import Swiper from 'react-native-web-swiper'
 
 // Import components
 import Picture from '../components/picture/Picture'
+import Title from '../components/title/Title'
+
+// Import theme
+import { Theme } from '../constants/Theme'
 
 // Import image
 import image1 from '../../assets/images/img-swiper-1.png'
 import image2 from '../../assets/images/img-swiper-2.png'
 import image3 from '../../assets/images/img-swiper-3.png'
+
+import logo from '../../assets/images/img-logo-skiper.png'
+
+const { width, height } = Dimensions.get('window')
 
 const items = [
   {
@@ -36,12 +46,30 @@ const items = [
 
 const ListOfData = props => {
   return (
-    <Swiper>
+    <Swiper
+      controlsProps={{
+        prevTitle: '',
+        nextTitle: ''
+      }}
+    >
       {items.map(item => (
-        <View key={item.key}>
+        <View
+          style={styles.swiper}
+          key={item.key}
+        >
+          <Picture
+            source={logo}
+            styles={styles.logo}
+          />
+          <View style={{ paddingVertical: 12 }} />
           <Picture
             source={item.image}
           />
+          <Title
+            title={item.title}
+            styles={styles.title}
+          />
+          <Text style={styles.description}>{item.description}</Text>
         </View>
       ))}
     </Swiper>
@@ -49,7 +77,28 @@ const ListOfData = props => {
 }
 
 const styles = StyleSheet.create({
-
+  swiper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10
+  },
+  logo: {
+    resizeMode: 'contain',
+    width: width * 0.5,
+    height: height * 0.15
+  },
+  title: {
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.subTitle
+  },
+  description: {
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.small,
+    textAlign: 'center'
+  }
 })
 
 export default ListOfData
