@@ -15,6 +15,7 @@ import { Theme } from '../../constants/Theme'
 
 const InputControl = props => {
   const { isActiveButton, isActiveIcon, isValid, errorText, value, setValue } = props
+
   return (
     <View style={styles.container}>
       <Input
