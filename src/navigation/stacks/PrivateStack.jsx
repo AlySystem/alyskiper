@@ -55,7 +55,7 @@ const StackNavigation = createStackNavigator({
     }
   }
 }, {
-  initialRouteName: 'Transport'
+  initialRouteName: 'Home'
 })
 
 const styles = StyleSheet.create({
