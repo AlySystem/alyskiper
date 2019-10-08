@@ -14,7 +14,7 @@ import Input from './Input'
 import { Theme } from '../../constants/Theme'
 
 const InputControl = props => {
-  const { isActiveButton, isActiveIcon, isValid, errorText, value, setValue } = props
+  const { isActiveButton, isActiveIcon, isValid, errorText, value = '', setValue } = props
 
   return (
     <View style={styles.container}>
@@ -34,7 +34,7 @@ const InputControl = props => {
           iconName={props.iconName}
         />
       )}
-      {isActiveButton && (
+      {(isActiveButton && value.length > 0) && (
         <Button
           iconName='cancel'
           iconSize={20}

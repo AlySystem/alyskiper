@@ -37,6 +37,7 @@ const HomeScreen = () => {
               <InputControl
                 stylesInput={styles.stylesInput}
                 value={email}
+                setValue={setEmail}
                 placeholder='Correo'
                 placeholderTextColor={Theme.COLORS.colorParagraph}
                 onChangeText={value => setEmail(value)}
@@ -51,6 +52,7 @@ const HomeScreen = () => {
               <InputControl
                 stylesInput={styles.stylesInput}
                 value={password}
+                setValue={setPassword}
                 placeholder='Contraseña'
                 placeholderTextColor={Theme.COLORS.colorParagraph}
                 onChangeText={value => setPassword(value)}

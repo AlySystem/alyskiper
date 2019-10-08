@@ -10,6 +10,7 @@ import DrawerStack from '../drawer/DrawerStack'
 // Import screens
 import CommerceScreen from '../../screens/Commerce/CommerceScreen'
 import ProfileCommerceScreen from '../../screens/Profile/ProfileCommerceScreen'
+import TransportScreen from '../../screens/Transport/TransportScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -46,9 +47,15 @@ const StackNavigation = createStackNavigator({
   ProfileCommerce: {
     screen: ProfileCommerceScreen,
     navigationOptions
+  },
+  Transport: {
+    screen: TransportScreen,
+    navigationOptions: {
+      header: null
+    }
   }
 }, {
-  initialRouteName: 'Commerce'
+  initialRouteName: 'Transport'
 })
 
 const styles = StyleSheet.create({
