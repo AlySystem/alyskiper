@@ -3,9 +3,9 @@ import {
   View,
   Text,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  ScrollView
 } from 'react-native'
-import Swiper from 'react-native-web-swiper'
 
 // Import components
 import Picture from '../components/picture/Picture'
@@ -39,18 +39,17 @@ const items = [
   {
     key: 3,
     title: 'Gana con Skiper',
-    description: 'Con Skiper podras ganar Alytochi al viajar con nosotros y satochi al pagar la aplicacion con tus amigos',
+    description: 'Con Skiper podras ganar Alytochi al viajar con nosotros y satochi al pagar la aplicacion con tus amigos.',
     image: image3
   }
 ]
 
 const ListOfData = props => {
   return (
-    <Swiper
-      controlsProps={{
-        prevTitle: '',
-        nextTitle: ''
-      }}
+    <ScrollView
+      horizontal
+      pagingEnabled
+      scrollIndicatorInsets={{ top: 10, left: 10, bottom: 10, right: 10 }}
     >
       {items.map(item => (
         <View
@@ -72,16 +71,22 @@ const ListOfData = props => {
           <Text style={styles.description}>{item.description}</Text>
         </View>
       ))}
-    </Swiper>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'blue'
+  },
+  scrollView: {
+
+  },
   swiper: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    width: width
   },
   logo: {
     resizeMode: 'contain',
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: Theme.COLORS.colorParagraph,
-    fontFamily: 'Lato-Bold',
+    fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
     textAlign: 'center'
   }
