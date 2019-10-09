@@ -1,6 +1,7 @@
 import React from 'react'
 import {
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
 
@@ -14,6 +15,7 @@ import TransportScreen from '../../screens/Transport/TransportScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
+import Icon from '../../components/icon/Icon'
 
 // Import image
 import logo from '../../../assets/images/logo.png'
@@ -38,7 +40,31 @@ const navigationOptions = ({ navigation }) => {
 
 const StackNavigation = createStackNavigator({
   Home: {
-    screen: DrawerStack
+    screen: DrawerStack,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: {
+          backgroundColor: Theme.COLORS.colorMainAlt
+        },
+        headerLeft: (
+          <Picture
+            source={logo}
+            styles={styles.image}
+          />
+        ),
+        headerRight: (
+          <TouchableOpacity
+            onPress={() => navigation.toggleDrawer()}
+            style={styles.icon}
+          >
+            <Icon
+              iconName='menu'
+              iconSize={30}
+            />
+          </TouchableOpacity>
+        )
+      }
+    }
   },
   Commerce: {
     screen: CommerceScreen,
@@ -64,6 +90,16 @@ const styles = StyleSheet.create({
     width: 130,
     height: 40,
     marginHorizontal: 10
+  },
+  image: {
+    resizeMode: 'contain',
+    width: 130,
+    height: 40,
+    marginHorizontal: 20
+  },
+  icon: {
+    paddingHorizontal: 20,
+    paddingVertical: 5
   }
 })
 
