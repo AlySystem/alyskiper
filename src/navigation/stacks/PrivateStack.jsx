@@ -95,10 +95,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: 130,
     height: 40,
-    marginHorizontal: 20
+    marginHorizontal: 10
   },
   icon: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 5
   }
 })

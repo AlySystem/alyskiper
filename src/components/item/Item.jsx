@@ -11,8 +11,8 @@ import { withNavigation } from 'react-navigation'
 import Logo from '../../../assets/images/img-logo-alycoin.png'
 
 // Import component
-import Icon from '../Icon/Icon'
-import Picture from '../Picture/Picture'
+import Icon from '../icon/Icon'
+import Picture from '../picture/Picture'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -62,8 +62,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingLeft: 20,
-    paddingRight: 10,
+    paddingHorizontal: 10,
     paddingVertical: 15
   },
   content: {},

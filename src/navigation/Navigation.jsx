@@ -10,7 +10,7 @@ import StartupScreen from '../StartupScreen'
 const STACKS = createSwitchNavigator({
   Public: PublicStack,
   Private: PrivateStack,
-  Loader: StartupScreen
+  Startup: StartupScreen
 }, { initialRouteName: 'Private' })
 
 export default createAppContainer(STACKS)

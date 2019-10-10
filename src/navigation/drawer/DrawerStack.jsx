@@ -9,6 +9,9 @@ import { Theme } from '../../constants/Theme'
 // Import screen
 import HomeScreen from '../../screens/Home/HomeScreen'
 
+// Import containers
+import ListOfItems from '../../containers/ListOfItems'
+
 const { width } = Dimensions.get('window')
 
 const DrawerStack = createDrawerNavigator({
@@ -16,7 +19,7 @@ const DrawerStack = createDrawerNavigator({
     screen: HomeScreen
   }
 }, {
-  // contentComponent: ListOfItems,
+  contentComponent: ListOfItems,
   drawerBackgroundColor: Theme.COLORS.colorMainAlt,
   drawerWidth: width * 0.9
 })
