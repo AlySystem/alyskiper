@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,
   StyleSheet
 } from 'react-native'
+import moment from 'moment'
 
 // Import components
 import Background from './components/background/Background'
@@ -13,7 +14,35 @@ import Loader from './components/loader/Loader'
 // Import theme
 import { Theme } from './constants/Theme'
 
+// Import utils
+import { keys } from './utils/keys'
+import { getAsyncStorage } from './utils/AsyncStorage'
+import { decodeJwt } from './utils/Token'
+
 const StartupScreen = props => {
+  const { navigate } = props.navigation
+  const [title] = useState(props.navigation.getParam('message', ' '))
+
+  useEffect(() => {
+    const trySignIn = async () => {
+      const userData = await getAsyncStorage(keys.asyncStorageKey)
+
+      if (!userData) {
+        navigate('Welcome')
+        return
+      }
+      const userParse = JSON.parse(userData)
+      const payloadToken = decodeJwt(userParse.userToken)
+      if (payloadToken.exp < moment().unix()) {
+        navigate('Welcome')
+        return
+      }
+
+      navigate('Home')
+    }
+    trySignIn()
+  }, [])
+
   return (
     <Background>
       <View style={styles.screen}>
@@ -21,10 +50,12 @@ const StartupScreen = props => {
           <Picture />
           <View style={{ paddingVertical: 5 }} />
           <Loader />
-          <Title
-            title='Cargando...'
-            styles={styles.title}
-          />
+          {title && (
+            <Title
+              title={title}
+              styles={styles.title}
+            />
+          )}
         </View>
       </View>
     </Background>
