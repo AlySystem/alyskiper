@@ -1,19 +1,13 @@
 import React from 'react'
 import {
-  ScrollView,
-  SafeAreaView,
   StyleSheet,
-  View,
-  TouchableOpacity,
-  Text
+  View
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
 
 // Import components
 import Item from '../components/item/Item'
-// import Profile from '../components/Profile/Profile'
-import Icon from '../components/icon/Icon'
 
 // Import theme
 import { Theme } from '../constants/Theme'
@@ -66,62 +60,48 @@ const ListOfItems = (props) => {
 
   const handleLogout = async () => {
     await removeAsyncStorage(keys.asyncStorageKey)
-    navigate('Loader', { message: 'Saliendo...' })
+    navigate('Startup', { message: 'Saliendo...' })
   }
 
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <SafeAreaView
-        style={styles.container}
-        forceInset={{ top: 'always', horizontal: 'never' }}
-      >
-        {/* <Profile onPress={() => navigate('EditAccount')} /> */}
-        <View style={{ paddingVertical: 10 }} />
+    <View style={styles.container}>
+      <View style={styles.containerFixed}>
         {items.map(item => (
           <Item
             key={item.key}
             routeName={item.routeName}
             name={item.name}
             icon={item.icon}
+            onPress={() => navigate(item.routeName)}
           />
         ))}
-
-        <TouchableOpacity
-          onPress={handleLogout}
-          style={styles.containerItem}
-        >
-          <View style={styles.left}>
-            <Icon
-              iconName='reply-all'
-              iconSize={28}
-              styles={styles.icon}
-            />
-            <View style={styles.content}>
-              <Text style={styles.name}>Cerrar sesion</Text>
-            </View>
-          </View>
-          <Icon
-            iconName='chevron-right'
-            iconSize={30}
+        <View style={styles.containerItems}>
+          <Item
+            onPress={handleLogout}
+            name='Cerrar sesion'
+            icon='reply-all'
           />
-        </TouchableOpacity>
-
-      </SafeAreaView>
-    </ScrollView>
+        </View>
+      </View>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between'
-  },
-  containerItem: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 15
+    position: 'relative'
+  },
+  containerItems: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%'
+  },
+  containerFixed: {
+    flex: 1,
+    position: 'relative'
   },
   left: {
     flexDirection: 'row',

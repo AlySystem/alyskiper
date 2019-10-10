@@ -14,18 +14,30 @@ import Input from './Input'
 import { Theme } from '../../constants/Theme'
 
 const InputControl = props => {
-  const { isActiveButton, isActiveIcon, isValid, errorText, value = '', setValue } = props
+  const { isActiveButton, isActiveIcon, isValid, errorText, value = '', setValue, secureTextEntry } = props
 
   return (
     <View style={styles.container}>
-      <Input
-        stylesInput={props.stylesInput}
-        value={value}
-        placeholder={props.placeholder}
-        placeholderTextColor={props.placeholderTextColor}
-        onChangeText={props.onChangeText}
-        keyboardType={props.keyboardType}
-      />
+      {secureTextEntry ? (
+        <Input
+          stylesInput={props.stylesInput}
+          value={value}
+          placeholder={props.placeholder}
+          placeholderTextColor={props.placeholderTextColor}
+          onChangeText={props.onChangeText}
+          keyboardType={props.keyboardType}
+          secureTextEntry
+        />
+      ) : (
+        <Input
+          stylesInput={props.stylesInput}
+          value={value}
+          placeholder={props.placeholder}
+          placeholderTextColor={props.placeholderTextColor}
+          onChangeText={props.onChangeText}
+          keyboardType={props.keyboardType}
+        />
+      )}
       {isActiveIcon && (
         <Icon
           styles={styles.icon}

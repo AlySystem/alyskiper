@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity
 } from 'react-native'
-import { withNavigation } from 'react-navigation'
 
 // Import image
 import Logo from '../../../assets/images/img-logo-alycoin.png'
@@ -18,11 +17,9 @@ import Picture from '../picture/Picture'
 import { Theme } from '../../constants/Theme'
 
 const Item = (props) => {
-  const { navigate } = props.navigation
-
   return (
     <TouchableOpacity
-      onPress={() => navigate(props.routeName)}
+      onPress={props.onPress}
       style={props.styles || styles.container}
     >
       <View style={styles.left}>
@@ -65,7 +62,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 15
   },
-  content: {},
   left: {
     flexDirection: 'row',
     alignItems: 'center'
@@ -92,4 +88,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default withNavigation(Item)
+export default Item
