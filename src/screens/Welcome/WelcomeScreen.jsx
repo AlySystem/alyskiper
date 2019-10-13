@@ -34,7 +34,7 @@ const WelcomeScreen = props => {
               isActiveIcon
               stylesButton={styles.button}
               iconName='person-add'
-              onPress={() => navigate('SignUp')}
+              onPress={() => navigate('VerifyPhone')}
             />
           </View>
         </View>

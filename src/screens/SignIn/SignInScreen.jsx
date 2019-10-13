@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView
 } from 'react-native'
+import * as Animatable from 'react-native-animatable'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -27,11 +28,21 @@ const HomeScreen = () => {
           keyboardShouldPersistTaps='always'
         >
           <View style={styles.layout}>
-            <Picture />
-            <Title
-              title='SING IN'
-              styles={styles.title}
-            />
+            <Animatable.View
+              animation='zoomIn'
+              iterationCount={1}
+            >
+              <Picture />
+            </Animatable.View>
+            <Animatable.View
+              animation='fadeInLeft'
+              iterationCount={1}
+            >
+              <Title
+                title='SING IN'
+                styles={styles.title}
+              />
+            </Animatable.View>
             <View style={{ paddingVertical: 8 }} />
             <View style={styles.container}>
               <InputControl

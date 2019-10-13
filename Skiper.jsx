@@ -6,7 +6,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import Navigation from './src/navigation/Navigation'
 
 const client = new ApolloClient({
-  uri: 'https://cryptic-chamber-25225.herokuapp.com/graphql'
+  uri: 'https://backend-alysystem-v2.herokuapp.com/graphql'
 })
 
 const Skiper = () => {

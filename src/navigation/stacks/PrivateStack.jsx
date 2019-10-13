@@ -81,7 +81,7 @@ const StackNavigation = createStackNavigator({
     }
   }
 }, {
-  initialRouteName: 'Home'
+  // initialRouteName: 'Transport'
 })
 
 const styles = StyleSheet.create({
