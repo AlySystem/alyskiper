@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import {
   View,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  Dimensions
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import { showMessage } from 'react-native-flash-message'
@@ -26,48 +27,88 @@ import { setAsyncStorage } from '../../utils/AsyncStorage'
 import { keys } from '../../utils/keys'
 import { decodeJwt } from '../../utils/Token'
 
+const { height } = Dimensions.get('window')
+
 const SignInScreen = props => {
   const { navigate } = props.navigation
   const [SignIn, { loading }] = useMutation(SIGNIN)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleOnSubmit = async () => {
-    const result = await SignIn({ variables: { input: { email, password } } })
+  const [emailIsValid, setEmailIsValid] = useState({
+    isValid: false,
+    message: '',
+    errorStyle: true
+  })
 
-    const { error } = result.data.signin
-    if (error !== null) {
-      showMessage({
-        message: 'Error',
-        description: error.message,
-        backgroundColor: 'red',
-        color: '#fff',
-        icon: 'danger',
-        titleStyle: {
-          fontFamily: 'Lato-Bold'
-        },
-        textStyle: {
-          fontFamily: 'Lato-Regular'
-        }
-      })
-      return
+  const [passwordIsValid, setPasswordIsValid] = useState({
+    isValid: false,
+    message: '',
+    errorStyle: true
+  })
+
+  const handleOnEmail = value => {
+    const emailPattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
+
+    if (!value) {
+      setEmailIsValid({ isValid: false, message: 'El correo es requerido.', errorStyle: false })
+    } else if (!emailPattern.test(value)) {
+      setEmailIsValid({ isValid: false, message: 'El correo es invalido.', errorStyle: false })
+    } else {
+      setEmailIsValid({ isValid: true, message: '', errorStyle: true })
     }
-    const { data } = result.data.signin
-    if (data !== null) {
-      const userToken = decodeJwt(data.token)
-      const userId = userToken.sub
-      const payload = {
-        auth: true,
-        userToken: data.token,
-        userId: userId,
-        firstName: data.firstname,
-        lastName: data.lastname,
-        username: data.username,
-        email: data.email,
-        phoneNumber: data.phone_number
+    setEmail(value.toLowerCase())
+  }
+
+  const handleOnPassword = value => {
+    if (!value) {
+      setPasswordIsValid({ isValid: false, message: 'La contraseña es requerida.', errorStyle: false })
+    } else if (value.length < 8) {
+      setPasswordIsValid({ isValid: false, message: 'La contraseña debe ser mayor a 8 digitos.', errorStyle: false })
+    } else {
+      setPasswordIsValid({ isValid: true, message: '', errorStyle: true })
+    }
+    setPassword(value)
+  }
+
+  const handleOnSubmit = async () => {
+    if (emailIsValid.isValid && passwordIsValid.isValid) {
+      const result = await SignIn({ variables: { input: { email, password } } })
+
+      const { error } = result.data.signin
+      if (error !== null) {
+        showMessage({
+          message: 'Error',
+          description: error.message,
+          backgroundColor: 'red',
+          color: '#fff',
+          icon: 'danger',
+          titleStyle: {
+            fontFamily: 'Lato-Bold'
+          },
+          textStyle: {
+            fontFamily: 'Lato-Regular'
+          }
+        })
+        return
       }
-      setAsyncStorage(keys.asyncStorageKey, payload)
-      navigate('Home')
+      const { data } = result.data.signin
+      if (data !== null) {
+        const userToken = decodeJwt(data.token)
+        const userId = userToken.sub
+        const payload = {
+          auth: true,
+          userToken: data.token,
+          userId: userId,
+          firstName: data.firstname,
+          lastName: data.lastname,
+          username: data.username,
+          email: data.email,
+          phoneNumber: data.phone_number
+        }
+        setAsyncStorage(keys.asyncStorageKey, payload)
+        navigate('Home')
+      }
     }
   }
 
@@ -97,33 +138,37 @@ const SignInScreen = props => {
             <View style={{ paddingVertical: 8 }} />
             <View style={styles.container}>
               <InputControl
-                stylesInput={styles.stylesInput}
                 value={email}
                 setValue={setEmail}
                 placeholder='Correo'
                 placeholderTextColor={Theme.COLORS.colorParagraph}
-                onChangeText={value => setEmail(value)}
+                onChangeText={handleOnEmail}
                 keyboardType='email-address'
                 isActiveButton
                 isActiveIcon
                 iconSize={25}
                 iconColor={Theme.COLORS.colorSecondary}
                 iconName='mail'
+                stylesInput={[styles.stylesInput, { borderColor: emailIsValid.errorStyle ? Theme.COLORS.colorSecondary : 'red' }]}
+                isValid={emailIsValid.isValid}
+                errorText={emailIsValid.message}
               />
 
               <InputControl
-                stylesInput={styles.stylesInput}
                 value={password}
                 setValue={setPassword}
                 placeholder='Contraseña'
                 placeholderTextColor={Theme.COLORS.colorParagraph}
-                onChangeText={value => setPassword(value)}
+                onChangeText={handleOnPassword}
                 secureTextEntry
                 isActiveButton
                 isActiveIcon
                 iconSize={25}
                 iconColor={Theme.COLORS.colorSecondary}
                 iconName='lock'
+                stylesInput={[styles.stylesInput, { borderColor: passwordIsValid.errorStyle ? Theme.COLORS.colorSecondary : 'red' }]}
+                isValid={passwordIsValid.isValid}
+                errorText={passwordIsValid.message}
               />
             </View>
             <Animatable.View
@@ -180,6 +225,18 @@ const styles = StyleSheet.create({
     fontSize: Theme.SIZES.small,
     fontFamily: 'Lato-Bold',
     marginLeft: 8
+  },
+  stylesInput: {
+    backgroundColor: Theme.COLORS.colorMainDark,
+    borderRadius: 100,
+    paddingLeft: 55,
+    paddingVertical: 12,
+    marginBottom: height * 0.03,
+    borderWidth: 0.3,
+    borderColor: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    color: Theme.COLORS.colorParagraph
   }
 })
 
