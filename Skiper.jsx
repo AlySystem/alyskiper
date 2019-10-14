@@ -1,4 +1,5 @@
 import React from 'react'
+import FlashMessage from 'react-native-flash-message'
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from '@apollo/react-hooks'
 
@@ -13,6 +14,7 @@ const Skiper = () => {
   return (
     <ApolloProvider client={client}>
       <Navigation />
+      <FlashMessage position='top' />
     </ApolloProvider>
   )
 }

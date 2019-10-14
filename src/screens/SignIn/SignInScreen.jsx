@@ -5,6 +5,11 @@ import {
   ScrollView
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
+import { showMessage } from 'react-native-flash-message'
+import { useMutation } from '@apollo/react-hooks'
+
+// Import mutations
+import { SIGNIN } from '../../graphql/mutations/Mutations'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -16,9 +21,55 @@ import IconButton from '../../components/button/IconButton'
 // Import theme
 import { Theme } from '../../constants/Theme'
 
-const HomeScreen = () => {
+// Import utils
+import { setAsyncStorage } from '../../utils/AsyncStorage'
+import { keys } from '../../utils/keys'
+import { decodeJwt } from '../../utils/Token'
+
+const SignInScreen = props => {
+  const { navigate } = props.navigation
+  const [SignIn, { loading }] = useMutation(SIGNIN)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const handleOnSubmit = async () => {
+    const result = await SignIn({ variables: { input: { email, password } } })
+
+    const { error } = result.data.signin
+    if (error !== null) {
+      showMessage({
+        message: 'Error',
+        description: error.message,
+        backgroundColor: 'red',
+        color: '#fff',
+        icon: 'danger',
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+      return
+    }
+    const { data } = result.data.signin
+    if (data !== null) {
+      const userToken = decodeJwt(data.token)
+      const userId = userToken.sub
+      const payload = {
+        auth: true,
+        userToken: data.token,
+        userId: userId,
+        firstName: data.firstname,
+        lastName: data.lastname,
+        username: data.username,
+        email: data.email,
+        phoneNumber: data.phone_number
+      }
+      setAsyncStorage(keys.asyncStorageKey, payload)
+      navigate('Home')
+    }
+  }
 
   return (
     <Background>
@@ -75,14 +126,20 @@ const HomeScreen = () => {
                 iconName='lock'
               />
             </View>
-            <View style={styles.containerButton}>
+            <Animatable.View
+              style={styles.containerButton}
+              animation='fadeInUp'
+              iterationCount={1}
+            >
               <IconButton
                 message='INICIAR SESION'
                 isActiveIcon
                 iconName='person'
                 stylesMessage={styles.message}
+                onPress={handleOnSubmit}
+                isLoading={loading}
               />
-            </View>
+            </Animatable.View>
           </View>
         </ScrollView>
       </View>
@@ -126,4 +183,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default HomeScreen
+export default SignInScreen

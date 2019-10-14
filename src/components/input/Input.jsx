@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     borderColor: Theme.COLORS.colorSecondary,
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
-    color: Theme.COLORS.colorSecondary
+    color: Theme.COLORS.colorParagraph
   }
 })
 
