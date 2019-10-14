@@ -8,6 +8,7 @@ import { createStackNavigator } from 'react-navigation-stack'
 import WelcomeScreen from '../../screens/Welcome/WelcomeScreen'
 import SignInScreen from '../../screens/SignIn/SignInScreen'
 import SignUpScreen from '../../screens/SignUp/SignUpScreen'
+import SendPhoneScreen from '../../screens/SendPhone/SendPhoneScreen'
 import VerifyPhoneScreen from '../../screens/VerifyPhone/VerifyPhoneScreen'
 
 // Import theme
@@ -46,6 +47,15 @@ const PublicStack = createStackNavigator({
     navigationOptions: {
       headerTransparent: true,
       headerTintColor: Theme.COLORS.colorSecondary
+    }
+  },
+  SendPhone: {
+    screen: SendPhoneScreen,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerTintColor: Theme.COLORS.colorSecondary,
+        headerTransparent: true
+      }
     }
   },
   VerifyPhone: {
