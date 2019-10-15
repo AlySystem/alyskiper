@@ -5,6 +5,8 @@ export const COUNTRIES = gql`
     countries {
       id
       name
+      phonecode
+      flag
     }
   }
 `

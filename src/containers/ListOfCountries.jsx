@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet
 } from 'react-native'
-import { Picker } from '@react-native-community/picker'
 import { useQuery } from '@apollo/react-hooks'
 
 // Import querys
@@ -14,32 +13,25 @@ import { Theme } from '../constants/Theme'
 
 // Import components
 import Loader from '../components/loader/Loader'
+import Picture from '../components/picture/Picture'
 
 const ListOfCountries = props => {
   const { data, error, loading } = useQuery(COUNTRIES)
-  const [selected, setSelected] = useState()
 
   return (
     <>
       {loading ? (
         <Loader />
-      ) : (
-        <Picker
-          selectedValue={selected}
-          onValueChange={(itemValue, itemIndex) => setSelected(itemValue)}
-          mode='dialog'
-          style={styles.picker}
-        >
-          {data.countries.map(({ id, name }) => (
-            <Picker.Item
+      )
+        : data.countries.map(({ id, name, phonecode, flag }) => {
+          console.log(flag)
+          return (
+            <Picture
               key={id}
-              label={name}
-              value={name}
-              itemStyle={styles.item}
+              source={{ uri: flag }}
             />
-          ))}
-        </Picker>
-      )}
+          )
+        })}
     </>
   )
 }

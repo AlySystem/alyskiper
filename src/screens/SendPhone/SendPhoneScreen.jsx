@@ -17,7 +17,9 @@ import Picture from '../../components/picture/Picture'
 import Icon from '../../components/icon/Icon'
 import IconButton from '../../components/button/IconButton'
 import Button from '../../components/button/Button'
-import ListOfPhone from '../../containers/ListOfCode'
+
+// Import container
+import ListOfCountries from '../../containers/ListOfCountries'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -114,8 +116,8 @@ const SendPhoneScreen = props => {
         >
           <Background
             source={background}
-            styles={styles.background}
           >
+
             <Animated.View
               style={{
                 marginTop: marginTop,
@@ -131,7 +133,7 @@ const SendPhoneScreen = props => {
                   pointerEvents={event}
                   style={styles.containerInput}
                 >
-                  <ListOfPhone />
+                  <ListOfCountries />
                   <TextInput
                     ref={inputRef}
                     style={styles.input}
@@ -174,6 +176,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.5)',
+    // backgroundColor: Theme.COLORS.colorMainAlt,
     position: 'relative'
   },
   layout: {
