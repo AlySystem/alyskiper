@@ -19,3 +19,19 @@ export const SIGNIN = gql`
     }
   }
 `
+export const SENDCODE = gql`
+  mutation SendCode($sendcode: twilioDto! ) {
+    send_code(sendcode: $sendcode) {
+      ok
+    }
+  }
+`
+
+export const VERIFYCODE = gql`
+  mutation VerifyCode($verifycode: twilioDto!) {
+    verify_code(verifycode: $verifycode) {
+      ok
+      message
+    }
+  }
+`

@@ -28,7 +28,7 @@ const StartupScreen = props => {
       const userData = await getAsyncStorage(keys.asyncStorageKey)
 
       if (!userData) {
-        navigate('SignIn')
+        navigate('Welcome')
         return
       }
       const userParse = JSON.parse(userData)
