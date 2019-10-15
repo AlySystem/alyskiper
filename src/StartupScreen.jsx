@@ -3,6 +3,7 @@ import {
   View,
   StyleSheet
 } from 'react-native'
+import decodeJwt from 'jwt-decode'
 import moment from 'moment'
 
 // Import components
@@ -17,7 +18,6 @@ import { Theme } from './constants/Theme'
 // Import utils
 import { keys } from './utils/keys'
 import { getAsyncStorage } from './utils/AsyncStorage'
-import { decodeJwt } from './utils/Token'
 
 const StartupScreen = props => {
   const { navigate } = props.navigation

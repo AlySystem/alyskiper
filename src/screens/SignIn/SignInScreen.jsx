@@ -5,6 +5,7 @@ import {
   ScrollView,
   Dimensions
 } from 'react-native'
+import decodeJwt from 'jwt-decode'
 import * as Animatable from 'react-native-animatable'
 import { showMessage } from 'react-native-flash-message'
 import { useMutation } from '@apollo/react-hooks'
@@ -25,7 +26,6 @@ import { Theme } from '../../constants/Theme'
 // Import utils
 import { setAsyncStorage } from '../../utils/AsyncStorage'
 import { keys } from '../../utils/keys'
-import { decodeJwt } from '../../utils/Token'
 
 const { height } = Dimensions.get('window')
 
@@ -74,7 +74,6 @@ const SignInScreen = props => {
   const handleOnSubmit = async () => {
     if (emailIsValid.isValid && passwordIsValid.isValid) {
       const result = await SignIn({ variables: { input: { email, password } } })
-      console.log(result)
       const { error } = result.data.signin
       if (error !== null) {
         showMessage({

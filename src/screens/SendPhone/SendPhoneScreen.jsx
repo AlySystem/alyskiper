@@ -22,11 +22,16 @@ import ListOfPhone from '../../containers/ListOfCode'
 // Import theme
 import { Theme } from '../../constants/Theme'
 
+// Import image
+import background from '../../../assets/images/img-background-dark.png'
+import logo from '../../../assets/images/logo.png'
+
 const { height } = Dimensions.get('window')
 
 const SendPhoneScreen = props => {
   const inputRef = useRef(null)
   const [numberPhone, setNumberPhone] = useState('')
+  const [event, setEvent] = useState('none')
   const heightScreen = new Animated.Value(200)
 
   const increaseHeightOfScreen = () => {
@@ -35,6 +40,7 @@ const SendPhoneScreen = props => {
       duration: 500
     }).start(() => {
       inputRef.current.focus()
+      setEvent('auto')
     })
   }
 
@@ -43,7 +49,9 @@ const SendPhoneScreen = props => {
     Animated.timing(heightScreen, {
       toValue: 200,
       duration: 500
-    }).start()
+    }).start(() => {
+      setEvent('none')
+    })
   }
 
   const marginTop = heightScreen.interpolate({
@@ -65,7 +73,6 @@ const SendPhoneScreen = props => {
     <Background>
       <View style={styles.screen}>
         <View style={styles.layout}>
-
           <Animated.View
             style={[styles.backButton, {
               opacity: backButton
@@ -74,6 +81,17 @@ const SendPhoneScreen = props => {
             <Button
               iconName='arrow-back'
               onPress={decreaseHeightOfScreen}
+            />
+          </Animated.View>
+
+          <Animated.View
+            style={[styles.logoType, {
+              opacity: backButton
+            }]}
+          >
+            <Picture
+              source={logo}
+              styles={styles.image}
             />
           </Animated.View>
 
@@ -94,52 +112,58 @@ const SendPhoneScreen = props => {
           iterationCount={1}
           style={[styles.container, { height: heightScreen }]}
         >
-          <Animated.View
-            style={{
-              marginTop: marginTop
-            }}
+          <Background
+            source={background}
+            styles={styles.background}
           >
-            <Text style={styles.subtitle}>Cuenta conmigo</Text>
-            <View style={{ paddingVertical: 10 }} />
-            <TouchableOpacity
-              onPress={increaseHeightOfScreen}
+            <Animated.View
+              style={{
+                marginTop: marginTop,
+                paddingHorizontal: 20
+              }}
             >
-              <View
-                pointerEvents='none'
-                style={styles.containerInput}
+              <Text style={styles.subtitle}>Cuenta conmigo</Text>
+              <View style={{ paddingVertical: 10 }} />
+              <TouchableOpacity
+                onPress={increaseHeightOfScreen}
               >
-                <ListOfPhone />
-                <TextInput
-                  ref={inputRef}
-                  style={styles.input}
-                  value={numberPhone}
-                  placeholder='Numero de telefono'
-                  placeholderTextColor={Theme.COLORS.colorParagraph}
-                  onChangeText={(value) => setNumberPhone(value)}
-                  keyboardType='number-pad'
-                  underlineColorAndroid='transparent'
-                  multiline={false}
-                  autoCapitalize='none'
-                  autoCorrect={false}
-                />
-                <Icon
-                  styles={styles.icon}
-                  iconName='phone'
-                />
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
-          <Animatable.View
-            style={[styles.containerButton, {
-              opacity: buttonOpacity
-            }]}
-          >
-            <IconButton
-              message='ENVIAR'
-              isActiveIcon
-              onPress={() => console.log('onPress')}
-            />
-          </Animatable.View>
+                <View
+                  pointerEvents={event}
+                  style={styles.containerInput}
+                >
+                  <ListOfPhone />
+                  <TextInput
+                    ref={inputRef}
+                    style={styles.input}
+                    value={numberPhone}
+                    placeholder='Numero de telefono'
+                    placeholderTextColor={Theme.COLORS.colorParagraph}
+                    onChangeText={(value) => setNumberPhone(value)}
+                    keyboardType='number-pad'
+                    underlineColorAndroid='transparent'
+                    multiline={false}
+                    autoCapitalize='none'
+                    autoCorrect={false}
+                  />
+                  <Icon
+                    styles={styles.icon}
+                    iconName='phone'
+                  />
+                </View>
+              </TouchableOpacity>
+            </Animated.View>
+            <Animatable.View
+              style={[styles.containerButton, {
+                opacity: buttonOpacity
+              }]}
+            >
+              <IconButton
+                message='ENVIAR'
+                isActiveIcon
+                onPress={() => console.log('onPress')}
+              />
+            </Animatable.View>
+          </Background>
         </Animatable.View>
       </View>
     </Background>
@@ -174,9 +198,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: Theme.COLORS.colorMainAlt,
-    width: '100%',
-    paddingVertical: 10,
-    paddingHorizontal: 20
+    width: '100%'
   },
   containerInput: {
     position: 'relative',
@@ -186,6 +208,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 13,
     left: 18
+  },
+  image: {
+    resizeMode: 'contain',
+    width: 130,
+    height: 40,
+    marginHorizontal: 10
   },
   input: {
     backgroundColor: Theme.COLORS.colorMainDark,
@@ -208,6 +236,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 25,
     left: 20,
+    zIndex: 1000
+  },
+  logoType: {
+    position: 'absolute',
+    top: 15,
+    right: 10,
     zIndex: 1000
   }
 })

@@ -4,9 +4,6 @@ import {
   StyleSheet
 } from 'react-native'
 
-// Import helpers
-import countries from '../helpers/data/countries.json'
-
 const ListOfCode = props => {
   return (
     <>
