@@ -3,11 +3,14 @@ import FlashMessage from 'react-native-flash-message'
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from '@apollo/react-hooks'
 
+// Import utils
+import { keys } from './src/utils/keys'
+
 // Import navigation
 import Navigation from './src/navigation/Navigation'
 
 const client = new ApolloClient({
-  uri: 'https://backend-alysystem-v2.herokuapp.com/graphql'
+  uri: keys.urlApi
 })
 
 const Skiper = () => {

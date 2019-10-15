@@ -74,7 +74,7 @@ const SignInScreen = props => {
   const handleOnSubmit = async () => {
     if (emailIsValid.isValid && passwordIsValid.isValid) {
       const result = await SignIn({ variables: { input: { email, password } } })
-
+      console.log(result)
       const { error } = result.data.signin
       if (error !== null) {
         showMessage({
@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.COLORS.colorMainDark,
     borderRadius: 100,
     paddingLeft: 55,
+    paddingRight: 50,
     paddingVertical: 12,
     marginBottom: height * 0.03,
     borderWidth: 0.3,

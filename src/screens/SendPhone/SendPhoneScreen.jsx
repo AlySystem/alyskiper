@@ -6,13 +6,18 @@ import {
   TouchableOpacity,
   Animated,
   TextInput,
-  Dimensions
+  Dimensions,
+  Keyboard
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 
 // Import components
 import Background from '../../components/background/Background'
 import Picture from '../../components/picture/Picture'
+import Icon from '../../components/icon/Icon'
+import IconButton from '../../components/button/IconButton'
+import Button from '../../components/button/Button'
+import ListOfPhone from '../../containers/ListOfCode'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -22,7 +27,7 @@ const { height } = Dimensions.get('window')
 const SendPhoneScreen = props => {
   const inputRef = useRef(null)
   const [numberPhone, setNumberPhone] = useState('')
-  const heightScreen = new Animated.Value(150)
+  const heightScreen = new Animated.Value(200)
 
   const increaseHeightOfScreen = () => {
     Animated.timing(heightScreen, {
@@ -33,15 +38,45 @@ const SendPhoneScreen = props => {
     })
   }
 
+  const decreaseHeightOfScreen = () => {
+    Keyboard.dismiss()
+    Animated.timing(heightScreen, {
+      toValue: 200,
+      duration: 500
+    }).start()
+  }
+
   const marginTop = heightScreen.interpolate({
-    inputRange: [150, height],
+    inputRange: [200, height],
     outputRange: [25, 70]
+  })
+
+  const buttonOpacity = heightScreen.interpolate({
+    inputRange: [200, height],
+    outputRange: [0, 1]
+  })
+
+  const backButton = heightScreen.interpolate({
+    inputRange: [200, height],
+    outputRange: [0, 1]
   })
 
   return (
     <Background>
       <View style={styles.screen}>
         <View style={styles.layout}>
+
+          <Animated.View
+            style={[styles.backButton, {
+              opacity: backButton
+            }]}
+          >
+            <Button
+              iconName='arrow-back'
+              onPress={decreaseHeightOfScreen}
+            />
+          </Animated.View>
+
           <Animatable.View
             animation='zoomIn'
             iterationCount={1}
@@ -64,23 +99,47 @@ const SendPhoneScreen = props => {
               marginTop: marginTop
             }}
           >
+            <Text style={styles.subtitle}>Cuenta conmigo</Text>
+            <View style={{ paddingVertical: 10 }} />
             <TouchableOpacity
               onPress={increaseHeightOfScreen}
             >
               <View
                 pointerEvents='none'
+                style={styles.containerInput}
               >
+                <ListOfPhone />
                 <TextInput
                   ref={inputRef}
+                  style={styles.input}
                   value={numberPhone}
                   placeholder='Numero de telefono'
                   placeholderTextColor={Theme.COLORS.colorParagraph}
                   onChangeText={(value) => setNumberPhone(value)}
                   keyboardType='number-pad'
+                  underlineColorAndroid='transparent'
+                  multiline={false}
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                />
+                <Icon
+                  styles={styles.icon}
+                  iconName='phone'
                 />
               </View>
             </TouchableOpacity>
           </Animated.View>
+          <Animatable.View
+            style={[styles.containerButton, {
+              opacity: buttonOpacity
+            }]}
+          >
+            <IconButton
+              message='ENVIAR'
+              isActiveIcon
+              onPress={() => console.log('onPress')}
+            />
+          </Animatable.View>
         </Animatable.View>
       </View>
     </Background>
@@ -90,7 +149,8 @@ const SendPhoneScreen = props => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,.5)'
+    backgroundColor: 'rgba(0,0,0,.5)',
+    position: 'relative'
   },
   layout: {
     flex: 1,
@@ -103,6 +163,11 @@ const styles = StyleSheet.create({
     fontSize: Theme.SIZES.small,
     textAlign: 'center'
   },
+  subtitle: {
+    fontFamily: 'Lato-Regular',
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.title
+  },
   containerImage: {
     justifyContent: 'center',
     alignItems: 'center'
@@ -111,7 +176,39 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.COLORS.colorMainAlt,
     width: '100%',
     paddingVertical: 10,
-    paddingHorizontal: 10
+    paddingHorizontal: 20
+  },
+  containerInput: {
+    position: 'relative',
+    width: '100%'
+  },
+  icon: {
+    position: 'absolute',
+    top: 13,
+    left: 18
+  },
+  input: {
+    backgroundColor: Theme.COLORS.colorMainDark,
+    borderRadius: 20,
+    paddingLeft: 55,
+    paddingVertical: 12,
+    borderWidth: 0.3,
+    borderColor: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    color: Theme.COLORS.colorParagraph
+  },
+  containerButton: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 30
+  },
+  backButton: {
+    position: 'absolute',
+    top: 25,
+    left: 20,
+    zIndex: 1000
   }
 })
 

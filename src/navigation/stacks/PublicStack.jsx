@@ -53,8 +53,7 @@ const PublicStack = createStackNavigator({
     screen: SendPhoneScreen,
     navigationOptions: ({ navigation }) => {
       return {
-        headerTintColor: Theme.COLORS.colorSecondary,
-        headerTransparent: true
+        header: null
       }
     }
   },
