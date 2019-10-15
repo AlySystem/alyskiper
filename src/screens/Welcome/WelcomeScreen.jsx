@@ -48,9 +48,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.5)'
   },
-  scrollView: {
-    flexGrow: 1
-  },
   container: {
     flex: 1,
     justifyContent: 'center',

@@ -3,9 +3,9 @@ import {
   View,
   Text,
   Dimensions,
-  StyleSheet,
-  ScrollView
+  StyleSheet
 } from 'react-native'
+import ViewPager from '@react-native-community/viewpager'
 
 // Import components
 import Picture from '../components/picture/Picture'
@@ -46,14 +46,12 @@ const items = [
 
 const ListOfData = props => {
   return (
-    <ScrollView
-      horizontal
-      pagingEnabled
-      scrollIndicatorInsets={{ top: 10, left: 10, bottom: 10, right: 10 }}
+    <ViewPager
+      style={styles.viewPager}
     >
       {items.map(item => (
         <View
-          style={styles.swiper}
+          style={styles.page}
           key={item.key}
         >
           <Picture
@@ -71,22 +69,21 @@ const ListOfData = props => {
           <Text style={styles.description}>{item.description}</Text>
         </View>
       ))}
-    </ScrollView>
+    </ViewPager>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'blue'
+  viewPager: {
+    flex: 1,
+    width: '100%',
+    height: '100%'
   },
-  scrollView: {
-
-  },
-  swiper: {
+  page: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    width: width
+    paddingHorizontal: 5
   },
   logo: {
     resizeMode: 'contain',
@@ -99,9 +96,9 @@ const styles = StyleSheet.create({
     fontSize: Theme.SIZES.subTitle
   },
   description: {
-    color: Theme.COLORS.colorParagraph,
-    fontFamily: 'Lato-Regular',
-    fontSize: Theme.SIZES.small,
+    color: Theme.COLORS.colorParagraphSecondary,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.xsmall,
     textAlign: 'center'
   }
 })
