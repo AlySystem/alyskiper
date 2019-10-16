@@ -10,9 +10,7 @@ import Background from '../../components/background/Background'
 import InputControl from '../../components/input/InputControl'
 import IconButton from '../../components/button/IconButton'
 import Title from '../../components/title/Title'
-
-// Import containers
-import ListOfCountries from '../../containers/ListOfCountries'
+import ModalPicker from '../../components/modal/ModalPicker'
 
 // Import screen
 import LoaderScreen from '../../screens/Loader/LoaderScreen'
@@ -49,7 +47,7 @@ const SignUpScreen = props => {
                 stylesInput={styles.stylesInput}
                 value={name}
                 setValue={setName}
-                placeholder='Nombres'
+                placeholder='Nombre'
                 placeholderTextColor={Theme.COLORS.colorParagraph}
                 onChangeText={value => setName(value)}
                 isActiveButton
@@ -63,7 +61,7 @@ const SignUpScreen = props => {
                 stylesInput={styles.stylesInput}
                 value={lastName}
                 setValue={setLastName}
-                placeholder='Apellidos'
+                placeholder='Apellido'
                 placeholderTextColor={Theme.COLORS.colorParagraph}
                 onChangeText={value => setLastName(value)}
                 isActiveButton
@@ -101,7 +99,11 @@ const SignUpScreen = props => {
                 iconColor={Theme.COLORS.colorSecondary}
                 iconName='mail'
               />
-              <ListOfCountries />
+
+              <ModalPicker
+                activeCountry
+              />
+
               <InputControl
                 stylesInput={styles.stylesInput}
                 value={password}

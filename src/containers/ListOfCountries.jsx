@@ -41,8 +41,12 @@ const ListOfCountries = props => {
       </View>
       <ScrollView style={{ paddingHorizontal: 10 }}>
         {loading ? (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, width: '100%', height: '100%' }}>
             <Loader />
+            <View style={{ paddingVertical: 5 }} />
+            <Title
+              title='Cargando paises'
+            />
           </View>
         ) : data.countries.map(country => (
           <Country

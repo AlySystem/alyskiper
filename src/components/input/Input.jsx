@@ -18,6 +18,7 @@ const Input = props => {
       multiline={false}
       autoCapitalize='none'
       autoCorrect={false}
+      ref={props.refs}
       style={props.stylesInput || styles.input}
     />
   )

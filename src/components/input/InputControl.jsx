@@ -17,7 +17,7 @@ const InputControl = props => {
   const { isActiveButton, isActiveIcon, isValid, errorText, value = '', setValue, secureTextEntry } = props
 
   return (
-    <View style={styles.container}>
+    <View style={props.stylesContainer || styles.container}>
       {secureTextEntry ? (
         <Input
           stylesInput={props.stylesInput}
@@ -27,6 +27,7 @@ const InputControl = props => {
           onChangeText={props.onChangeText}
           keyboardType={props.keyboardType}
           secureTextEntry
+          refs={props.references}
         />
       ) : (
         <Input
@@ -36,11 +37,12 @@ const InputControl = props => {
           placeholderTextColor={props.placeholderTextColor}
           onChangeText={props.onChangeText}
           keyboardType={props.keyboardType}
+          refs={props.references}
         />
       )}
       {isActiveIcon && (
         <Icon
-          styles={styles.icon}
+          styles={props.stylesIcon || styles.icon}
           iconSize={props.iconSize}
           iconColor={props.iconColor}
           iconName={props.iconName}
