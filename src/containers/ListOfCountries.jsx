@@ -1,65 +1,60 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   View,
+  Text,
   StyleSheet,
   ScrollView
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
 
-// Import querys
-import { COUNTRIES } from '../graphql/querys/Querys'
+// Import components
+import Country from '../components/country/Country'
+import Loader from '../components/loader/Loader'
+import Button from '../components/button/Button'
+import Title from '../components/title/Title'
 
 // Import theme
 import { Theme } from '../constants/Theme'
 
-// Import components
-import Loader from '../components/loader/Loader'
-import Modal from '../components/modal/Modal'
-import Button from '../components/button/Button'
-import Country from '../components/country/Country'
-import Title from '../components/title/Title'
+// Import query
+import { COUNTRIES } from '../graphql/querys/Querys'
 
 const ListOfCountries = props => {
   const { data, error, loading } = useQuery(COUNTRIES)
+
+  if (error) return <Text>Error {error}</Text>
+
   return (
     <>
-      <Modal
-        isVisible={props.isVisible}
-      >
-        <View
-          style={styles.container}
-        >
-          <View style={styles.containerHeader}>
-            <Title
-              title='Selecciona tu país'
-              styles={styles.title}
-            />
-            <Button
-              iconName='cancel'
-              iconSize={25}
-              stylesButton={styles.button}
-              iconColor={Theme.COLORS.colorSecondary}
-              onPress={() => props.setIsVisible(!props.isVisible)}
-            />
+      <View style={styles.containerHeader}>
+        <Title
+          title='Selecciona tu país'
+          styles={styles.title}
+        />
+        <Button
+          iconName='cancel'
+          iconSize={25}
+          stylesButton={styles.button}
+          iconColor={Theme.COLORS.colorSecondary}
+          onPress={() => props.setIsVisible(!props.isVisible)}
+        />
+      </View>
+      <ScrollView style={{ paddingHorizontal: 10 }}>
+        {loading ? (
+          <View style={{ flex: 1 }}>
+            <Loader />
           </View>
-          <ScrollView>
-            {!loading
-              ? data.countries.map((country) => (
-                <Country
-                  key={country.id}
-                  {...country}
-                  onPress={() => {
-                    props.setIsVisible(!props.isVisible)
-                    return props.handleOnSelect({ ...country })
-                  }}
-                />
-              ))
-              : (
-                <Loader />
-              )}
-          </ScrollView>
-        </View>
-      </Modal>
+        ) : data.countries.map(country => (
+          <Country
+            key={country.id}
+            {...country}
+            onPress={() => {
+              props.setIsVisible(!props.isVisible)
+              return props.handleOnSelect({ ...country })
+            }}
+          />
+        ))}
+      </ScrollView>
     </>
   )
 }
@@ -69,20 +64,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10,
-    backgroundColor: Theme.COLORS.colorMain
+    backgroundColor: Theme.COLORS.colorMain,
+    borderBottomColor: Theme.COLORS.colorSecondary,
+    borderBottomWidth: 0.3,
+    paddingVertical: 10
   },
   title: {
     color: Theme.COLORS.colorParagraph,
     fontSize: Theme.SIZES.normal,
     fontFamily: 'Lato-Bold'
   },
-  container: {
-    flex: 1,
-    backgroundColor: Theme.COLORS.colorMainAlt
-  },
   button: {
-    paddingHorizontal: 5
+    paddingRight: 10
   }
 })
 

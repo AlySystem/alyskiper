@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
   },
   name: {
     color: Theme.COLORS.colorParagraph,
-    paddingLeft: 15
+    paddingLeft: 15,
+    fontSize: 12
   },
   phoneCode: {
     color: Theme.COLORS.colorParagraph
