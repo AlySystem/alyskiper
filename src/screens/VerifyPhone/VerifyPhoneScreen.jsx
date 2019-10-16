@@ -89,6 +89,9 @@ const VerifyPhoneScreen = props => {
                 value={code}
                 autoFocus
                 numeric
+                style={{
+
+                }}
                 onChange={value => setCode(value)}
               />
             </View>
@@ -97,6 +100,7 @@ const VerifyPhoneScreen = props => {
                 isActiveIcon
                 message='VERIFICAR'
                 iconName='done'
+                stylesButton={styles.button}
                 isLoading={loading}
                 onPress={handleOnSubmit}
               />
@@ -120,20 +124,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   containerMain: {
-    marginVertical: 10
+    marginTop: 30
   },
   containerButton: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 50,
     marginBottom: 20
   },
   scrollView: {
     flexGrow: 1
   },
   title: {
-    color: Theme.COLORS.colorParagraph,
+    color: Theme.COLORS.colorSecondary,
     fontSize: Theme.SIZES.normal,
     fontFamily: 'Lato-Bold'
   },
@@ -142,6 +146,18 @@ const styles = StyleSheet.create({
     fontSize: Theme.SIZES.small,
     textAlign: 'center',
     fontFamily: 'Lato-Regular'
+  },
+  button: {
+    borderRadius: 100,
+    paddingHorizontal: 20,
+    height: 57,
+    backgroundColor: Theme.COLORS.colorMainAlt,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: 180,
+    borderBottomColor: Theme.COLORS.colorSecondary,
+    borderBottomWidth: 0.3
   }
 })
 

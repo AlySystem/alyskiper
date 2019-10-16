@@ -1,8 +1,7 @@
 import React from 'react'
 import {
   TouchableOpacity,
-  StyleSheet,
-  Dimensions
+  StyleSheet
 } from 'react-native'
 
 // Import components
@@ -10,8 +9,6 @@ import Icon from '../icon/Icon'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-
-const { height, width } = Dimensions.get('window')
 
 const FloatingActionButton = props => {
   return (
@@ -41,8 +38,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    right: width * 0.02,
-    bottom: height * 0.02,
+    right: 20,
+    bottom: 20,
     padding: 15,
     zIndex: 1000,
     borderRadius: 100
