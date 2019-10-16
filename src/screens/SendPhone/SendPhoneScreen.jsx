@@ -226,7 +226,8 @@ const SendPhoneScreen = props => {
               <IconButton
                 message='ENVIAR'
                 isActiveIcon
-                onPress={handleOnSubmit}
+                // onPress={handleOnSubmit}
+                onPress={() => navigate('VerifyPhone')}
                 isLoading={loading}
               />
             </Animatable.View>

@@ -65,7 +65,7 @@ const PublicStack = createStackNavigator({
     screen: SignUpScreen,
     navigationOptions
   }
-})
+}, { initialRouteName: 'Welcome' })
 
 const styles = StyleSheet.create({
   image: {
