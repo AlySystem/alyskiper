@@ -12,6 +12,7 @@ import DrawerStack from '../drawer/DrawerStack'
 import CommerceScreen from '../../screens/Commerce/CommerceScreen'
 import ProfileCommerceScreen from '../../screens/Profile/ProfileCommerceScreen'
 import TransportScreen from '../../screens/Transport/TransportScreen'
+import InvitedFriendScreen from '../../screens/InvitedFriend/InvitedFriendScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -66,6 +67,10 @@ const StackNavigation = createStackNavigator({
       }
     }
   },
+  InvitedFriend: {
+    screen: InvitedFriendScreen,
+    navigationOptions
+  },
   Commerce: {
     screen: CommerceScreen,
     navigationOptions
@@ -81,7 +86,7 @@ const StackNavigation = createStackNavigator({
     }
   }
 }, {
-  // initialRouteName: 'Transport'
+  initialRouteName: 'InvitedFriend'
 })
 
 const styles = StyleSheet.create({

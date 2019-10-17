@@ -199,7 +199,7 @@ const SendPhoneScreen = props => {
             >
               <IconButton
                 isActiveIcon
-                message='Enviar'
+                message='ENVIAR'
                 isLoading={loading}
                 onPress={handleOnSubmit}
               />

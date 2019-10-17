@@ -11,6 +11,6 @@ const STACKS = createSwitchNavigator({
   Public: PublicStack,
   Private: PrivateStack,
   Startup: StartupScreen
-}, { initialRouteName: 'Public' })
+}, { initialRouteName: 'Private' })
 
 export default createAppContainer(STACKS)
