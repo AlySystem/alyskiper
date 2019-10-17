@@ -12,9 +12,6 @@ import IconButton from '../../components/button/IconButton'
 import Title from '../../components/title/Title'
 import ModalPicker from '../../components/modal/ModalPicker'
 
-// Import screen
-import LoaderScreen from '../../screens/Loader/LoaderScreen'
-
 // Import theme
 import { Theme } from '../../constants/Theme'
 
@@ -25,9 +22,14 @@ const SignUpScreen = props => {
   const [lastName, setLastName] = useState('')
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
+  const [details, setDetails] = useState('')
   const [password, setPassword] = useState('')
   const [verifyPassword, setVerifyPassword] = useState('')
   const [sponsorId, setSponsorId] = useState('')
+
+  const handleOnSelect = (details) => {
+    setDetails(details)
+  }
 
   return (
     <>
@@ -102,6 +104,7 @@ const SignUpScreen = props => {
 
               <ModalPicker
                 activeCountry
+                handleOnSelect={handleOnSelect}
               />
 
               <InputControl

@@ -43,9 +43,10 @@ const ListOfCountries = props => {
         {loading ? (
           <View style={{ flex: 1, width: '100%', height: '100%' }}>
             <Loader />
-            <View style={{ paddingVertical: 5 }} />
+            <View style={{ paddingVertical: 2 }} />
             <Title
               title='Cargando paises'
+              styles={styles.subTitle}
             />
           </View>
         ) : data.countries.map(country => (
@@ -77,6 +78,12 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorParagraph,
     fontSize: Theme.SIZES.normal,
     fontFamily: 'Lato-Bold'
+  },
+  subTitle: {
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.xsmall,
+    fontFamily: 'Lato-Bold',
+    textAlign: 'center'
   },
   button: {
     paddingRight: 10

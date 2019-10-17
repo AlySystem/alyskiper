@@ -18,16 +18,14 @@ import { SENDCODE } from '../../graphql/mutations/Mutations'
 // Import components
 import Background from '../../components/background/Background'
 import Picture from '../../components/picture/Picture'
-import IconButton from '../../components/button/IconButton'
 import Button from '../../components/button/Button'
 import ModalPicker from '../../components/modal/ModalPicker'
 import InputControl from '../../components/input/InputControl'
+import Header from '../../components/header/Header'
+import Icon from '../../components/icon/Icon'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-
-// Import image
-import logo from '../../../assets/images/logo.png'
 
 const { height } = Dimensions.get('window')
 
@@ -38,9 +36,9 @@ const SendPhoneScreen = props => {
   const inputRef = useRef(null)
   const [numberPhone, setNumberPhone] = useState('')
   const [event, setEvent] = useState('none')
-  const heightScreen = new Animated.Value(100)
+  const heightScreen = new Animated.Value(150)
 
-  const increaseHeightOfScreen = () => {
+  const incrementeHeight = () => {
     Animated.timing(heightScreen, {
       toValue: height,
       duration: 500
@@ -50,28 +48,27 @@ const SendPhoneScreen = props => {
     })
   }
 
-  const decreaseHeightOfScreen = () => {
+  const decrementHeight = () => {
     Keyboard.dismiss()
     Animated.timing(heightScreen, {
-      toValue: 100,
+      toValue: 150,
       duration: 500
     }).start(() => {
       setEvent('none')
     })
   }
 
+  const headerOpacity = heightScreen.interpolate({
+    inputRange: [150, height],
+    outputRange: [1, 0]
+  })
+
   const marginTop = heightScreen.interpolate({
-    inputRange: [100, height],
-    outputRange: [25, 70]
+    inputRange: [150, height],
+    outputRange: [25, 200]
   })
-
-  const buttonOpacity = heightScreen.interpolate({
-    inputRange: [100, height],
-    outputRange: [0, 1]
-  })
-
-  const backButton = heightScreen.interpolate({
-    inputRange: [130, height],
+  const headerBackOpacity = heightScreen.interpolate({
+    inputRange: [150, height],
     outputRange: [0, 1]
   })
 
@@ -108,36 +105,50 @@ const SendPhoneScreen = props => {
     <Background>
       <View style={styles.screen}>
         <View style={styles.layout}>
+          <Header
+            animationImage='fadeInLeft'
+            animationButton='fadeInLeft'
+            onPress={() => props.navigation.goBack()}
+            stylesContainer={{
+              flexDirection: 'row-reverse',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              paddingVertical: 12
+            }}
+          />
 
-          {/* BUTTON BACK PARA BAJAR LA SCREEN */}
           <Animated.View
-            style={[styles.backButton, {
-              opacity: backButton
-            }]}
+            style={{
+              zIndex: 1000,
+              opacity: headerBackOpacity,
+              width: '100%',
+              position: 'absolute',
+              top: 0,
+              left: 0
+            }}
           >
-            <Button
+            <Header
+              animationImage='fadeInLeft'
+              animationButton='fadeInLeft'
+              onPress={decrementHeight}
               iconName='arrow-back'
-              onPress={decreaseHeightOfScreen}
+              stylesContainer={{
+                flexDirection: 'row-reverse',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingVertical: 12
+              }}
             />
           </Animated.View>
 
-          {/* LOGO QUE SE MUESTRAS AL AGRANDAR LA PANTALLA */}
-          <Animated.View
-            style={[styles.logoType, {
-              opacity: backButton
-            }]}
-          >
-            <Picture
-              source={logo}
-              styles={styles.image}
-            />
-          </Animated.View>
-
-          {/* LOGO EN LA SCREEN PRINCIPAL */}
           <Animatable.View
             animation='zoomIn'
             iterationCount={1}
-            style={styles.containerImage}
+            style={styles.container}
           >
             <Picture />
             <View style={{ paddingVertical: 5 }} />
@@ -146,62 +157,63 @@ const SendPhoneScreen = props => {
             <Text style={styles.title}>Ingresa tu numero de telefono.</Text>
           </Animatable.View>
 
-          {/* CONTENEDOR DE LA PARTE INFERIOR */}
           <Animatable.View
-            animation='fadeInUp'
+            animation='slideInUp'
             iterationCount={1}
-            style={[styles.container, { height: heightScreen }]}
+            style={{
+              width: '100%',
+              height: heightScreen,
+              backgroundColor: Theme.COLORS.colorMainAlt,
+              paddingHorizontal: 10,
+              justifyContent: 'center'
+            }}
           >
-            {/* CONTAINER INPUTS */}
-            <Animated.View
-              style={{
-                marginTop: marginTop
-              }}
+            <TouchableOpacity
+              onPress={incrementeHeight}
             >
-              <View
+              <Animated.View
                 style={{
-                  flexDirection: 'row-reverse',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  width: '100%',
-
-                  paddingHorizontal: 10,
-                  flex: 1
+                  opacity: headerOpacity
                 }}
-                pointerEvents={event}
-                onPress={increaseHeightOfScreen}
               >
-                <InputControl
-                  references={inputRef}
-                  stylesInput={styles.input}
-                  stylesContainer={styles.containerInput}
-                  value={numberPhone}
-                  isActiveIcon
-                  iconName='phone'
-                  iconSize={22}
-                  stylesIcon={styles.icon}
-                  placeholder='77289801'
-                  placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
-                  onChangeText={(value) => setNumberPhone(value)}
-                  keyboardType='number-pad'
-                />
-                <ModalPicker
-                  handleOnSelect={handleOnSelect}
-                />
-              </View>
-            </Animated.View>
+                <Text style={styles.description}>Cuenta conmigo</Text>
+              </Animated.View>
 
-            {/* BUTTON SUBMIT */}
-            <Animatable.View
-              style={[styles.containerButton, {
-                opacity: buttonOpacity
-              }]}
-            >
-            </Animatable.View>
+              <Animated.View
+                style={{
+                  marginTop: marginTop
+                }}
+              >
+                <Animated.View
+                  pointerEvents={event}
+                  style={styles.containerRow}
+                >
+                  <ModalPicker
+                    handleOnSelect={handleOnSelect}
+                  />
+                  <InputControl
+                    references={inputRef}
+                    stylesInput={styles.input}
+                    stylesContainer={styles.containerInput}
+                    value={numberPhone}
+                    isActiveIcon
+                    iconName='phone'
+                    iconSize={22}
+                    stylesIcon={styles.icon}
+                    placeholder='77289801'
+                    placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
+                    onChangeText={(value) => setNumberPhone(value)}
+                    keyboardType='number-pad'
+                  />
+                </Animated.View>
+
+              </Animated.View>
+            </TouchableOpacity>
+
           </Animatable.View>
+
         </View>
       </View>
-
     </Background>
   )
 }
@@ -217,43 +229,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  title: {
-    fontFamily: 'Lato-Regular',
-    color: Theme.COLORS.colorParagraph,
-    fontSize: Theme.SIZES.small,
-    textAlign: 'center'
-  },
-  containerImage: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   container: {
-    backgroundColor: Theme.COLORS.colorMainAlt,
-    width: '100%',
-    position: 'absolute',
-    bottom: 0,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    flex: 1
   },
-  backButton: {
-    position: 'absolute',
-    top: 25,
-    left: 20,
-    zIndex: 1000
-  },
-  logoType: {
-    position: 'absolute',
-    top: 15,
-    right: 10,
-    zIndex: 1000
+  containerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   containerInput: {
     position: 'relative'
   },
+  title: {
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.small,
+    fontFamily: 'Lato-Regular',
+    textAlign: 'center'
+  },
+  description: {
+    color: Theme.COLORS.colorSecondary,
+    fontSize: Theme.SIZES.subTitle,
+    fontFamily: 'Lato-Bold'
+  },
   input: {
-    width: 250,
+    width: 230,
     backgroundColor: Theme.COLORS.colorMainDark,
-    borderRadius: 5,
+    borderRadius: 40,
     paddingLeft: 48,
     paddingVertical: 9,
     borderWidth: 0.3,
@@ -261,11 +263,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
     color: Theme.COLORS.colorParagraph
-  },
-  icon: {
-    position: 'absolute',
-    top: 13,
-    left: 15
   }
 })
 
