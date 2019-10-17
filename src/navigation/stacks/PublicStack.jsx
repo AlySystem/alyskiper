@@ -42,13 +42,6 @@ const PublicStack = createStackNavigator({
       header: null
     }
   },
-  SignIn: {
-    screen: SignInScreen,
-    navigationOptions: {
-      headerTransparent: true,
-      headerTintColor: Theme.COLORS.colorSecondary
-    }
-  },
   SendPhone: {
     screen: SendPhoneScreen,
     navigationOptions: ({ navigation }) => {
@@ -64,8 +57,15 @@ const PublicStack = createStackNavigator({
   SignUp: {
     screen: SignUpScreen,
     navigationOptions
+  },
+  SignIn: {
+    screen: SignInScreen,
+    navigationOptions: {
+      headerTransparent: true,
+      headerTintColor: Theme.COLORS.colorSecondary
+    }
   }
-}, { initialRouteName: 'SignUp' })
+}, { })
 
 const styles = StyleSheet.create({
   image: {

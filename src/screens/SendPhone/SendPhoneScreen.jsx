@@ -84,11 +84,6 @@ const SendPhoneScreen = props => {
     outputRange: [25, 360]
   })
 
-  const headerBackOpacity = heightScreen.interpolate({
-    inputRange: [150, height],
-    outputRange: [0, 1]
-  })
-
   const titleTextOpacity = heightScreen.interpolate({
     inputRange: [150, height],
     outputRange: [0, 1]
@@ -97,9 +92,23 @@ const SendPhoneScreen = props => {
   const handleOnSubmit = async () => {
     if (numberPhoneIsValid.isValid) {
       const result = await SendCode({ variables: { sendcode: { phone_number: `${details.phoneCode}${numberPhone}`, channel: 'sms' } } })
-      const { ok, message } = result.data.send_code
+      const { ok, message, status } = result.data.send_code
 
-      if (!ok) {
+      if (status === 429) {
+        showMessage({
+          message: 'Error',
+          description: 'Has excedido el limite maximo de intentos.',
+          backgroundColor: 'red',
+          color: '#fff',
+          icon: 'danger',
+          titleStyle: {
+            fontFamily: 'Lato-Bold'
+          },
+          textStyle: {
+            fontFamily: 'Lato-Regular'
+          }
+        })
+      } else if (!ok) {
         showMessage({
           message: 'Error',
           description: message,
@@ -141,42 +150,19 @@ const SendPhoneScreen = props => {
           <Header
             animationImage='fadeInLeft'
             animationButton='fadeInLeft'
-            onPress={() => props.navigation.goBack()}
+            onPress={event === 'none' ? () => props.navigation.goBack() : decrementHeight}
             stylesContainer={{
               flexDirection: 'row-reverse',
               justifyContent: 'space-between',
               alignItems: 'center',
               width: '100%',
+              paddingVertical: 10,
               position: 'absolute',
               top: 0,
               left: 0,
-              paddingVertical: 12
+              zIndex: 2000
             }}
           />
-
-          <Animated.View
-            style={{
-              zIndex: 1000,
-              opacity: headerBackOpacity,
-              width: '100%',
-              position: 'absolute',
-              top: 0,
-              left: 0
-            }}
-          >
-            <Header
-              animationImage='fadeInLeft'
-              animationButton='fadeInLeft'
-              onPress={decrementHeight}
-              iconName='arrow-back'
-              stylesContainer={{
-                flexDirection: 'row-reverse',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingVertical: 12
-              }}
-            />
-          </Animated.View>
 
           <Animatable.View
             animation='zoomIn'
