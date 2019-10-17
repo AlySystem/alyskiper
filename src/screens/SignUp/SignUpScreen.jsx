@@ -195,6 +195,20 @@ const SignUpScreen = props => {
                 fontFamily: 'Lato-Regular'
               }
             })
+          } else if (error.message === '') {
+            showMessage({
+              message: 'Error',
+              description: 'El codigo de invitado no es valido.',
+              backgroundColor: 'red',
+              color: '#fff',
+              icon: 'danger',
+              titleStyle: {
+                fontFamily: 'Lato-Bold'
+              },
+              textStyle: {
+                fontFamily: 'Lato-Regular'
+              }
+            })
           }
         } else {
 

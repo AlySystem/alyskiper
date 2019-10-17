@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   description: {
     color: Theme.COLORS.colorParagraphSecondary,
     fontFamily: 'Lato-Bold',
-    fontSize: Theme.SIZES.xsmall,
+    fontSize: Theme.SIZES.small,
     textAlign: 'center'
   }
 })

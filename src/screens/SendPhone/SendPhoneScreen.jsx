@@ -249,7 +249,7 @@ const SendPhoneScreen = props => {
                     iconName='phone'
                     iconSize={22}
                     stylesIcon={styles.icon}
-                    placeholder='77289801'
+                    placeholder='7728  9801'
                     placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
                     onChangeText={handleOnChange}
                     keyboardType='number-pad'
