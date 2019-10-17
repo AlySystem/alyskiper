@@ -4,6 +4,10 @@ import {
   StyleSheet,
   ScrollView
 } from 'react-native'
+import { useMutation } from '@apollo/react-hooks'
+
+// Import mutations
+import { SIGNUP } from '../../graphql/mutations/Mutations'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -17,11 +21,13 @@ import { Theme } from '../../constants/Theme'
 
 const SignUpScreen = props => {
   const { navigate } = props.navigation
+  const [SignUp, { loading }] = useMutation(SIGNUP)
 
   const [name, setName] = useState('')
   const [lastName, setLastName] = useState('')
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
+  const [numberPhone] = useState(props.navigation.getParam('number'))
   const [details, setDetails] = useState('')
   const [password, setPassword] = useState('')
   const [verifyPassword, setVerifyPassword] = useState('')
@@ -29,6 +35,25 @@ const SignUpScreen = props => {
 
   const handleOnSelect = (details) => {
     setDetails(details)
+  }
+
+  const handleOnSubmit = async () => {
+    const result = await SignUp({
+      variables: {
+        input: {
+          firstname: name,
+          lastname: lastName,
+          email: email,
+          user: userName,
+          password: password,
+          phone: numberPhone,
+          country_id: details.id,
+          sponsor_id: sponsorId || 1
+        }
+      }
+    })
+
+    const { ok, message } = result.data.signup
   }
 
   return (
@@ -154,9 +179,10 @@ const SignUpScreen = props => {
                 <IconButton
                   message='REGISTRATE'
                   isActiveIcon
+                  isLoading={loading}
                   stylesButton={styles.button}
                   iconName='person-add'
-                  onPress={() => navigate('Home')}
+                  onPress={handleOnSubmit}
                 />
               </View>
             </View>

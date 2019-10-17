@@ -50,7 +50,9 @@ const VerifyPhoneScreen = props => {
         }
       })
     } else {
-      navigate('SignUp')
+      navigate('SignUp', {
+        number: numberPhone
+      })
     }
   }
 

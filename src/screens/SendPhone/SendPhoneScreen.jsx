@@ -18,11 +18,10 @@ import { SENDCODE } from '../../graphql/mutations/Mutations'
 // Import components
 import Background from '../../components/background/Background'
 import Picture from '../../components/picture/Picture'
-import Button from '../../components/button/Button'
+import IconButton from '../../components/button/IconButton'
 import ModalPicker from '../../components/modal/ModalPicker'
 import InputControl from '../../components/input/InputControl'
 import Header from '../../components/header/Header'
-import Icon from '../../components/icon/Icon'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -36,6 +35,13 @@ const SendPhoneScreen = props => {
   const inputRef = useRef(null)
   const [numberPhone, setNumberPhone] = useState('')
   const [event, setEvent] = useState('none')
+  const [details, setDetails] = useState({})
+  const [numberPhoneIsValid, setNumberPhoneIsValid] = useState({
+    isValid: false,
+    message: '',
+    errorStyle: true
+  })
+
   const heightScreen = new Animated.Value(150)
 
   const incrementeHeight = () => {
@@ -43,8 +49,8 @@ const SendPhoneScreen = props => {
       toValue: height,
       duration: 500
     }).start(() => {
-      inputRef.current.focus()
       setEvent('auto')
+      inputRef.current.focus()
     })
   }
 
@@ -65,40 +71,67 @@ const SendPhoneScreen = props => {
 
   const marginTop = heightScreen.interpolate({
     inputRange: [150, height],
-    outputRange: [25, 200]
+    outputRange: [25, 230]
   })
+
+  const marginTopMax = heightScreen.interpolate({
+    inputRange: [150, height],
+    outputRange: [25, 240]
+  })
+
+  const marginTopButton = heightScreen.interpolate({
+    inputRange: [150, height],
+    outputRange: [25, 360]
+  })
+
   const headerBackOpacity = heightScreen.interpolate({
     inputRange: [150, height],
     outputRange: [0, 1]
   })
 
-  // const handleOnSubmit = async () => {
-  //   const result = await SendCode({ variables: { sendcode: { phone_number: `${details.phoneCode}${numberPhone}`, channel: 'sms' } } })
-  //   const { ok, message } = result.data.send_code
+  const titleTextOpacity = heightScreen.interpolate({
+    inputRange: [150, height],
+    outputRange: [0, 1]
+  })
 
-  //   if (!ok) {
-  //     showMessage({
-  //       message: 'Error',
-  //       description: message,
-  //       backgroundColor: 'red',
-  //       color: '#fff',
-  //       icon: 'danger',
-  //       titleStyle: {
-  //         fontFamily: 'Lato-Bold'
-  //       },
-  //       textStyle: {
-  //         fontFamily: 'Lato-Regular'
-  //       }
-  //     })
-  //     return
-  //   }
-  //   navigate('VerifyPhone', {
-  //     number: `${details.phoneCode}${numberPhone}`
-  //   })
-  // }
+  const handleOnSubmit = async () => {
+    if (numberPhoneIsValid.isValid) {
+      const result = await SendCode({ variables: { sendcode: { phone_number: `${details.phoneCode}${numberPhone}`, channel: 'sms' } } })
+      const { ok, message } = result.data.send_code
+
+      if (!ok) {
+        showMessage({
+          message: 'Error',
+          description: message,
+          backgroundColor: 'red',
+          color: '#fff',
+          icon: 'danger',
+          titleStyle: {
+            fontFamily: 'Lato-Bold'
+          },
+          textStyle: {
+            fontFamily: 'Lato-Regular'
+          }
+        })
+      } else {
+        navigate('VerifyPhone', {
+          number: `${details.phoneCode}${numberPhone}`
+        })
+      }
+    }
+  }
 
   const handleOnSelect = (details) => {
-    console.log(details)
+    setDetails(details)
+  }
+
+  const handleOnChange = value => {
+    if (!value) {
+      setNumberPhoneIsValid({ isValid: false, message: 'El numero es requerido.', errorStyle: false })
+    } else {
+      setNumberPhoneIsValid({ isValid: true, message: '', errorStyle: true })
+    }
+    setNumberPhone(value)
   }
 
   return (
@@ -165,9 +198,27 @@ const SendPhoneScreen = props => {
               height: heightScreen,
               backgroundColor: Theme.COLORS.colorMainAlt,
               paddingHorizontal: 10,
-              justifyContent: 'center'
+              paddingVertical: 12
             }}
           >
+            <Animated.View
+              style={{
+                opacity: titleTextOpacity,
+                position: 'absolute',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                marginTop: marginTopButton
+              }}
+            >
+              <IconButton
+                isActiveIcon
+                message='Enviar'
+                isLoading={loading}
+                onPress={handleOnSubmit}
+              />
+            </Animated.View>
+
             <TouchableOpacity
               onPress={incrementeHeight}
             >
@@ -181,7 +232,20 @@ const SendPhoneScreen = props => {
 
               <Animated.View
                 style={{
+                  opacity: titleTextOpacity,
+                  position: 'absolute',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
                   marginTop: marginTop
+                }}
+              >
+                <Text style={styles.descriptionAlt}>Ingresa tu numero de telefono</Text>
+              </Animated.View>
+
+              <Animated.View
+                style={{
+                  marginTop: marginTopMax
                 }}
               >
                 <Animated.View
@@ -193,7 +257,6 @@ const SendPhoneScreen = props => {
                   />
                   <InputControl
                     references={inputRef}
-                    stylesInput={styles.input}
                     stylesContainer={styles.containerInput}
                     value={numberPhone}
                     isActiveIcon
@@ -202,8 +265,12 @@ const SendPhoneScreen = props => {
                     stylesIcon={styles.icon}
                     placeholder='77289801'
                     placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
-                    onChangeText={(value) => setNumberPhone(value)}
+                    onChangeText={handleOnChange}
                     keyboardType='number-pad'
+                    stylesError={styles.stylesError}
+                    stylesInput={[styles.input, { borderColor: numberPhoneIsValid.errorStyle ? Theme.COLORS.colorSecondary : 'red' }]}
+                    isValid={numberPhoneIsValid.isValid}
+                    errorText={numberPhoneIsValid.message}
                   />
                 </Animated.View>
 
@@ -252,6 +319,11 @@ const styles = StyleSheet.create({
     fontSize: Theme.SIZES.subTitle,
     fontFamily: 'Lato-Bold'
   },
+  descriptionAlt: {
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.normal,
+    fontFamily: 'Lato-Bold'
+  },
   input: {
     width: 230,
     backgroundColor: Theme.COLORS.colorMainDark,
@@ -263,6 +335,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
     color: Theme.COLORS.colorParagraph
+  },
+  stylesError: {
+    position: 'absolute',
+    bottom: -18,
+    left: 10
   }
 })
 

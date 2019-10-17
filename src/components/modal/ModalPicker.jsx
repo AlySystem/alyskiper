@@ -20,15 +20,16 @@ const { height } = Dimensions.get('window')
 
 const ModalPicker = props => {
   const [isVisible, setIsVisible] = useState(false)
-  const [details, setDetails] = useState({ phoneCode: '+505', country: 'Seleccionar país' })
+  const [details, setDetails] = useState({ phoneCode: '+505', country: 'Seleccionar país', id: 154 })
 
   const handleOnSelect = (details) => {
     setDetails({
       phoneCode: `+${details.phonecode}`,
-      country: details.name
+      country: details.name,
+      id: details.id
     })
-    return props.handleOnSelect(details)
   }
+  props.handleOnSelect(details)
 
   return (
     <>

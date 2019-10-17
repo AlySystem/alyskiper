@@ -60,7 +60,7 @@ const InputControl = props => {
       )}
 
       {!isValid && (
-        <View style={styles.containerError}>
+        <View style={props.stylesError || styles.containerError}>
           <Text style={styles.errorText}>{errorText}</Text>
         </View>
       )}

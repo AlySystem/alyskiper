@@ -19,6 +19,29 @@ export const SIGNIN = gql`
     }
   }
 `
+
+export const SIGNUP = gql`
+  mutation SignUp($input: UserInput! ) {
+    signup (input: $input) {
+      data {
+        firstname
+        lastname
+        email
+        user
+        password
+        phone
+        country_id
+        sponsor_id
+      }
+      error {
+        message
+        status
+        ok
+      }
+    }
+  }
+`
+
 export const SENDCODE = gql`
   mutation SendCode($sendcode: twilioDto! ) {
     send_code(sendcode: $sendcode) {
