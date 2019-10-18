@@ -39,7 +39,7 @@ const items = [
     key: 4,
     name: 'Invitar amigos',
     icon: 'card-giftcard',
-    routeName: 'Invited'
+    routeName: 'InvitedFriend'
   },
   {
     key: 5,
