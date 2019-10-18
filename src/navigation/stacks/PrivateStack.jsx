@@ -13,6 +13,7 @@ import CommerceScreen from '../../screens/Commerce/CommerceScreen'
 import ProfileCommerceScreen from '../../screens/Profile/ProfileCommerceScreen'
 import TransportScreen from '../../screens/Transport/TransportScreen'
 import InvitedFriendScreen from '../../screens/InvitedFriend/InvitedFriendScreen'
+import ProfileUserScreen from '../../screens/Profile/ProfileUserScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -66,6 +67,10 @@ const StackNavigation = createStackNavigator({
         )
       }
     }
+  },
+  ProfileUser: {
+    screen: ProfileUserScreen,
+    navigationOptions
   },
   InvitedFriend: {
     screen: InvitedFriendScreen,

@@ -10,63 +10,60 @@ import {
 import { Theme } from '../../constants/Theme'
 
 // Import components
-// import Picture from '../Picture/Picture'
+import Picture from '../picture/Picture'
 
 const Profile = (props) => {
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={props.onPress}
-    >
-      <View style={styles.containerImage}>
-        <Text style={styles.text}>IJ</Text>
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.title}>Idsarth Juarez</Text>
-        <Text style={styles.subtitle}>Idsarthdev19@gmail.com</Text>
-      </View>
-    </TouchableOpacity>
+    <View style={styles.container}>
+      <TouchableOpacity
+        activeOpacity={props.activeOpacity}
+        style={styles.containerMain}
+        onPress={props.onPress}
+      >
+        <Picture
+          source={props.source}
+          styles={styles.image}
+        />
+        <View style={styles.containerText}>
+          <Text style={styles.user}>{props.username}</Text>
+          <View style={{ paddingVertical: 2 }} />
+          <Text style={styles.email}>{props.email}</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    borderBottomColor: Theme.COLORS.colorBorder,
-    borderBottomWidth: 0.3,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    borderBottomColor: Theme.COLORS.colorSecondary,
+    borderBottomWidth: 0.2,
+    borderRadius: 100
+  },
+  containerMain: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingVertical: 20
+    alignItems: 'center'
   },
-  content: {
-    padding: 5,
-    justifyContent: 'space-evenly',
-    marginLeft: 8
+  containerText: {
+    paddingLeft: 20
   },
-  text: {
-    color: Theme.COLORS.colorParagraphSecondary,
-    fontSize: Theme.SIZES.samll,
-    fontFamily: 'Lato-Regular'
-  },
-  containerImage: {
-    backgroundColor: 'yellow',
-    width: 50,
-    height: 50,
-    borderRadius: 100,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  title: {
+  user: {
     color: Theme.COLORS.colorParagraph,
-    fontSize: Theme.SIZES.normal,
-    fontFamily: 'Lato-Bold'
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.small
   },
-  subtitle: {
-    color: Theme.COLORS.colorParagraphSecondary,
-    fontSize: Theme.SIZES.xsmall,
+  email: {
+    color: Theme.COLORS.colorParagraph,
     fontFamily: 'Lato-Regular',
-    marginTop: 5
+    fontSize: Theme.SIZES.xsmall
+  },
+  image: {
+    width: 80,
+    height: 80,
+    borderRadius: 100,
+    backgroundColor: Theme.COLORS.colorSecondary
   }
 })
 

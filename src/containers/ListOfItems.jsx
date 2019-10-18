@@ -8,6 +8,7 @@ import { withNavigation } from 'react-navigation'
 
 // Import components
 import Item from '../components/item/Item'
+import Profile from '../components/profile/Profile'
 
 // Import theme
 import { Theme } from '../constants/Theme'
@@ -66,6 +67,12 @@ const ListOfItems = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.containerFixed}>
+        <Profile
+          source={{ uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png' }}
+          username='Idsarth Jr'
+          email='Idsarthdev19@gmail.com'
+          onPress={() => navigate('ProfileUser')}
+        />
         {items.map(item => (
           <Item
             key={item.key}
