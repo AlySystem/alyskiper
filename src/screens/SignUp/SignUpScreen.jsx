@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useMutation } from '@apollo/react-hooks'
+import Hashids from 'hashids'
 
 // Import mutations
 import { SIGNUP } from '../../graphql/mutations/Mutations'
@@ -24,7 +25,7 @@ import { Theme } from '../../constants/Theme'
 const { height } = Dimensions.get('window')
 
 const SignUpScreen = props => {
-  const { navigate } = props.navigation
+  const hashids = new Hashids()
   const [SignUp, { loading }] = useMutation(SIGNUP)
 
   const [name, setName] = useState('')
@@ -175,16 +176,17 @@ const SignUpScreen = props => {
               password: password,
               phone: numberPhone,
               country_id: details,
-              sponsor_id: sponsorId ? parseInt(sponsorId) : 1
+              sponsor_id: sponsorId ? hashids.decode(sponsorId)[0] : 1
             }
           }
         })
-        const { error } = result.data.signup
+
+        const { error, data } = result.data.signup
         if (error) {
-          if (error.message === 'Error to create a user or user already exist!') {
+          if (error.message === 'This email is already exist in the database!') {
             showMessage({
               message: 'Error',
-              description: 'El usuario ya esta registrado.',
+              description: 'El correo ya esta registrado.',
               backgroundColor: 'red',
               color: '#fff',
               icon: 'danger',
@@ -211,7 +213,21 @@ const SignUpScreen = props => {
             })
           }
         } else {
-          navigate('SignIn')
+          showMessage({
+            message: 'AlySkiper',
+            description: `${data.username} registrado correctamente.`,
+            backgroundColor: 'green',
+            color: '#fff',
+            type: 'success',
+            icon: 'success',
+            titleStyle: {
+              fontFamily: 'Lato-Bold'
+            },
+            textStyle: {
+              fontFamily: 'Lato-Regular'
+            }
+          })
+          props.navigation.push('SignIn')
         }
       }
     }

@@ -24,8 +24,7 @@ export const SIGNUP = gql`
   mutation SignUp($input: UserInput! ) {
     signup (input: $input) {
       data {
-        firstname
-        lastname
+        username
       }
       error {
         message
