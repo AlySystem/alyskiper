@@ -67,7 +67,7 @@ const InvitedFriendScreen = props => {
                     message='COMPARTIR'
                     isActiveIcon
                     iconName='share'
-                    onPress={() => handleOnShare(hashids.encode(client.cache.data.data.ROOT_QUERY.userId, client.cache.data.data.ROOT_QUERY.phoneNumber))}
+                    onPress={() => handleOnShare(hashids.encode(client.cache.data.data.ROOT_QUERY.userId), client.cache.data.data.ROOT_QUERY.phoneNumber)}
                   />
                 </View>
               </View>

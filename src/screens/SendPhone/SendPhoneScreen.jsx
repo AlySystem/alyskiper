@@ -92,9 +92,8 @@ const SendPhoneScreen = props => {
   const handleOnSubmit = async () => {
     if (numberPhoneIsValid.isValid) {
       const result = await SendCode({ variables: { sendcode: { phone_number: `${details.phoneCode}${numberPhone}`, channel: 'sms' } } })
-      const { ok, message, status } = result.data.send_code
-
-      if (status === 429) {
+      const { ok, message } = result.data.send_code
+      if (message === 'Max send attempts reached') {
         showMessage({
           message: 'Error',
           description: 'Has excedido el limite maximo de intentos.',

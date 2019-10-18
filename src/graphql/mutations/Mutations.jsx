@@ -26,12 +26,6 @@ export const SIGNUP = gql`
       data {
         firstname
         lastname
-        email
-        user
-        password
-        phone
-        country_id
-        sponsor_id
       }
       error {
         message
