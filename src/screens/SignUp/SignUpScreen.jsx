@@ -6,7 +6,8 @@ import {
   Dimensions
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation, useApolloClient } from '@apollo/react-hooks'
+import decodeJwt from 'jwt-decode'
 
 // Import mutations
 import { SIGNUP } from '../../graphql/mutations/Mutations'
@@ -18,6 +19,10 @@ import IconButton from '../../components/button/IconButton'
 import Title from '../../components/title/Title'
 import ModalPicker from '../../components/modal/ModalPicker'
 
+// Import utils
+import { keys } from '../../utils/keys'
+import { setAsyncStorage } from '../../utils/AsyncStorage'
+
 // Import theme
 import { Theme } from '../../constants/Theme'
 
@@ -26,6 +31,7 @@ const { height } = Dimensions.get('window')
 const SignUpScreen = props => {
   const { navigate } = props.navigation
   const [SignUp, { loading }] = useMutation(SIGNUP)
+  const client = useApolloClient()
 
   const [name, setName] = useState('')
   const [nameIsValid, setNameIsValid] = useState({
@@ -195,7 +201,7 @@ const SignUpScreen = props => {
                 fontFamily: 'Lato-Regular'
               }
             })
-          } else if (error.message === '') {
+          } else if (error.message === 'Sponsor ID is not valid!') {
             showMessage({
               message: 'Error',
               description: 'El codigo de invitado no es valido.',
@@ -211,7 +217,21 @@ const SignUpScreen = props => {
             })
           }
         } else {
-
+          const userToken = decodeJwt(data.token)
+          const userId = userToken.sub
+          const payload = {
+            auth: true,
+            userToken: data.token,
+            userId: userId,
+            firstName: data.firstname,
+            lastName: data.lastname,
+            username: data.username,
+            email: data.email,
+            phoneNumber: data.phone_number
+          }
+          setAsyncStorage(keys.asyncStorageKey, payload)
+          client.writeData({ data: payload })
+          navigate('Home')
         }
       }
     }

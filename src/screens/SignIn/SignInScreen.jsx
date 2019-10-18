@@ -8,7 +8,7 @@ import {
 import decodeJwt from 'jwt-decode'
 import * as Animatable from 'react-native-animatable'
 import { showMessage } from 'react-native-flash-message'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation, useApolloClient } from '@apollo/react-hooks'
 
 // Import mutations
 import { SIGNIN } from '../../graphql/mutations/Mutations'
@@ -32,6 +32,7 @@ const { height } = Dimensions.get('window')
 const SignInScreen = props => {
   const { navigate } = props.navigation
   const [SignIn, { loading }] = useMutation(SIGNIN)
+  const client = useApolloClient()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -106,6 +107,7 @@ const SignInScreen = props => {
           phoneNumber: data.phone_number
         }
         setAsyncStorage(keys.asyncStorageKey, payload)
+        client.writeData({ data: payload })
         navigate('Home')
       }
     }

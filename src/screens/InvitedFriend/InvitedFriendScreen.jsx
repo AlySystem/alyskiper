@@ -25,13 +25,15 @@ import Title from '../../components/title/Title'
 const { height, width } = Dimensions.get('window')
 
 const InvitedFriendScreen = props => {
-  const handleOnShare = async () => {
+  const hashids = new Hashids()
+
+  const handleOnShare = async (id, phone) => {
     await Share.open({
       title: 'Comparte tu codigo',
-      message: `Hola, utiliza mi código ${212} para poder ganar con Skiper`,
+      message: `Hola, utiliza mi código *${id}* para poder ganar con Skiper`,
       url: 'Url de la play store',
       filename: 'test',
-      whatsAppNumber: '+50577289801'
+      whatsAppNumber: phone
     })
   }
 
@@ -52,7 +54,9 @@ const InvitedFriendScreen = props => {
                 <View style={{ paddingVertical: 5 }} />
                 <Text style={styles.description}>Comparte tu codigo con tus amigos y podras ganar Alytochis y Satochis cuando tu y tus amigos utilicen la aplicacion.</Text>
                 <View style={styles.container}>
-                  <Text style={styles.codeInvited}>Idsarth</Text>
+                  <Text style={styles.codeInvited}>
+                    {hashids.encode(client.cache.data.data.ROOT_QUERY.userId)}
+                  </Text>
                   <View style={{ paddingVertical: 3 }} />
                   <Picture
                     source={image}
@@ -63,7 +67,7 @@ const InvitedFriendScreen = props => {
                     message='COMPARTIR'
                     isActiveIcon
                     iconName='share'
-                    onPress={handleOnShare}
+                    onPress={() => handleOnShare(hashids.encode(client.cache.data.data.ROOT_QUERY.userId, client.cache.data.data.ROOT_QUERY.phoneNumber))}
                   />
                 </View>
               </View>
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
   },
   codeInvited: {
     fontFamily: 'Lato-Bold',
-    fontSize: Theme.SIZES.h1,
+    fontSize: Theme.SIZES.title,
     color: Theme.COLORS.colorSecondary,
     transform: [{ rotate: '-8deg' }]
   }
