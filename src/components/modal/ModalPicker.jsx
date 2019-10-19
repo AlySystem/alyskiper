@@ -79,7 +79,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderColor: Theme.COLORS.colorSecondary,
+    paddingHorizontal: 5
   },
   code: {
     fontFamily: 'Lato-Bold',
