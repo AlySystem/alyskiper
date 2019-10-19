@@ -85,7 +85,7 @@ const ListOfItems = (props) => {
     <View style={styles.container}>
       <View style={styles.containerFixed}>
         <Profile
-          source={{ uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png' }}
+          source={{ uri: 'https://www.fancyhands.com/images/default-avatar-250x250.png' }}
           username={userData.username}
           email={userData.email}
           // onPress={() => navigate('ProfileUser')}
