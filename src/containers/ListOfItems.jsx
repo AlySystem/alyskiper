@@ -5,6 +5,7 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
+import { useMutation } from '@apollo/react-hooks'
 
 // Import components
 import Item from '../components/item/Item'
@@ -14,8 +15,10 @@ import Profile from '../components/profile/Profile'
 import { Theme } from '../constants/Theme'
 
 // Import utils
-import { removeAsyncStorage } from '../utils/AsyncStorage'
+import { removeAsyncStorage, getAsyncStorage } from '../utils/AsyncStorage'
 import { keys } from '../utils/keys'
+
+import { SIGNOUT } from '../graphql/mutations/Mutations'
 
 const items = [
   {
@@ -58,10 +61,16 @@ const items = [
 
 const ListOfItems = (props) => {
   const { navigate } = props.navigation
+  const [SignOut] = useMutation(SIGNOUT)
 
   const handleLogout = async () => {
-    await removeAsyncStorage(keys.asyncStorageKey)
-    navigate('Startup', { message: 'Saliendo...' })
+    const userData = await getAsyncStorage(keys.asyncStorageKey)
+    const userId = JSON.parse(userData).userId
+    const { data: { logout } } = await SignOut({ variables: { id: userId } })
+    if (logout) {
+      await removeAsyncStorage(keys.asyncStorageKey)
+      navigate('Startup', { message: 'Saliendo...' })
+    }
   }
 
   return (
@@ -71,9 +80,9 @@ const ListOfItems = (props) => {
           source={{ uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png' }}
           username='Idsarth Jr'
           email='Idsarthdev19@gmail.com'
-          onPress={() => navigate('ProfileUser')}
+          // onPress={() => navigate('ProfileUser')}
         />
-        {items.map(item => (
+        {/* {items.map(item => (
           <Item
             key={item.key}
             routeName={item.routeName}
@@ -81,7 +90,7 @@ const ListOfItems = (props) => {
             icon={item.icon}
             onPress={() => navigate(item.routeName)}
           />
-        ))}
+        ))} */}
         <View style={styles.containerItems}>
           <Item
             onPress={handleLogout}

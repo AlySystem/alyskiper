@@ -51,3 +51,9 @@ export const VERIFYCODE = gql`
     }
   }
 `
+
+export const SIGNOUT = gql`
+  mutation SignOut($id: Int!) {
+    logout(id: $id)
+  }
+`

@@ -5,12 +5,24 @@ import { ApolloProvider } from '@apollo/react-hooks'
 
 // Import utils
 import { keys } from './src/utils/keys'
+import { getAsyncStorage } from './src/utils/AsyncStorage'
 
 // Import navigation
 import Navigation from './src/navigation/Navigation'
 
 const client = new ApolloClient({
-  uri: keys.urlApi
+  uri: keys.urlApi,
+  request: async operation => {
+    const userData = await getAsyncStorage(keys.asyncStorageKey)
+    if (userData) {
+      const userToken = JSON.parse(userData).userToken
+      operation.setContext({
+        headers: {
+          Authorization: userToken ? `Bearer ${userToken}` : ''
+        }
+      })
+    }
+  }
 })
 
 const Skiper = () => {
