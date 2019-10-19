@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   View
@@ -62,10 +62,18 @@ const items = [
 const ListOfItems = (props) => {
   const { navigate } = props.navigation
   const [SignOut] = useMutation(SIGNOUT)
+  const [userData, setUserData] = useState('')
+
+  useEffect(() => {
+    const getData = async () => {
+      const user = await getAsyncStorage(keys.asyncStorageKey)
+      setUserData(JSON.parse(user))
+    }
+    getData()
+  }, [setUserData, getAsyncStorage, keys])
 
   const handleLogout = async () => {
-    const userData = await getAsyncStorage(keys.asyncStorageKey)
-    const userId = JSON.parse(userData).userId
+    const userId = userData.userId
     const { data: { logout } } = await SignOut({ variables: { id: userId } })
     if (logout) {
       await removeAsyncStorage(keys.asyncStorageKey)
@@ -78,8 +86,8 @@ const ListOfItems = (props) => {
       <View style={styles.containerFixed}>
         <Profile
           source={{ uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png' }}
-          username='Idsarth Jr'
-          email='Idsarthdev19@gmail.com'
+          username={userData.username}
+          email={userData.email}
           // onPress={() => navigate('ProfileUser')}
         />
         {/* {items.map(item => (
