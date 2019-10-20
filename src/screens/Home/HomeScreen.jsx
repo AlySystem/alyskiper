@@ -31,7 +31,7 @@ const HomeScreen = props => {
     await Share.open({
       title: 'Comparte tu codigo',
       message: `Hola, utiliza mi código *${id}* para poder ganar con Skiper`,
-      url: 'Url de la play store',
+      url: '',
       filename: 'test',
       whatsAppNumber: phone
     })
