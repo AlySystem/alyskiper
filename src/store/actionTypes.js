@@ -1,0 +1,2 @@
+export const USERDATA = 'USERDATA'
+export const USERREMOVEDATA = 'USERREMOVEDATA'

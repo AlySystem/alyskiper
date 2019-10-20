@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   View
@@ -6,6 +6,10 @@ import {
 
 import { withNavigation } from 'react-navigation'
 import { useMutation } from '@apollo/react-hooks'
+import { useDispatch, useSelector } from 'react-redux'
+
+// Actions types
+import { USERREMOVEDATA } from '../store/actionTypes'
 
 // Import components
 import Item from '../components/item/Item'
@@ -15,7 +19,7 @@ import Profile from '../components/profile/Profile'
 import { Theme } from '../constants/Theme'
 
 // Import utils
-import { removeAsyncStorage, getAsyncStorage } from '../utils/AsyncStorage'
+import { removeAsyncStorage } from '../utils/AsyncStorage'
 import { keys } from '../utils/keys'
 
 import { SIGNOUT } from '../graphql/mutations/Mutations'
@@ -61,23 +65,18 @@ const items = [
 
 const ListOfItems = (props) => {
   const { navigate } = props.navigation
+  const dispatch = useDispatch()
+  const userData = useSelector(state => state.user)
   const [SignOut] = useMutation(SIGNOUT)
-  const [userData, setUserData] = useState('')
-
-  useEffect(() => {
-    const getData = async () => {
-      const user = await getAsyncStorage(keys.asyncStorageKey)
-      setUserData(JSON.parse(user))
-    }
-    getData()
-  }, [setUserData, getAsyncStorage, keys])
 
   const handleLogout = async () => {
-    const userId = userData.userId
-    const { data: { logout } } = await SignOut({ variables: { id: userId } })
+    const { data: { logout } } = await SignOut({ variables: { id: userData.userId } })
     if (logout) {
-      await removeAsyncStorage(keys.asyncStorageKey)
+      dispatch({
+        type: USERREMOVEDATA
+      })
       navigate('Startup', { message: 'Saliendo...' })
+      await removeAsyncStorage(keys.asyncStorageKey)
     }
   }
 
@@ -86,11 +85,11 @@ const ListOfItems = (props) => {
       <View style={styles.containerFixed}>
         <Profile
           source={{ uri: 'https://www.fancyhands.com/images/default-avatar-250x250.png' }}
-          username={userData.username}
+          username={userData.userName}
           email={userData.email}
-          // onPress={() => navigate('ProfileUser')}
+          onPress={() => navigate('ProfileUser')}
         />
-        {/* {items.map(item => (
+        {items.map(item => (
           <Item
             key={item.key}
             routeName={item.routeName}
@@ -98,7 +97,7 @@ const ListOfItems = (props) => {
             icon={item.icon}
             onPress={() => navigate(item.routeName)}
           />
-        ))} */}
+        ))}
         <View style={styles.containerItems}>
           <Item
             onPress={handleLogout}

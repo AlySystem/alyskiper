@@ -39,7 +39,10 @@ const ListOfCountries = props => {
           onPress={() => props.setIsVisible(!props.isVisible)}
         />
       </View>
-      <ScrollView style={{ paddingHorizontal: 10 }}>
+      <ScrollView
+        keyboardShouldPersistTaps='always'
+        style={{ paddingHorizontal: 10 }}
+      >
         {loading ? (
           <View style={{ flex: 1, width: '100%', height: '100%' }}>
             <Loader />

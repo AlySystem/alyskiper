@@ -5,6 +5,10 @@ import {
 } from 'react-native'
 import decodeJwt from 'jwt-decode'
 import moment from 'moment'
+import { useDispatch } from 'react-redux'
+
+// Actions types
+import { USERDATA } from './store/actionTypes'
 
 // Import components
 import Background from './components/background/Background'
@@ -20,6 +24,7 @@ import { keys } from './utils/keys'
 import { getAsyncStorage } from './utils/AsyncStorage'
 
 const StartupScreen = props => {
+  const dispatch = useDispatch()
   const { navigate } = props.navigation
   const [title] = useState(props.navigation.getParam('message', ' '))
 
@@ -28,7 +33,7 @@ const StartupScreen = props => {
       const userData = await getAsyncStorage(keys.asyncStorageKey)
 
       if (!userData) {
-        navigate('Welcome')
+        navigate('SignIn')
         return
       }
       const userParse = JSON.parse(userData)
@@ -38,6 +43,20 @@ const StartupScreen = props => {
         return
       }
 
+      const payload = {
+        auth: true,
+        userToken: userParse.userToken,
+        userId: userParse.userId,
+        firstName: userParse.firstName,
+        lastName: userParse.lastName,
+        userName: userParse.userName,
+        email: userParse.email,
+        phoneNumber: userParse.phoneNumber
+      }
+      dispatch({
+        type: USERDATA,
+        payload
+      })
       navigate('Home')
     }
     trySignIn()

@@ -2,10 +2,14 @@ import React from 'react'
 import FlashMessage from 'react-native-flash-message'
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from '@apollo/react-hooks'
+import { Provider } from 'react-redux'
 
 // Import utils
 import { keys } from './src/utils/keys'
 import { getAsyncStorage } from './src/utils/AsyncStorage'
+
+// Import store
+import store from './src/store/store'
 
 // Import navigation
 import Navigation from './src/navigation/Navigation'
@@ -27,10 +31,12 @@ const client = new ApolloClient({
 
 const Skiper = () => {
   return (
-    <ApolloProvider client={client}>
-      <Navigation />
-      <FlashMessage position='top' />
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <Navigation />
+        <FlashMessage position='top' />
+      </ApolloProvider>
+    </Provider>
   )
 }
 

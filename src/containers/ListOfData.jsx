@@ -39,7 +39,7 @@ const items = [
   {
     key: 3,
     title: 'Gana con Skiper',
-    description: 'Con Skiper podras ganar Alytochi al viajar con nosotros y satochi al pagar la aplicacion con tus amigos.',
+    description: 'Podrás ganar Alytochis al utilizar los servicios de AlySkiper, y Satochis cada vez que tus amigos referidos paguen con criptomonedas.',
     image: image3
   }
 ]
