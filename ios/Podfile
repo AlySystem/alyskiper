@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'alyskiper' do
-  # Pods for alyskiper
+target 'AlySkiper' do
+  # Pods for AlySkiper
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -34,7 +34,7 @@ target 'alyskiper' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  target 'alyskiperTests' do
+  target 'AlySkiperTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -42,10 +42,10 @@ target 'alyskiper' do
   use_native_modules!
 end
 
-target 'alyskiper-tvOS' do
-  # Pods for alyskiper-tvOS
+target 'AlySkiper-tvOS' do
+  # Pods for AlySkiper-tvOS
 
-  target 'alyskiper-tvOSTests' do
+  target 'AlySkiper-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
