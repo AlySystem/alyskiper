@@ -71,7 +71,7 @@ const SendPhoneScreen = props => {
 
   const marginTop = heightScreen.interpolate({
     inputRange: [150, height],
-    outputRange: [25, 230]
+    outputRange: [25, 220]
   })
 
   const marginTopMax = heightScreen.interpolate({
@@ -81,7 +81,7 @@ const SendPhoneScreen = props => {
 
   const marginTopButton = heightScreen.interpolate({
     inputRange: [150, height],
-    outputRange: [25, 360]
+    outputRange: [25, 380]
   })
 
   const titleTextOpacity = heightScreen.interpolate({
@@ -147,6 +147,7 @@ const SendPhoneScreen = props => {
       <View style={styles.screen}>
         <View style={styles.layout}>
           <Header
+            isActiveImage
             animationImage='fadeInLeft'
             animationButton='fadeInLeft'
             onPress={event === 'none' ? () => props.navigation.goBack() : decrementHeight}
@@ -206,6 +207,9 @@ const SendPhoneScreen = props => {
 
             <TouchableOpacity
               onPress={incrementeHeight}
+              style={{
+                paddingHorizontal: 10
+              }}
             >
               <Animated.View
                 style={{
@@ -288,7 +292,12 @@ const styles = StyleSheet.create({
   },
   containerRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    borderColor: Theme.COLORS.colorSecondary,
+    borderWidth: 0.3,
+    borderRadius: 100,
+    paddingHorizontal: 20,
+    paddingVertical: 8
   },
   containerInput: {
     position: 'relative'
@@ -309,21 +318,24 @@ const styles = StyleSheet.create({
     fontSize: Theme.SIZES.normal,
     fontFamily: 'Lato-Bold'
   },
+  icon: {
+    position: 'absolute',
+    left: 15,
+    top: 9
+  },
   input: {
-    width: 230,
-    backgroundColor: Theme.COLORS.colorMainDark,
-    borderRadius: 10,
+    width: 180,
+    height: 40,
     paddingLeft: 48,
-    paddingVertical: 9,
-    borderWidth: 0.3,
-    borderColor: Theme.COLORS.colorSecondary,
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
-    color: Theme.COLORS.colorParagraph
+    color: Theme.COLORS.colorParagraph,
+    borderLeftColor: Theme.COLORS.colorSecondary,
+    borderLeftWidth: 0.3
   },
   stylesError: {
     position: 'absolute',
-    bottom: -18,
+    bottom: -28,
     left: 10
   }
 })

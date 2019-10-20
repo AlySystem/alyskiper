@@ -15,15 +15,17 @@ import Logo from '../../../assets/images/logo.png'
 const Header = props => {
   return (
     <View style={props.stylesContainer || styles.container}>
-      <Animatable.View
-        animation={props.animationImage}
-        iterationCount={1}
-      >
-        <Picture
-          source={Logo}
-          styles={styles.image}
-        />
-      </Animatable.View>
+      {props.isActiveImage && (
+        <Animatable.View
+          animation={props.animationImage}
+          iterationCount={1}
+        >
+          <Picture
+            source={Logo}
+            styles={styles.image}
+          />
+        </Animatable.View>
+      )}
       <Animatable.View
         animation={props.animationButton}
         iterationCount={1}

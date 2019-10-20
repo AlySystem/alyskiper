@@ -6,9 +6,9 @@ import {
   ScrollView,
   Dimensions
 } from 'react-native'
-import { ApolloConsumer } from '@apollo/react-hooks'
 import Share from 'react-native-share'
 import Hashids from 'hashids'
+import { useSelector } from 'react-redux'
 
 // Import image
 import image from '../../../assets/images/img-code-invited.png'
@@ -26,56 +26,53 @@ const { height, width } = Dimensions.get('window')
 
 const InvitedFriendScreen = props => {
   const hashids = new Hashids()
+  const userData = useSelector(state => state.user)
 
-  const handleOnShare = async (id, phone) => {
+  const handleOnShare = async (id) => {
     await Share.open({
       title: 'Comparte tu codigo',
       message: `Hola, utiliza mi código *${id}* para poder ganar con Skiper`,
       url: 'Url de la play store',
       filename: 'test',
-      whatsAppNumber: phone
+      whatsAppNumber: userData.phoneNumber
     })
   }
 
   return (
-    <ApolloConsumer>
-      {client => (
-        <Background>
-          <View style={styles.screen}>
-            <ScrollView
-              contentContainerStyle={styles.scrollView}
-              keyboardShouldPersistTaps='always'
-            >
-              <View style={styles.layout}>
-                <Title
-                  title='Invitar amigos'
-                  styles={styles.title}
-                />
-                <View style={{ paddingVertical: 5 }} />
-                <Text style={styles.description}>Comparte tu codigo con tus amigos y podras ganar Alytochis y Satochis cuando tu y tus amigos utilicen la aplicacion.</Text>
-                <View style={styles.container}>
-                  <Text style={styles.codeInvited}>
-                    {hashids.encode(client.cache.data.data.ROOT_QUERY.userId)}
-                  </Text>
-                  <View style={{ paddingVertical: 3 }} />
-                  <Picture
-                    source={image}
-                    styles={styles.image}
-                  />
-                  <View style={{ paddingVertical: 8 }} />
-                  <IconButton
-                    message='COMPARTIR'
-                    isActiveIcon
-                    iconName='share'
-                    onPress={() => handleOnShare(hashids.encode(client.cache.data.data.ROOT_QUERY.userId), client.cache.data.data.ROOT_QUERY.phoneNumber)}
-                  />
-                </View>
-              </View>
-            </ScrollView>
+    <Background>
+      <View style={styles.screen}>
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          keyboardShouldPersistTaps='always'
+        >
+          <View style={styles.layout}>
+            <Title
+              title='Invitar amigos'
+              styles={styles.title}
+            />
+            <View style={{ paddingVertical: 5 }} />
+            <Text style={styles.description}>Comparte tu codigo con tus amigos y podras ganar Alytochis y Satochis cuando tu y tus amigos utilicen la aplicacion.</Text>
+            <View style={styles.container}>
+              <Text style={styles.codeInvited}>
+                {hashids.encode(userData.userId)}
+              </Text>
+              <View style={{ paddingVertical: 3 }} />
+              <Picture
+                source={image}
+                styles={styles.image}
+              />
+              <View style={{ paddingVertical: 8 }} />
+              <IconButton
+                message='COMPARTIR'
+                isActiveIcon
+                iconName='share'
+                onPress={() => handleOnShare(hashids.encode(userData.userId))}
+              />
+            </View>
           </View>
-        </Background>
-      )}
-    </ApolloConsumer>
+        </ScrollView>
+      </View>
+    </Background>
   )
 }
 

@@ -139,7 +139,7 @@ const SignInScreen = props => {
               iterationCount={1}
             >
               <Title
-                title='SING IN'
+                title='SIGN IN'
                 styles={styles.title}
               />
             </Animatable.View>

@@ -3,11 +3,15 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Dimensions
+  Dimensions,
+  Text,
+  Linking,
+  TouchableOpacity
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useMutation } from '@apollo/react-hooks'
 import Hashids from 'hashids'
+import CheckBox from 'react-native-check-box'
 
 // Import mutations
 import { SIGNUP } from '../../graphql/mutations/Mutations'
@@ -26,6 +30,7 @@ const { height } = Dimensions.get('window')
 
 const SignUpScreen = props => {
   const hashids = new Hashids()
+  const [checked, setChecked] = useState(false)
   const [SignUp, { loading }] = useMutation(SIGNUP)
 
   const [name, setName] = useState('')
@@ -163,71 +168,93 @@ const SignUpScreen = props => {
     return true
   }
 
+  const handleIsChecked = () => {
+    if (!checked) {
+      showMessage({
+        message: 'Error',
+        description: 'Por favor acepte los terminos y condiciones para seguir adelante.',
+        backgroundColor: 'red',
+        color: '#fff',
+        icon: 'danger',
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+      return false
+    }
+    return true
+  }
+
   const handleOnSubmit = async () => {
     if (handleConfirmPassword()) {
-      if (nameIsValid.isValid && lastNameIsValid.isValid && userNameIsValid.isValid && emailIsValid.isValid && passwordIsValid.isValid) {
-        const result = await SignUp({
-          variables: {
-            input: {
-              firstname: name,
-              lastname: lastName,
-              email: email,
-              user: userName,
-              password: password,
-              phone: numberPhone,
-              country_id: details,
-              sponsor_id: sponsorId ? hashids.decode(sponsorId)[0] : 1
-            }
-          }
-        })
-
-        const { error, data } = result.data.signup
-        if (error) {
-          if (error.message === 'This email is already exist in the database!') {
-            showMessage({
-              message: 'Error',
-              description: 'El correo ya esta registrado.',
-              backgroundColor: 'red',
-              color: '#fff',
-              icon: 'danger',
-              titleStyle: {
-                fontFamily: 'Lato-Bold'
-              },
-              textStyle: {
-                fontFamily: 'Lato-Regular'
+      if (handleIsChecked()) {
+        if (nameIsValid.isValid && lastNameIsValid.isValid && userNameIsValid.isValid && emailIsValid.isValid && passwordIsValid.isValid) {
+          const result = await SignUp({
+            variables: {
+              input: {
+                firstname: name,
+                lastname: lastName,
+                email: email,
+                user: userName,
+                password: password,
+                phone: numberPhone,
+                country_id: details,
+                sponsor_id: sponsorId ? hashids.decode(sponsorId)[0] : 1
               }
-            })
-          } else if (error.message === 'Sponsor ID is not valid!') {
-            showMessage({
-              message: 'Error',
-              description: 'El codigo de invitado no es valido.',
-              backgroundColor: 'red',
-              color: '#fff',
-              icon: 'danger',
-              titleStyle: {
-                fontFamily: 'Lato-Bold'
-              },
-              textStyle: {
-                fontFamily: 'Lato-Regular'
-              }
-            })
-          }
-        } else {
-          showMessage({
-            message: 'AlySkiper',
-            description: `${data.username} registrado correctamente.`,
-            backgroundColor: 'green',
-            color: '#fff',
-            type: 'success',
-            icon: 'success',
-            titleStyle: {
-              fontFamily: 'Lato-Bold'
-            },
-            textStyle: {
-              fontFamily: 'Lato-Regular'
             }
           })
-          props.navigation.push('SignIn')
+
+          const { error, data } = result.data.signup
+          if (error) {
+            if (error.message === 'This email is already exist in the database!') {
+              showMessage({
+                message: 'Error',
+                description: 'El correo ya esta registrado.',
+                backgroundColor: 'red',
+                color: '#fff',
+                icon: 'danger',
+                titleStyle: {
+                  fontFamily: 'Lato-Bold'
+                },
+                textStyle: {
+                  fontFamily: 'Lato-Regular'
+                }
+              })
+            } else if (error.message === 'Sponsor ID is not valid!') {
+              showMessage({
+                message: 'Error',
+                description: 'El codigo de invitado no es valido.',
+                backgroundColor: 'red',
+                color: '#fff',
+                icon: 'danger',
+                titleStyle: {
+                  fontFamily: 'Lato-Bold'
+                },
+                textStyle: {
+                  fontFamily: 'Lato-Regular'
+                }
+              })
+            }
+          } else {
+            showMessage({
+              message: 'AlySkiper',
+              description: `${data.username} registrado correctamente.`,
+              backgroundColor: 'green',
+              color: '#fff',
+              type: 'success',
+              icon: 'success',
+              titleStyle: {
+                fontFamily: 'Lato-Bold'
+              },
+              textStyle: {
+                fontFamily: 'Lato-Regular'
+              }
+            })
+            props.navigation.push('SignIn')
+          }
         }
       }
     }
@@ -364,6 +391,24 @@ const SignUpScreen = props => {
                 iconColor={Theme.COLORS.colorSecondary}
                 iconName='card-giftcard'
               />
+              <View style={styles.containerTerm}>
+                <CheckBox
+                  onClick={() => setChecked(!checked)}
+                  isChecked={checked}
+                  checkBoxColor={Theme.COLORS.colorSecondary}
+                />
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={styles.description}>He leído y acepto los </Text>
+                  <TouchableOpacity
+                    onPress={() => Linking.openURL('https://alyskiper.com/terms')}
+                  >
+                    <Text
+                      style={styles.descriptionBold}
+                    >términos y condiciones
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
               <View style={styles.containerButton}>
                 <IconButton
                   message='REGISTRATE'
@@ -422,6 +467,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
     color: Theme.COLORS.colorParagraph
+  },
+  containerTerm: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 15
+  },
+  description: {
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Regular'
+  },
+  descriptionBold: {
+    color: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Bold',
+    fontSize: 14
   }
 })
 
