@@ -35,7 +35,7 @@ const items = [
     key: 2,
     name: 'Metodo de pago',
     icon: 'credit-card',
-    routeName: 'MethodPayment'
+    routeName: 'PaymentMethod'
   },
   {
     key: 3,

@@ -14,6 +14,8 @@ import ProfileCommerceScreen from '../../screens/Profile/ProfileCommerceScreen'
 import TransportScreen from '../../screens/Transport/TransportScreen'
 import InvitedFriendScreen from '../../screens/InvitedFriend/InvitedFriendScreen'
 import ProfileUserScreen from '../../screens/Profile/ProfileUserScreen'
+import PaymentMethodScreen from '../../screens/PaymentMethod/PaymentMethodScreen'
+import CryptoWalletScreen from '../../screens/CryptoWallet/CryptoWalletScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -70,6 +72,14 @@ const StackNavigation = createStackNavigator({
   },
   ProfileUser: {
     screen: ProfileUserScreen,
+    navigationOptions
+  },
+  CryptoWallet: {
+    screen: CryptoWalletScreen,
+    navigationOptions
+  },
+  PaymentMethod: {
+    screen: PaymentMethodScreen,
     navigationOptions
   },
   InvitedFriend: {
