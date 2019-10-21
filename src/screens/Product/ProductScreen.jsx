@@ -99,8 +99,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   extraPrice: {
-    color: Theme.COLORS.colorParagraphSecondary,
-    fontFamily: 'Lato-Regular'
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small
   },
   nameStyle: {
     color: Theme.COLORS.colorParagraph,

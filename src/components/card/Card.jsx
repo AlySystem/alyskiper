@@ -34,6 +34,7 @@ const Card = props => {
           <Text style={props.stylesDescription || styles.description}>{props.description}</Text>
         </View>
       </View>
+      <View style={{ paddingVertical: 2 }} />
       <Picture
         source={props.sourceImage}
         styles={props.stylesImage || styles.image}
@@ -60,8 +61,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     resizeMode: 'contain',
     marginRight: 15
   },

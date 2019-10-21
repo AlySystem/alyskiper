@@ -1,16 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,
   ScrollView,
   StyleSheet
 } from 'react-native'
-import {
-  Placeholder,
-  PlaceholderMedia,
-  PlaceholderLine,
-  Fade
-} from 'rn-placeholder'
-import { useQuery } from '@apollo/react-hooks'
+import Geolocation from 'react-native-geolocation-service'
 
 // Import container
 import ListOfPromotion from '../../containers/ListOfPromotion'
@@ -19,37 +13,47 @@ import ListOfCommerce from '../../containers/ListOfCommerce'
 // Import components
 import Background from '../../components/background/Background'
 
-// Import querys
-import { COMMERCERS } from '../../graphql/querys/Querys'
-
 const CommerceScreen = props => {
-  const { data, error, loading } = useQuery(COMMERCERS)
+  const [region, setRegion] = useState(null)
+
+  let watchId
+
+  useEffect(() => {
+    watchId = Geolocation.watchPosition(
+      async ({ coords: { latitude, longitude } }) => {
+        setRegion({ latitude, longitude })
+      },
+      (error) => {
+        console.log(error)
+      },
+      {
+        timeout: 2000,
+        enableHighAccuracy: true,
+        maximumAge: 1000,
+        distanceFilter: 100
+      }
+    )
+
+    return () => {
+      Geolocation.clearWatch(watchId)
+    }
+  }, [setRegion])
 
   return (
     <Background>
       <View style={styles.screen}>
-        {loading ? (
-          <Placeholder
-            Animation={Fade}
-            Left={PlaceholderMedia}
-            Right={PlaceholderMedia}
-          >
-            <PlaceholderLine width={80} />
-            <PlaceholderLine />
-            <PlaceholderLine width={30} />
-          </Placeholder>
-        ) : (
-          <ScrollView
-            keyboardShouldPersistTaps='always'
-          >
-            <ListOfPromotion />
-            <View style={{ paddingVertical: 10 }} />
+        <ScrollView
+          keyboardShouldPersistTaps='always'
+        >
+          <ListOfPromotion />
+          <View style={{ paddingVertical: 10 }} />
+          {region && (
             <ListOfCommerce
               navigation={props.navigation}
-              data={data}
+              region={region}
             />
-          </ScrollView>
-        )}
+          )}
+        </ScrollView>
       </View>
     </Background>
   )
