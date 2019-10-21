@@ -5,12 +5,13 @@ import {
   Text,
   ScrollView
 } from 'react-native'
+import CheckBox from 'react-native-check-box'
 
 // Import components
 import Background from '../../components/background/Background'
 import Banner from '../../components/banner/Banner'
 import Title from '../../components/title/Title'
-import CheckBox from 'react-native-check-box'
+import TextArea from '../../components/input/TextArea'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -18,6 +19,7 @@ import { Theme } from '../../constants/Theme'
 const ProductScreen = props => {
   const [commerce] = useState(props.navigation.getParam('commerce'))
   const [checked, setChecked] = useState(false)
+  const [value, setValue] = useState('')
 
   return (
     <Background>
@@ -35,7 +37,7 @@ const ProductScreen = props => {
           />
           <View style={styles.layout}>
             <Text style={styles.description}>{commerce.description}</Text>
-            <View style={{ paddingVertical: 5 }} />
+            <View style={{ paddingVertical: 10 }} />
             {commerce.optionAddon.length > 0 &&
               <Title
                 stylesContainer={{}}
@@ -43,7 +45,7 @@ const ProductScreen = props => {
                 styles={styles.title}
               />}
 
-            <View style={{ paddingVertical: 5 }} />
+            <View style={{ paddingVertical: 10 }} />
             {commerce.optionAddon.length > 0 &&
               commerce.optionAddon.map(item => (
                 <View
@@ -70,6 +72,16 @@ const ProductScreen = props => {
                   <Text style={styles.extraPrice}>+{item.extraPrice}</Text>
                 </View>
               ))}
+            <View style={{ paddingVertical: 10 }} />
+            <TextArea
+              onChangeText={(value) => setValue(value)}
+              maxLength={120}
+              value={value}
+              placeholder='Agrega una nota a tu orden...'
+              placeholderTextColor={Theme.COLORS.colorParagraph}
+              stylesContainer={styles.textArea}
+              stylesInput={styles.input}
+            />
           </View>
         </ScrollView>
       </View>
@@ -108,6 +120,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Bold',
     paddingLeft: 8,
     fontSize: Theme.SIZES.normal
+  },
+  textArea: {
+    width: '100%',
+    height: 90,
+    position: 'relative',
+    backgroundColor: Theme.COLORS.colorMainDark,
+    borderRadius: 8,
+    borderColor: Theme.COLORS.colorSecondary,
+    borderWidth: 0.2,
+    paddingHorizontal: 10
+  },
+  input: {
+    color: Theme.COLORS.colorSecondary
   }
 })
 
