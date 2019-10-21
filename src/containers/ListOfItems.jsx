@@ -95,7 +95,10 @@ const ListOfItems = (props) => {
             routeName={item.routeName}
             name={item.name}
             icon={item.icon}
-            onPress={() => navigate(item.routeName)}
+            onPress={() => {
+              props.navigation.toggleDrawer()
+              navigate(item.routeName)
+            }}
           />
         ))}
         <View style={styles.containerItems}>

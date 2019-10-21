@@ -7,6 +7,7 @@ import {
   Dimensions
 } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
+import { useSelector } from 'react-redux'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -23,6 +24,7 @@ import ModalPicker from '../../components/modal/ModalPicker'
 const { height } = Dimensions.get('window')
 
 const ProfileUserScreen = () => {
+  const userData = useSelector(state => state.user)
   const [photo, setPhoto] = useState({ uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png' })
   const options = {
     title: 'Seleccionar imagen',
@@ -51,7 +53,7 @@ const ProfileUserScreen = () => {
     })
   }
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState(userData.firstName)
   const [nameIsValid, setNameIsValid] = useState({
     isValid: false,
     message: '',
@@ -70,7 +72,7 @@ const ProfileUserScreen = () => {
     setName(value)
   }
 
-  const [lastName, setLastName] = useState('')
+  const [lastName, setLastName] = useState(userData.lastName)
   const [lastNameIsValid, setLastNameIsValid] = useState({
     isValid: false,
     message: '',
@@ -89,7 +91,7 @@ const ProfileUserScreen = () => {
     setLastName(value)
   }
 
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState(userData.userName)
   const [userNameIsValid, setUserNameIsValid] = useState({
     isValid: false,
     message: '',
@@ -104,7 +106,7 @@ const ProfileUserScreen = () => {
     setUserName(value)
   }
 
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(userData.email)
   const [emailIsValid, setEmailIsValid] = useState({
     isValid: false,
     message: '',
@@ -309,6 +311,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 20,
+    paddingVertical: 20,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },

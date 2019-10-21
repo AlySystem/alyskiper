@@ -3,7 +3,8 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Dimensions
+  Dimensions,
+  Keyboard
 } from 'react-native'
 import decodeJwt from 'jwt-decode'
 import * as Animatable from 'react-native-animatable'
@@ -78,6 +79,7 @@ const SignInScreen = props => {
 
   const handleOnSubmit = async () => {
     if (emailIsValid.isValid && passwordIsValid.isValid) {
+      Keyboard.dismiss()
       const result = await SignIn({ variables: { input: { email, password } } })
       const { error } = result.data.signin
       if (error !== null) {
