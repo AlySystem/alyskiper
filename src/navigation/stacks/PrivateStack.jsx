@@ -16,6 +16,7 @@ import InvitedFriendScreen from '../../screens/InvitedFriend/InvitedFriendScreen
 import ProfileUserScreen from '../../screens/Profile/ProfileUserScreen'
 import PaymentMethodScreen from '../../screens/PaymentMethod/PaymentMethodScreen'
 import CryptoWalletScreen from '../../screens/CryptoWallet/CryptoWalletScreen'
+import ProductScreen from '../../screens/Product/ProductScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -80,6 +81,10 @@ const StackNavigation = createStackNavigator({
   },
   PaymentMethod: {
     screen: PaymentMethodScreen,
+    navigationOptions
+  },
+  Product: {
+    screen: ProductScreen,
     navigationOptions
   },
   InvitedFriend: {

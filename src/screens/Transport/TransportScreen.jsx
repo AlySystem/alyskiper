@@ -35,71 +35,65 @@ class TransportScreen extends Component {
   constructor (props) {
     super(props)
 
-    this.pubnub = new PubNubReact({
-      publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
-      subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5'
-    })
+    // this.pubnub = new PubNubReact({
+    //   publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
+    //   subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5'
+    // })
 
-    this.state = {
-      latitude: LATITUDE,
-      longitude: LONGITUDE,
-      coordinate: new AnimatedRegion({
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: 0,
-        longitudeDelta: 0
-      })
-    }
+    // this.state = {
+    //   latitude: LATITUDE,
+    //   longitude: LONGITUDE,
+    //   coordinate: new AnimatedRegion({
+    //     latitude: LATITUDE,
+    //     longitude: LONGITUDE,
+    //     latitudeDelta: 0,
+    //     longitudeDelta: 0
+    //   })
+    // }
 
-    this.pubnub.init(this)
+    // this.pubnub.init(this)
   }
 
   componentDidMount () {
-    this.subscribeToPubNub();
+    // this.subscribeToPubNub();
   }
 
   subscribeToPubNub = () => {
-    this.pubnub.subscribe({
-      channels: ['enLinea'],
-      withPresence: true,
-    });
-    this.pubnub.getMessage('location', msg => {
-      const { coordinate } = this.state;
-      const { latitude, longitude } = msg.message;
-      const newCoordinate = { latitude, longitude };
+    // this.pubnub.subscribe({
+    //   channels: ['enLinea'],
+    //   withPresence: true,
+    // });
 
-      if (Platform.OS === 'android') {
-        if (this.marker) {
-          this.marker._component.animateMarkerToCoordinate(newCoordinate, 500);
-        }
-      } else {
-        coordinate.timing(newCoordinate).start();
-      }
-
-      this.setState({
-        latitude,
-        longitude,
-      });
-    });
+    // this.pubnub.addListener({
+    //   status: function(statusEvent) {
+        
+    //   },
+    //   message: function(message) {
+    //     // console.log(message)
+    //   },
+    //   presence: function(presenceEvent) {
+    //     console.log(presenceEvent)
+    //     const newCoordinate = presenceEvent.state.coords
+    //     this.marker._component.animateMarkerToCoordinate(newCoordinate, 500);
+    //   }
+    // })
   };
-
-  getMapRegion = () => ({
-    latitude: this.state.latitude,
-    longitude: this.state.longitude,
-    latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA
-  });
 
   render () {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <MapView
+          {/* <MapView
             style={styles.map}
             showUserLocation
             followUserLocation
             loadingEnabled
-            region={this.getMapRegion()}
+            region={{
+              latitude: 12.1013507,
+              longitude: -86.2587655,
+              longitudeDelta: 0.0134,
+              latitudeDelta:0.0143 ,
+            }}
           >
             <Marker.Animated
               ref={marker => {
@@ -107,7 +101,7 @@ class TransportScreen extends Component {
               }}
               coordinate={this.state.coordinate}
             />
-          </MapView>
+          </MapView> */}
         </View>
       </SafeAreaView>
     )

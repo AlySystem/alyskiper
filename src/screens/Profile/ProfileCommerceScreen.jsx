@@ -1,34 +1,61 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  ScrollView
 } from 'react-native'
 
 // Import components
 import Background from '../../components/background/Background'
 import Banner from '../../components/banner/Banner'
+import ItemProduct from '../../components/item/ItemProduct'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
 const ProfileCommerceScreen = props => {
+  const { navigate } = props.navigation
+  const [commerce] = useState(props.navigation.getParam('commerce'))
+
   return (
     <Background>
       <View style={styles.screen}>
-        <Banner
-          sourceLogo={{ uri: 'https://pbs.twimg.com/profile_images/666277106368671744/C9ITGHyB_400x400.png' }}
-          sourceImage={{ uri: 'https://userscontent2.emaze.com/images/50a47c7f-0ab5-4038-af60-a822eec00dd8/652296452549ce574b272fcd57c1fcfc.jpg' }}
-        />
-        <View style={{ paddingVertical: 8 }} />
-        <View style={styles.container}>
-          <Text style={styles.name}>McDonalds</Text>
-          <Text style={styles.description}>Hamburguesas - postres</Text>
-        </View>
-        <View style={styles.containerHour}>
-          <Text style={styles.hourTitle}>Horarios</Text>
-          <Text style={styles.description}>11:00 am / 6:00 pm</Text>
-        </View>
+        <ScrollView
+          keyboardShouldPersistTaps='always'
+        >
+          <Banner
+            sourceLogo={{ uri: commerce.url_logo }}
+            sourceImage={{ uri: commerce.url_art }}
+          />
+          <View style={{ paddingVertical: 8 }} />
+          <View style={styles.container}>
+            <Text style={styles.name}>{commerce.namecommerce}</Text>
+            <Text style={styles.description}>{commerce.address}</Text>
+          </View>
+          <View style={{ paddingVertical: 8 }} />
+
+          {commerce.skiperCatProductsCommerce.map(catProduct => (
+            <View
+              key={catProduct.id}
+              style={styles.containerProduct}
+            >
+              <Text style={styles.title}>{catProduct.name}</Text>
+              {catProduct.skiperProductCommerce.map(product => (
+                <ItemProduct
+                  key={product.id}
+                  sourceImage={{ uri: product.url_img_product }}
+                  name={product.name}
+                  description={product.description}
+                  price={product.price}
+                  onPress={() => navigate('Product', {
+                    commerce: product
+                  })}
+                />
+              ))}
+            </View>
+          ))}
+        </ScrollView>
       </View>
     </Background>
   )
@@ -37,18 +64,17 @@ const ProfileCommerceScreen = props => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,.5)'
+    backgroundColor: 'rgba(0,0,0,.7)'
   },
   container: {
     paddingHorizontal: 10
   },
-  containerHour: {
-    paddingVertical: 15,
+  containerProduct: {
     paddingHorizontal: 10
   },
   name: {
     color: Theme.COLORS.colorParagraph,
-    fontSize: Theme.SIZES.h1,
+    fontSize: Theme.SIZES.subTitle,
     fontFamily: 'Lato-Bold'
   },
   description: {
@@ -57,10 +83,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
     paddingVertical: 5
   },
-  hourTitle: {
-    color: Theme.COLORS.colorParagraph,
-    fontSize: Theme.SIZES.normal,
-    fontFamily: 'Lato-Bold'
+  title: {
+    color: Theme.COLORS.colorSecondary,
+    fontSize: Theme.SIZES.title,
+    fontFamily: 'Lato-Bold',
+    marginVertical: 10
   }
 })
 

@@ -31,6 +31,11 @@ const HomeScreen = props => {
             title='Transporte'
             onPress={() => navigate('Transport')}
           />
+
+          <Button
+            title='Commerce'
+            onPress={() => navigate('Commerce')}
+          />
         </ScrollView>
       </View>
     </Background>
