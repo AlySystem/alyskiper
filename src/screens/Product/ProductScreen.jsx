@@ -5,7 +5,9 @@ import {
   Text,
   ScrollView
 } from 'react-native'
+// import moment from 'moment'
 import CheckBox from 'react-native-check-box'
+// import { useSelector } from 'react-redux'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -19,10 +21,17 @@ import IconButton from '../../components/button/IconButton'
 import { Theme } from '../../constants/Theme'
 
 const ProductScreen = props => {
+  // const userData = useSelector(state => state.user)
   const [commerce] = useState(props.navigation.getParam('commerce'))
   const [checked, setChecked] = useState(false)
   const [value, setValue] = useState('')
   const [count] = useState(0)
+  // const [totalPrice, setTotalPrice] = useState(0)
+  // const [address, setAddress] = useState('')
+
+  const handleOnSubmit = async (commerce) => {
+
+  }
 
   return (
     <Background>
@@ -105,6 +114,7 @@ const ProductScreen = props => {
               <IconButton
                 message='GENERAR ORDEN'
                 isActiveIcon
+                onPress={() => handleOnSubmit(commerce)}
               />
             </View>
           </View>
@@ -162,7 +172,7 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorParagraph,
     fontFamily: 'Lato-Bold',
     paddingLeft: 8,
-    fontSize: Theme.SIZES.normal
+    fontSize: Theme.SIZES.small
   },
   textArea: {
     width: '100%',
