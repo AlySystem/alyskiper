@@ -72,10 +72,10 @@ const ListOfItems = (props) => {
   const handleLogout = async () => {
     const { data: { logout } } = await SignOut({ variables: { id: userData.userId } })
     if (logout) {
+      navigate('Startup', { message: 'Saliendo...' })
       dispatch({
         type: USERREMOVEDATA
       })
-      navigate('Startup', { message: 'Saliendo...' })
       await removeAsyncStorage(keys.asyncStorageKey)
     }
   }
@@ -84,7 +84,7 @@ const ListOfItems = (props) => {
     <View style={styles.container}>
       <View style={styles.containerFixed}>
         <Profile
-          source={{ uri: 'https://www.fancyhands.com/images/default-avatar-250x250.png' }}
+          source={{ uri: userData.avatar }}
           username={userData.userName}
           email={userData.email}
           onPress={() => navigate('ProfileUser')}

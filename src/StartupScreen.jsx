@@ -51,7 +51,8 @@ const StartupScreen = props => {
         lastName: userParse.lastName,
         userName: userParse.userName,
         email: userParse.email,
-        phoneNumber: userParse.phoneNumber
+        phoneNumber: userParse.phoneNumber,
+        avatar: userParse.avatar
       }
       dispatch({
         type: USERDATA,

@@ -8,7 +8,8 @@ const INITIAL_STATE = {
   lastName: null,
   userName: null,
   email: null,
-  phoneNumber: null
+  phoneNumber: null,
+  avatar: null
 }
 
 export const user = (state = INITIAL_STATE, action) => {

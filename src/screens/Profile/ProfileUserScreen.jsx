@@ -25,7 +25,7 @@ const { height } = Dimensions.get('window')
 
 const ProfileUserScreen = () => {
   const userData = useSelector(state => state.user)
-  const [photo, setPhoto] = useState({ uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png' })
+  const [photo, setPhoto] = useState({ uri: userData.avatar })
   const options = {
     title: 'Seleccionar imagen',
     takePhotoButtonTitle: 'Tomar foto',
@@ -329,7 +329,9 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 100,
-    backgroundColor: Theme.COLORS.colorMain
+    backgroundColor: Theme.COLORS.colorMain,
+    borderColor: Theme.COLORS.colorSecondary,
+    borderWidth: 1
   },
   containerImage: {
     position: 'relative',

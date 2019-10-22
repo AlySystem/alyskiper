@@ -9,7 +9,8 @@ export const SIGNIN = gql`
         lastname
         username
         email
-        phone_number  
+        phone_number,
+        avatar  
       }
       error {
         message

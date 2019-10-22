@@ -110,7 +110,8 @@ const SignInScreen = props => {
           lastName: data.lastname,
           userName: data.username,
           email: data.email,
-          phoneNumber: data.phone_number
+          phoneNumber: data.phone_number,
+          avatar: data.avatar
         }
         setAsyncStorage(keys.asyncStorageKey, payload)
         dispatch({
