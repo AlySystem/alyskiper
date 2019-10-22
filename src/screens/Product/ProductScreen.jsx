@@ -12,6 +12,7 @@ import Background from '../../components/background/Background'
 import Banner from '../../components/banner/Banner'
 import Title from '../../components/title/Title'
 import TextArea from '../../components/input/TextArea'
+import ButtonQuantity from '../../components/button/ButtonQuantity'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -20,6 +21,7 @@ const ProductScreen = props => {
   const [commerce] = useState(props.navigation.getParam('commerce'))
   const [checked, setChecked] = useState(false)
   const [value, setValue] = useState('')
+  const [count, setCount] = useState(0)
 
   return (
     <Background>
@@ -72,7 +74,9 @@ const ProductScreen = props => {
                   <Text style={styles.extraPrice}>+{item.extraPrice}</Text>
                 </View>
               ))}
-            <View style={{ paddingVertical: 10 }} />
+            {commerce.optionAddon.length > 0 && (
+              <View style={{ paddingVertical: 10 }} />
+            )}
             <TextArea
               onChangeText={(value) => setValue(value)}
               maxLength={120}
@@ -82,6 +86,16 @@ const ProductScreen = props => {
               stylesContainer={styles.textArea}
               stylesInput={styles.input}
             />
+            <View style={{ paddingVertical: 5 }} />
+            <View style={styles.containerQuantity}>
+              <Title
+                title='Escoge tu cantidad'
+                styles={styles.smallTitle}
+              />
+              <ButtonQuantity
+                count={count}
+              />
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -131,8 +145,18 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     paddingHorizontal: 10
   },
+  containerQuantity: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   input: {
     color: Theme.COLORS.colorSecondary
+  },
+  smallTitle: {
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.small,
+    color: Theme.COLORS.colorParagraph,
+    marginBottom: 8
   }
 })
 
