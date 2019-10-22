@@ -21,7 +21,7 @@ const ProductScreen = props => {
   const [commerce] = useState(props.navigation.getParam('commerce'))
   const [checked, setChecked] = useState(false)
   const [value, setValue] = useState('')
-  const [count, setCount] = useState(0)
+  const [count] = useState(0)
 
   return (
     <Background>
