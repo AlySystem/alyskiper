@@ -7,6 +7,7 @@ import {
   Dimensions
 } from 'react-native'
 import { useMutation } from '@apollo/react-hooks'
+import { showMessage } from 'react-native-flash-message'
 import ImagePicker from 'react-native-image-picker'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -149,24 +150,40 @@ const ProfileUserScreen = () => {
         }
       }
     })
-    const payload = {
-      auth: true,
-      userToken: result.data.token,
-      userId: result.userId,
-      firstName: result.data.firstname,
-      lastName: result.data.lastname,
-      userName: result.data.user,
-      email: result.data.email,
-      phoneNumber: result.data.phone,
-      avatar: result.data.avatar,
-      country: result.data.country.name,
-      country_id: result.data.country.id
-    }
 
-    dispatch({
-      type: USERDATA,
-      payload
-    })
+    if (result.data) {
+      const payload = {
+        auth: true,
+        userId: result.data.updateUser.id,
+        firstName: result.data.updateUser.firstname,
+        lastName: result.data.updateUser.lastname,
+        userName: result.data.updateUser.user,
+        email: result.data.updateUser.email,
+        phoneNumber: result.data.updateUser.phone,
+        avatar: result.data.updateUser.avatar,
+        country: result.data.updateUser.country.name,
+        country_id: result.data.updateUser.country.id
+      }
+
+      dispatch({
+        type: USERDATA,
+        payload
+      })
+
+      showMessage({
+        message: 'AlySkiper',
+        description: `${result.data.updateUser.user} actualizado correctamente.`,
+        backgroundColor: 'green',
+        color: '#fff',
+        icon: 'success',
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+    }
   }
 
   return (
