@@ -13,6 +13,7 @@ import Banner from '../../components/banner/Banner'
 import Title from '../../components/title/Title'
 import TextArea from '../../components/input/TextArea'
 import ButtonQuantity from '../../components/button/ButtonQuantity'
+import IconButton from '../../components/button/IconButton'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -34,9 +35,12 @@ const ProductScreen = props => {
             sourceImage={{ uri: commerce.url_img_product }}
           />
           <View style={{ paddingVertical: 5 }} />
-          <Title
-            title={commerce.name}
-          />
+          <View style={styles.containerMain}>
+            <Title
+              title={commerce.name}
+            />
+            <Text style={styles.price}>{commerce.price}</Text>
+          </View>
           <View style={styles.layout}>
             <Text style={styles.description}>{commerce.description}</Text>
             <View style={{ paddingVertical: 10 }} />
@@ -96,6 +100,13 @@ const ProductScreen = props => {
                 count={count}
               />
             </View>
+
+            <View style={styles.containerButton}>
+              <IconButton
+                message='GENERAR ORDEN'
+                isActiveIcon
+              />
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -114,15 +125,33 @@ const styles = StyleSheet.create({
   description: {
     color: Theme.COLORS.colorParagraphSecondary
   },
+  price: {
+    color: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.subTitle,
+    paddingRight: 10
+  },
   title: {
     color: Theme.COLORS.colorSecondary,
     fontFamily: 'Lato-Bold',
     fontSize: Theme.SIZES.subTitle
   },
+  containerMain: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   containerPrice: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: 25
+  },
+  containerButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 25,
+    marginTop: 10
   },
   extraPrice: {
     color: Theme.COLORS.colorParagraph,
