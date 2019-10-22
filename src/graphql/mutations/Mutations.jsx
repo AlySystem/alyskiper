@@ -10,7 +10,11 @@ export const SIGNIN = gql`
         username
         email
         phone_number,
-        avatar  
+        avatar
+        country {
+          name
+          id
+        }
       }
       error {
         message
@@ -56,5 +60,23 @@ export const VERIFYCODE = gql`
 export const SIGNOUT = gql`
   mutation SignOut($id: Int!) {
     logout(id: $id)
+  }
+`
+
+export const UPDATEUSER = gql`
+  mutation UpdateUser($input: UserUpdateInput!) {
+    updateUser(input: $input) {
+      firstname
+      lastname
+      user
+      email
+      avatar
+      id
+      phone
+      country {
+        name
+        id
+      }
+    }
   }
 `

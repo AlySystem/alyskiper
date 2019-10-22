@@ -6,11 +6,15 @@ import {
   StyleSheet,
   Dimensions
 } from 'react-native'
+import { useMutation } from '@apollo/react-hooks'
 import ImagePicker from 'react-native-image-picker'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+
+// Action types
+import { USERDATA } from '../../store/actionTypes'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -19,12 +23,17 @@ import Picture from '../../components/picture/Picture'
 import Button from '../../components/button/Button'
 import InputControl from '../../components/input/InputControl'
 import IconButton from '../../components/button/IconButton'
-import ModalPicker from '../../components/modal/ModalPicker'
+
+// Import mutations
+import { UPDATEUSER } from '../../graphql/mutations/Mutations'
 
 const { height } = Dimensions.get('window')
 
 const ProfileUserScreen = () => {
   const userData = useSelector(state => state.user)
+  const dispatch = useDispatch()
+  const [UpdateUser, { loading }] = useMutation(UPDATEUSER)
+
   const [photo, setPhoto] = useState({ uri: userData.avatar })
   const options = {
     title: 'Seleccionar imagen',
@@ -125,40 +134,39 @@ const ProfileUserScreen = () => {
     setEmail(value.toLowerCase())
   }
 
-  const [country, setCountry] = useState({})
-  const handleOnSelect = (country) => {
-    setCountry(country.id)
-  }
-
-  const handleOnSubmit = async => {
-    console.log(name)
-    console.log(lastName)
-    console.log(userName)
-    console.log(numberPhone)
-    console.log(phoneCode)
-    console.log(email)
-    console.log(country)
-  }
-
-  const [numberPhone, setNumberPhone] = useState('')
-  const [numberPhoneIsValid, setNumberPhoneIsValid] = useState({
-    isValid: false,
-    message: '',
-    errorStyle: true
-  })
-
-  const [phoneCode, setPhoneCode] = useState('')
-  const handleOnSelectPicker = (details) => {
-    setPhoneCode(details.phoneCode)
-  }
-
-  const handleOnChange = value => {
-    if (!value) {
-      setNumberPhoneIsValid({ isValid: false, message: 'El numero es requerido.', errorStyle: false })
-    } else {
-      setNumberPhoneIsValid({ isValid: true, message: '', errorStyle: true })
+  const handleOnSubmit = async () => {
+    const result = await UpdateUser({
+      variables: {
+        input: {
+          id: userData.userId,
+          firstname: name,
+          lastname: lastName,
+          username: userName,
+          email: email,
+          avatar: photo.uri,
+          phone: userData.phoneNumber,
+          country_id: userData.country_id
+        }
+      }
+    })
+    const payload = {
+      auth: true,
+      userToken: result.data.token,
+      userId: result.userId,
+      firstName: result.data.firstname,
+      lastName: result.data.lastname,
+      userName: result.data.user,
+      email: result.data.email,
+      phoneNumber: result.data.phone,
+      avatar: result.data.avatar,
+      country: result.data.country.name,
+      country_id: result.data.country.id
     }
-    setNumberPhone(value)
+
+    dispatch({
+      type: USERDATA,
+      payload
+    })
   }
 
   return (
@@ -240,30 +248,6 @@ const ProfileUserScreen = () => {
               errorText={userNameIsValid.message}
             />
 
-            <View
-              style={styles.containerRow}
-            >
-              <ModalPicker
-                handleOnSelect={handleOnSelectPicker}
-              />
-              <InputControl
-                stylesContainer={styles.containerInput}
-                value={numberPhone}
-                isActiveIcon
-                iconName='phone'
-                iconSize={22}
-                stylesIcon={styles.icon}
-                placeholder='7728  9801'
-                placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
-                onChangeText={handleOnChange}
-                keyboardType='number-pad'
-                stylesError={styles.stylesError}
-                stylesInput={[styles.input, { borderColor: numberPhoneIsValid.errorStyle ? Theme.COLORS.colorSecondary : 'red' }]}
-                isValid={numberPhoneIsValid.isValid}
-                errorText={numberPhoneIsValid.message}
-              />
-            </View>
-
             <InputControl
               value={email}
               setValue={setEmail}
@@ -280,17 +264,11 @@ const ProfileUserScreen = () => {
               isValid={emailIsValid.isValid}
               errorText={emailIsValid.message}
             />
-
-            <ModalPicker
-              activeCountry
-              handleOnSelect={handleOnSelect}
-            />
-
             <View style={styles.containerButton}>
               <IconButton
                 message='ACEPTAR'
                 isActiveIcon
-                isLoading={false}
+                isLoading={loading}
                 stylesButton={styles.buttonIcon}
                 iconName='check'
                 onPress={handleOnSubmit}
@@ -346,7 +324,6 @@ const styles = StyleSheet.create({
   layout: {
     flex: 1,
     paddingHorizontal: 20,
-    justifyContent: 'center',
     alignItems: 'center'
   },
   scrollView: {
@@ -356,7 +333,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20
+    marginBottom: 20,
+    marginTop: 30
   },
   stylesInput: {
     backgroundColor: Theme.COLORS.colorMainDark,

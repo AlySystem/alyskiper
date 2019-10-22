@@ -65,6 +65,7 @@ const items = [
 
 const ListOfItems = (props) => {
   const { navigate } = props.navigation
+
   const dispatch = useDispatch()
   const userData = useSelector(state => state.user)
   const [SignOut] = useMutation(SIGNOUT)

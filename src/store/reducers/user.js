@@ -9,7 +9,9 @@ const INITIAL_STATE = {
   userName: null,
   email: null,
   phoneNumber: null,
-  avatar: null
+  avatar: null,
+  country: null,
+  country_id: null
 }
 
 export const user = (state = INITIAL_STATE, action) => {
