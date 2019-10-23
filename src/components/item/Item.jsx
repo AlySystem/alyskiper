@@ -17,16 +17,24 @@ import Picture from '../picture/Picture'
 import { Theme } from '../../constants/Theme'
 
 const Item = (props) => {
+  const handleOnPress = () => {
+    props.setActive(props.id)
+  }
+
+  console.log(props.classActive)
+
   return (
     <TouchableOpacity
-      onPress={props.onPress}
-      style={props.styles || styles.container}
+      onPress={props.onPress || handleOnPress}
+      style={[props.styles || styles.container, {
+        backgroundColor: props.classActive
+      }]}
     >
       <View style={styles.left}>
         {props.icon ? (
           <Icon
             iconName={props.icon}
-            iconSize={28}
+            iconSize={props.iconSize || 28}
             styles={styles.icon}
           />
         ) : (
@@ -43,7 +51,7 @@ const Item = (props) => {
         </View>
       </View>
       <Icon
-        iconName='chevron-right'
+        iconName={props.iconNameCheck || 'chevron-right'}
         iconSize={30}
       />
     </TouchableOpacity>

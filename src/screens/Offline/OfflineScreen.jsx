@@ -11,7 +11,7 @@ import Picture from '../../components/picture/Picture'
 import Title from '../../components/title/Title'
 
 // Import image
-import logo from '../../../assets/images/img-alyskiper.png'
+import logo from '../../../assets/images/img-alyskiper-error.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'

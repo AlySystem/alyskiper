@@ -7,11 +7,12 @@ import {
 import Geolocation from 'react-native-geolocation-service'
 
 // Import container
-import ListOfPromotion from '../../containers/ListOfPromotion'
+// import ListOfPromotion from '../../containers/ListOfPromotion'
 import ListOfCommerce from '../../containers/ListOfCommerce'
 
 // Import components
 import Background from '../../components/background/Background'
+import ToolBar from '../../components/header/ToolBar'
 
 const CommerceScreen = props => {
   const [region, setRegion] = useState(null)
@@ -42,10 +43,13 @@ const CommerceScreen = props => {
   return (
     <Background>
       <View style={styles.screen}>
+        <ToolBar
+          navigation={props.navigation}
+        />
         <ScrollView
           keyboardShouldPersistTaps='always'
         >
-          <ListOfPromotion />
+          {/* <ListOfPromotion /> */}
           <View style={{ paddingVertical: 10 }} />
           {region && (
             <ListOfCommerce

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     right: 20,
     bottom: 20,
     padding: 15,
-    zIndex: 100000,
+    zIndex: 1000,
     borderRadius: 100
   }
 })

@@ -26,12 +26,7 @@ import { Theme } from '../../constants/Theme'
 const OrderCheck = props => {
   const dispatch = useDispatch()
   const handleOnSubmit = async () => {
-    dispatch({
-      type: ACTIVE,
-      payload: {
-        active: true
-      }
-    })
+
   }
 
   return (

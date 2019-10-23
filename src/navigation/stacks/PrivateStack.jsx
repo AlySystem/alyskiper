@@ -17,6 +17,7 @@ import ProfileUserScreen from '../../screens/Profile/ProfileUserScreen'
 import PaymentMethodScreen from '../../screens/PaymentMethod/PaymentMethodScreen'
 import CryptoWalletScreen from '../../screens/CryptoWallet/CryptoWalletScreen'
 import ProductScreen from '../../screens/Product/ProductScreen'
+import AddressScreen from '../../screens/Address/AddressScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -75,6 +76,10 @@ const StackNavigation = createStackNavigator({
     screen: ProfileUserScreen,
     navigationOptions
   },
+  Address: {
+    screen: AddressScreen,
+    navigationOptions
+  },
   CryptoWallet: {
     screen: CryptoWalletScreen,
     navigationOptions
@@ -93,7 +98,9 @@ const StackNavigation = createStackNavigator({
   },
   Commerce: {
     screen: CommerceScreen,
-    navigationOptions
+    navigationOptions: {
+      header: null
+    }
   },
   ProfileCommerce: {
     screen: ProfileCommerceScreen,
