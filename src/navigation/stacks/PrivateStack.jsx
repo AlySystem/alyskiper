@@ -18,6 +18,7 @@ import PaymentMethodScreen from '../../screens/PaymentMethod/PaymentMethodScreen
 import CryptoWalletScreen from '../../screens/CryptoWallet/CryptoWalletScreen'
 import ProductScreen from '../../screens/Product/ProductScreen'
 import AddressScreen from '../../screens/Address/AddressScreen'
+import NotificationScreen from '../../screens/Notification/NotificationScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -82,6 +83,10 @@ const StackNavigation = createStackNavigator({
   },
   CryptoWallet: {
     screen: CryptoWalletScreen,
+    navigationOptions
+  },
+  Notification: {
+    screen: NotificationScreen,
     navigationOptions
   },
   PaymentMethod: {

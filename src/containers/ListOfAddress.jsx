@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import {
-  StyleSheet,
-  View
+  StyleSheet
 } from 'react-native'
 
 import Item from '../components/item/Item'
-import { Theme } from '../constants/Theme'
 
 const items = [
   {
@@ -55,9 +53,5 @@ const ListOfAddress = props => {
     </>
   )
 }
-
-const styles = StyleSheet.create({
-
-})
 
 export default ListOfAddress

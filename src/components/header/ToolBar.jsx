@@ -63,6 +63,7 @@ const ToolBar = props => {
                 <Button
                   iconName='notifications-off'
                   iconSize={30}
+                  onPress={() => navigate('Notification')}
                 />
                 <View style={styles.notification}>
                   <Text style={styles.notificationValue}>7</Text>
