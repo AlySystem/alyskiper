@@ -53,6 +53,7 @@ export const VERIFYCODE = gql`
     verify_code(verifycode: $verifycode) {
       ok
       message
+      status
     }
   }
 `

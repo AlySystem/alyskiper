@@ -5,9 +5,8 @@ import {
   Text,
   ScrollView
 } from 'react-native'
-// import moment from 'moment'
-import CheckBox from 'react-native-check-box'
-// import { useSelector } from 'react-redux'
+import moment from 'moment'
+import { useSelector } from 'react-redux'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -16,25 +15,47 @@ import Title from '../../components/title/Title'
 import TextArea from '../../components/input/TextArea'
 import ButtonQuantity from '../../components/button/ButtonQuantity'
 import IconButton from '../../components/button/IconButton'
+import CheckBox from '../../components/checkbox/CheckBox'
+import Modal from '../../components/modal/Modal'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+import OrderCheck from '../../components/orderCheck/OrderCheck'
 
 const ProductScreen = props => {
-  // const userData = useSelector(state => state.user)
+  const userData = useSelector(state => state.user)
   const [commerce] = useState(props.navigation.getParam('commerce'))
-  const [checked, setChecked] = useState(false)
+  const [checked, setChecked] = useState()
   const [value, setValue] = useState('')
   const [count] = useState(0)
-  // const [totalPrice, setTotalPrice] = useState(0)
-  // const [address, setAddress] = useState('')
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [address, setAddress] = useState('')
+
+  const [isVisible, setIsVisible] = useState(false)
 
   const handleOnSubmit = async (commerce) => {
-
+    setIsVisible(true)
   }
 
   return (
     <Background>
+      {isVisible && (
+        <Modal
+          animationIn='zoomIn'
+          backgroundColor={Theme.COLORS.colorMainAlt}
+          opacity={1}
+          style={{
+            margin: 0
+          }}
+
+          isVisible={isVisible}
+        >
+          <OrderCheck
+            setIsVisible={setIsVisible}
+            isVisible={isVisible}
+          />
+        </Modal>
+      )}
       <View style={styles.screen}>
         <ScrollView
           keyboardShouldPersistTaps='always'
@@ -59,7 +80,6 @@ const ProductScreen = props => {
                 title='Extras'
                 styles={styles.title}
               />}
-
             <View style={{ paddingVertical: 10 }} />
             {commerce.optionAddon.length > 0 &&
               commerce.optionAddon.map(item => (
@@ -67,23 +87,10 @@ const ProductScreen = props => {
                   style={styles.containerPrice}
                   key={item.id}
                 >
-                  <View style={{
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                  }}
-                  >
-                    <CheckBox
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'row'
-                      }}
-                      onClick={() => setChecked(!checked)}
-                      isChecked={checked}
-                      checkBoxColor={Theme.COLORS.colorSecondary}
-                    />
-                    <Text style={styles.nameStyle}>{item.name}</Text>
-                  </View>
+                  <CheckBox
+                    name={item.name}
+                    handleCheck={() => console.log(item.id, item.name, item.extraPrice)}
+                  />
                   <Text style={styles.extraPrice}>+{item.extraPrice}</Text>
                 </View>
               ))}
@@ -112,8 +119,9 @@ const ProductScreen = props => {
 
             <View style={styles.containerButton}>
               <IconButton
-                message='GENERAR ORDEN'
+                message='AGREGAR ORDEN'
                 isActiveIcon
+                iconName='add'
                 onPress={() => handleOnSubmit(commerce)}
               />
             </View>
@@ -166,12 +174,6 @@ const styles = StyleSheet.create({
   extraPrice: {
     color: Theme.COLORS.colorParagraph,
     fontFamily: 'Lato-Regular',
-    fontSize: Theme.SIZES.small
-  },
-  nameStyle: {
-    color: Theme.COLORS.colorParagraph,
-    fontFamily: 'Lato-Bold',
-    paddingLeft: 8,
     fontSize: Theme.SIZES.small
   },
   textArea: {

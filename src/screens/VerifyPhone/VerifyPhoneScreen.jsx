@@ -32,7 +32,7 @@ const VerifyPhoneScreen = props => {
   const [numberPhone] = useState(props.navigation.getParam('number'))
 
   const handleOnSubmit = async (codeVerify = code) => {
-    const result = await VerifyCode({ variables: { verifycode: { phone_number: numberPhone, channel: 'sms', code: `${codeVerify}` } } })
+    const result = await VerifyCode({ variables: { verifycode: { phone_number: numberPhone, channel: 'sms', code: `${code}` } } })
     const { message } = result.data.verify_code
 
     if (message === 'Could not send verification code') {

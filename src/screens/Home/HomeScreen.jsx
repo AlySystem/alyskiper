@@ -16,10 +16,12 @@ import { Theme } from '../../constants/Theme'
 
 // Import components
 import Background from '../../components/background/Background'
+import FloatingActionButton from '../../components/button/FloatingActionButton'
 
 const HomeScreen = props => {
   const { navigate } = props.navigation
   const userData = useSelector(state => state.user)
+  const active = useSelector(state => state.active)
 
   return (
     <Background>
@@ -38,6 +40,10 @@ const HomeScreen = props => {
           />
         </ScrollView>
       </View>
+      <FloatingActionButton
+        iconName='receipt'
+        isActive={active.active}
+      />
     </Background>
   )
 }

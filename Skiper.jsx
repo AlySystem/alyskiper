@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import FlashMessage from 'react-native-flash-message'
 import ApolloClient from 'apollo-boost'
-import { ApolloProvider } from '@apollo/react-hooks'
 import { Provider } from 'react-redux'
+import { ApolloProvider } from '@apollo/react-hooks'
+
 import NetInfo from '@react-native-community/netinfo'
 
 // Import utils
