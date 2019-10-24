@@ -1,78 +1,89 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   View,
   StyleSheet,
-  SafeAreaView
+  SafeAreaView,
+  Dimensions
 } from 'react-native'
-
 import MapView, { AnimatedRegion } from 'react-native-maps'
-import PubNubReact from 'pubnub-react'
 
+// Import components
+import Background from '../../components/background/Background'
+import Search from '../../components/search/Search'
 
-const LATITUDE = 37.78825
-const LONGITUDE = -122.4324
+// Import hoooks
+import { useLocation } from '../../hooks/useLocation'
 
-class TransportScreen extends Component {
-  constructor (props) {
-    super(props)
+// Import theme
+import { Theme } from '../../constants/Theme'
 
-    this.pubnub = new PubNubReact({
-      publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
-      subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5'
-    })
+const { height, width } = Dimensions.get('window')
 
-    this.state = {
-      latitude: LATITUDE,
-      longitude: LONGITUDE,
-      coordinate: new AnimatedRegion({
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: 0,
-        longitudeDelta: 0
-      })
-    }
+const TransportScreen = props => {
+  const { region, error } = useLocation()
+  const [isLoading, setIsLoading] = useState(false)
+  const [destination, setDestination] = useState(null)
+  const mapView = useRef(null)
 
-    this.pubnub.init(this)
+  const handleDetails = (placeId, details) => {
+    console.log(placeId, details)
   }
 
-  componentDidMount () {
-    this.subscribeToPubNub();
-  }
-
-  subscribeToPubNub = () => {
-    
-  };
-
-  render () {
-    return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <MapView
-            style={styles.map}
-            showUserLocation
-            followUserLocation
-            loadingEnabled
-            region={{
-              latitude: 12.1013507,
-              longitude: -86.2587655,
-              longitudeDelta: 0.0134,
-              latitudeDelta:0.0143,
-            }}
-          >
-          </MapView>
+  return (
+    <Background>
+      <View style={styles.screen}>
+        <MapView
+          style={{ flex: 1 }}
+          ref={mapView}
+          showsUserLocation
+          loadingEnabled
+          loadingBackgroundColor={Theme.COLORS.colorMainAlt}
+          loadingIndicatorColor={Theme.COLORS.colorSecondary}
+          region={region}
+        />
+        <View style={styles.containerInput}>
+          <Search
+            handleDetails={handleDetails}
+            origen={region}
+            stylesInput={styles.input}
+            containerPredictions={styles.containerPredictions}
+          />
         </View>
-      </SafeAreaView>
-    )
-  }
+      </View>
+    </Background>
+  )
 }
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,.5)'
-  },
-  map: {
+    backgroundColor: 'rgba(0,0,0,.5)',
     flex: 1
+  },
+  containerPredictions: {
+    backgroundColor: Theme.COLORS.colorMainAlt,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    position: 'relative',
+    top: 2
+  },
+  input: {
+    backgroundColor: Theme.COLORS.colorMainDark,
+    borderRadius: 8,
+    paddingLeft: 55,
+    paddingRight: 50,
+    paddingVertical: 10,
+    borderWidth: 0.3,
+    borderColor: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    color: Theme.COLORS.colorParagraph
+  },
+  containerInput: {
+    position: 'absolute',
+    top: height * 0.05,
+    width: '100%',
+    paddingHorizontal: 15
   }
 })
 

@@ -50,10 +50,10 @@ const Search = props => {
         iconSize={25}
         iconColor={Theme.COLORS.colorSecondary}
         iconName='search'
-        stylesInput={styles.stylesInput}
+        stylesInput={props.stylesInput || styles.stylesInput}
       />
       {predictions && (
-        <View style={styles.containerPredictions}>
+        <View style={props.containerPredictions || styles.containerPredictions}>
           <Text style={styles.resultText}>Destinos sugeridos</Text>
           <View style={{ paddingVertical: 5 }} />
 
@@ -82,9 +82,6 @@ const Search = props => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-
-  },
   containerPredictions: {
     backgroundColor: Theme.COLORS.colorMainAlt,
     paddingVertical: 10

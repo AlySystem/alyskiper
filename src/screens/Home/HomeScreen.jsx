@@ -30,7 +30,12 @@ const HomeScreen = props => {
         <ScrollView
           keyboardShouldPersistTaps='always'
         >
-          <ListOfSwiper />
+          <Animatable.View
+            animation='zoomIn'
+            iterationCount={1}
+          >
+            <ListOfSwiper />
+          </Animatable.View>
           <Button
             title='Transporte'
             onPress={() => navigate('Transport')}
