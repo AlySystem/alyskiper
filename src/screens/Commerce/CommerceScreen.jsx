@@ -10,6 +10,9 @@ import Geolocation from 'react-native-geolocation-service'
 // import ListOfPromotion from '../../containers/ListOfPromotion'
 import ListOfCommerce from '../../containers/ListOfCommerce'
 
+// Import skeleton
+import Skeleton from '../../skeleton/SkeletonCommerce'
+
 // Import components
 import Background from '../../components/background/Background'
 import ToolBar from '../../components/header/ToolBar'
@@ -49,14 +52,15 @@ const CommerceScreen = props => {
         <ScrollView
           keyboardShouldPersistTaps='always'
         >
+          <Skeleton />
           {/* <ListOfPromotion /> */}
-          <View style={{ paddingVertical: 10 }} />
+          {/* <View style={{ paddingVertical: 10 }} />
           {region && (
             <ListOfCommerce
               navigation={props.navigation}
               region={region}
             />
-          )}
+          )} */}
         </ScrollView>
       </View>
     </Background>

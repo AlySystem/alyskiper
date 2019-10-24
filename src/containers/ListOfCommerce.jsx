@@ -8,7 +8,7 @@ import { COMMERCERS } from '../graphql/querys/Querys'
 import Card from '../components/card/Card'
 
 // Import skeleton
-import Skeleton from '../skeleton/SkeletonCommerce'
+import Skeleton from '../skeleton/SkeletonProduct'
 
 const ListOfCommerce = props => {
   const { navigate } = props.navigation
