@@ -78,6 +78,7 @@ export const UPDATEUSER = gql`
       country {
         name
         id
+        iso
       }
     }
   }

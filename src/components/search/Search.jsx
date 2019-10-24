@@ -22,9 +22,10 @@ import { Theme } from '../../constants/Theme'
 const { height } = Dimensions.get('window')
 
 const Search = props => {
-  const { iso } = useSelector(state => state.user)
+  const userData = useSelector(state => state.user)
   const [search, setSearch] = useState('')
   const [predictions, setPredictions] = useState()
+  const iso = 'ni'
 
   const handleOnChange = async (value) => {
     setSearch(value)
@@ -34,6 +35,8 @@ const Search = props => {
     const data = await response.json()
 
     setPredictions(data.predictions)
+    console.log(data)
+    console.log(userData)
   }
 
   return (
