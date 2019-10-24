@@ -11,7 +11,8 @@ const INITIAL_STATE = {
   phoneNumber: null,
   avatar: null,
   country: null,
-  country_id: null
+  country_id: null,
+  iso: null
 }
 
 export const user = (state = INITIAL_STATE, action) => {

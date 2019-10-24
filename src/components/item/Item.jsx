@@ -21,8 +21,6 @@ const Item = (props) => {
     props.setActive(props.id)
   }
 
-  console.log(props.classActive)
-
   return (
     <TouchableOpacity
       onPress={props.onPress || handleOnPress}

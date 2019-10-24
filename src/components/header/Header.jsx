@@ -33,7 +33,7 @@ const Header = props => {
         <Button
           stylesButton={styles.button}
           onPress={props.onPress}
-          iconName='arrow-back'
+          iconName={props.iconName || 'arrow-back'}
         />
       </Animatable.View>
     </View>

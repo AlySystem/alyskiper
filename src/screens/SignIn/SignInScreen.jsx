@@ -113,7 +113,8 @@ const SignInScreen = props => {
           phoneNumber: data.phone_number,
           avatar: data.avatar,
           country: data.country.name,
-          country_id: data.country.id
+          country_id: data.country.id,
+          iso: data.country.iso.toLowerCase()
         }
         setAsyncStorage(keys.asyncStorageKey, payload)
         dispatch({

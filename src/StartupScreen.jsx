@@ -54,7 +54,8 @@ const StartupScreen = props => {
         phoneNumber: userParse.phoneNumber,
         avatar: userParse.avatar,
         country: userParse.country.name,
-        country_id: userParse.country.id
+        country_id: userParse.country.id,
+        iso: userParse.country.iso
       }
       dispatch({
         type: USERDATA,
