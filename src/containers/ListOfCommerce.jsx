@@ -16,20 +16,16 @@ const ListOfCommerce = props => {
 
   return (
     <>
-      {loading ? (
-        <Skeleton />
-      ) : (
-        data.CommercesIntoRadio.map((commerce, index) => (
-          <Card
-            key={index}
-            name={commerce.namecommerce}
-            description={commerce.address}
-            sourceLogo={{ uri: commerce.url_logo }}
-            sourceImage={{ uri: commerce.url_art }}
-            onPress={() => navigate('ProfileCommerce', { commerce: commerce })}
-          />
-        ))
-      )}
+      {data.CommercesIntoRadio.map((commerce, index) => (
+        <Card
+          key={index}
+          name={commerce.namecommerce}
+          description={commerce.address}
+          sourceLogo={{ uri: commerce.url_logo }}
+          sourceImage={{ uri: commerce.url_art }}
+          onPress={() => navigate('ProfileCommerce', { commerce: commerce })}
+        />
+      ))}
     </>
   )
 }

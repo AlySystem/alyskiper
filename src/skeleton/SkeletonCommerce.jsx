@@ -25,7 +25,7 @@ const SkeletonCommerce = props => {
           width={40}
           height={18}
           style={{
-            backgroundColor: Theme.COLORS.colorSecondary,
+            backgroundColor: Theme.COLORS.colorSecondaryAlt,
             borderRadius: 100
           }}
         />
@@ -36,7 +36,7 @@ const SkeletonCommerce = props => {
                 borderRadius: 100,
                 height: 80,
                 width: 80,
-                backgroundColor: Theme.COLORS.colorSecondary
+                backgroundColor: Theme.COLORS.colorSecondaryAlt
               }}
             />
             <PlaceholderLine
@@ -44,7 +44,7 @@ const SkeletonCommerce = props => {
               height={10}
               style={{
                 marginVertical: 10,
-                backgroundColor: Theme.COLORS.colorSecondary,
+                backgroundColor: Theme.COLORS.colorSecondaryAlt,
                 borderRadius: 100
               }}
             />
@@ -55,7 +55,7 @@ const SkeletonCommerce = props => {
                 borderRadius: 100,
                 height: 80,
                 width: 80,
-                backgroundColor: Theme.COLORS.colorSecondary
+                backgroundColor: Theme.COLORS.colorSecondaryAlt
               }}
             />
             <PlaceholderLine
@@ -63,7 +63,7 @@ const SkeletonCommerce = props => {
               height={10}
               style={{
                 marginVertical: 10,
-                backgroundColor: Theme.COLORS.colorSecondary,
+                backgroundColor: Theme.COLORS.colorSecondaryAlt,
                 borderRadius: 100
               }}
             />
@@ -74,7 +74,7 @@ const SkeletonCommerce = props => {
                 borderRadius: 100,
                 height: 80,
                 width: 80,
-                backgroundColor: Theme.COLORS.colorSecondary
+                backgroundColor: Theme.COLORS.colorSecondaryAlt
               }}
             />
             <PlaceholderLine
@@ -82,7 +82,7 @@ const SkeletonCommerce = props => {
               height={10}
               style={{
                 marginVertical: 10,
-                backgroundColor: Theme.COLORS.colorSecondary,
+                backgroundColor: Theme.COLORS.colorSecondaryAlt,
                 borderRadius: 100
               }}
             />
@@ -93,7 +93,7 @@ const SkeletonCommerce = props => {
           style={{
             width: '100%',
             height: 200,
-            backgroundColor: Theme.COLORS.colorSecondary,
+            backgroundColor: Theme.COLORS.colorSecondaryAlt,
             borderRadius: 10
           }}
         />
@@ -102,7 +102,7 @@ const SkeletonCommerce = props => {
           width={40}
           height={18}
           style={{
-            backgroundColor: Theme.COLORS.colorSecondary,
+            backgroundColor: Theme.COLORS.colorSecondaryAlt,
             borderRadius: 100
           }}
         />
@@ -110,7 +110,7 @@ const SkeletonCommerce = props => {
           style={{
             width: 220,
             height: 130,
-            backgroundColor: Theme.COLORS.colorSecondary,
+            backgroundColor: Theme.COLORS.colorSecondaryAlt,
             borderRadius: 10
           }}
         />

@@ -4,11 +4,12 @@ import {
   ScrollView,
   StyleSheet
 } from 'react-native'
-import Geolocation from 'react-native-geolocation-service'
 
 // Import container
-// import ListOfPromotion from '../../containers/ListOfPromotion'
+import ListOfPromotion from '../../containers/ListOfPromotion'
 import ListOfCommerce from '../../containers/ListOfCommerce'
+import ListOfCategory from '../../containers/ListOfCategory'
+import ListOfSwiper from '../../containers/ListOfSwiper'
 
 // Import skeleton
 import Skeleton from '../../skeleton/SkeletonCommerce'
@@ -17,31 +18,11 @@ import Skeleton from '../../skeleton/SkeletonCommerce'
 import Background from '../../components/background/Background'
 import ToolBar from '../../components/header/ToolBar'
 
+// Import custom hooks
+import { useLocation } from '../../hooks/useLocation'
+
 const CommerceScreen = props => {
-  const [region, setRegion] = useState(null)
-
-  let watchId
-
-  useEffect(() => {
-    watchId = Geolocation.watchPosition(
-      async ({ coords: { latitude, longitude } }) => {
-        setRegion({ latitude, longitude })
-      },
-      (error) => {
-        console.log(error)
-      },
-      {
-        timeout: 2000,
-        enableHighAccuracy: true,
-        maximumAge: 1000,
-        distanceFilter: 100
-      }
-    )
-
-    return () => {
-      Geolocation.clearWatch(watchId)
-    }
-  }, [setRegion])
+  const { region, error } = useLocation()
 
   return (
     <Background>
@@ -53,14 +34,16 @@ const CommerceScreen = props => {
           keyboardShouldPersistTaps='always'
         >
           <Skeleton />
-          {/* <ListOfPromotion /> */}
-          {/* <View style={{ paddingVertical: 10 }} />
-          {region && (
-            <ListOfCommerce
-              navigation={props.navigation}
-              region={region}
-            />
-          )} */}
+          <ListOfCategory />
+          <View style={{ marginVertical: 20 }}>
+            <ListOfSwiper />
+          </View>
+          <ListOfPromotion />
+          <View style={{ paddingVertical: 10 }} />
+          <ListOfCommerce
+            navigation={props.navigation}
+            region={region}
+          />
         </ScrollView>
       </View>
     </Background>

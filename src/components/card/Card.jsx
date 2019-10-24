@@ -12,7 +12,7 @@ import Picture from '../picture/Picture'
 
 // Import default images
 import logo from '../../../assets/images/img-logo-alycoin.png'
-import image from '../../../assets/images/img-background-alt.png'
+import image from '../../../assets/images/img-background.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'

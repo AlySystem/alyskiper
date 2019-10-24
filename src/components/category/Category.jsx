@@ -12,7 +12,7 @@ import Picture from '../picture/Picture'
 import Title from '../title/Title'
 
 // Import default image
-import defaultImage from '../../../assets/images/img-background-alt.png'
+import defaultImage from '../../../assets/images/img-background.png'
 
 const Category = props => {
   return (
