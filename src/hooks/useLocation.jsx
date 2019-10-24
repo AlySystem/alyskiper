@@ -5,7 +5,8 @@ import Geolocation from 'react-native-geolocation-service'
 import { hasLocationPermission } from '../utils/PermissionLocation'
 
 export const useLocation = () => {
-  const [region, setRegion] = useState()
+  const [region, setRegion] = useState({ latitude: 0, longitude: 0 })
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   let watchId = null
 
@@ -13,10 +14,12 @@ export const useLocation = () => {
     const fetchLocation = async () => {
       const location = await hasLocationPermission()
       if (!location) return
+      setIsLoading(true)
 
       watchId = Geolocation.watchPosition(
         ({ coords: { latitude, longitude } }) => {
           setRegion({ latitude, longitude, latitudeDelta: 0.0143, longitudeDelta: 0.0134 })
+          setIsLoading(false)
         }, error => {
           setError(error)
         }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100 }
@@ -29,5 +32,5 @@ export const useLocation = () => {
     }
   }, [watchId, setRegion, setError])
 
-  return { region, error }
+  return { region, error, isLoading }
 }

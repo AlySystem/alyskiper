@@ -15,7 +15,6 @@ export const COMMERCERS = gql`
     CommercesIntoRadio (latitud: $latitud, longitud: $longitud) {
       id
       namecommerce
-      phone
       lat
       lon
       url_art

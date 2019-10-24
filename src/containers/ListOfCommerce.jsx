@@ -1,22 +1,14 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
-
-// Import querys
-import { COMMERCERS } from '../graphql/querys/Querys'
 
 // Import components
 import Card from '../components/card/Card'
 
-// Import skeleton
-import Skeleton from '../skeleton/SkeletonProduct'
-
 const ListOfCommerce = props => {
   const { navigate } = props.navigation
-  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: props.region.latitude, longitud: props.region.longitude } })
 
   return (
     <>
-      {data.CommercesIntoRadio.map((commerce, index) => (
+      {props.data.CommercesIntoRadio.map((commerce, index) => (
         <Card
           key={index}
           name={commerce.namecommerce}
