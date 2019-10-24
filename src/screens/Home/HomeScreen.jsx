@@ -14,6 +14,9 @@ import * as Animatable from 'react-native-animatable'
 // Import theme
 import { Theme } from '../../constants/Theme'
 
+// Import containers
+import ListOfSwiper from '../../containers/ListOfSwiper'
+
 // Import components
 import Background from '../../components/background/Background'
 
@@ -27,6 +30,7 @@ const HomeScreen = props => {
         <ScrollView
           keyboardShouldPersistTaps='always'
         >
+          <ListOfSwiper />
           <Button
             title='Transporte'
             onPress={() => navigate('Transport')}

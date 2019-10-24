@@ -48,21 +48,21 @@ const ToolBar = props => {
               {!isActiveSearch && (
                 <Button
                   iconName='search'
-                  iconSize={30}
+                  iconSize={25}
                   onPress={() => setIsActiveSearch(true)}
                 />
               )}
               <View style={{ paddingHorizontal: 4 }} />
               <Button
                 iconName='location-off'
-                iconSize={30}
+                iconSize={25}
                 onPress={() => navigate('Address')}
               />
               <View style={{ paddingHorizontal: 4 }} />
               <View style={styles.containerNotification}>
                 <Button
                   iconName='notifications-off'
-                  iconSize={30}
+                  iconSize={25}
                   onPress={() => navigate('Notification')}
                 />
                 <View style={styles.notification}>

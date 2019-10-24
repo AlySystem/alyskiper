@@ -3,6 +3,7 @@ import {
   StyleSheet,
   TouchableOpacity
 } from 'react-native'
+import * as Animatable from 'react-native-animatable'
 import { createStackNavigator } from 'react-navigation-stack'
 
 // Import drawer
@@ -54,10 +55,15 @@ const StackNavigation = createStackNavigator({
           backgroundColor: Theme.COLORS.colorMainAlt
         },
         headerLeft: (
-          <Picture
-            source={logo}
-            styles={styles.image}
-          />
+          <Animatable.View
+            animation='bounce'
+            iterationCount={1}
+          >
+            <Picture
+              source={logo}
+              styles={styles.image}
+            />
+          </Animatable.View>
         ),
         headerRight: (
           <TouchableOpacity
