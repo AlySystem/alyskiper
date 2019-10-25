@@ -16,6 +16,7 @@ import { Theme } from '../../constants/Theme'
 
 // Import containers
 import ListOfSwiper from '../../containers/ListOfSwiper'
+import ListOfBanner from '../../containers/ListOfBanner'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -34,8 +35,9 @@ const HomeScreen = props => {
             animation='zoomIn'
             iterationCount={1}
           >
-            <ListOfSwiper />
+            <ListOfBanner />
           </Animatable.View>
+          <View style={{ paddingVertical: 20 }} />
           <Button
             title='Transporte'
             onPress={() => navigate('Transport')}
@@ -45,6 +47,13 @@ const HomeScreen = props => {
             title='Commerce'
             onPress={() => navigate('Commerce')}
           />
+          <View style={{ paddingVertical: 20 }} />
+          <Animatable.View
+            animation='zoomIn'
+            iterationCount={1}
+          >
+            <ListOfSwiper />
+          </Animatable.View>
         </ScrollView>
       </View>
     </Background>
