@@ -7,7 +7,7 @@ import { hasLocationPermission } from '../utils/PermissionLocation'
 export const useLocation = () => {
   const [region, setRegion] = useState({ latitude: 0, longitude: 0 })
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [errorRegion, setErrorRegion] = useState(null)
   let watchId = null
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export const useLocation = () => {
           setRegion({ latitude, longitude, latitudeDelta: 0.0143, longitudeDelta: 0.0134 })
           setIsLoading(false)
         }, error => {
-          setError(error)
+          setErrorRegion(error)
         }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100 }
       )
     }
@@ -30,7 +30,7 @@ export const useLocation = () => {
     return () => {
       Geolocation.clearWatch(watchId)
     }
-  }, [watchId, setRegion, setError])
+  }, [watchId, setRegion, setErrorRegion])
 
-  return { region, error, isLoading }
+  return { region, errorRegion, isLoading }
 }

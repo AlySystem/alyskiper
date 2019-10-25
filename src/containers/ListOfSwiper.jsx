@@ -68,16 +68,13 @@ const ListOfSwiper = props => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-
-  },
   image: {
     width: '100%',
     height: '100%',
     resizeMode: 'contain'
   },
   opacity: {
-    backgroundColor: 'rgba(0,0,0,.5)',
+    backgroundColor: 'rgba(0,0,0,0)',
     width: '100%',
     height: '100%',
     position: 'absolute'
