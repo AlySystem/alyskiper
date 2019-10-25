@@ -34,7 +34,7 @@ const ToolBar = props => {
         {!isActiveSearch && (
           <>
             <Button
-              iconName='keyboard-backspace'
+              iconName='arrow-back'
               iconSize={32}
               onPress={() => props.navigation.goBack()}
             />

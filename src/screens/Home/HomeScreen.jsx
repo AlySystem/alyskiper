@@ -1,9 +1,9 @@
 import React from 'react'
 import {
   View,
+  Text,
   StyleSheet,
-  ScrollView,
-  Button
+  ScrollView
 } from 'react-native'
 import { useSelector } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
@@ -14,6 +14,7 @@ import { Theme } from '../../constants/Theme'
 // Import containers
 import ListOfSwiper from '../../containers/ListOfSwiper'
 import ListOfBanner from '../../containers/ListOfBanner'
+import ListOfServices from '../../containers/ListOfServices'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -34,16 +35,17 @@ const HomeScreen = props => {
           >
             <ListOfBanner />
           </Animatable.View>
-          <View style={{ paddingVertical: 20 }} />
-          <Button
-            title='Transporte'
-            onPress={() => navigate('Transport')}
-          />
 
-          <Button
-            title='Commerce'
-            onPress={() => navigate('Commerce')}
-          />
+          <View style={{ paddingVertical: 10 }} />
+          <View style={styles.container}>
+            <Text style={styles.title}>Bienvenido, {userData.firstName}!</Text>
+            <View style={{ paddingVertical: 2 }} />
+            <Text style={styles.description}>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Text>
+            <View style={{ paddingVertical: 15 }} />
+            <ListOfServices
+              navigate={navigate}
+            />
+          </View>
           <View style={{ paddingVertical: 20 }} />
           <Animatable.View
             animation='zoomIn'
@@ -61,6 +63,19 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.5)'
+  },
+  container: {
+    paddingHorizontal: 10
+  },
+  title: {
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.title,
+    fontFamily: 'Lato-Regular'
+  },
+  description: {
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.small,
+    fontFamily: 'Lato-Regular'
   }
 })
 
