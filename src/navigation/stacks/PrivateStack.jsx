@@ -123,8 +123,6 @@ const StackNavigation = createStackNavigator({
       header: null
     }
   }
-}, {
-  // initialRouteName: 'InvitedFriend'
 })
 
 const styles = StyleSheet.create({

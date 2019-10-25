@@ -10,10 +10,10 @@ import ErrorScreen from '../screens/Error/Error'
 import LocationScreen from '../screens/Location/LocationScreen'
 
 const STACKS = createSwitchNavigator({
+  Location: LocationScreen,
+  Error: ErrorScreen,
   Public: PublicStack,
   Private: PrivateStack,
-  Error: ErrorScreen,
-  Location: LocationScreen,
   Startup: StartupScreen
 }, { initialRouteName: 'Startup' })
 

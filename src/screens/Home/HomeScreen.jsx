@@ -5,11 +5,11 @@ import {
   ScrollView,
   Button
 } from 'react-native'
-// import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
 
 // Import theme
-// import { Theme } from '../../constants/Theme'
+import { Theme } from '../../constants/Theme'
 
 // Import containers
 import ListOfSwiper from '../../containers/ListOfSwiper'
@@ -20,7 +20,7 @@ import Background from '../../components/background/Background'
 
 const HomeScreen = props => {
   const { navigate } = props.navigation
-  // const userData = useSelector(state => state.user)
+  const userData = useSelector(state => state.user)
 
   return (
     <Background>

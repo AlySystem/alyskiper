@@ -33,13 +33,13 @@ const StartupScreen = props => {
       const userData = await getAsyncStorage(keys.asyncStorageKey)
 
       if (!userData) {
-        navigate('SignIn')
+        navigate('Welcome')
         return
       }
       const userParse = JSON.parse(userData)
       const payloadToken = decodeJwt(userParse.userToken)
       if (payloadToken.exp < moment().unix()) {
-        navigate('SignIn')
+        navigate('Welcome')
         return
       }
 
@@ -61,7 +61,7 @@ const StartupScreen = props => {
         type: USERDATA,
         payload
       })
-      navigate('Location')
+      navigate('Profile')
     }
     trySignIn()
   }, [])

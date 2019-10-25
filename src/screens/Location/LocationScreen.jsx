@@ -23,7 +23,7 @@ const LocationScreen = props => {
   const { isLoading } = useVerifyLocation(navigate)
 
   const verifyState = (isLoading) => {
-    if (!isLoading) return navigate('Home')
+    if (!isLoading) return navigate('Profile')
   }
 
   useEffect(() => {

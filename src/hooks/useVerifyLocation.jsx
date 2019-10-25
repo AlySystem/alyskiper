@@ -12,7 +12,7 @@ export const useVerifyLocation = (navigate) => {
         return navigate('Error', {
           title: 'Error de ubicacion',
           message: 'No hemos podido obtener tu ubicacion, asegurate de tener activado el GPS para ofrecerte una mejor experiencia.',
-          routeName: 'Home'
+          routeName: 'Location'
         })
       }
       if (isLoading) return navigate('Location')
