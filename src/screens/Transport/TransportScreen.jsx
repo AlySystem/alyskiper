@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   View,
   StyleSheet,
-  SafeAreaView,
   Dimensions
 } from 'react-native'
-import MapView, { AnimatedRegion, Polyline, Marker } from 'react-native-maps'
+import { useSelector } from 'react-redux'
+import MapView, { Polyline, Marker } from 'react-native-maps'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -17,9 +17,6 @@ import Button from '../../components/button/Button'
 // Import image
 import marker from '../../../assets/images/img-icon-alyskiper.png'
 
-// Import hoooks
-import { useLocation } from '../../hooks/useLocation'
-
 // Import theme
 import { Theme } from '../../constants/Theme'
 
@@ -30,7 +27,7 @@ import { getPixelSize } from '../../utils/Pixel'
 const { height, width } = Dimensions.get('window')
 
 const TransportScreen = props => {
-  // const { region, error } = useLocation()
+  const location = useSelector(state => state.location)
   const [isLoading, setIsLoading] = useState(false)
   const [details, setDetails] = useState('')
   const [destination, setDestination] = useState(null)
@@ -38,7 +35,7 @@ const TransportScreen = props => {
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
-    const { latitude, longitude } = {}
+    const { latitude, longitude } = location
     const pointCoords = await routeDirection(placeId, latitude, longitude)
 
     setDestination(pointCoords)
@@ -64,7 +61,7 @@ const TransportScreen = props => {
           loadingEnabled
           loadingBackgroundColor={Theme.COLORS.colorMainAlt}
           loadingIndicatorColor={Theme.COLORS.colorSecondary}
-          region={{}}
+          region={location}
         >
           {destination && (
             <>
@@ -106,7 +103,7 @@ const TransportScreen = props => {
           <View style={styles.containerInput}>
             <Search
               handleDetails={handleDetails}
-              origen={{}}
+              origen={location}
               stylesInput={styles.input}
               containerPredictions={styles.containerPredictions}
             />
