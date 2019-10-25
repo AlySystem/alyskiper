@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
 import Geolocation from 'react-native-geolocation-service'
+import { useDispatch } from 'react-redux'
 
 // import utils
 import { hasLocationPermission } from '../utils/PermissionLocation'
 
+// Import actions type
+import { LOCATION } from '../store/actionTypes'
+
 export const useLocation = () => {
-  const [region, setRegion] = useState({ latitude: 0, longitude: 0 })
-  const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(true)
   const [errorRegion, setErrorRegion] = useState(null)
   let watchId = null
 
@@ -18,11 +22,17 @@ export const useLocation = () => {
 
       watchId = Geolocation.watchPosition(
         ({ coords: { latitude, longitude } }) => {
-          setRegion({ latitude, longitude, latitudeDelta: 0.0143, longitudeDelta: 0.0134 })
+          dispatch({
+            type: LOCATION,
+            payload: {
+              latitude,
+              longitude
+            }
+          })
           setIsLoading(false)
         }, error => {
           setErrorRegion(error)
-        }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100 }
+        }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 10 }
       )
     }
     fetchLocation()
@@ -30,7 +40,7 @@ export const useLocation = () => {
     return () => {
       Geolocation.clearWatch(watchId)
     }
-  }, [watchId, setRegion, setErrorRegion])
+  }, [watchId, dispatch])
 
-  return { region, errorRegion, isLoading }
+  return { errorRegion, isLoading }
 }

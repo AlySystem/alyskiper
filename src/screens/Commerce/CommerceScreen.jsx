@@ -31,7 +31,7 @@ import { Theme } from '../../constants/Theme'
 
 const CommerceScreen = props => {
   const { navigate } = props.navigation
-  const { region, errorRegion, isLoading } = useLocation()
+  // const { region, errorRegion, isLoading } = useLocation()
   // const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude } })
 
   // if (isLoading) return <Skeleton />

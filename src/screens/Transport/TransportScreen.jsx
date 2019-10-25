@@ -30,7 +30,7 @@ import { getPixelSize } from '../../utils/Pixel'
 const { height, width } = Dimensions.get('window')
 
 const TransportScreen = props => {
-  const { region, error } = useLocation()
+  // const { region, error } = useLocation()
   const [isLoading, setIsLoading] = useState(false)
   const [details, setDetails] = useState('')
   const [destination, setDestination] = useState(null)
@@ -38,7 +38,7 @@ const TransportScreen = props => {
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
-    const { latitude, longitude } = region
+    const { latitude, longitude } = {}
     const pointCoords = await routeDirection(placeId, latitude, longitude)
 
     setDestination(pointCoords)
@@ -64,7 +64,7 @@ const TransportScreen = props => {
           loadingEnabled
           loadingBackgroundColor={Theme.COLORS.colorMainAlt}
           loadingIndicatorColor={Theme.COLORS.colorSecondary}
-          region={region}
+          region={{}}
         >
           {destination && (
             <>
@@ -106,7 +106,7 @@ const TransportScreen = props => {
           <View style={styles.containerInput}>
             <Search
               handleDetails={handleDetails}
-              origen={region}
+              origen={{}}
               stylesInput={styles.input}
               containerPredictions={styles.containerPredictions}
             />
