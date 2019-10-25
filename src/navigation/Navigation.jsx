@@ -7,11 +7,13 @@ import PrivateStack from './stacks/PrivateStack'
 // INITIAL SCREEN
 import StartupScreen from '../StartupScreen'
 import ErrorScreen from '../screens/Error/Error'
+import LocationScreen from '../screens/Location/LocationScreen'
 
 const STACKS = createSwitchNavigator({
   Public: PublicStack,
   Private: PrivateStack,
   Error: ErrorScreen,
+  Location: LocationScreen,
   Startup: StartupScreen
 }, { initialRouteName: 'Startup' })
 

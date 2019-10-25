@@ -61,7 +61,7 @@ const StartupScreen = props => {
         type: USERDATA,
         payload
       })
-      navigate('Home')
+      navigate('Location')
     }
     trySignIn()
   }, [])
