@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import FlashMessage from 'react-native-flash-message'
 import ApolloClient from 'apollo-boost'
 import { Provider } from 'react-redux'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from '@apollo/react-hooks'
 
 import NetInfo from '@react-native-community/netinfo'
@@ -19,6 +20,7 @@ import OfflineScreen from './src/screens/Offline/OfflineScreen'
 
 const client = new ApolloClient({
   uri: keys.urlApi,
+  cache: new InMemoryCache(),
   request: async operation => {
     const userData = await getAsyncStorage(keys.asyncStorageKey)
     if (userData) {

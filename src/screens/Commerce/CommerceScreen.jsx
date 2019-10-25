@@ -5,6 +5,7 @@ import {
   StyleSheet
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
+import { useSelector } from 'react-redux'
 
 // Import querys
 import { COMMERCERS } from '../../graphql/querys/Querys'
@@ -21,21 +22,14 @@ import Skeleton from '../../skeleton/SkeletonCommerce'
 // Import components
 import Background from '../../components/background/Background'
 import ToolBar from '../../components/header/ToolBar'
-import Loader from '../../components/loader/Loader'
-
-// Import custom hooks
-import { useLocation } from '../../hooks/useLocation'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
 const CommerceScreen = props => {
   const { navigate } = props.navigation
-  // const { region, errorRegion, isLoading } = useLocation()
-  // const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude } })
-
-  // if (isLoading) return <Skeleton />
-  // if (errorRegion) return navigate('Error', { title: 'Error de ubicacion', message: 'No hemos podido obtener tu ubicacion, asegurate de tener activado el GPS para ofrecerte una mejor experiencia.' })
+  const region = useSelector(state => state.location)
+  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude } })
 
   return (
     <Background>
@@ -46,16 +40,22 @@ const CommerceScreen = props => {
         <ScrollView
           keyboardShouldPersistTaps='always'
         >
-          <ListOfCategory />
-          <View style={{ marginVertical: 20 }}>
-            <ListOfSwiper />
-          </View>
-          <ListOfPromotion />
-          <View style={{ paddingVertical: 10 }} />
-          {/* <ListOfCommerce
-            navigation={props.navigation}
-            data={data}
-          /> */}
+          {loading ? (
+            <Skeleton />
+          ) : (
+            <>
+              <ListOfCategory />
+              <View style={{ marginVertical: 20 }}>
+                <ListOfSwiper />
+              </View>
+              <ListOfPromotion />
+              <View style={{ paddingVertical: 10 }} />
+              <ListOfCommerce
+                navigation={props.navigation}
+                data={data}
+              />
+            </>
+          )}
         </ScrollView>
       </View>
     </Background>

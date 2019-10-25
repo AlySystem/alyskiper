@@ -16,6 +16,7 @@
     "@react-native-community/netinfo": "4.4.0",
     "@react-native-community/viewpager": "2.0.1",
     "apollo-boost": "0.4.4",
+    "apollo-cache-inmemory": "^1.6.3",
     "graphql": "14.5.8",
     "hashids": "2.0.1",
     "jwt-decode": "2.2.0",

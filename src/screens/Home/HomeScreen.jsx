@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   View,
   Text,
@@ -24,9 +24,6 @@ import Background from '../../components/background/Background'
 const HomeScreen = props => {
   const { navigate } = props.navigation
   const userData = useSelector(state => state.user)
-  const location = useSelector(state => state.location)
-
-  console.log(location)
 
   return (
     <Background>
