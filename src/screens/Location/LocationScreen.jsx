@@ -12,7 +12,7 @@ import * as Animatable from 'react-native-animatable'
 import Location from '../../../world-locations.json'
 
 // Import hooks
-import { useLocation } from '../../hooks/useLocation'
+import { useVerifyLocation } from '../../hooks/useVerifyLocation'
 
 // Import theme
 import { Theme } from '../../constants/Theme.js'
@@ -20,7 +20,7 @@ import Picture from '../../components/picture/Picture.jsx'
 
 const LocationScreen = props => {
   const { navigate } = props.navigation
-  const { isLoading } = useLocation()
+  const { isLoading } = useVerifyLocation(navigate)
 
   const verifyState = (isLoading) => {
     if (!isLoading) return navigate('Home')

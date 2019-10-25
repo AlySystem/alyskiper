@@ -21,6 +21,7 @@ const ErrorScreen = props => {
   const { navigate } = props.navigation
   const title = props.navigation.getParam('title')
   const message = props.navigation.getParam('message')
+  const routeName = props.navigation.getParam('routeName')
 
   const handleRequestDialog = async () => {
     LocationServicesDialogBox.checkLocationServicesIsEnabled({
@@ -37,7 +38,7 @@ const ErrorScreen = props => {
         negativeButtonBackgroundColor: Theme.COLORS.colorMainAlt
       }
     }).then(function (success) {
-      navigate('Commerce')
+      navigate(routeName)
     }).catch((error) => {
       console.log(error.message)
     })
@@ -67,7 +68,7 @@ const ErrorScreen = props => {
           iconName='location-on'
           onPress={handleRequestDialog}
         />
-        <View style={{ paddingVertical: 10 }} />
+        {/* <View style={{ paddingVertical: 10 }} />
         <IconButton
           message='SACAME DE AQUI'
           stylesButton={styles.button}
@@ -75,7 +76,7 @@ const ErrorScreen = props => {
           isActiveIcon
           iconName='reply'
           onPress={() => navigate('Home')}
-        />
+        /> */}
       </View>
     </View>
   )
