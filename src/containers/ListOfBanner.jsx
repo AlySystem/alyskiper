@@ -6,11 +6,6 @@ import {
 
 import Swiper from 'react-native-swiper'
 
-// Import image
-import img1 from '../../assets/images/img-banner-1.jpg'
-import img2 from '../../assets/images/img-banner-2.jpg'
-import img3 from '../../assets/images/img-banner-3.jpg'
-
 // Import theme
 import { Theme } from '../constants/Theme'
 
@@ -20,15 +15,19 @@ import Picture from '../components/picture/Picture'
 const items = [
   {
     key: 1,
-    img: img1
+    img: 'https://storage.googleapis.com/app_user_bucket/1400x700px%20A%20pie.jpg'
   },
   {
     key: 2,
-    img: img2
+    img: 'https://storage.googleapis.com/app_user_bucket/1400x700px%20Bici.jpg'
   },
   {
     key: 3,
-    img: img3
+    img: 'https://storage.googleapis.com/app_user_bucket/1400x700px%20Moto.jpg'
+  },
+  {
+    key: 4,
+    img: 'https://storage.googleapis.com/app_user_bucket/1400x700px%20Taxi.jpg'
   }
 ]
 
@@ -46,7 +45,7 @@ const ListOfSwiper = props => {
         >
           <Picture
             styles={styles.image}
-            source={item.img}
+            source={{ uri: item.img }}
           />
           <View
             style={styles.opacity}
