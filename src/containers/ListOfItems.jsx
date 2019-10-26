@@ -86,6 +86,7 @@ const ListOfItems = (props) => {
       <View style={styles.containerFixed}>
         <Profile
           source={{ uri: userData.avatar }}
+          avatar={!userData.avatar ? `${userData.firstName[0]}${userData.lastName[0]}` : null}
           username={userData.userName}
           email={userData.email}
           onPress={() => navigate('ProfileUser')}

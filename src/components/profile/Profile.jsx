@@ -20,10 +20,16 @@ const Profile = (props) => {
         style={styles.containerMain}
         onPress={props.onPress}
       >
-        <Picture
-          source={props.source}
-          styles={styles.image}
-        />
+        {props.avatar ? (
+          <View style={styles.image}>
+            <Text style={styles.textAvatar}>{props.avatar}</Text>
+          </View>
+        ) : (
+          <Picture
+            source={props.source}
+            styles={styles.image}
+          />
+        )}
         <View style={styles.containerText}>
           <Text style={styles.user}>{props.username}</Text>
           <View style={{ paddingVertical: 2 }} />
@@ -49,6 +55,11 @@ const styles = StyleSheet.create({
   containerText: {
     paddingLeft: 20
   },
+  textAvatar: {
+    color: Theme.COLORS.colorMainAlt,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.title
+  },
   user: {
     color: Theme.COLORS.colorParagraph,
     fontFamily: 'Lato-Bold',
@@ -65,7 +76,9 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: Theme.COLORS.colorSecondary,
     borderColor: Theme.COLORS.colorSecondary,
-    borderWidth: 1
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
 
