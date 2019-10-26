@@ -14,6 +14,9 @@ import Loader from '../../components/loader/Loader'
 import Details from '../../components/details/Details'
 import Button from '../../components/button/Button'
 
+// Import containers
+import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
+
 // Import image
 import marker from '../../../assets/images/img-icon-alyskiper.png'
 
@@ -92,6 +95,7 @@ const TransportScreen = props => {
               stylesButton={styles.buttonBack}
               iconColor={Theme.COLORS.colorMainAlt}
             />
+            <ListOfCategoryServices />
           </>
         ) : isLoading ? (
           <View style={styles.containerLoader}>

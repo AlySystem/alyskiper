@@ -40,7 +40,7 @@ const HomeScreen = props => {
           <View style={styles.container}>
             <Text style={styles.title}>Bienvenido, {userData.firstName}!</Text>
             <View style={{ paddingVertical: 2 }} />
-            <Text style={styles.description}>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Text>
+            <Text style={styles.description}>Cuenta conmigo.</Text>
             <View style={{ paddingVertical: 15 }} />
             <ListOfServices
               navigate={navigate}
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular'
   },
   description: {
-    color: Theme.COLORS.colorParagraph,
+    color: Theme.COLORS.colorSecondary,
     fontSize: Theme.SIZES.small,
     fontFamily: 'Lato-Regular'
   }

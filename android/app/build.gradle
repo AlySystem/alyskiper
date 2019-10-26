@@ -128,11 +128,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.alyskiper"
+        applicationId "com.alyskiperuser"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
-        versionName "1.5"
+        versionCode 1
+        versionName "1.0"
     }
     splits {
         abi {
