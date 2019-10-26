@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import {
   View,
+  Text,
   StyleSheet,
   ScrollView,
   Dimensions,
-  Keyboard
+  Keyboard,
+  TouchableOpacity
 } from 'react-native'
 import decodeJwt from 'jwt-decode'
 import * as Animatable from 'react-native-animatable'
@@ -198,6 +200,12 @@ const SignInScreen = props => {
                 onPress={handleOnSubmit}
                 isLoading={loading}
               />
+              <View style={{ paddingVertical: 10 }} />
+              <TouchableOpacity
+                onPress={() => navigate('Reset')}
+              >
+                <Text style={styles.text}>¿Olvido su contraseña?</Text>
+              </TouchableOpacity>
             </Animatable.View>
           </View>
         </ScrollView>
@@ -252,6 +260,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
     color: Theme.COLORS.colorParagraph
+  },
+  text: {
+    fontFamily: 'Lato-Regular',
+    color: Theme.COLORS.colorSecondary,
+    fontSize: Theme.SIZES.small
   }
 })
 

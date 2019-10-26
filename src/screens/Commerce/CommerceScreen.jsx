@@ -29,7 +29,7 @@ import { Theme } from '../../constants/Theme'
 const CommerceScreen = props => {
   const { navigate } = props.navigation
   const region = useSelector(state => state.location)
-  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude } })
+  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude, radio: 6 } })
 
   return (
     <Background>

@@ -6,7 +6,8 @@ import {
   Dimensions,
   Text,
   Linking,
-  TouchableOpacity
+  TouchableOpacity,
+  Keyboard
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useMutation } from '@apollo/react-hooks'
@@ -192,6 +193,7 @@ const SignUpScreen = props => {
     if (handleConfirmPassword()) {
       if (handleIsChecked()) {
         if (nameIsValid.isValid && lastNameIsValid.isValid && userNameIsValid.isValid && emailIsValid.isValid && passwordIsValid.isValid) {
+          Keyboard.dismiss()
           const result = await SignUp({
             variables: {
               input: {

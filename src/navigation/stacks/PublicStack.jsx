@@ -10,6 +10,8 @@ import SignInScreen from '../../screens/SignIn/SignInScreen'
 import SignUpScreen from '../../screens/SignUp/SignUpScreen'
 import SendPhoneScreen from '../../screens/SendPhone/SendPhoneScreen'
 import VerifyPhoneScreen from '../../screens/VerifyPhone/VerifyPhoneScreen'
+import ResetScreen from '../../screens/Reset/ResetScreen'
+import ResetPasswordScreen from '../../screens/Reset/ResetPasswordScreen'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -64,8 +66,15 @@ const PublicStack = createStackNavigator({
   SignUp: {
     screen: SignUpScreen,
     navigationOptions
+  },
+  Reset: {
+    screen: ResetScreen,
+    navigationOptions
+  },
+  ResetPassword: {
+    screen: ResetPasswordScreen,
+    navigationOptions
   }
-// }, { initialRouteName: 'SignUp' })
 })
 
 const styles = StyleSheet.create({

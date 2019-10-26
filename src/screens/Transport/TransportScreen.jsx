@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   View,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 import { useSelector } from 'react-redux'
 import MapView, { Polyline, Marker } from 'react-native-maps'
+import PubNubReact from 'pubnub-react'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -31,10 +32,45 @@ const { height, width } = Dimensions.get('window')
 
 const TransportScreen = props => {
   const location = useSelector(state => state.location)
+  const [numberUser, setNumberUser] = useState(0)
+  const [users, setUsers] = useState(new Map())
   const [isLoading, setIsLoading] = useState(false)
   const [details, setDetails] = useState('')
   const [destination, setDestination] = useState(null)
   const mapView = useRef(null)
+
+  const pubnub = new PubNubReact({
+    publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
+    subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5'
+  })
+
+  useEffect(() => {
+    const subscribe = () => {
+      pubnub.addListener({
+        status: function (statusEvent) {
+          // console.log(statusEvent)
+        },
+        message: function (message) {
+
+        },
+        presence: function (presenceEvent) {
+          console.log(presenceEvent)
+          // const { state: { coords } } = presenceEvent.state
+          // const uuid = presenceEvent.uuid
+          // if (presenceEvent.action === 'timeout') {
+          //   console.log(coords, uuid)
+          // }
+          // console.log(coords, uuid)
+        }
+      })
+      pubnub.subscribe({
+        channels: ['Driver'],
+        withPresence: true
+      })
+    }
+
+    subscribe()
+  }, [pubnub])
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)

@@ -29,7 +29,9 @@ const VerifyPhoneScreen = props => {
   const { navigate } = props.navigation
   const [VerifyCode, { loading }] = useMutation(VERIFYCODE)
   const [code, setCode] = useState('')
-  const [numberPhone] = useState(props.navigation.getParam('number'))
+  const [numberPhone] = useState(props.navigation.getParam('number', ''))
+  const [routeName] = useState(props.navigation.getParam('routeName', ''))
+  const [id] = useState(props.navigation.getParam('id', ''))
 
   const handleOnSubmit = async (codeNumber = null) => {
     const result = await VerifyCode({ variables: { verifycode: { phone_number: numberPhone, channel: 'sms', code: `${codeNumber || code}` } } })
@@ -50,8 +52,9 @@ const VerifyPhoneScreen = props => {
         }
       })
     } else {
-      navigate('SignUp', {
-        number: numberPhone
+      navigate(routeName, {
+        number: numberPhone,
+        id: id
       })
     }
   }

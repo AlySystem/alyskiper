@@ -123,6 +123,7 @@ const SendPhoneScreen = props => {
         })
       } else {
         navigate('VerifyPhone', {
+          routeName: 'SignUp',
           number: `${details.phoneCode}${numberPhone}`
         })
       }

@@ -83,3 +83,27 @@ export const UPDATEUSER = gql`
     }
   }
 `
+export const RESET = gql`
+  mutation Reset($phone_number: String!){
+    reset_password (phone_number: $phone_number) {
+      error {
+        message
+        ok
+        status
+      }
+      data {
+        id
+      }
+    }
+  }
+`
+
+export const EDITPASSWORD = gql`
+  mutation EditPassword($input: UserUpdatePassword!) {
+    editPassword (input: $input) {
+      message
+      ok
+      status
+    }
+  }
+`
