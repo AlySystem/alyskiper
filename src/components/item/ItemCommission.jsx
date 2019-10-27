@@ -9,6 +9,9 @@ import {
 // Import components
 import Picture from '../picture/Picture'
 
+// Import theme
+import { Theme } from '../../constants/Theme'
+
 const ItemCommission = props => {
   return (
     <TouchableOpacity
@@ -22,16 +25,19 @@ const ItemCommission = props => {
         />
         <View>
           <Text style={styles.name}>{props.name}</Text>
+          <View style={{ paddingVertical: 2 }} />
           <Text style={styles.symbol}>{props.symbol}</Text>
         </View>
       </View>
 
       <View style={styles.containerCenter}>
-        <Text style={styles.price}>{props.price}</Text>
+        <Text style={styles.price}>${props.price}</Text>
         <Text style={styles.percentChange}>{props.percent_change}</Text>
       </View>
-
-      <View />
+      <View style={styles.containerAbsolute}>
+        <Text style={styles.total}>TOTAL:</Text>
+        <Text style={styles.total}>3.4345903823</Text>
+      </View>
     </TouchableOpacity>
   )
 }
@@ -41,25 +47,53 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
+    width: '100%',
+    backgroundColor: Theme.COLORS.colorMain,
+    marginBottom: 20,
+    flexDirection: 'row',
+    borderRadius: 15
   },
   image: {
-
+    resizeMode: 'contain',
+    width: 70,
+    height: 70,
+    marginRight: 5
   },
   containerLeft: {
-
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   name: {
-
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.subTitle
   },
   symbol: {
-
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Regular'
   },
   price: {
-
+    color: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.small
   },
   percentChange: {
-
+    color: 'green'
+  },
+  containerCenter: {
+    width: '30%'
+  },
+  containerAbsolute: {
+    position: 'absolute',
+    bottom: 10,
+    right: 20,
+    flexDirection: 'row'
+  },
+  total: {
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Regular',
+    marginRight: 8
   }
 })
 
