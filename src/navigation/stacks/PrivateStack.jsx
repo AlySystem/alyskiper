@@ -20,6 +20,7 @@ import CryptoWalletScreen from '../../screens/CryptoWallet/CryptoWalletScreen'
 import ProductScreen from '../../screens/Product/ProductScreen'
 import AddressScreen from '../../screens/Address/AddressScreen'
 import NotificationScreen from '../../screens/Notification/NotificationScreen'
+import AlyMoneyScreen from '../../screens/AlyMoney/AlyMoneyScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -93,6 +94,10 @@ const StackNavigation = createStackNavigator({
   },
   Notification: {
     screen: NotificationScreen,
+    navigationOptions
+  },
+  AlyMoney: {
+    screen: AlyMoneyScreen,
     navigationOptions
   },
   PaymentMethod: {
