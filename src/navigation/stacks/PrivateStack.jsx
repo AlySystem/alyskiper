@@ -21,6 +21,7 @@ import ProductScreen from '../../screens/Product/ProductScreen'
 import AddressScreen from '../../screens/Address/AddressScreen'
 import NotificationScreen from '../../screens/Notification/NotificationScreen'
 import AlyMoneyScreen from '../../screens/AlyMoney/AlyMoneyScreen'
+import DetailsTransportScreen from '../../screens/Transport/DetailsTransportScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -127,6 +128,10 @@ const StackNavigation = createStackNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  DetailsTransport: {
+    screen: DetailsTransportScreen,
+    navigationOptions
   }
 })
 

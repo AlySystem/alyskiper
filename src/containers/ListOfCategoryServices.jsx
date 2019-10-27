@@ -2,15 +2,17 @@ import React from 'react'
 import {
   StyleSheet,
   Dimensions,
-  ScrollView
+  Text,
+  View
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
+import ViewPager from '@react-native-community/viewpager'
+import { useSelector } from 'react-redux'
 
 // Import theme
 import { Theme } from '../constants/Theme'
 
 // Import components
-import Title from '../components/title/Title'
 import CategoryServices from '../components/category/CategoryServices'
 
 // Import images
@@ -41,46 +43,57 @@ const items = [
 ]
 
 const ListOfCategoryServices = props => {
+  const { navigate } = props.navigation
+  const userData = useSelector(state => state.user)
+
   return (
     <Animatable.View
       animation='fadeInUp'
       iterationCount={1}
       style={styles.container}
     >
-      <Title
-        title='Elige tu categoria'
-        styles={styles.title}
-      />
-      <ScrollView
-        horizontal
-        keyboardShouldPersistTaps='always'
-        pagingEnabled
-        scrollIndicatorInsets={{ top: 10, left: 10, bottom: 10, right: 10, color: 'red' }}
+
+      <Text style={styles.title}>Hola {userData.firstName.toLowerCase()}, selecciona una de nuestras categorias.</Text>
+      <View style={{ paddingVertical: 5 }} />
+      <ViewPager
+        style={styles.viewPager}
       >
         {items.map(item => (
           <CategoryServices
+            onPress={() => navigate('DetailsTransport', {
+              destination: props.destination,
+              region: props.region
+            })}
             key={item.key}
             source={item.img}
           />
         ))}
-      </ScrollView>
+      </ViewPager>
     </Animatable.View>
   )
 }
 
 const styles = StyleSheet.create({
+  viewPager: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   container: {
     backgroundColor: Theme.COLORS.colorMainAlt,
     position: 'absolute',
     bottom: 0,
     left: 0,
     width: '100%',
-    height: height * 0.4
+    height: height * 0.3,
+    paddingVertical: 10,
+    paddingHorizontal: 10
   },
   title: {
     color: Theme.COLORS.colorParagraph,
-    fontFamily: 'Lato-Bold',
-    fontSize: Theme.SIZES.normal
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    textAlign: 'center'
   }
 })
 

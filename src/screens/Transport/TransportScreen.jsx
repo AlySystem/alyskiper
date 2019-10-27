@@ -44,33 +44,33 @@ const TransportScreen = props => {
     subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5'
   })
 
-  useEffect(() => {
-    const subscribe = () => {
-      pubnub.addListener({
-        status: function (statusEvent) {
-          // console.log(statusEvent)
-        },
-        message: function (message) {
+  // useEffect(() => {
+  //   const subscribe = () => {
+  //     pubnub.addListener({
+  //       status: function (statusEvent) {
+  //         // console.log(statusEvent)
+  //       },
+  //       message: function (message) {
 
-        },
-        presence: function (presenceEvent) {
-          console.log(presenceEvent)
-          // const { state: { coords } } = presenceEvent.state
-          // const uuid = presenceEvent.uuid
-          // if (presenceEvent.action === 'timeout') {
-          //   console.log(coords, uuid)
-          // }
-          // console.log(coords, uuid)
-        }
-      })
-      pubnub.subscribe({
-        channels: ['Driver'],
-        withPresence: true
-      })
-    }
+  //       },
+  //       presence: function (presenceEvent) {
+  //         console.log(presenceEvent)
+  //         // const { state: { coords } } = presenceEvent.state
+  //         // const uuid = presenceEvent.uuid
+  //         // if (presenceEvent.action === 'timeout') {
+  //         //   console.log(coords, uuid)
+  //         // }
+  //         // console.log(coords, uuid)
+  //       }
+  //     })
+  //     pubnub.subscribe({
+  //       channels: ['Driver'],
+  //       withPresence: true
+  //     })
+  //   }
 
-    subscribe()
-  }, [pubnub])
+  //   subscribe()
+  // }, [pubnub])
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
@@ -85,7 +85,7 @@ const TransportScreen = props => {
         right: getPixelSize(50),
         left: getPixelSize(50),
         top: getPixelSize(50),
-        bottom: getPixelSize(350)
+        bottom: getPixelSize(280)
       }
     })
   }
@@ -131,7 +131,11 @@ const TransportScreen = props => {
               stylesButton={styles.buttonBack}
               iconColor={Theme.COLORS.colorMainAlt}
             />
-            <ListOfCategoryServices />
+            <ListOfCategoryServices
+              navigation={props.navigation}
+              destination={destination}
+              region={location}
+            />
           </>
         ) : isLoading ? (
           <View style={styles.containerLoader}>
