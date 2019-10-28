@@ -8,11 +8,12 @@ export const routeDirection = async (placeId, latitude, longitude) => {
     const response = await fetch(apiUrl)
     const result = await response.json()
 
+    const steps = result.routes[0].legs[0]
     const points = PolyLine.decode(result.routes[0].overview_polyline.points)
     const pointCoords = points.map(point => {
       return { latitude: point[0], longitude: point[1] }
     })
-    return pointCoords
+    return { pointCoords, steps }
   } catch (error) {
     console.error(error)
   }

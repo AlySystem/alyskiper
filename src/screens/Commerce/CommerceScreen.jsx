@@ -22,6 +22,7 @@ import Skeleton from '../../skeleton/SkeletonCommerce'
 // Import components
 import Background from '../../components/background/Background'
 import ToolBar from '../../components/header/ToolBar'
+import Loader from '../../components/loader/Loader'
 
 // Import theme
 import { Theme } from '../../constants/Theme'

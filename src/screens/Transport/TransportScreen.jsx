@@ -35,6 +35,7 @@ const TransportScreen = props => {
   const [numberUser, setNumberUser] = useState(0)
   const [users, setUsers] = useState(new Map())
   const [isLoading, setIsLoading] = useState(false)
+  const [steps, setSteps] = useState(null)
   const [details, setDetails] = useState('')
   const [destination, setDestination] = useState(null)
   const mapView = useRef(null)
@@ -75,11 +76,12 @@ const TransportScreen = props => {
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
     const { latitude, longitude } = location
-    const pointCoords = await routeDirection(placeId, latitude, longitude)
+    const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
 
-    setDestination(pointCoords)
-    setDetails({ title: details.main_text, description: details.description })
     setIsLoading(false)
+    setDestination(pointCoords)
+    setSteps(steps)
+    setDetails({ title: details.main_text, description: details.description })
     mapView.current.fitToCoordinates(pointCoords, {
       edgePadding: {
         right: getPixelSize(50),
@@ -133,8 +135,7 @@ const TransportScreen = props => {
             />
             <ListOfCategoryServices
               navigation={props.navigation}
-              destination={destination}
-              region={location}
+              steps={steps}
             />
           </>
         ) : isLoading ? (

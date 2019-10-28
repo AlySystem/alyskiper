@@ -1,4 +1,4 @@
-package com.alyskiper;
+package com.alyskiperuser;
 
 import android.app.Application;
 import android.content.Context;

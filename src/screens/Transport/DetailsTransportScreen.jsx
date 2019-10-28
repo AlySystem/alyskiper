@@ -2,45 +2,64 @@ import React, { useEffect, useState, useRef } from 'react'
 import {
   View,
   StyleSheet,
+  Text,
   ScrollView
 } from 'react-native'
-import MapView, { Polyline, Marker } from 'react-native-maps'
+import moment from 'moment'
+import { useQuery } from '@apollo/react-hooks'
+import { useSelector } from 'react-redux'
 
 // Import components
 import Background from '../../components/background/Background'
+import IconButton from '../../components/button/IconButton'
 import Loader from '../../components/loader/Loader'
 
-// Import image
-import marker from '../../../assets/images/img-icon-alyskiper.png'
+// Import querys
+import { CALCULATERATE } from '../../graphql/querys/Querys'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-
-// Import utils
-import { getPixelSize } from '../../utils/Pixel'
+import Picture from '../../components/picture/Picture'
 
 const DetailsTransportScreen = props => {
-  const [destination, setDestination] = useState()
-  const [region, setRegion] = useState()
-  const [isLoading, setIsLoading] = useState(true)
-  // props.navigation.getParam('destination', [])
-  // props.navigation.getParam('region', [])
-  const mapView = useRef(null)
+  const { country_id, cidy_id } = useSelector(state => state.user)
+  const [steps] = useState(props.navigation.getParam('steps', ''))
+  const [id] = useState(props.navigation.getParam('id', ''))
+  const [category] = useState(props.navigation.getParam('category', ''))
+  const [priceTotal, setPriceTotal] = useState(0)
+  const { distance, duration, end_address, start_address } = steps
+  const hour = new Date().getHours()
+  const min = new Date().getMinutes()
+
+  const { data, loading } = useQuery(CALCULATERATE, {
+    variables: {
+      idcountry: country_id,
+      idcity: 1,
+      idcategoriaviaje: id,
+      date_init: `${moment().format('YYYY-MM-DD')} ${moment().format('HH:mm:ss')}`
+    }
+  })
+
   useEffect(() => {
-    setDestination(props.navigation.getParam('destination', []))
-    setRegion(props.navigation.getParam('region', []))
-    mapView.current.fitToCoordinates(destination, {
-      edgePadding: {
-        right: getPixelSize(5),
-        left: getPixelSize(5),
-        top: getPixelSize(5),
-        bottom: getPixelSize(5)
+    const calculate = () => {
+      if (!loading) {
+        const durationMin = duration.text.split(' ')[0]
+        const distanceKm = distance.text.split(' ')[0]
+
+        const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
+        const minutes = durationMin * priceminute
+        const km = distanceKm * priceckilometer
+
+        const total = minutes + km + pricebase
+        if (total < priceminimun) {
+          setPriceTotal(priceminimun)
+        } else {
+          setPriceTotal(total)
+        }
       }
-    })
-    console.log(destination)
-    console.log(region)
-    setIsLoading(false)
-  }, [mapView])
+    }
+    calculate()
+  }, [distance, duration, data, loading])
 
   return (
     <Background>
@@ -48,35 +67,102 @@ const DetailsTransportScreen = props => {
         <ScrollView
           keyboardShouldPersistTaps='always'
         >
-          <View style={{ height: 250 }}>
-            <MapView
-              style={{ flex: 1 }}
-              ref={mapView}
-              loadingEnabled
-              loadingBackgroundColor={Theme.COLORS.colorMainAlt}
-              loadingIndicatorColor={Theme.COLORS.colorSecondary}
-              region={region || { latitude: 0, longitude: 0, latitudeDelta: 1.234, longitudeDelta: 2.128 }}
-            >
-              <>
-                {isLoading ? (
-                  <Loader />
-                ) : (
-                  <>
-                    <Polyline
-                      coordinates={destination}
-                      strokeWidth={3}
-                      strokeColor={Theme.COLORS.colorMainAlt}
-                    />
+          <View style={styles.layout}>
 
-                    <Marker
-                      coordinate={destination[destination.length - 1]}
-                      anchor={{ x: 0, y: 0 }}
-                      image={marker}
-                    />
-                  </>
+            <View style={styles.container}>
+              <View style={styles.itemAlt}>
+                <Text style={styles.text}>DURACION</Text>
+                <Text style={styles.value}>{duration.text}</Text>
+              </View>
+              <View style={styles.item}>
+                <Text style={styles.text}>DISTANCIA</Text>
+                <Text style={styles.value}>{distance.text}</Text>
+              </View>
+            </View>
+
+            <View style={styles.containerAddress}>
+              <Text style={styles.text}>ORIGEN</Text>
+              <Text style={styles.textAddress}>{start_address}</Text>
+            </View>
+
+            <View style={styles.containerAddress}>
+              <Text style={styles.text}>DESTINO</Text>
+              <Text style={styles.textAddress}>{end_address}</Text>
+            </View>
+
+            <View style={styles.container}>
+              <Text style={styles.text}>HORARIO SOLICITADO</Text>
+              <Text style={styles.value}>{`${hour}:${min}`}</Text>
+            </View>
+
+            <View style={styles.container}>
+              <Text style={styles.text}>CATEGORIA</Text>
+              <Text style={styles.textCategory}>{category.toUpperCase()}</Text>
+            </View>
+
+            <View style={styles.containerPrice}>
+              <View style={styles.container}>
+                <Text style={styles.text}>PRECIO BASE</Text>
+                {loading ? (
+                  <Loader
+                    size='small'
+                  />
+                ) : (
+                  <Text style={styles.value}>{data.CalcularTarifa.pricebase}</Text>
                 )}
-              </>
-            </MapView>
+              </View>
+
+              <View style={styles.container}>
+                <Text style={styles.text}>PRECIO POR DISTANCIA</Text>
+                {loading ? (
+                  <Loader
+                    size='small'
+                  />
+                ) : (
+                  <Text style={styles.value}>{Math.round(data.CalcularTarifa.priceckilometer * distance.text.split(' ')[0])}</Text>
+                )}
+              </View>
+
+              <View style={styles.container}>
+                <Text style={styles.text}>PRECIO POR TIEMPO</Text>
+                {loading ? (
+                  <Loader
+                    size='small'
+                  />
+                ) : (
+                  <Text style={styles.value}>{Math.round(duration.text.split(' ')[0] * data.CalcularTarifa.priceminute)}</Text>
+                )}
+              </View>
+            </View>
+
+            <View style={styles.container}>
+              <Text style={styles.text}>METODO DE PAGO</Text>
+              <View>
+                <Picture
+                  source={require('../../../assets/images/img-cash.png')}
+                  styles={styles.image}
+                />
+                <Text style={styles.value}>Efectivo</Text>
+              </View>
+            </View>
+
+            <View style={styles.container}>
+              <Text style={styles.text}>TOTAL</Text>
+              {loading ? (
+                <Loader
+                  size='small'
+                />
+              ) : (
+                <Text style={styles.priceTotal}>{Math.round(priceTotal)}</Text>
+              )}
+            </View>
+
+            <View style={styles.containerButton}>
+              <IconButton
+                message='SOLICITAR'
+                isActiveIcon
+              />
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -88,6 +174,68 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.5)'
+  },
+  layout: {
+    paddingHorizontal: 10,
+    paddingVertical: 20
+  },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 10
+  },
+  containerAddress: {
+    paddingHorizontal: 10,
+    paddingVertical: 10
+  },
+  textAddress: {
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    paddingVertical: 5
+  },
+  item: {
+    flexGrow: 1,
+    borderLeftColor: Theme.COLORS.colorSecondary,
+    borderLeftWidth: 1,
+    alignItems: 'flex-end'
+  },
+  itemAlt: {
+    flexGrow: 1
+  },
+  text: {
+    fontFamily: 'Lato-Regular',
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.small,
+    marginVertical: 3
+  },
+  priceTotal: {
+    fontFamily: 'Lato-Bold',
+    color: Theme.COLORS.colorParagraph,
+    fontSize: 28
+  },
+  value: {
+    fontFamily: 'Lato-Bold',
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.small
+  },
+  image: {
+    height: 40,
+    width: 60,
+    resizeMode: 'contain'
+  },
+  textCategory: {
+    color: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.normal
+  },
+  containerButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginVertical: 20
   }
 })
 

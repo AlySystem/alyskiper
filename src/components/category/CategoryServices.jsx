@@ -19,8 +19,6 @@ const CategoryServices = props => {
     >
       <View
         style={{
-          borderColor: Theme.COLORS.colorSecondary,
-          borderWidth: 1,
           borderRadius: 200,
           padding: 5
         }}
@@ -43,9 +41,8 @@ const styles = StyleSheet.create({
   },
   image: {
     resizeMode: 'contain',
-    width: 120,
-    height: 120,
-    borderRadius: 200
+    width: 200,
+    height: 200
   }
 })
 
