@@ -6,6 +6,7 @@ import {
   ScrollView
 } from 'react-native'
 import moment from 'moment'
+import PubNubReact from 'pubnub-react'
 import { useQuery } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
 
@@ -27,9 +28,15 @@ const DetailsTransportScreen = props => {
   const [id] = useState(props.navigation.getParam('id', ''))
   const [category] = useState(props.navigation.getParam('category', ''))
   const [priceTotal, setPriceTotal] = useState(0)
-  const { distance, duration, end_address, start_address } = steps
+  const { distance, duration, end_address, start_address, end_location } = steps
+  const [isLoading, setIsLoading] = useState(false)
   const hour = new Date().getHours()
   const min = new Date().getMinutes()
+
+  const pubnub = new PubNubReact({
+    publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
+    subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5'
+  })
 
   const { data, loading } = useQuery(CALCULATERATE, {
     variables: {
@@ -60,6 +67,27 @@ const DetailsTransportScreen = props => {
     }
     calculate()
   }, [distance, duration, data, loading])
+
+  const handleOnSubmit = async () => {
+    setIsLoading(true)
+    pubnub.publish({
+      message: {
+        tipodeviaje: 2,
+        detallesviaje: {
+          message: 'Idsarth Juarez'
+        },
+        origen: {
+          latitude: 12.116791,
+          longitude: -86.251011
+        },
+        destino: {
+          latitude: end_location.lat,
+          longitude: end_location.lng
+        }
+      },
+      channel: 'Driver'
+    })
+  }
 
   return (
     <Background>
@@ -161,6 +189,8 @@ const DetailsTransportScreen = props => {
               <IconButton
                 message='SOLICITAR'
                 isActiveIcon
+                onPress={handleOnSubmit}
+                isLoading={isLoading}
               />
             </View>
           </View>
