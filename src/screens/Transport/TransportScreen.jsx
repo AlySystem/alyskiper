@@ -32,7 +32,7 @@ const { height, width } = Dimensions.get('window')
 
 const TransportScreen = props => {
   const location = useSelector(state => state.location)
-  const [numberUser, setNumberUser] = useState(0)
+  const [userCount, setUserCount] = useState(0)
   const [users, setUsers] = useState(new Map())
   const [isLoading, setIsLoading] = useState(false)
   const [steps, setSteps] = useState(null)
@@ -45,33 +45,59 @@ const TransportScreen = props => {
     subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5'
   })
 
-  // useEffect(() => {
-  //   const subscribe = () => {
-  //     pubnub.addListener({
-  //       status: function (statusEvent) {
-  //         // console.log(statusEvent)
-  //       },
-  //       message: function (message) {
+  useEffect(() => {
+    const subscribe = () => {
+      // pubnub.addListener({
+      //   status: function (statusEvent) {
 
-  //       },
-  //       presence: function (presenceEvent) {
-  //         console.log(presenceEvent)
-  //         // const { state: { coords } } = presenceEvent.state
-  //         // const uuid = presenceEvent.uuid
-  //         // if (presenceEvent.action === 'timeout') {
-  //         //   console.log(coords, uuid)
-  //         // }
-  //         // console.log(coords, uuid)
-  //       }
-  //     })
-  //     pubnub.subscribe({
-  //       channels: ['Driver'],
-  //       withPresence: true
-  //     })
-  //   }
+      //   },
+      //   message: function (message) {
 
-  //   subscribe()
-  // }, [pubnub])
+      //   },
+      //   presence: function (presenceEvent) {
+
+      //   }
+      // })
+      // pubnub.subscribe({
+      //   channels: ['Driver'],
+      //   withPresence: true
+      // })
+      // pubnub.hereNow(
+      //   {
+      //     channels: ['Driver'],
+      //     channelGroups: ['DriverGroup'],
+      //     includeUUIDs: true,
+      //     includeState: true
+      //   },
+      //   (status, response) => {
+      //     console.log('Channel Occupants')
+      //     console.log(response)
+      //     console.log('-----------')
+      //     console.log('Presence Response:')
+      //     console.log(response)
+
+      //     console.log('-----------')
+
+      //     console.log('Choferes:')
+      //   }
+      // )
+    }
+
+    subscribe()
+  }, [pubnub])
+
+  const updateUserCount = () => {
+    let presenceUsers = 0
+    pubnub.hereNow({
+      includeUUIDs: true,
+      includeState: true
+    },
+    function (status, response) {
+      presenceUsers = response.totalOccupancy
+    })
+    const totalUsers = Math.max(presenceUsers, users.size)
+    setUserCount(totalUsers)
+  }
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
