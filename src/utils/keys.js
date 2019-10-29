@@ -1,6 +1,6 @@
 export const keys = {
   asyncStorageKey: 'skiperStorage',
-  urlApi: 'https://backend-alysystem-v2.herokuapp.com/graphql',
+  urlApi: 'https://backend-alyskiper.herokuapp.com/graphql',
   googleMaps: {
     apiKey: 'AIzaSyD_S3b75tC_Td7aq8oQLsr5-VX9FO1v2yc',
     autocomplete: 'https://maps.googleapis.com/maps/api/place/autocomplete/',

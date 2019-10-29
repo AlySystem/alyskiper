@@ -14,9 +14,6 @@ import ListOfData from '../../containers/ListOfData'
 // Import theme
 import { Theme } from '../../constants/Theme'
 
-// Import utils
-import { ReadSms } from '../../utils/PermissionReadSms'
-
 import { hasLocationPermission } from '../../utils/PermissionLocation'
 
 const WelcomeScreen = props => {
@@ -24,7 +21,6 @@ const WelcomeScreen = props => {
 
   useEffect(() => {
     const permission = async () => {
-      await ReadSms()
       await hasLocationPermission()
     }
     permission()

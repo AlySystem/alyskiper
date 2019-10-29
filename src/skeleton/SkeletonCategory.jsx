@@ -14,7 +14,7 @@ import {
 // Import theme
 import { Theme } from '../constants/Theme'
 
-const SkeletonCommerce = props => {
+const SkeletonCategory = props => {
   return (
     <View style={styles.container}>
       <Placeholder
@@ -49,7 +49,7 @@ const SkeletonCommerce = props => {
               }}
             />
           </View>
-          <View style={styles.category}>
+          <View>
             <PlaceholderMedia
               style={{
                 borderRadius: 100,
@@ -68,7 +68,7 @@ const SkeletonCommerce = props => {
               }}
             />
           </View>
-          <View style={styles.category}>
+          <View>
             <PlaceholderMedia
               style={{
                 borderRadius: 100,
@@ -88,32 +88,6 @@ const SkeletonCommerce = props => {
             />
           </View>
         </View>
-        <View style={{ paddingVertical: 6 }} />
-        <PlaceholderMedia
-          style={{
-            width: '100%',
-            height: 200,
-            backgroundColor: Theme.COLORS.colorSecondaryAlt,
-            borderRadius: 10
-          }}
-        />
-        <View style={{ paddingVertical: 10 }} />
-        <PlaceholderLine
-          width={40}
-          height={18}
-          style={{
-            backgroundColor: Theme.COLORS.colorSecondaryAlt,
-            borderRadius: 100
-          }}
-        />
-        <PlaceholderMedia
-          style={{
-            width: 220,
-            height: 130,
-            backgroundColor: Theme.COLORS.colorSecondaryAlt,
-            borderRadius: 10
-          }}
-        />
       </Placeholder>
     </View>
   )
@@ -127,10 +101,7 @@ const styles = StyleSheet.create({
   containerCategory: {
     flexDirection: 'row',
     justifyContent: 'space-between'
-  },
-  category: {
-
   }
 })
 
-export default SkeletonCommerce
+export default SkeletonCategory

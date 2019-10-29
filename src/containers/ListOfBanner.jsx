@@ -15,19 +15,19 @@ import Picture from '../components/picture/Picture'
 const items = [
   {
     key: 1,
-    img: 'https://storage.googleapis.com/app_user_bucket/1400x700px%20A%20pie.jpg'
+    img: 'https://storage.googleapis.com/app_user_bucket/apie.jpg'
   },
   {
     key: 2,
-    img: 'https://storage.googleapis.com/app_user_bucket/1400x700px%20Bici.jpg'
+    img: 'https://storage.googleapis.com/app_user_bucket/bici.jpg'
   },
   {
     key: 3,
-    img: 'https://storage.googleapis.com/app_user_bucket/1400x700px%20Moto.jpg'
+    img: 'https://storage.googleapis.com/app_user_bucket/moto.jpg'
   },
   {
     key: 4,
-    img: 'https://storage.googleapis.com/app_user_bucket/1400x700px%20Taxi.jpg'
+    img: 'https://storage.googleapis.com/app_user_bucket/taxi.jpg'
   }
 ]
 

@@ -51,3 +51,13 @@ export const CALCULATERATE = gql`
     }
   }
 `
+
+export const CATEGORY = gql`
+  query {
+    getAllSkiperSubCatCommerce{
+      id
+      name
+      url_img
+    }
+  }
+`

@@ -4,82 +4,50 @@ import {
   StyleSheet,
   ScrollView
 } from 'react-native'
+import { useQuery } from '@apollo/react-hooks'
 
 // Import components
 import Category from '../components/category/Category'
 import Title from '../components/title/Title'
 
+// Import query
+import { CATEGORY } from '../graphql/querys/Querys'
+
 // Import theme
 import { Theme } from '../constants/Theme'
 
-const items = [
-  {
-    key: 1,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20cafe.png'
-  },
-  {
-    key: 2,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20carnes.png'
-  },
-  {
-    key: 3,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20italiana.png'
-  },
-  {
-    key: 4,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20vegetariana.png'
-  },
-  {
-    key: 5,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20sabor%20Nica.png'
-  },
-  {
-    key: 6,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20pizzas.png'
-  },
-  {
-    key: 7,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20mexicana.png'
-  },
-  {
-    key: 8,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20mediterranea.png'
-  },
-  {
-    key: 9,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20mariscos.png'
-  },
-  {
-    key: 10,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20mediterranea.png'
-  },
-  {
-    key: 11,
-    img: 'https://storage.googleapis.com/app_user_bucket/500X500%20desayuno.png'
-  }
-]
+// Import skeleton
+import SkeletonCategory from '../skeleton/SkeletonCategory'
 
 const ListOfCategory = props => {
-  return (
-    <View style={styles.container}>
-      <Title
-        title='Categorias'
-        styles={styles.title}
-      />
+  const { data, loading } = useQuery(CATEGORY)
 
-      <ScrollView
-        horizontal
-        keyboardShouldPersistTaps='always'
-      >
-        {items.map(item => (
-          <Category
-            key={item.key}
-            title={`Category ${item.key}`}
-            source={{ uri: item.img }}
+  return (
+    <>
+      {loading ? (
+        <SkeletonCategory />
+      ) : (
+        <View style={styles.container}>
+          <Title
+            title='Categorias'
+            styles={styles.title}
           />
-        ))}
-      </ScrollView>
-    </View>
+
+          <ScrollView
+            horizontal
+            keyboardShouldPersistTaps='always'
+          >
+            {data.getAllSkiperSubCatCommerce.map(category => (
+              <Category
+                key={category.id}
+                title={category.name}
+                source={{ uri: category.url_img }}
+              />
+            ))}
+          </ScrollView>
+        </View>
+      )}
+    </>
   )
 }
 

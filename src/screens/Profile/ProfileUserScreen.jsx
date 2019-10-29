@@ -24,6 +24,7 @@ import Picture from '../../components/picture/Picture'
 import Button from '../../components/button/Button'
 import InputControl from '../../components/input/InputControl'
 import IconButton from '../../components/button/IconButton'
+// import ModalPicker from '../../components/modal/ModalPicker'
 
 // Import mutations
 import { UPDATEUSER } from '../../graphql/mutations/Mutations'
@@ -134,6 +135,11 @@ const ProfileUserScreen = () => {
     }
     setEmail(value.toLowerCase())
   }
+  // const [details, setDetails] = useState('')
+
+  // const handleOnSelect = (details) => {
+  //   setDetails(details.id)
+  // }
 
   const handleOnSubmit = async () => {
     const result = await UpdateUser({
@@ -264,6 +270,11 @@ const ProfileUserScreen = () => {
               isValid={userNameIsValid.isValid}
               errorText={userNameIsValid.message}
             />
+
+            {/* <ModalPicker
+              activeCountry
+              handleOnSelect={handleOnSelect}
+            /> */}
 
             <InputControl
               value={email}
