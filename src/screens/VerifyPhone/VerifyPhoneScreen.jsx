@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
   ScrollView,
   StyleSheet
 } from 'react-native'
-import SmsListener from 'react-native-android-sms-listener'
 import { showMessage } from 'react-native-flash-message'
 import { useMutation } from '@apollo/react-hooks'
 import { KeycodeInput } from 'react-native-keycode'
@@ -33,8 +32,8 @@ const VerifyPhoneScreen = props => {
   const [routeName] = useState(props.navigation.getParam('routeName', ''))
   const [id] = useState(props.navigation.getParam('id', ''))
 
-  const handleOnSubmit = async (codeNumber = null) => {
-    const result = await VerifyCode({ variables: { verifycode: { phone_number: numberPhone, channel: 'sms', code: `${codeNumber || code}` } } })
+  const handleOnSubmit = async () => {
+    const result = await VerifyCode({ variables: { verifycode: { phone_number: numberPhone, channel: 'sms', code: `${code}` } } })
     const { message } = result.data.verify_code
 
     if (message === 'Could not send verification code') {
@@ -58,17 +57,6 @@ const VerifyPhoneScreen = props => {
       })
     }
   }
-
-  useEffect(() => {
-    const subscription = SmsListener.addListener(message => {
-      setCode(message.body.split(' ')[message.body.split(' ').length - 1])
-      handleOnSubmit(message.body.split(' ')[message.body.split(' ').length - 1])
-    })
-
-    return () => {
-      subscription.remove()
-    }
-  }, [handleOnSubmit])
 
   return (
     <Background>
@@ -97,6 +85,7 @@ const VerifyPhoneScreen = props => {
                 style={{
 
                 }}
+                onComplete={handleOnSubmit}
                 onChange={value => setCode(value)}
               />
             </View>
@@ -107,7 +96,7 @@ const VerifyPhoneScreen = props => {
                 iconName='done'
                 stylesButton={styles.button}
                 isLoading={loading}
-                onPress={() => handleOnSubmit(code)}
+                onPress={handleOnSubmit}
               />
             </View>
           </View>
