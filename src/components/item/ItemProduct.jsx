@@ -33,9 +33,9 @@ const ItemProduct = props => {
           styles={styles.name}
         />
         <View style={{ paddingVertical: 2 }} />
-        <Text style={styles.description}>{props.description}</Text>
+        <Text allowFontScaling={false} style={styles.description}>{props.description}</Text>
         <View style={{ paddingVertical: 2 }} />
-        <Text style={styles.price}>${props.price}</Text>
+        <Text allowFontScaling={false} style={styles.price}>${props.price}</Text>
       </View>
     </TouchableOpacity>
   )

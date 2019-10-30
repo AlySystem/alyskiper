@@ -57,7 +57,7 @@ const ModalPicker = props => {
           style={styles.button}
           onPress={() => setIsVisible(true)}
         >
-          <Text style={styles.country}>{details.country}</Text>
+          <Text allowFontScaling={false} style={styles.country}>{details.country}</Text>
           <Icon
             iconName='arrow-drop-down'
           />
@@ -72,7 +72,7 @@ const ModalPicker = props => {
             styles={styles.image}
           />
           <View style={styles.content}>
-            <Text style={styles.code}>{details.phoneCode}</Text>
+            <Text allowFontScaling={false} style={styles.code}>{details.phoneCode}</Text>
             <Icon
               iconName='arrow-drop-down'
               iconSize={25}

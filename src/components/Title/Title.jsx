@@ -11,7 +11,7 @@ import { Theme } from '../../constants/Theme'
 const Title = props => {
   return (
     <View style={props.stylesContainer || styles.container}>
-      <Text style={props.styles || styles.title}>{props.title}</Text>
+      <Text allowFontScaling={false} style={props.styles || styles.title}>{props.title}</Text>
     </View>
   )
 }

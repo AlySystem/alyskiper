@@ -42,9 +42,9 @@ const Item = (props) => {
           />
         )}
         <View style={styles.content}>
-          <Text style={styles.name}>{props.name}</Text>
+          <Text allowFontScaling={false} style={styles.name}>{props.name}</Text>
           {props.description ? (
-            <Text style={styles.description}>{props.description}</Text>
+            <Text allowFontScaling={false} style={styles.description}>{props.description}</Text>
           ) : null}
         </View>
       </View>

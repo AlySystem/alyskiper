@@ -30,8 +30,8 @@ const ProfileCommerceScreen = props => {
           />
           <View style={{ paddingVertical: 8 }} />
           <View style={styles.container}>
-            <Text style={styles.name}>{commerce.namecommerce}</Text>
-            <Text style={styles.description}>{commerce.address}</Text>
+            <Text allowFontScaling={false} style={styles.name}>{commerce.namecommerce}</Text>
+            <Text allowFontScaling={false} style={styles.description}>{commerce.address}</Text>
           </View>
           <View style={{ paddingVertical: 8 }} />
 
@@ -40,7 +40,7 @@ const ProfileCommerceScreen = props => {
               key={catProduct.id}
               style={styles.containerProduct}
             >
-              <Text style={styles.title}>{catProduct.name}</Text>
+              <Text allowFontScaling={false} style={styles.title}>{catProduct.name}</Text>
               {catProduct.skiperProductCommerce.map(product => (
                 <ItemProduct
                   key={product.id}

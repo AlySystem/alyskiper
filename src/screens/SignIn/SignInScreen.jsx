@@ -204,7 +204,7 @@ const SignInScreen = props => {
               <TouchableOpacity
                 onPress={() => navigate('Reset')}
               >
-                <Text style={styles.text}>¿Olvido su contraseña?</Text>
+                <Text allowFontScaling={false} style={styles.text}>¿Olvido su contraseña?</Text>
               </TouchableOpacity>
             </Animatable.View>
           </View>

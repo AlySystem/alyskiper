@@ -51,9 +51,9 @@ const InvitedFriendScreen = props => {
               styles={styles.title}
             />
             <View style={{ paddingVertical: 5 }} />
-            <Text style={styles.description}>Comparte tu codigo con tus amigos y podras ganar Alytochis y Satochis cuando tu y tus amigos utilicen la aplicacion.</Text>
+            <Text allowFontScaling={false} style={styles.description}>Comparte tu codigo con tus amigos y podras ganar Alytochis y Satochis cuando tu y tus amigos utilicen la aplicacion.</Text>
             <View style={styles.container}>
-              <Text style={styles.codeInvited}>
+              <Text allowFontScaling={false} style={styles.codeInvited}>
                 {hashids.encode(userData.userId)}
               </Text>
               <View style={{ paddingVertical: 3 }} />

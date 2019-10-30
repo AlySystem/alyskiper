@@ -203,7 +203,7 @@ const ProfileUserScreen = () => {
               styles={styles.title}
             />
             <View style={{ paddingVertical: 1 }} />
-            <Text style={styles.description}>Toda tu informacion personal</Text>
+            <Text allowFontScaling={false} style={styles.description}>Toda tu informacion personal</Text>
           </View>
           <View style={styles.containerImage}>
             <Picture

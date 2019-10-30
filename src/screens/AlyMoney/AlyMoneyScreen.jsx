@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
   View,
   StyleSheet,
-  Text,
   Dimensions
 } from 'react-native'
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view'

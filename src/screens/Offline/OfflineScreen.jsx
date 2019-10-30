@@ -44,7 +44,7 @@ const OfflineScreen = props => {
             title='Ooppss!'
             styles={styles.title}
           />
-          <Text style={styles.description}>Revisa tu conexion a internet e intenta nuevamente.</Text>
+          <Text allowFontScaling={false} style={styles.description}>Revisa tu conexion a internet e intenta nuevamente.</Text>
           <View style={styles.containerButton}>
             <IconButton
               stylesButton={styles.button}
@@ -57,7 +57,7 @@ const OfflineScreen = props => {
           </View>
         </View>
         <View style={styles.bottom}>
-          <Text style={styles.description}>No podemos acceder a la red de Skiper</Text>
+          <Text allowFontScaling={false} style={styles.description}>No podemos acceder a la red de Skiper</Text>
         </View>
       </View>
     </Background>

@@ -172,9 +172,9 @@ const SendPhoneScreen = props => {
           >
             <Picture />
             <View style={{ paddingVertical: 5 }} />
-            <Text style={styles.title}>Estas a solo unos pasos de ser parte de Skiper</Text>
+            <Text allowFontScaling={false} style={styles.title}>Estas a solo unos pasos de ser parte de Skiper</Text>
             <View style={{ paddingVertical: 1 }} />
-            <Text style={styles.title}>Ingresa tu numero de telefono.</Text>
+            <Text allowFontScaling={false} style={styles.title}>Ingresa tu numero de telefono.</Text>
           </Animatable.View>
 
           <Animatable.View
@@ -217,7 +217,7 @@ const SendPhoneScreen = props => {
                   opacity: headerOpacity
                 }}
               >
-                <Text style={styles.description}>Cuenta conmigo</Text>
+                <Text allowFontScaling={false} style={styles.description}>Cuenta conmigo</Text>
               </Animated.View>
 
               <Animated.View
@@ -230,7 +230,7 @@ const SendPhoneScreen = props => {
                   marginTop: marginTop
                 }}
               >
-                <Text style={styles.descriptionAlt}>Ingresa tu numero de telefono</Text>
+                <Text allowFontScaling={false} style={styles.descriptionAlt}>Ingresa tu numero de telefono</Text>
               </Animated.View>
 
               <Animated.View

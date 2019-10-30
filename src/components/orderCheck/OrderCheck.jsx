@@ -50,7 +50,7 @@ const OrderCheck = props => {
           styles={styles.title}
         />
         <View style={{ paddingVertical: 4 }} />
-        <Text style={styles.description}>Tu orden ha sido enviada correctamente, se te notificara cuando tu orden este siendo procesada.</Text>
+        <Text allowFontScaling={false} style={styles.description}>Tu orden ha sido enviada correctamente, se te notificara cuando tu orden este siendo procesada.</Text>
         <View style={{ paddingVertical: 20 }} />
         <IconButton
           message='VER ESTADO DE LA ORDEN'

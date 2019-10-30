@@ -73,7 +73,7 @@ const VerifyPhoneScreen = props => {
               title='INGRESE EL CODIGO'
               styles={styles.title}
             />
-            <Text style={styles.description}>Hemos enviado un codigo de verificación a tu numero de telefono.</Text>
+            <Text allowFontScaling={false} style={styles.description}>Hemos enviado un codigo de verificación a tu numero de telefono.</Text>
             <View style={styles.containerMain}>
               <KeycodeInput
                 length={6}

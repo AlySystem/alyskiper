@@ -93,89 +93,89 @@ const DetailsTransportScreen = props => {
 
             <View style={styles.container}>
               <View style={styles.itemAlt}>
-                <Text style={styles.text}>DURACION</Text>
-                <Text style={styles.value}>{duration.text}</Text>
+                <Text allowFontScaling={false} style={styles.text}>DURACION</Text>
+                <Text allowFontScaling={false} style={styles.value}>{duration.text}</Text>
               </View>
               <View style={styles.item}>
-                <Text style={styles.text}>DISTANCIA</Text>
-                <Text style={styles.value}>{distance.text}</Text>
+                <Text allowFontScaling={false} style={styles.text}>DISTANCIA</Text>
+                <Text allowFontScaling={false} style={styles.value}>{distance.text}</Text>
               </View>
             </View>
 
             <View style={styles.containerAddress}>
-              <Text style={styles.text}>ORIGEN</Text>
-              <Text style={styles.textAddress}>{start_address}</Text>
+              <Text allowFontScaling={false} style={styles.text}>ORIGEN</Text>
+              <Text allowFontScaling={false} style={styles.textAddress}>{start_address}</Text>
             </View>
 
             <View style={styles.containerAddress}>
-              <Text style={styles.text}>DESTINO</Text>
-              <Text style={styles.textAddress}>{end_address}</Text>
+              <Text allowFontScaling={false} style={styles.text}>DESTINO</Text>
+              <Text allowFontScaling={false} style={styles.textAddress}>{end_address}</Text>
             </View>
 
             <View style={styles.container}>
-              <Text style={styles.text}>HORARIO SOLICITADO</Text>
-              <Text style={styles.value}>{`${hour}:${min}`}</Text>
+              <Text allowFontScaling={false} style={styles.text}>HORARIO SOLICITADO</Text>
+              <Text allowFontScaling={false} style={styles.value}>{`${hour}:${min}`}</Text>
             </View>
 
             <View style={styles.container}>
-              <Text style={styles.text}>CATEGORIA</Text>
-              <Text style={styles.textCategory}>{category.toUpperCase()}</Text>
+              <Text allowFontScaling={false} style={styles.text}>CATEGORIA</Text>
+              <Text allowFontScaling={false} style={styles.textCategory}>{category.toUpperCase()}</Text>
             </View>
 
             <View style={styles.containerPrice}>
               <View style={styles.container}>
-                <Text style={styles.text}>PRECIO BASE</Text>
+                <Text allowFontScaling={false} style={styles.text}>PRECIO BASE</Text>
                 {loading ? (
                   <Loader
                     size='small'
                   />
                 ) : (
-                  <Text style={styles.value}>{data.CalcularTarifa.pricebase}</Text>
+                  <Text allowFontScaling={false} style={styles.value}>{data.CalcularTarifa.pricebase}</Text>
                 )}
               </View>
 
               <View style={styles.container}>
-                <Text style={styles.text}>PRECIO POR DISTANCIA</Text>
+                <Text allowFontScaling={false} style={styles.text}>PRECIO POR DISTANCIA</Text>
                 {loading ? (
                   <Loader
                     size='small'
                   />
                 ) : (
-                  <Text style={styles.value}>{Math.round(data.CalcularTarifa.priceckilometer * distance.text.split(' ')[0])}</Text>
+                  <Text allowFontScaling={false} style={styles.value}>{Math.round(data.CalcularTarifa.priceckilometer * distance.text.split(' ')[0])}</Text>
                 )}
               </View>
 
               <View style={styles.container}>
-                <Text style={styles.text}>PRECIO POR TIEMPO</Text>
+                <Text allowFontScaling={false} style={styles.text}>PRECIO POR TIEMPO</Text>
                 {loading ? (
                   <Loader
                     size='small'
                   />
                 ) : (
-                  <Text style={styles.value}>{Math.round(duration.text.split(' ')[0] * data.CalcularTarifa.priceminute)}</Text>
+                  <Text allowFontScaling={false} style={styles.value}>{Math.round(duration.text.split(' ')[0] * data.CalcularTarifa.priceminute)}</Text>
                 )}
               </View>
             </View>
 
             <View style={styles.container}>
-              <Text style={styles.text}>METODO DE PAGO</Text>
+              <Text allowFontScaling={false} style={styles.text}>METODO DE PAGO</Text>
               <View>
                 <Picture
                   source={require('../../../assets/images/img-cash.png')}
                   styles={styles.image}
                 />
-                <Text style={styles.value}>Efectivo</Text>
+                <Text allowFontScaling={false} style={styles.value}>Efectivo</Text>
               </View>
             </View>
 
             <View style={styles.container}>
-              <Text style={styles.text}>TOTAL</Text>
+              <Text allowFontScaling={false} style={styles.text}>TOTAL</Text>
               {loading ? (
                 <Loader
                   size='small'
                 />
               ) : (
-                <Text style={styles.priceTotal}>{Math.round(priceTotal)}</Text>
+                <Text allowFontScaling={false} style={styles.priceTotal}>{Math.round(priceTotal)}</Text>
               )}
             </View>
 

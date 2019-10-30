@@ -23,9 +23,9 @@ const Country = props => {
           styles={styles.image}
           source={{ uri: props.flag }}
         />
-        <Text style={styles.name}>{props.name}</Text>
+        <Text allowFontScaling={false} style={styles.name}>{props.name}</Text>
       </View>
-      <Text style={styles.phoneCode}>+{props.phonecode}</Text>
+      <Text allowFontScaling={false} style={styles.phoneCode}>+{props.phonecode}</Text>
     </TouchableOpacity>
   )
 }

@@ -22,7 +22,7 @@ const Profile = (props) => {
       >
         {props.avatar ? (
           <View style={styles.image}>
-            <Text style={styles.textAvatar}>{props.avatar}</Text>
+            <Text allowFontScaling={false} style={styles.textAvatar}>{props.avatar}</Text>
           </View>
         ) : (
           <Picture
@@ -31,9 +31,9 @@ const Profile = (props) => {
           />
         )}
         <View style={styles.containerText}>
-          <Text style={styles.user}>{props.username}</Text>
+          <Text allowFontScaling={false} style={styles.user}>{props.username}</Text>
           <View style={{ paddingVertical: 2 }} />
-          <Text style={styles.email}>{props.email}</Text>
+          <Text allowFontScaling={false} style={styles.email}>{props.email}</Text>
         </View>
       </TouchableOpacity>
     </View>

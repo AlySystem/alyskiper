@@ -107,7 +107,7 @@ const ResetScreen = props => {
               source={require('../../../assets/images/img-alyskiper.png')}
             />
             <View style={{ paddingVertical: 10 }} />
-            <Text style={styles.title}>Ingresa tu correo para poder restablecer tu contraseña, te enviaremos un código para confirmar que eres tu.</Text>
+            <Text allowFontScaling={false} style={styles.title}>Ingresa tu correo para poder restablecer tu contraseña, te enviaremos un código para confirmar que eres tu.</Text>
             <View style={{ paddingVertical: 10 }} />
             <View style={styles.container}>
               <ModalPicker

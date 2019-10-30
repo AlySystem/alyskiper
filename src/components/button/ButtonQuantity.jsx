@@ -17,13 +17,13 @@ const ButtonQuantity = props => {
       <TouchableOpacity
         onPress={props.handleDecrement}
       >
-        <Text style={styles.textButton}>-</Text>
+        <Text allowFontScaling={false} style={styles.textButton}>-</Text>
       </TouchableOpacity>
-      <Text style={styles.count}>{props.count}</Text>
+      <Text allowFontScaling={false} style={styles.count}>{props.count}</Text>
       <TouchableOpacity
         onPress={props.handleIncrement}
       >
-        <Text style={styles.textButton}>+</Text>
+        <Text allowFontScaling={false} style={styles.textButton}>+</Text>
       </TouchableOpacity>
     </View>
   )

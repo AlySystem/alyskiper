@@ -66,7 +66,7 @@ const ListOfData = props => {
             title={item.title}
             styles={styles.title}
           />
-          <Text style={styles.description}>{item.description}</Text>
+          <Text allowFontScaling={false} style={styles.description}>{item.description}</Text>
         </View>
       ))}
     </ViewPager>

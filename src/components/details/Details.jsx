@@ -20,7 +20,7 @@ const Details = props => {
         iconSize={30}
         styles={styles.design}
       />
-      <Text style={styles.title}>{props.title}</Text>
+      <Text allowFontScaling={false} style={styles.title}>{props.title}</Text>
     </View>
   )
 }

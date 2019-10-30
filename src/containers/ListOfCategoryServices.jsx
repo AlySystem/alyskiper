@@ -56,7 +56,7 @@ const ListOfCategoryServices = props => {
       style={styles.container}
     >
 
-      <Text style={styles.title}>Hola {userData.firstName.toLowerCase()}, selecciona una de nuestras categorias.</Text>
+      <Text allowFontScaling={false} style={styles.title}>Hola {userData.firstName.toLowerCase()}, selecciona una de nuestras categorias.</Text>
       <ViewPager
         style={styles.viewPager}
       >

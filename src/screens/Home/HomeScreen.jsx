@@ -33,9 +33,9 @@ const HomeScreen = props => {
 
           <View style={{ paddingVertical: 10 }} />
           <View style={styles.container}>
-            <Text style={styles.title}>Bienvenido, {userData.firstName}!</Text>
+            <Text allowFontScaling={false} style={styles.title}>Bienvenido, {userData.firstName}!</Text>
             <View style={{ paddingVertical: 2 }} />
-            <Text style={styles.description}>Cuenta conmigo.</Text>
+            <Text allowFontScaling={false} style={styles.description}>Cuenta conmigo.</Text>
             <View style={{ paddingVertical: 15 }} />
             <ListOfServices
               navigate={navigate}

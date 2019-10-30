@@ -43,7 +43,7 @@ const ToolBar = props => {
             onPress={() => navigate('Notification')}
           />
           <View style={styles.notification}>
-            <Text style={styles.notificationValue}>7</Text>
+            <Text allowFontScaling={false} style={styles.notificationValue}>7</Text>
           </View>
         </View>
       </Animatable.View>

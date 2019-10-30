@@ -26,7 +26,7 @@ const Check = props => {
         isChecked={props.checked}
         checkBoxColor={Theme.COLORS.colorSecondary}
       />
-      <Text style={styles.nameStyle}>{props.name}</Text>
+      <Text allowFontScaling={false} style={styles.nameStyle}>{props.name}</Text>
     </View>
   )
 }

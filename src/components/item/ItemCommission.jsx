@@ -24,19 +24,19 @@ const ItemCommission = props => {
           styles={styles.image}
         />
         <View>
-          <Text style={styles.name}>{props.name}</Text>
+          <Text allowFontScaling={false} style={styles.name}>{props.name}</Text>
           <View style={{ paddingVertical: 2 }} />
-          <Text style={styles.symbol}>{props.symbol}</Text>
+          <Text allowFontScaling={false} style={styles.symbol}>{props.symbol}</Text>
         </View>
       </View>
 
       <View style={styles.containerCenter}>
-        <Text style={styles.price}>${props.price}</Text>
-        <Text style={styles.percentChange}>{props.percent_change}</Text>
+        <Text allowFontScaling={false} style={styles.price}>${props.price}</Text>
+        <Text allowFontScaling={false} style={styles.percentChange}>{props.percent_change}</Text>
       </View>
       <View style={styles.containerAbsolute}>
-        <Text style={styles.total}>TOTAL:</Text>
-        <Text style={styles.total}>3.4345903823</Text>
+        <Text allowFontScaling={false} style={styles.total}>TOTAL:</Text>
+        <Text allowFontScaling={false} style={styles.total}>3.4345903823</Text>
       </View>
     </TouchableOpacity>
   )

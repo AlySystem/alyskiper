@@ -1,5 +1,4 @@
 import React from 'react'
-
 import {
   View,
   TouchableOpacity,
@@ -8,7 +7,7 @@ import {
 } from 'react-native'
 
 // Import components
-import Picture from '../picture/Picture'
+import { LazyImage } from '../lazy/LazyImage'
 
 // Import default images
 import logo from '../../../assets/images/img-logo-alycoin.png'
@@ -25,19 +24,46 @@ const Card = props => {
       style={props.stylesContainer || styles.container}
     >
       <View style={props.stylesContainerHeader || styles.containerHeader}>
-        <Picture
+        <LazyImage
+          styleLazyImage={{
+            width: 40,
+            height: 40,
+            resizeMode: 'cover',
+            marginRight: 15,
+            borderRadius: 5
+          }}
+          sourceLazy={require('../../../assets/images/img-lazy.png')}
           source={props.sourceLogo}
-          styles={props.stylesLogo || styles.logo}
+          styleImage={{
+            width: 40,
+            height: 40,
+            resizeMode: 'cover',
+            marginRight: 15,
+            borderRadius: 5
+          }}
         />
+
         <View style={props.stylesContainerTitle || styles.containerTitle}>
-          <Text style={props.stylesName || styles.name}>{props.name}</Text>
-          <Text style={props.stylesDescription || styles.description}>{props.description}</Text>
+          <Text allowFontScaling={false} style={props.stylesName || styles.name}>{props.name}</Text>
+          <Text allowFontScaling={false} style={props.stylesDescription || styles.description}>{props.description}</Text>
         </View>
       </View>
       <View style={{ paddingVertical: 2 }} />
-      <Picture
+      <LazyImage
+        styleLazyImage={{
+          width: '100%',
+          maxWidth: 420,
+          height: 220,
+          borderRadius: 10
+        }}
+        sourceLazy={require('../../../assets/images/img-lazy.png')}
         source={props.sourceImage}
-        styles={props.stylesImage || styles.image}
+        styleImage={{
+          width: '100%',
+          maxWidth: 420,
+          height: 220,
+          borderRadius: 10
+        }}
       />
     </TouchableOpacity>
   )
@@ -60,12 +86,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     alignItems: 'center'
   },
-  logo: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
-    marginRight: 15
-  },
   containerTitle: {
     justifyContent: 'space-between'
   },
@@ -78,12 +98,6 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorParagraphSecondary,
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.xsmall
-  },
-  image: {
-    width: '100%',
-    maxWidth: 420,
-    height: 220,
-    borderRadius: 10
   }
 })
 

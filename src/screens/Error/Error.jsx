@@ -57,7 +57,7 @@ const ErrorScreen = props => {
         stylesContainer={{}}
       />
       <View style={{ paddingVertical: 5 }} />
-      <Text style={styles.message}>{message}</Text>
+      <Text allowFontScaling={false} style={styles.message}>{message}</Text>
 
       <View style={{ marginTop: 50 }}>
         <IconButton

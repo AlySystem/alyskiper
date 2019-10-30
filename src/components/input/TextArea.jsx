@@ -24,7 +24,7 @@ const TextArea = props => {
         onChangeText={handleOnChange}
         multiline
       />
-      <Text style={props.stylesCount || styles.count}>{`${count} / ${props.maxLength}`}</Text>
+      <Text allowFontScaling={false} style={props.stylesCount || styles.count}>{`${count} / ${props.maxLength}`}</Text>
     </View>
   )
 }

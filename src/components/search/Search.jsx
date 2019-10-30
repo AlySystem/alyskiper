@@ -54,7 +54,7 @@ const Search = props => {
       />
       {predictions && (
         <View style={props.containerPredictions || styles.containerPredictions}>
-          <Text style={styles.resultText}>Destinos sugeridos</Text>
+          <Text allowFontScaling={false} style={styles.resultText}>Destinos sugeridos</Text>
           <View style={{ paddingVertical: 5 }} />
 
           <ScrollView

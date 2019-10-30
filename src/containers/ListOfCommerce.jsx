@@ -1,4 +1,5 @@
 import React from 'react'
+import { FlatList, Text } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
 
@@ -16,21 +17,23 @@ const ListOfCommerce = props => {
   const region = useSelector(state => state.location)
   const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude, radio: 6000 } })
 
+  if (loading) return <SkeletonProduct />
+
   return (
-    <>
-      {loading ? (
-        <SkeletonProduct />
-      ) : data.CommercesIntoRadio.map((commerce, index) => (
+    <FlatList
+      data={data.CommercesIntoRadio}
+      renderItem={({ item }) => (
         <Card
-          key={index}
-          name={commerce.namecommerce}
-          description={commerce.address}
-          sourceLogo={{ uri: commerce.url_logo }}
-          sourceImage={{ uri: commerce.url_art }}
-          onPress={() => navigate('ProfileCommerce', { commerce: commerce })}
+          name={item.namecommerce}
+          description={item.address}
+          sourceLogo={{ uri: item.url_logo }}
+          sourceImage={{ uri: item.url_art }}
+          onPress={() => navigate('ProfileCommerce', { commerce: item })}
         />
-      ))}
-    </>
+      )}
+      keyExtractor={(item, index) => index.toString()}
+      ListEmptyComponent={<Text allowFontScaling={false}>No hay comercios</Text>}
+    />
   )
 }
 

@@ -400,11 +400,12 @@ const SignUpScreen = props => {
                   checkBoxColor={Theme.COLORS.colorSecondary}
                 />
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.description}>He leído y acepto los </Text>
+                  <Text allowFontScaling={false} style={styles.description}>He leído y acepto los </Text>
                   <TouchableOpacity
                     onPress={() => Linking.openURL('https://alyskiper.com/terms')}
                   >
                     <Text
+                      allowFontScaling={false}
                       style={styles.descriptionBold}
                     >términos y condiciones
                     </Text>

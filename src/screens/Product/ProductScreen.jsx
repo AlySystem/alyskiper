@@ -5,7 +5,6 @@ import {
   Text,
   ScrollView
 } from 'react-native'
-import moment from 'moment'
 import { useSelector } from 'react-redux'
 
 // Import components
@@ -69,10 +68,10 @@ const ProductScreen = props => {
             <Title
               title={commerce.name}
             />
-            <Text style={styles.price}>{commerce.price}</Text>
+            <Text allowFontScaling={false} style={styles.price}>{commerce.price}</Text>
           </View>
           <View style={styles.layout}>
-            <Text style={styles.description}>{commerce.description}</Text>
+            <Text allowFontScaling={false} style={styles.description}>{commerce.description}</Text>
             <View style={{ paddingVertical: 10 }} />
             {commerce.optionAddon.length > 0 &&
               <Title
@@ -91,7 +90,7 @@ const ProductScreen = props => {
                     name={item.name}
                     handleCheck={() => console.log(item.id, item.name, item.extraPrice)}
                   />
-                  <Text style={styles.extraPrice}>+{item.extraPrice}</Text>
+                  <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
                 </View>
               ))}
             {commerce.optionAddon.length > 0 && (

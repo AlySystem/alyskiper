@@ -22,7 +22,7 @@ import { COUNTRIES } from '../graphql/querys/Querys'
 const ListOfCountries = props => {
   const { data, error, loading } = useQuery(COUNTRIES)
 
-  if (error) return <Text>Error {error}</Text>
+  if (error) return <Text allowFontScaling={false}>Error {error}</Text>
 
   return (
     <>

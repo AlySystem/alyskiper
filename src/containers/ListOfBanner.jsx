@@ -10,7 +10,6 @@ import Swiper from 'react-native-swiper'
 import { Theme } from '../constants/Theme'
 
 // Import components
-import Picture from '../components/picture/Picture'
 import { LazyImage } from '../components/lazy/LazyImage'
 
 const items = [

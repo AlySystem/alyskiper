@@ -34,7 +34,7 @@ const Notification = props => {
           styles={styles.title}
         />
         <View style={{ paddingVertical: 1 }} />
-        <Text style={styles.description}>Su pizza fue aceptada.</Text>
+        <Text allowFontScaling={false} style={styles.description}>Su pizza fue aceptada.</Text>
       </View>
     </TouchableOpacity>
   )

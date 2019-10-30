@@ -60,7 +60,7 @@ const LocationScreen = props => {
           resizeMode='contain'
           loop
         />
-        <Text style={styles.title}>OBTENIENDO UBICACION...</Text>
+        <Text allowFontScaling={false} style={styles.title}>OBTENIENDO UBICACION...</Text>
       </View>
     </SafeAreaView>
   )

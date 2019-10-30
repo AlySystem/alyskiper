@@ -29,7 +29,7 @@ const IconButton = (props) => {
               styles={props.stylesIcon}
             />
           )}
-          <Text style={props.stylesMessage || styles.message}>{props.message}</Text>
+          <Text allowFontScaling={false} style={props.stylesMessage || styles.message}>{props.message}</Text>
         </>
       ) : (
         <Loader />

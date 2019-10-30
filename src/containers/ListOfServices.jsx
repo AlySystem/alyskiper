@@ -51,7 +51,7 @@ const ListOfServices = props => {
               styles={styles.image}
             />
             <View style={{ paddingVertical: 5 }} />
-            <Text style={styles.title}>{item.title}</Text>
+            <Text allowFontScaling={false} style={styles.title}>{item.title}</Text>
           </TouchableOpacity>
         ))}
       </View>
