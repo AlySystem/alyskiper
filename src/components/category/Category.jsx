@@ -35,19 +35,6 @@ const Category = props => {
           height: 85
         }}
       />
-
-      {/* <LazyImage
-        stylesContainer={{
-          width: 150,
-          height: 150
-        }}
-        source={{ uri: 'https://www.optoma.es/images/ProductApplicationFeatures/4kuhd/banner.jpg' }}
-        style={{
-          width: '100%',
-          height: '100%'
-        }}
-      /> */}
-
       <Title
         styles={props.stylesTitle || styles.title}
         title={props.title}

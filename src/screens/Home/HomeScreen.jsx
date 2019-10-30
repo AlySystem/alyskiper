@@ -29,12 +29,7 @@ const HomeScreen = props => {
         <ScrollView
           keyboardShouldPersistTaps='always'
         >
-          <Animatable.View
-            animation='zoomIn'
-            iterationCount={1}
-          >
-            <ListOfBanner />
-          </Animatable.View>
+          <ListOfBanner />
 
           <View style={{ paddingVertical: 10 }} />
           <View style={styles.container}>
@@ -47,12 +42,9 @@ const HomeScreen = props => {
             />
           </View>
           <View style={{ paddingVertical: 20 }} />
-          <Animatable.View
-            animation='zoomIn'
-            iterationCount={1}
-          >
-            <ListOfSwiper />
-          </Animatable.View>
+
+          <ListOfSwiper />
+
         </ScrollView>
       </View>
     </Background>

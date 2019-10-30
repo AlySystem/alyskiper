@@ -11,6 +11,7 @@ import { Theme } from '../constants/Theme'
 
 // Import components
 import Picture from '../components/picture/Picture'
+import { LazyImage } from '../components/lazy/LazyImage'
 
 const items = [
   {
@@ -43,9 +44,19 @@ const ListOfSwiper = props => {
         <View
           key={item.key}
         >
-          <Picture
-            styles={styles.image}
+          <LazyImage
+            styleLazyImage={{
+              width: '100%',
+              height: '100%',
+              resizeMode: 'cover'
+            }}
+            sourceLazy={require('../../assets/images/img-lazy.png')}
             source={{ uri: item.img }}
+            styleImage={{
+              width: '100%',
+              height: '100%',
+              resizeMode: 'cover'
+            }}
           />
           <View
             style={styles.opacity}
@@ -57,11 +68,6 @@ const ListOfSwiper = props => {
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain'
-  },
   opacity: {
     backgroundColor: 'rgba(0,0,0,0)',
     width: '100%',
