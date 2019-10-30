@@ -47,9 +47,9 @@ const TransportScreen = props => {
 
   const pubnub = new PubNubReact({
     publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
-    subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5'
-    // subscribeRequestTimeout: 60000,
-    // presenceTimeout: 122
+    subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5',
+    subscribeRequestTimeout: 60000,
+    presenceTimeout: 122
   })
 
   useEffect(() => {
