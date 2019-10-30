@@ -2,7 +2,9 @@ import React, { useState, useRef, useEffect } from 'react'
 import {
   View,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Image,
+  Platform
 } from 'react-native'
 import { useSelector } from 'react-redux'
 import MapView, { Polyline, Marker } from 'react-native-maps'
@@ -15,11 +17,14 @@ import Loader from '../../components/loader/Loader'
 import Details from '../../components/details/Details'
 import Button from '../../components/button/Button'
 
+// Import utils
+import { keys } from '../../utils/keys'
+
 // Import containers
 import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
 
 // Import image
-import marker from '../../../assets/images/img-icon-alyskiper.png'
+import markerImage from '../../../assets/images/img-icon-alyskiper.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -32,71 +37,56 @@ const { height, width } = Dimensions.get('window')
 
 const TransportScreen = props => {
   const location = useSelector(state => state.location)
-  const [userCount, setUserCount] = useState(0)
-  const [users, setUsers] = useState(new Map())
+  const [users, setUsers] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [steps, setSteps] = useState(null)
   const [details, setDetails] = useState('')
   const [destination, setDestination] = useState(null)
   const mapView = useRef(null)
+  const marker = useRef(null)
 
   const pubnub = new PubNubReact({
     publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
     subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5'
+    // subscribeRequestTimeout: 60000,
+    // presenceTimeout: 122
   })
 
   useEffect(() => {
-    const subscribe = () => {
-      // pubnub.addListener({
-      //   status: function (statusEvent) {
-
-      //   },
-      //   message: function (message) {
-
-      //   },
-      //   presence: function (presenceEvent) {
-
-      //   }
-      // })
-      // pubnub.subscribe({
-      //   channels: ['Driver'],
-      //   withPresence: true
-      // })
-      // pubnub.hereNow(
-      //   {
-      //     channels: ['Driver'],
-      //     channelGroups: ['DriverGroup'],
-      //     includeUUIDs: true,
-      //     includeState: true
-      //   },
-      //   (status, response) => {
-      //     console.log('Channel Occupants')
-      //     console.log(response)
-      //     console.log('-----------')
-      //     console.log('Presence Response:')
-      //     console.log(response)
-
-      //     console.log('-----------')
-
-      //     console.log('Choferes:')
-      //   }
-      // )
-    }
-
-    subscribe()
+    setUpApp()
   }, [pubnub])
 
-  const updateUserCount = () => {
-    let presenceUsers = 0
+  const setUpApp = async () => {
+    driverCount()
+
+    pubnub.subscribe({
+      channels: [`${keys.channels.drivers}`],
+      withPresence: true
+    })
+    // pubnub.addListener({
+    //   status: function (statusEvent) {
+
+    //   },
+    //   message: function (message) {
+    //     console.log(message)
+    //   },
+    //   presence: function (presenceEvent) {
+    //     console.log(presenceEvent)
+    //   }
+    // })
+  }
+
+  const driverCount = () => {
     pubnub.hereNow({
       includeUUIDs: true,
-      includeState: true
+      includeState: true,
+      channels: [`${keys.channels.drivers}`]
     },
     function (status, response) {
-      presenceUsers = response.totalOccupancy
+      const { occupants } = response.channels.Conductor
+      const newArray = occupants.filter(item => item.state !== undefined)
+      setUsers(newArray)
     })
-    const totalUsers = Math.max(presenceUsers, users.size)
-    setUserCount(totalUsers)
   }
 
   const handleDetails = async (placeId, details) => {
@@ -128,8 +118,26 @@ const TransportScreen = props => {
           loadingEnabled
           loadingBackgroundColor={Theme.COLORS.colorMainAlt}
           loadingIndicatorColor={Theme.COLORS.colorSecondary}
-          region={location}
+          initialRegion={location}
         >
+          {users &&
+            users.map(item => (
+              <Marker.Animated
+                style={styles.marker}
+                key={item.uuid}
+                coordinate={{
+                  latitude: item.state.coords.latitude,
+                  longitude: item.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={styles.profile}
+                  source={markerImage}
+                />
+              </Marker.Animated>
+            ))}
+
           {destination && (
             <>
               <Polyline
@@ -141,7 +149,7 @@ const TransportScreen = props => {
               <Marker
                 coordinate={destination[destination.length - 1]}
                 anchor={{ x: 0, y: 0 }}
-                image={marker}
+                image={markerImage}
               >
                 <Details
                   title={details.title}
@@ -180,7 +188,6 @@ const TransportScreen = props => {
             />
           </View>
         )}
-
       </View>
     </Background>
   )
@@ -210,6 +217,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: height * 0.03,
     left: width * 0.05
+  },
+  marker: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: Platform.OS === 'android' ? 100 : 0
+  },
+  profile: {
+    width: 40,
+    height: 40
   },
   input: {
     backgroundColor: Theme.COLORS.colorMainDark,

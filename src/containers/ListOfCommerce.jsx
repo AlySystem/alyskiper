@@ -14,7 +14,7 @@ import SkeletonProduct from '../skeleton/SkeletonProduct'
 const ListOfCommerce = props => {
   const { navigate } = props.navigation
   const region = useSelector(state => state.location)
-  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude, radio: 6 } })
+  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude, radio: 6000 } })
 
   return (
     <>

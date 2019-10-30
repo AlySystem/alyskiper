@@ -6,5 +6,8 @@ export const keys = {
     autocomplete: 'https://maps.googleapis.com/maps/api/place/autocomplete/',
     directions: 'https://maps.googleapis.com/maps/api/directions/',
     geocode: 'https://maps.googleapis.com/maps/api/geocode/'
+  },
+  channels: {
+    drivers: 'Conductor'
   }
 }

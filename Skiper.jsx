@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import {
+  View
+} from 'react-native'
 import FlashMessage from 'react-native-flash-message'
 import ApolloClient from 'apollo-boost'
 import { Provider } from 'react-redux'
@@ -17,6 +20,7 @@ import store from './src/store/store'
 // Import navigation
 import Navigation from './src/navigation/Navigation'
 import OfflineScreen from './src/screens/Offline/OfflineScreen'
+import ErrorScreen from './src/screens/Error/Error'
 
 const client = new ApolloClient({
   uri: keys.urlApi,
@@ -30,6 +34,18 @@ const client = new ApolloClient({
           Authorization: userToken ? `Bearer ${userToken}` : ''
         }
       })
+    }
+  },
+  onError: error => {
+    const { networkError } = error
+    if (networkError) {
+      return (
+        <ErrorScreen
+          title='NetworkError'
+          message={`Server internal error, status code ${networkError.response.status}`}
+          routeName='Location'
+        />
+      )
     }
   }
 })
