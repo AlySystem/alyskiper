@@ -13,6 +13,7 @@ const { width, height } = Dimensions.get('window')
 const Picture = props => {
   return (
     <Image
+      {...props}
       source={props.source}
       style={props.styles || styles.image}
     />

@@ -54,6 +54,12 @@ const TransportScreen = props => {
 
   useEffect(() => {
     setUpApp()
+
+    return () => {
+      pubnub.unsubscribe({
+        channels: [`${keys.channels.drivers}`]
+      })
+    }
   }, [pubnub])
 
   const setUpApp = async () => {
@@ -63,17 +69,17 @@ const TransportScreen = props => {
       channels: [`${keys.channels.drivers}`],
       withPresence: true
     })
-    // pubnub.addListener({
-    //   status: function (statusEvent) {
+    pubnub.addListener({
+      status: function (statusEvent) {
 
-    //   },
-    //   message: function (message) {
-    //     console.log(message)
-    //   },
-    //   presence: function (presenceEvent) {
-    //     console.log(presenceEvent)
-    //   }
-    // })
+      },
+      message: function (message) {
+
+      },
+      presence: function (presenceEvent) {
+
+      }
+    })
   }
 
   const driverCount = () => {

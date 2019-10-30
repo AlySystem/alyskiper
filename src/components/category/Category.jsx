@@ -8,8 +8,8 @@ import {
 import { Theme } from '../../constants/Theme'
 
 // Import components
-import Picture from '../picture/Picture'
 import Title from '../title/Title'
+import { LazyImage } from '../lazy/LazyImage'
 
 // Import default image
 import defaultImage from '../../../assets/images/img-background.png'
@@ -21,10 +21,32 @@ const Category = props => {
       onPress={props.onPress}
       style={props.styles || styles.container}
     >
-      <Picture
+      <LazyImage
+        styleLazyImage={{
+          width: 85,
+          height: 85,
+          resizeMode: 'cover',
+          borderRadius: 200
+        }}
+        sourceLazy={require('../../../assets/images/img-lazy.png')}
         source={props.source}
-        styles={props.stylesImage || styles.image}
+        styleImage={{
+          width: 85,
+          height: 85
+        }}
       />
+
+      {/* <LazyImage
+        stylesContainer={{
+          width: 150,
+          height: 150
+        }}
+        source={{ uri: 'https://www.optoma.es/images/ProductApplicationFeatures/4kuhd/banner.jpg' }}
+        style={{
+          width: '100%',
+          height: '100%'
+        }}
+      /> */}
 
       <Title
         styles={props.stylesTitle || styles.title}
