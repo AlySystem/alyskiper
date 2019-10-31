@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   ScrollView,
@@ -16,6 +16,12 @@ import Background from '../../components/background/Background'
 import ToolBar from '../../components/header/ToolBar'
 
 const CommerceScreen = props => {
+  const [categoryId, setCategoryId] = useState(0)
+
+  const handleOnPress = (categoryId) => {
+    setCategoryId(categoryId)
+  }
+
   return (
     <Background>
       <View style={styles.screen}>
@@ -25,13 +31,20 @@ const CommerceScreen = props => {
         <ScrollView
           keyboardShouldPersistTaps='always'
         >
-          <ListOfCategory />
-          <View style={{ marginVertical: 20 }}>
-            <ListOfSwiper />
-          </View>
-          <ListOfPromotion />
+          <ListOfCategory
+            handleOnPress={handleOnPress}
+          />
+          {!categoryId && (
+            <>
+              <View style={{ marginVertical: 20 }}>
+                <ListOfSwiper />
+              </View>
+              <ListOfPromotion />
+            </>
+          )}
           <View style={{ paddingVertical: 10 }} />
           <ListOfCommerce
+            categoryId={categoryId}
             navigation={props.navigation}
           />
         </ScrollView>

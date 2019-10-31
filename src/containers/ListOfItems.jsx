@@ -79,7 +79,7 @@ const ListOfItems = (props) => {
       <View style={styles.containerFixed}>
         <Profile
           avatarInitial={!userData.avatar ? `${userData.firstName[0]}${userData.lastName[0]}` : null}
-          sourceImage={userData.avatar ? { uri: userData.avatar } : null}
+          sourceImage={userData.avatar ? userData.avatar : null}
           username={userData.userName}
           email={userData.email}
           onPress={() => navigate('ProfileUser')}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   TouchableOpacity,
   StyleSheet
@@ -15,10 +15,15 @@ import { LazyImage } from '../lazy/LazyImage'
 import defaultImage from '../../../assets/images/img-background.png'
 
 const Category = props => {
+  const handleOnPress = () => {
+    props.setActive(props.id)
+    props.onPress()
+  }
+
   return (
     <TouchableOpacity
       activeOpacity={props.activeOpacity}
-      onPress={props.onPress}
+      onPress={handleOnPress}
       style={props.styles || styles.container}
     >
       <LazyImage
@@ -34,7 +39,9 @@ const Category = props => {
           width: 85,
           height: 85,
           borderRadius: 200,
-          resizeMode: 'cover'
+          resizeMode: 'cover',
+          borderColor: props.classActive,
+          borderWidth: 1
         }}
       />
       <Title

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   StyleSheet,
@@ -20,7 +20,12 @@ import { Theme } from '../constants/Theme'
 import SkeletonCategory from '../skeleton/SkeletonCategory'
 
 const ListOfCategory = props => {
+  const [active, setActive] = useState('')
   const { data, loading } = useQuery(CATEGORY)
+
+  const handleOnActive = id => {
+    setActive(id)
+  }
 
   return (
     <>
@@ -37,13 +42,22 @@ const ListOfCategory = props => {
             horizontal
             keyboardShouldPersistTaps='always'
           >
-            {data.getAllSkiperSubCatCommerce.map(category => (
-              <Category
-                key={category.id}
-                title={category.name}
-                source={{ uri: category.url_img }}
-              />
-            ))}
+            {data.getAllSkiperSubCatCommerce.map(category => {
+              const isActive = active === category.id
+              const className = isActive ? Theme.COLORS.colorSecondary : 'transparent'
+
+              return (
+                <Category
+                  key={category.id}
+                  title={category.name}
+                  source={{ uri: category.url_img }}
+                  onPress={() => props.handleOnPress(category.id)}
+                  classActive={className}
+                  setActive={handleOnActive}
+                  id={category.id}
+                />
+              )
+            })}
           </ScrollView>
         </View>
       )}

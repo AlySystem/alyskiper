@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Keyboard,
   Text,
-  Dimensions,
   ScrollView
 } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -18,8 +17,6 @@ import ShowResult from '../search/ShowResult'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-
-const { height } = Dimensions.get('window')
 
 const Search = props => {
   const { iso, firstName } = useSelector(state => state.user)

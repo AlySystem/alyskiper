@@ -11,8 +11,8 @@ export const COUNTRIES = gql`
   }
 `
 export const COMMERCERS = gql`
-  query Commerces ($latitud: Float!, $longitud: Float!, $radio: Int!) {
-    CommercesIntoRadio (latitud: $latitud, longitud: $longitud, radio: $radio) {
+  query Commerces ($latitud: Float!, $longitud: Float!, $radio: Int!, $id_category_product: Int) {
+    CommercesIntoRadio (latitud: $latitud, longitud: $longitud, radio: $radio, id_category_product: $id_category_product) {
       id
       namecommerce
       lat

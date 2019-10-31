@@ -7,7 +7,6 @@ import {
   Dimensions
 } from 'react-native'
 import Share from 'react-native-share'
-import Hashids from 'hashids'
 import { useSelector } from 'react-redux'
 
 // Import image
@@ -25,7 +24,6 @@ import Title from '../../components/title/Title'
 const { height, width } = Dimensions.get('window')
 
 const InvitedFriendScreen = props => {
-  const hashids = new Hashids()
   const userData = useSelector(state => state.user)
 
   const handleOnShare = async (id) => {
@@ -54,7 +52,7 @@ const InvitedFriendScreen = props => {
             <Text allowFontScaling={false} style={styles.description}>Comparte tu codigo con tus amigos y podras ganar Alytochis y Satochis cuando tu y tus amigos utilicen la aplicacion.</Text>
             <View style={styles.container}>
               <Text allowFontScaling={false} style={styles.codeInvited}>
-                {hashids.encode(userData.userId)}
+                {userData.userId}
               </Text>
               <View style={{ paddingVertical: 3 }} />
               <Picture
@@ -66,7 +64,7 @@ const InvitedFriendScreen = props => {
                 message='COMPARTIR'
                 isActiveIcon
                 iconName='share'
-                onPress={() => handleOnShare(hashids.encode(userData.userId))}
+                onPress={() => handleOnShare(userData.userId)}
               />
             </View>
           </View>

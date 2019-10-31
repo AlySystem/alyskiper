@@ -28,7 +28,7 @@ const Profile = (props) => {
 
         {props.sourceImage && (
           <Picture
-            source={props.sourceImage}
+            source={{ uri: props.sourceImage }}
             styles={styles.image}
           />
         )}

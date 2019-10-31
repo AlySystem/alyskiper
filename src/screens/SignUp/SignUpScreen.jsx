@@ -11,7 +11,6 @@ import {
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useMutation } from '@apollo/react-hooks'
-import Hashids from 'hashids'
 import CheckBox from 'react-native-check-box'
 
 // Import mutations
@@ -30,7 +29,6 @@ import { Theme } from '../../constants/Theme'
 const { height } = Dimensions.get('window')
 
 const SignUpScreen = props => {
-  const hashids = new Hashids()
   const [checked, setChecked] = useState(false)
   const [SignUp, { loading }] = useMutation(SIGNUP)
 
@@ -204,7 +202,7 @@ const SignUpScreen = props => {
                 password: password,
                 phone: numberPhone,
                 country_id: details,
-                sponsor_id: sponsorId ? hashids.decode(sponsorId)[0] : 1
+                sponsor_id: sponsorId || 1
               }
             }
           })
