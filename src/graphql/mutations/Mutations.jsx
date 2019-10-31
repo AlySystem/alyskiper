@@ -109,3 +109,12 @@ export const EDITPASSWORD = gql`
     }
   }
 `
+
+export const GENERATETRAVEL = gql`
+  mutation GenerateTravel($inputviaje: SkiperTravelsInput!) {
+    GenerateTravel (inputviaje: $inputviaje) {
+      id
+      total
+    }
+  }
+`

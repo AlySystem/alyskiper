@@ -27,7 +27,7 @@ const Card = props => {
         <LazyImage
           styleLazyImage={{
             width: 40,
-            height: 40,
+            height: 35,
             resizeMode: 'cover',
             marginRight: 15,
             borderRadius: 5
@@ -36,7 +36,7 @@ const Card = props => {
           source={props.sourceLogo}
           styleImage={{
             width: 40,
-            height: 40,
+            height: 35,
             resizeMode: 'cover',
             marginRight: 15,
             borderRadius: 5
@@ -54,7 +54,7 @@ const Card = props => {
           width: '100%',
           maxWidth: 420,
           height: 220,
-          borderRadius: 10
+          borderRadius: 12
         }}
         sourceLazy={require('../../../assets/images/img-lazy.png')}
         source={props.sourceImage}
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   containerHeader: {
     flexDirection: 'row',
-    paddingVertical: 5,
+    paddingVertical: 10,
     alignItems: 'center'
   },
   containerTitle: {

@@ -32,7 +32,9 @@ const Category = props => {
         source={props.source}
         styleImage={{
           width: 85,
-          height: 85
+          height: 85,
+          borderRadius: 200,
+          resizeMode: 'cover'
         }}
       />
       <Title
@@ -51,7 +53,8 @@ Category.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    alignItems: 'center'
   },
   title: {
     fontFamily: 'Lato-Bold',

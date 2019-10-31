@@ -61,3 +61,9 @@ export const CATEGORY = gql`
     }
   }
 `
+
+export const GETDRIVERNEARBY = gql`
+  query GetDriverNearby ($lat: Float!, $lng: Float!, $inputdrive: [AgentDriveInput!]!) {
+    ObtenerDriveCercano(lat: $lat, lng: $lng, inputdrive: $inputdrive)
+  }
+`

@@ -33,22 +33,6 @@ const LocationScreen = props => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Animatable.View
-          animation='bounce'
-          iterationCount={1}
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            paddingHorizontal: 10,
-            paddingVertical: 10
-          }}
-        >
-          <Picture
-            source={require('../../../assets/images/logo.png')}
-            styles={styles.image}
-          />
-        </Animatable.View>
         <LottieView
           style={{
             width: 300,
