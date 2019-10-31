@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   View,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useSelector } from 'react-redux'
 import MapView, { Polyline, Marker } from 'react-native-maps'
-import PubNubReact from 'pubnub-react'
+// import PubNubReact from 'pubnub-react'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -18,7 +18,7 @@ import Details from '../../components/details/Details'
 import Button from '../../components/button/Button'
 
 // Import utils
-import { keys } from '../../utils/keys'
+// import { keys } from '../../utils/keys'
 
 // Import containers
 import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
@@ -45,55 +45,55 @@ const TransportScreen = props => {
   const mapView = useRef(null)
   const marker = useRef(null)
 
-  const pubnub = new PubNubReact({
-    publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
-    subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5',
-    subscribeRequestTimeout: 60000,
-    presenceTimeout: 122
-  })
+  // const pubnub = new PubNubReact({
+  //   publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
+  //   subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5',
+  //   subscribeRequestTimeout: 60000,
+  //   presenceTimeout: 122
+  // })
 
-  useEffect(() => {
-    setUpApp()
+  // useEffect(() => {
+  //   setUpApp()
 
-    return () => {
-      pubnub.unsubscribe({
-        channels: [`${keys.channels.drivers}`]
-      })
-    }
-  }, [pubnub])
+  //   return () => {
+  //     pubnub.unsubscribe({
+  //       channels: [`${keys.channels.drivers}`]
+  //     })
+  //   }
+  // }, [pubnub])
 
-  const setUpApp = async () => {
-    driverCount()
+  // const setUpApp = async () => {
+  //   driverCount()
 
-    pubnub.subscribe({
-      channels: [`${keys.channels.drivers}`],
-      withPresence: true
-    })
-    pubnub.addListener({
-      status: function (statusEvent) {
+  //   pubnub.subscribe({
+  //     channels: [`${keys.channels.drivers}`],
+  //     withPresence: true
+  //   })
+  //   pubnub.addListener({
+  //     status: function (statusEvent) {
 
-      },
-      message: function (message) {
+  //     },
+  //     message: function (message) {
 
-      },
-      presence: function (presenceEvent) {
+  //     },
+  //     presence: function (presenceEvent) {
 
-      }
-    })
-  }
+  //     }
+  //   })
+  // }
 
-  const driverCount = () => {
-    pubnub.hereNow({
-      includeUUIDs: true,
-      includeState: true,
-      channels: [`${keys.channels.drivers}`]
-    },
-    function (status, response) {
-      const { occupants } = response.channels.Conductor
-      const newArray = occupants.filter(item => item.state !== undefined)
-      setUsers(newArray)
-    })
-  }
+  // const driverCount = () => {
+  //   pubnub.hereNow({
+  //     includeUUIDs: true,
+  //     includeState: true,
+  //     channels: [`${keys.channels.drivers}`]
+  //   },
+  //   function (status, response) {
+  //     const { occupants } = response.channels.Conductor
+  //     const newArray = occupants.filter(item => item.state !== undefined)
+  //     setUsers(newArray)
+  //   })
+  // }
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)

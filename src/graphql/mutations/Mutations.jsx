@@ -45,6 +45,8 @@ export const SENDCODE = gql`
   mutation SendCode($sendcode: twilioDto! ) {
     send_code(sendcode: $sendcode) {
       ok
+      message
+      status
     }
   }
 `

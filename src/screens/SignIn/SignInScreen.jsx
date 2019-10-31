@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   },
   message: {
     color: '#fff',
-    fontSize: Theme.SIZES.small,
+    fontSize: Theme.SIZES.xsmall,
     fontFamily: 'Lato-Bold',
     marginLeft: 8
   },

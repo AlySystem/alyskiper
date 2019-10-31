@@ -107,6 +107,20 @@ const SendPhoneScreen = props => {
             fontFamily: 'Lato-Regular'
           }
         })
+      } else if (message === 'Phone number is already exist in the database!!') {
+        showMessage({
+          message: 'Error',
+          description: 'El numero de telefono ya se encuentra registrado.',
+          backgroundColor: 'red',
+          color: '#fff',
+          icon: 'danger',
+          titleStyle: {
+            fontFamily: 'Lato-Bold'
+          },
+          textStyle: {
+            fontFamily: 'Lato-Regular'
+          }
+        })
       } else if (!ok) {
         showMessage({
           message: 'Error',
