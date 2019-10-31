@@ -21,7 +21,8 @@ const DrawerStack = createDrawerNavigator({
 }, {
   contentComponent: ListOfItems,
   drawerBackgroundColor: Theme.COLORS.colorMainAlt,
-  drawerWidth: width * 0.9
+  drawerWidth: width * 0.9,
+  drawerType: 'back'
 })
 
 export default DrawerStack

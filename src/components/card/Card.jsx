@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   TouchableOpacity,
@@ -8,6 +8,7 @@ import {
 
 // Import components
 import { LazyImage } from '../lazy/LazyImage'
+import Icon from '../icon/Icon'
 
 // Import default images
 import logo from '../../../assets/images/img-logo-alycoin.png'
@@ -17,6 +18,8 @@ import image from '../../../assets/images/img-background.png'
 import { Theme } from '../../constants/Theme'
 
 const Card = props => {
+  const [icon, setIcon] = useState(false)
+
   return (
     <TouchableOpacity
       activeOpacity={props.activeOpacity}
@@ -49,22 +52,41 @@ const Card = props => {
         </View>
       </View>
       <View style={{ paddingVertical: 2 }} />
-      <LazyImage
-        styleLazyImage={{
+      <View style={styles.containerImage}>
+        <Icon
+          styles={styles.icon}
+          iconName={icon ? 'favorite' : 'favorite-border'}
+          iconSize={32}
+          iconColor={Theme.COLORS.colorSecondary}
+          onPress={() => setIcon(!icon)}
+        />
+        <View style={{
+          backgroundColor: 'rgba(0,0,0,.1)',
+          position: 'absolute',
           width: '100%',
-          maxWidth: 420,
-          height: 220,
-          borderRadius: 12
+          height: '100%',
+          top: 0,
+          left: 0,
+          zIndex: 1
         }}
-        sourceLazy={require('../../../assets/images/img-lazy.png')}
-        source={props.sourceImage}
-        styleImage={{
-          width: '100%',
-          maxWidth: 420,
-          height: 220,
-          borderRadius: 10
-        }}
-      />
+        />
+        <LazyImage
+          styleLazyImage={{
+            width: '100%',
+            maxWidth: 420,
+            height: 220,
+            borderRadius: 12
+          }}
+          sourceLazy={require('../../../assets/images/img-lazy.png')}
+          source={props.sourceImage}
+          styleImage={{
+            width: '100%',
+            maxWidth: 420,
+            height: 220,
+            borderRadius: 10
+          }}
+        />
+      </View>
     </TouchableOpacity>
   )
 }
@@ -98,6 +120,15 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorParagraphSecondary,
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.xsmall
+  },
+  containerImage: {
+    position: 'relative'
+  },
+  icon: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    zIndex: 2
   }
 })
 

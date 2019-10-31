@@ -27,7 +27,7 @@ export const removeAsyncStorage = async (key) => {
     await AsyncStorage.removeItem(key)
     return true
   } catch (error) {
-    console.log(error)
+    console.log(error.message)
     return false
   }
 }

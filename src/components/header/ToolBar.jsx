@@ -21,18 +21,20 @@ const ToolBar = props => {
 
   return (
     <>
-      <Animatable.View
-        animation='fadeInDown'
-        iterationCount={1}
+      <View
         style={styles.container}
       >
         <Button
           iconName='arrow-back'
-          iconSize={32}
+          iconSize={25}
           onPress={() => props.navigation.goBack()}
         />
 
-        <View style={styles.containerNotification}>
+        <Animatable.View
+          style={styles.containerNotification}
+          animation='fadeInDown'
+          iterationCount={1}
+        >
           <Picture
             source={logo}
             styles={styles.image}
@@ -45,8 +47,8 @@ const ToolBar = props => {
           <View style={styles.notification}>
             <Text allowFontScaling={false} style={styles.notificationValue}>7</Text>
           </View>
-        </View>
-      </Animatable.View>
+        </Animatable.View>
+      </View>
     </>
   )
 }

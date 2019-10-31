@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   View,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useSelector } from 'react-redux'
 import MapView, { Polyline, Marker } from 'react-native-maps'
-// import PubNubReact from 'pubnub-react'
+import PubNubReact from 'pubnub-react'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -16,9 +16,6 @@ import Search from '../../components/search/Search'
 import Loader from '../../components/loader/Loader'
 import Details from '../../components/details/Details'
 import Button from '../../components/button/Button'
-
-// Import utils
-// import { keys } from '../../utils/keys'
 
 // Import containers
 import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
@@ -32,6 +29,7 @@ import { Theme } from '../../constants/Theme'
 // Import utils
 import { routeDirection } from '../../utils/Directions'
 import { getPixelSize } from '../../utils/Pixel'
+import { keys } from '../../utils/keys'
 
 const { height, width } = Dimensions.get('window')
 
@@ -45,30 +43,37 @@ const TransportScreen = props => {
   const mapView = useRef(null)
   const marker = useRef(null)
 
-  // const pubnub = new PubNubReact({
-  //   publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
-  //   subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5',
-  //   subscribeRequestTimeout: 60000,
-  //   presenceTimeout: 122
-  // })
+  const pubnub = new PubNubReact({
+    publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
+    subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5',
+    subscribeRequestTimeout: 60000,
+    presenceTimeout: 122
+  })
 
-  // useEffect(() => {
-  //   setUpApp()
+  useEffect(() => {
+    pubnub.subscribe({
+      channels: [`${keys.channels.drivers}`],
+      withPresence: true
+    })
 
-  //   return () => {
-  //     pubnub.unsubscribe({
-  //       channels: [`${keys.channels.drivers}`]
-  //     })
-  //   }
-  // }, [pubnub])
+    pubnub.hereNow({
+      includeUUIDs: true,
+      includeState: true,
+      channels: [`${keys.channels.drivers}`]
+    },
 
-  // const setUpApp = async () => {
-  //   driverCount()
+    function (status, response) {
+      const { occupants } = response.channels.Conductor
+      const newArray = occupants.filter(item => item.state !== undefined)
+      setUsers(newArray)
+    })
 
-  //   pubnub.subscribe({
-  //     channels: [`${keys.channels.drivers}`],
-  //     withPresence: true
-  //   })
+    return () => {
+      pubnub.unsubscribe({
+        channels: [`${keys.channels.drivers}`]
+      })
+    }
+  }, [pubnub])
   //   pubnub.addListener({
   //     status: function (statusEvent) {
 
@@ -79,19 +84,6 @@ const TransportScreen = props => {
   //     presence: function (presenceEvent) {
 
   //     }
-  //   })
-  // }
-
-  // const driverCount = () => {
-  //   pubnub.hereNow({
-  //     includeUUIDs: true,
-  //     includeState: true,
-  //     channels: [`${keys.channels.drivers}`]
-  //   },
-  //   function (status, response) {
-  //     const { occupants } = response.channels.Conductor
-  //     const newArray = occupants.filter(item => item.state !== undefined)
-  //     setUsers(newArray)
   //   })
   // }
 
@@ -169,7 +161,7 @@ const TransportScreen = props => {
             <Button
               onPress={() => setDestination(null)}
               iconName='arrow-back'
-              iconSize={28}
+              iconSize={30}
               stylesButton={styles.buttonBack}
               iconColor={Theme.COLORS.colorMainAlt}
             />
@@ -221,7 +213,7 @@ const styles = StyleSheet.create({
   },
   buttonBack: {
     position: 'absolute',
-    top: height * 0.03,
+    top: height * 0.02,
     left: width * 0.05
   },
   marker: {
@@ -247,7 +239,7 @@ const styles = StyleSheet.create({
   },
   containerInput: {
     position: 'absolute',
-    top: height * 0.05,
+    top: height * 0.1,
     width: '100%',
     paddingHorizontal: 15
   }

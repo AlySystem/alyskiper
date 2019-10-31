@@ -20,16 +20,19 @@ const Profile = (props) => {
         style={styles.containerMain}
         onPress={props.onPress}
       >
-        {props.avatar ? (
+        {props.avatarInitial && (
           <View style={styles.image}>
-            <Text allowFontScaling={false} style={styles.textAvatar}>{props.avatar}</Text>
+            <Text allowFontScaling={false} style={styles.textAvatar}>{props.avatarInitial}</Text>
           </View>
-        ) : (
+        )}
+
+        {props.sourceImage && (
           <Picture
-            source={props.source}
+            source={props.sourceImage}
             styles={styles.image}
           />
         )}
+
         <View style={styles.containerText}>
           <Text allowFontScaling={false} style={styles.user}>{props.username}</Text>
           <View style={{ paddingVertical: 2 }} />

@@ -58,8 +58,7 @@ const ProfileUserScreen = () => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton)
       } else {
-        const source = response
-        setPhoto(source)
+        setPhoto(response.data)
       }
     })
   }
@@ -210,6 +209,7 @@ const ProfileUserScreen = () => {
               source={photo}
               styles={styles.image}
             />
+
             <Button
               stylesButton={styles.button}
               iconName='add-a-photo'

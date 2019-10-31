@@ -93,6 +93,7 @@ const SendPhoneScreen = props => {
     if (numberPhoneIsValid.isValid) {
       const result = await SendCode({ variables: { sendcode: { phone_number: `${details.phoneCode}${numberPhone}`, channel: 'sms' } } })
       const { ok, message } = result.data.send_code
+
       if (message === 'Max send attempts reached') {
         showMessage({
           message: 'Error',

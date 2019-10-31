@@ -5,7 +5,6 @@ import {
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
-import { useMutation } from '@apollo/react-hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Actions types
@@ -15,14 +14,12 @@ import { USERREMOVEDATA } from '../store/actionTypes'
 import Item from '../components/item/Item'
 import Profile from '../components/profile/Profile'
 
-// Import theme
-import { Theme } from '../constants/Theme'
-
 // Import utils
 import { removeAsyncStorage } from '../utils/AsyncStorage'
 import { keys } from '../utils/keys'
 
-import { SIGNOUT } from '../graphql/mutations/Mutations'
+// Import theme
+import { Theme } from '../constants/Theme'
 
 const items = [
   {
@@ -68,25 +65,21 @@ const ListOfItems = (props) => {
 
   const dispatch = useDispatch()
   const userData = useSelector(state => state.user)
-  const [SignOut] = useMutation(SIGNOUT)
 
-  const handleLogout = async () => {
-    const { data: { logout } } = await SignOut({ variables: { id: userData.userId } })
-    if (logout) {
-      navigate('Startup', { message: 'Saliendo...' })
-      dispatch({
-        type: USERREMOVEDATA
-      })
-      await removeAsyncStorage(keys.asyncStorageKey)
-    }
+  const handleLogout = () => {
+    dispatch({
+      type: USERREMOVEDATA
+    })
+    removeAsyncStorage(keys.asyncStorageKey)
+    navigate('Startup', { message: 'Saliendo...' })
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.containerFixed}>
         <Profile
-          source={{ uri: userData.avatar }}
-          avatar={!userData.avatar ? `${userData.firstName[0]}${userData.lastName[0]}` : null}
+          avatarInitial={!userData.avatar ? `${userData.firstName[0]}${userData.lastName[0]}` : null}
+          sourceImage={userData.avatar ? { uri: userData.avatar } : null}
           username={userData.userName}
           email={userData.email}
           onPress={() => navigate('ProfileUser')}
