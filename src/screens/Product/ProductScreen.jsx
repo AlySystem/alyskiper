@@ -67,6 +67,11 @@ const ProductScreen = props => {
           <View style={styles.containerMain}>
             <Title
               title={commerce.name}
+              styles={{
+                fontFamily: 'Lato-Bold',
+                color: Theme.COLORS.colorParagraph,
+                fontSize: Theme.SIZES.normal
+              }}
             />
             <Text allowFontScaling={false} style={styles.price}>{commerce.price}</Text>
           </View>

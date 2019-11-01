@@ -29,8 +29,8 @@ const InvitedFriendScreen = props => {
   const handleOnShare = async (id) => {
     await Share.open({
       title: 'Comparte tu codigo',
-      message: `Hola, utiliza mi código *${id}* para poder ganar con Skiper`,
-      url: '',
+      message: `Hola, utiliza mi código *${id}* para poder ganar con Skiper, descarga la app a traves de este enlace: `,
+      url: 'https://play.google.com/store/apps/details?id=com.alyskiperuser&hl=es',
       filename: 'test',
       whatsAppNumber: userData.phoneNumber
     })

@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Theme.COLORS.colorSecondary,
-    fontSize: Theme.SIZES.title,
+    fontSize: Theme.SIZES.subTitle,
     fontFamily: 'Lato-Bold',
     marginVertical: 10
   }

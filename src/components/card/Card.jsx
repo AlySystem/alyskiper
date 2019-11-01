@@ -75,7 +75,8 @@ const Card = props => {
             width: '100%',
             maxWidth: 420,
             height: 220,
-            borderRadius: 12
+            borderRadius: 12,
+            resizeMode: 'cover'
           }}
           sourceLazy={require('../../../assets/images/img-lazy.png')}
           source={props.sourceImage}
@@ -83,7 +84,8 @@ const Card = props => {
             width: '100%',
             maxWidth: 420,
             height: 220,
-            borderRadius: 10
+            borderRadius: 10,
+            resizeMode: 'contain'
           }}
         />
       </View>

@@ -208,8 +208,9 @@ const SignUpScreen = props => {
           })
 
           const { error, data } = result.data.signup
+          // console.log(result)
           if (error) {
-            if (error.message === 'This email is already exist in the database!') {
+            if (error.message === 'This email or phone is already exist in the database!') {
               showMessage({
                 message: 'Error',
                 description: 'El correo ya esta registrado.',

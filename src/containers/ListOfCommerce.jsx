@@ -6,6 +6,9 @@ import { useSelector } from 'react-redux'
 // Import components
 import Card from '../components/card/Card'
 
+// Import containers
+import ListEmpty from '../containers/ListEmpty'
+
 // Import query
 import { COMMERCERS } from '../graphql/querys/Querys'
 
@@ -16,7 +19,7 @@ const ListOfCommerce = props => {
   const { navigate } = props.navigation
   const region = useSelector(state => state.location)
 
-  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude, radio: 6000, id_category_product: props.categoryId } })
+  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude, radio: 40000, id_category_product: props.categoryId } })
 
   if (loading) return <SkeletonProduct />
 
@@ -33,7 +36,7 @@ const ListOfCommerce = props => {
         />
       )}
       keyExtractor={(item, index) => index.toString()}
-      ListEmptyComponent={<Text style={{ color: 'white' }} allowFontScaling={false}>No hay comercios</Text>}
+      // ListEmptyComponent={<ListEmpty />}
     />
   )
 }
