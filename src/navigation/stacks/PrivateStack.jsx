@@ -22,6 +22,7 @@ import AddressScreen from '../../screens/Address/AddressScreen'
 import NotificationScreen from '../../screens/Notification/NotificationScreen'
 import AlyMoneyScreen from '../../screens/AlyMoney/AlyMoneyScreen'
 import DetailsTransportScreen from '../../screens/Transport/DetailsTransportScreen'
+import FixedMapScreen from '../../screens/FixedMap/FixedMapScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -132,6 +133,12 @@ const StackNavigation = createStackNavigator({
   DetailsTransport: {
     screen: DetailsTransportScreen,
     navigationOptions
+  },
+  FixedMap: {
+    screen: FixedMapScreen,
+    navigationOptions: {
+      header: null
+    }
   }
 })
 

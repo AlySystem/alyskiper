@@ -31,6 +31,7 @@
     "react-native-camera-kit": "8.0.2",
     "react-native-check-box": "2.1.7",
     "react-native-flash-message": "0.1.15",
+    "react-native-geocoding": "0.4.0",
     "react-native-geolocation-service": "3.1.0",
     "react-native-gesture-handler": "1.4.1",
     "react-native-image-picker": "1.1.0",

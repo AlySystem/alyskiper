@@ -1,104 +1,62 @@
 import React, { useState } from 'react'
 import {
   View,
-  StyleSheet,
-  Keyboard,
-  Text,
-  ScrollView
+  StyleSheet
 } from 'react-native'
 import { useSelector } from 'react-redux'
-
-// Import utils
-import { keys } from '../../utils/keys'
-
-// Import components
-import InputControl from '../input/InputControl'
-import ShowResult from '../search/ShowResult'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
+// Import components
+import InputControl from '../../components/input/InputControl'
+
 const Search = props => {
-  const { iso, firstName } = useSelector(state => state.user)
-  const [search, setSearch] = useState('')
-  const [predictions, setPredictions] = useState()
+  const [value, setValue] = useState('')
+  const { firstName, iso } = useSelector(state => state.user)
+  const { latitude, longitude } = useSelector(state => state.location)
 
-  const handleOnChange = async (value) => {
-    setSearch(value)
-    const { latitude, longitude } = props.origen
-    const apiUrl = `${keys.googleMaps.autocomplete}json?input=${search}&location=${latitude}, ${longitude}&key=${keys.googleMaps.apiKey}&components=country:${iso}&language=es&radius=2000`
-    const response = await fetch(apiUrl)
-    const data = await response.json()
-
-    setPredictions(data.predictions)
+  const handleOnChange = (value) => {
+    setValue(value)
   }
 
   return (
     <View style={styles.container}>
       <InputControl
-        value={search}
-        setValue={setSearch}
-        placeholder={`${firstName} ¿Donde quieres ir?`}
-        placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
+        value={value}
+        setValue={setValue}
         onChangeText={handleOnChange}
+        placeholder='Destino'
+        placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
+        stylesInput={styles.input}
         isActiveIcon
-        isActiveButton
-        isValue={setSearch}
-        iconSize={25}
-        iconColor={Theme.COLORS.colorSecondary}
         iconName='search'
-        stylesInput={props.stylesInput || styles.stylesInput}
+        iconSize={25}
+        stylesIcon={{
+          position: 'absolute',
+          top: 10,
+          left: 20
+        }}
       />
-      {predictions && (
-        <View style={props.containerPredictions || styles.containerPredictions}>
-          <Text allowFontScaling={false} style={styles.resultText}>Destinos sugeridos</Text>
-          <View style={{ paddingVertical: 5 }} />
-
-          <ScrollView
-            contentContainerStyle={styles.scrollView}
-            keyboardShouldPersistTaps='always'
-          >
-            {predictions.map(prediction => (
-              <ShowResult
-                key={prediction.place_id}
-                title={prediction.structured_formatting.main_text}
-                description={prediction.description}
-                onPress={() => {
-                  setPredictions([])
-                  setSearch(prediction.structured_formatting.main_text)
-                  Keyboard.dismiss()
-                  return props.handleDetails(prediction.place_id, { main_text: prediction.structured_formatting.main_text, description: prediction.description })
-                }}
-              />
-            ))}
-          </ScrollView>
-        </View>
-      )}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  containerPredictions: {
-    backgroundColor: Theme.COLORS.colorMainAlt,
-    paddingVertical: 10
+  container: {
+    // paddingHorizontal: 20
   },
-  stylesInput: {
+  input: {
     backgroundColor: Theme.COLORS.colorMainDark,
-    borderRadius: 8,
+    borderRadius: 100,
     paddingLeft: 55,
     paddingRight: 50,
-    paddingVertical: 10,
+    paddingVertical: 8,
     borderWidth: 0.3,
     borderColor: Theme.COLORS.colorSecondary,
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
     color: Theme.COLORS.colorParagraph
-  },
-  resultText: {
-    color: Theme.COLORS.colorParagraph,
-    fontFamily: 'Lato-Bold',
-    fontSize: Theme.SIZES.small
   }
 })
 
