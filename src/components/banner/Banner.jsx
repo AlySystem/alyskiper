@@ -6,6 +6,7 @@ import {
 
 // Import components
 import Picture from '../picture/Picture'
+import { LazyImage } from '../lazy/LazyImage'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -13,13 +14,42 @@ import { Theme } from '../../constants/Theme'
 const Banner = props => {
   return (
     <View style={styles.container}>
-      <Picture
+      <LazyImage
+        styleLazyImage={{
+          width: '100%',
+          height: '100%',
+          resizeMode: 'cover'
+        }}
+        sourceLazy={require('../../../assets/images/img-lazy.png')}
         source={props.sourceImage}
-        styles={styles.image}
+        styleImage={{
+          width: '100%',
+          height: '100%',
+          resizeMode: 'cover'
+        }}
       />
-      <Picture
-        source={props.sourceLogo}
-        styles={styles.logo}
+
+      <LazyImage
+        styleLazyImage={{
+          position: 'absolute',
+          bottom: -30,
+          right: 20,
+          width: 80,
+          height: 80,
+          borderRadius: 200,
+          resizeMode: 'cover'
+        }}
+        sourceLazy={require('../../../assets/images/img-lazy.png')}
+        source={props.sourceImage}
+        styleImage={{
+          position: 'absolute',
+          bottom: -30,
+          right: 20,
+          width: 80,
+          height: 80,
+          borderRadius: 200,
+          resizeMode: 'cover'
+        }}
       />
     </View>
   )
@@ -35,7 +65,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    resizeMode: 'contain'
+    resizeMode: 'cover'
   },
   logo: {
     position: 'absolute',

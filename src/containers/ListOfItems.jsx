@@ -67,11 +67,11 @@ const ListOfItems = (props) => {
   const userData = useSelector(state => state.user)
 
   const handleLogout = () => {
+    navigate('Startup', { message: 'Saliendo...' })
     dispatch({
       type: USERREMOVEDATA
     })
     removeAsyncStorage(keys.asyncStorageKey)
-    navigate('Startup', { message: 'Saliendo...' })
   }
 
   return (

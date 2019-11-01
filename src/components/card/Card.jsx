@@ -74,7 +74,7 @@ const Card = props => {
           styleLazyImage={{
             width: '100%',
             maxWidth: 420,
-            height: 220,
+            height: 210,
             borderRadius: 12,
             resizeMode: 'cover'
           }}
@@ -83,7 +83,7 @@ const Card = props => {
           styleImage={{
             width: '100%',
             maxWidth: 420,
-            height: 220,
+            height: 210,
             borderRadius: 10,
             resizeMode: 'contain'
           }}

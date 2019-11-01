@@ -8,7 +8,7 @@ import {
 
 // Import components
 import Title from '../../components/title/Title'
-import Picture from '../../components/picture/Picture'
+import { LazyImage } from '../../components/lazy/LazyImage'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -20,12 +20,24 @@ const ItemProduct = props => {
       style={styles.container}
     >
       <View style={styles.containerImage}>
-        <Picture
+        <LazyImage
+          styleLazyImage={{
+            resizeMode: 'cover',
+            width: 70,
+            height: 70,
+            borderRadius: 100
+          }}
+          sourceLazy={require('../../../assets/images/img-lazy.png')}
           source={props.sourceImage}
-          styles={styles.image}
+          styleImage={{
+            resizeMode: 'cover',
+            width: 70,
+            height: 70,
+            borderRadius: 100
+          }}
         />
-      </View>
 
+      </View>
       <View style={styles.containerText}>
         <Title
           stylesContainer={styles.containerName}

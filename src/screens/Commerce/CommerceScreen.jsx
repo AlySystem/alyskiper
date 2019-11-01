@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 
 // Import container
-import ListOfPromotion from '../../containers/ListOfPromotion'
+// import ListOfPromotion from '../../containers/ListOfPromotion'
 import ListOfCommerce from '../../containers/ListOfCommerce'
 import ListOfCategory from '../../containers/ListOfCategory'
 import ListOfSwiper from '../../containers/ListOfSwiper'
@@ -39,7 +39,7 @@ const CommerceScreen = props => {
               <View style={{ marginVertical: 20 }}>
                 <ListOfSwiper />
               </View>
-              <ListOfPromotion />
+              {/* <ListOfPromotion /> */}
             </>
           )}
           <View style={{ paddingVertical: 10 }} />
