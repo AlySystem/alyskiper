@@ -242,18 +242,20 @@ const TransportScreen = props => {
         </Animatable.View>
       )}
 
-      <Animatable.View
-        animation='fadeInRight'
-        iterationCount={1}
-        style={styles.buttonBack}
-      >
-        <Button
-          onPress={() => props.navigation.goBack()}
-          iconName='keyboard-backspace'
-          iconSize={35}
-          iconColor={Theme.COLORS.colorMainAlt}
-        />
-      </Animatable.View>
+      {!destination && (
+        <Animatable.View
+          animation='fadeInRight'
+          iterationCount={1}
+          style={styles.buttonBack}
+        >
+          <Button
+            onPress={() => props.navigation.goBack()}
+            iconName='keyboard-backspace'
+            iconSize={35}
+            iconColor={Theme.COLORS.colorMainAlt}
+          />
+        </Animatable.View>
+      )}
     </View>
   )
 }
