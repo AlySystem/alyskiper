@@ -25,7 +25,8 @@ Background.defaultProps = {
 const styles = StyleSheet.create({
   background: {
     resizeMode: 'cover',
-    flex: 1
+    flex: 1,
+    position: 'relative'
   }
 })
 

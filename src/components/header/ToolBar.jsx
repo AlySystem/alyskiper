@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -20,25 +20,23 @@ const ToolBar = props => {
   const { navigate } = props.navigation
 
   return (
-    <>
-      <View
-        style={styles.container}
-      >
-        <Button
-          iconName='arrow-back'
-          iconSize={25}
-          onPress={() => props.navigation.goBack()}
-        />
+    <View style={styles.container}>
+      <Button
+        iconName='arrow-back'
+        iconSize={25}
+        onPress={() => props.navigation.goBack()}
+      />
 
-        <Animatable.View
-          style={styles.containerNotification}
-          animation='fadeInDown'
-          iterationCount={1}
-        >
-          <Picture
-            source={logo}
-            styles={styles.image}
-          />
+      <Animatable.View
+        style={styles.containerRight}
+        animation='fadeInDown'
+        iterationCount={1}
+      >
+        <Picture
+          source={logo}
+          styles={styles.image}
+        />
+        <View style={styles.containerNotification}>
           <Button
             iconName='notifications'
             iconSize={25}
@@ -47,9 +45,15 @@ const ToolBar = props => {
           <View style={styles.notification}>
             <Text allowFontScaling={false} style={styles.notificationValue}>7</Text>
           </View>
-        </Animatable.View>
-      </View>
-    </>
+        </View>
+        <View style={{ paddingHorizontal: 4 }} />
+        <Button
+          iconName='more-vert'
+          iconSize={30}
+          onPress={() => props.setDropDown(!props.dropDown)}
+        />
+      </Animatable.View>
+    </View>
   )
 }
 
@@ -59,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.COLORS.colorMainAlt,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'baseline',
     height: 50,
     borderBottomColor: Theme.COLORS.colorSecondary,
     borderRadius: 200,
@@ -67,15 +71,13 @@ const styles = StyleSheet.create({
   },
   containerNotification: {
     position: 'relative',
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'center'
+    flexDirection: 'row'
   },
   notification: {
     backgroundColor: 'red',
     position: 'absolute',
     right: -5,
-    top: 8,
+    top: -5,
     borderRadius: 100,
     width: 18,
     height: 18,
@@ -86,6 +88,12 @@ const styles = StyleSheet.create({
   notificationValue: {
     color: Theme.COLORS.colorParagraph,
     fontFamily: 'Lato-Bold'
+
+  },
+  containerRight: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'center'
   },
   image: {
     resizeMode: 'contain',

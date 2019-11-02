@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import {
   View,
   ScrollView,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity,
+  Text
 } from 'react-native'
 
 // Import container
@@ -14,9 +16,15 @@ import ListOfSwiper from '../../containers/ListOfSwiper'
 // Import components
 import Background from '../../components/background/Background'
 import ToolBar from '../../components/header/ToolBar'
+import DropDown from '../../components/dropdown/DropDown'
+
+// Import theme
+import { Theme } from '../../constants/Theme'
 
 const CommerceScreen = props => {
   const [categoryId, setCategoryId] = useState(0)
+  const [dropDown, setDropDown] = useState(false)
+  console.log(dropDown)
 
   const handleOnPress = (categoryId) => {
     setCategoryId(categoryId)
@@ -27,6 +35,8 @@ const CommerceScreen = props => {
       <View style={styles.screen}>
         <ToolBar
           navigation={props.navigation}
+          setDropDown={setDropDown}
+          dropDown={dropDown}
         />
         <ScrollView
           keyboardShouldPersistTaps='always'
@@ -48,6 +58,16 @@ const CommerceScreen = props => {
             navigation={props.navigation}
           />
         </ScrollView>
+        {dropDown && (
+          <DropDown>
+            <TouchableOpacity>
+              <Text allowFontScaling={false} style={styles.textItem}>Agregar direcciones</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text allowFontScaling={false} style={styles.textItem}>Buscar</Text>
+            </TouchableOpacity>
+          </DropDown>
+        )}
       </View>
     </Background>
   )
@@ -56,7 +76,14 @@ const CommerceScreen = props => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,.5)'
+    backgroundColor: 'rgba(0,0,0,.5)',
+    position: 'relative'
+  },
+  textItem: {
+    fontFamily: 'Lato-Regular',
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.small,
+    paddingVertical: 15
   }
 })
 
