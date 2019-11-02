@@ -25,7 +25,7 @@ import Button from '../../components/button/Button'
 import Details from '../../components/details/Details'
 
 // Import custom hooks
-// import { usePubnub } from '../../hooks/usePubnub'
+import { usePubnub } from '../../hooks/usePubnub'
 
 // Import container
 import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
@@ -42,8 +42,8 @@ const { width, height } = Dimensions.get('window')
 const TransportScreen = props => {
   const { navigate } = props.navigation
   const dispatch = useDispatch()
-  // const { drivers } = usePubnub()
-  // console.log(drivers)
+  const { drivers } = usePubnub()
+  console.log(drivers)
   const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
   const [isVisible, setIsVisible] = useState(false)

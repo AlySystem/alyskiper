@@ -74,6 +74,11 @@ export const CATEGORYTRAVEL = gql`
       id
       name
       url_img_category
+      mode_drive
+      url_img_drive
+      btaxy
+      bdelivery
+      btransporte
     }
   }
 `

@@ -15,20 +15,35 @@ export const usePubnub = () => {
 
   useEffect(() => {
     pubnub.subscribe({
-      channels: [`${keys.channels.drivers}`],
+      channels: [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`],
       withPresence: true
     })
 
     pubnub.hereNow({
       includeUUIDs: true,
       includeState: true,
-      channels: [`${keys.channels.drivers}`]
+      channels: [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`]
     },
 
     function (status, response) {
-      const { occupants } = response.channels.Conductor
-      const newArray = occupants.filter(item => item.state !== undefined)
-      setDrivers(newArray)
+      const silverChannel = response.channels.SkiperDrive_1.occupants
+      const arraySilver = silverChannel.filter(item => item.state !== undefined)
+
+      const goldenChannel = response.channels.SkiperDrive_2.occupants
+      const arrayGolden = goldenChannel.filter(item => item.state !== undefined)
+
+      const vipChannel = response.channels.SkiperDrive_3.occupants
+      const arrayVip = vipChannel.filter(item => item.state !== undefined)
+
+      const presidentChannel = response.channels.SkiperDrive_4.occupants
+      const arrayPresident = presidentChannel.filter(item => item.state !== undefined)
+
+      setDrivers({
+        silver: arraySilver,
+        golden: arrayGolden,
+        vip: arrayVip,
+        president: arrayPresident
+      })
     })
 
     //   pubnub.addListener({
@@ -49,7 +64,7 @@ export const usePubnub = () => {
         channels: [`${keys.channels.drivers}`]
       })
     }
-  }, [pubnub])
+  }, [])
 
   return { drivers }
 }

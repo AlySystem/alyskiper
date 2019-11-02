@@ -42,6 +42,11 @@ const ListOfCategoryServices = props => {
         <SkeletonServices />
       </Animatable.View>
     )
+  } else {
+    dispatch({
+      type: SERVICES,
+      payload: data
+    })
   }
 
   return (
@@ -54,7 +59,7 @@ const ListOfCategoryServices = props => {
       <ViewPager
         style={styles.viewPager}
       >
-        {data.skipercattravels.filter(item => item.id < 5).map(category => (
+        {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
           <CategoryServices
             onPress={() => navigate('DetailsTransport', {
               steps: props.steps,
