@@ -3,7 +3,8 @@ import {
   View,
   TouchableOpacity,
   Text,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native'
 
 // Import components
@@ -16,6 +17,8 @@ import image from '../../../assets/images/img-background.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+
+const { width } = Dimensions.get('window')
 
 const Card = props => {
   const [icon, setIcon] = useState(false)
@@ -73,8 +76,7 @@ const Card = props => {
         <LazyImage
           styleLazyImage={{
             width: '100%',
-            maxWidth: 420,
-            height: 210,
+            height: width > 420 ? 280 : 210,
             borderRadius: 12,
             resizeMode: 'cover'
           }}
@@ -82,8 +84,7 @@ const Card = props => {
           source={props.sourceImage}
           styleImage={{
             width: '100%',
-            maxWidth: 420,
-            height: 210,
+            height: width > 420 ? 280 : 210,
             borderRadius: 10,
             resizeMode: 'contain'
           }}

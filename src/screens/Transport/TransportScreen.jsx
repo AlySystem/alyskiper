@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Text
 } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome5'
 import MapView, { Polyline, Marker } from 'react-native-maps'
@@ -30,10 +30,14 @@ import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
 import { routeDirection } from '../../utils/Directions'
 import { getPixelSize } from '../../utils/Pixel'
 
+// Import actions types
+import { REMOVEDETAILSLOCATION } from '../../store/actionTypes'
+
 const { width, height } = Dimensions.get('window')
 
 const TransportScreen = props => {
   const { navigate } = props.navigation
+  const dispatch = useDispatch()
   const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
   const [isVisible, setIsVisible] = useState(false)
@@ -80,10 +84,25 @@ const TransportScreen = props => {
     }
   }, [location])
 
+  const handleBack = () => {
+    setDestination(null)
+
+    dispatch({
+      type: REMOVEDETAILSLOCATION,
+      payload: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        latitudeDelta: 0.0143,
+        longitudeDelta: 0.0134
+      }
+    })
+  }
+
   return (
     <View style={styles.screen}>
       <Modal
         isVisible={isVisible}
+        animationInTiming={500}
         style={{
           margin: 0,
           backgroundColor: Theme.COLORS.colorMainDark
@@ -177,7 +196,7 @@ const TransportScreen = props => {
       {destination ? (
         <>
           <Button
-            onPress={() => setDestination(null)}
+            onPress={handleBack}
             iconName='arrow-back'
             iconSize={30}
             stylesButton={styles.buttonBack}
@@ -222,6 +241,19 @@ const TransportScreen = props => {
           </TouchableOpacity>
         </Animatable.View>
       )}
+
+      <Animatable.View
+        animation='fadeInRight'
+        iterationCount={1}
+        style={styles.buttonBack}
+      >
+        <Button
+          onPress={() => props.navigation.goBack()}
+          iconName='keyboard-backspace'
+          iconSize={35}
+          iconColor={Theme.COLORS.colorMainAlt}
+        />
+      </Animatable.View>
     </View>
   )
 }

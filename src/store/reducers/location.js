@@ -1,4 +1,4 @@
-import { LOCATION } from '../actionTypes'
+import { LOCATION, REMOVEDETAILSLOCATION } from '../actionTypes'
 
 const INITIAL_STATE = {
   latitude: null,
@@ -12,6 +12,11 @@ export const location = (state = INITIAL_STATE, action) => {
     case LOCATION: {
       return {
         ...state,
+        ...action.payload
+      }
+    }
+    case REMOVEDETAILSLOCATION: {
+      return {
         ...action.payload
       }
     }
