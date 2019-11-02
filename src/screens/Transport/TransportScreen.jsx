@@ -4,12 +4,13 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Text
+  Text,
+  Image
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome5'
-import MapView, { Polyline, Marker } from 'react-native-maps'
+import MapView, { Polyline, Marker, MarkerAnimated } from 'react-native-maps'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -22,6 +23,9 @@ import Search from '../../components/search/Search'
 import Loader from '../../components/loader/Loader'
 import Button from '../../components/button/Button'
 import Details from '../../components/details/Details'
+
+// Import custom hooks
+// import { usePubnub } from '../../hooks/usePubnub'
 
 // Import container
 import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
@@ -38,6 +42,8 @@ const { width, height } = Dimensions.get('window')
 const TransportScreen = props => {
   const { navigate } = props.navigation
   const dispatch = useDispatch()
+  // const { drivers } = usePubnub()
+  // console.log(drivers)
   const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
   const [isVisible, setIsVisible] = useState(false)
@@ -47,6 +53,7 @@ const TransportScreen = props => {
   const [isLoading, setIsLoading] = useState(false)
   const mapView = useRef(null)
   const inputRef = useRef(null)
+  const marker = useRef(null)
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
@@ -158,6 +165,26 @@ const TransportScreen = props => {
           showsCompass={false}
           showsMyLocationButton={false}
         >
+
+          {/* {drivers && (
+            drivers.map(drive => (
+              <MarkerAnimated
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={styles.drive}
+                  source={require('../../../assets/images/img-location.png')}
+                />
+              </MarkerAnimated>
+            ))
+          )} */}
+
           {destination && (
             <>
               <Polyline

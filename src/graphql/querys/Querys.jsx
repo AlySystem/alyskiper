@@ -67,3 +67,13 @@ export const GETDRIVERNEARBY = gql`
     ObtenerDriveCercano(lat: $lat, lng: $lng, inputdrive: $inputdrive)
   }
 `
+
+export const CATEGORYTRAVEL = gql`
+  query {
+    skipercattravels {
+      id
+      name
+      url_img_category
+    }
+  }
+`

@@ -6,7 +6,14 @@ import {
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import ViewPager from '@react-native-community/viewpager'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useQuery } from '@apollo/react-hooks'
+
+// Import actions types
+import { SERVICES } from '../store/actionTypes'
+
+// Import querys
+import { CATEGORYTRAVEL } from '../graphql/querys/Querys'
 
 // Import theme
 import { Theme } from '../constants/Theme'
@@ -14,40 +21,28 @@ import { Theme } from '../constants/Theme'
 // Import components
 import CategoryServices from '../components/category/CategoryServices'
 
-// Import images
-import image1 from '../../assets/images/img-category-3.png'
-import image2 from '../../assets/images/img-category-4.png'
-import image3 from '../../assets/images/img-category-1.png'
-import image4 from '../../assets/images/img-category-2.png'
+// Import skeleton
+import SkeletonServices from '../skeleton/SkeletonServices'
 
 const { height } = Dimensions.get('window')
 
-const items = [
-  {
-    key: 1,
-    img: image1,
-    category: 'Silver'
-  },
-  {
-    key: 2,
-    img: image2,
-    category: 'Golden'
-  },
-  {
-    key: 3,
-    img: image3,
-    category: 'Vip'
-  },
-  {
-    key: 4,
-    img: image4,
-    category: 'President'
-  }
-]
-
 const ListOfCategoryServices = props => {
   const { navigate } = props.navigation
+  const dispatch = useDispatch()
   const userData = useSelector(state => state.user)
+  const { data, loading } = useQuery(CATEGORYTRAVEL)
+
+  if (loading) {
+    return (
+      <Animatable.View
+        animation='fadeInUp'
+        iterationCount={1}
+        style={styles.container}
+      >
+        <SkeletonServices />
+      </Animatable.View>
+    )
+  }
 
   return (
     <Animatable.View
@@ -55,20 +50,19 @@ const ListOfCategoryServices = props => {
       iterationCount={1}
       style={styles.container}
     >
-
       <Text allowFontScaling={false} style={styles.title}>Hola {userData.firstName.toLowerCase()}, selecciona una de nuestras categorias.</Text>
       <ViewPager
         style={styles.viewPager}
       >
-        {items.map(item => (
+        {data.skipercattravels.filter(item => item.id < 5).map(category => (
           <CategoryServices
             onPress={() => navigate('DetailsTransport', {
               steps: props.steps,
-              id: item.key,
-              category: item.category
+              id: category.id,
+              category: category.name
             })}
-            key={item.key}
-            source={item.img}
+            key={category.id}
+            source={{ uri: category.url_img_category }}
           />
         ))}
       </ViewPager>

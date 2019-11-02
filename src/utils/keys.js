@@ -9,6 +9,11 @@ export const keys = {
     geocode: 'https://maps.googleapis.com/maps/api/geocode/'
   },
   channels: {
-    drivers: 'Conductor'
+    drivers: {
+      silver: 'SkiperDrive_1',
+      golden: 'SkiperDrive_2',
+      vip: 'SkiperDrive_3',
+      president: 'SkiperDrive_4'
+    }
   }
 }
