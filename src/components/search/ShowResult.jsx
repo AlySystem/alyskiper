@@ -6,6 +6,8 @@ import {
   TouchableOpacity
 } from 'react-native'
 
+import Fontisto from 'react-native-vector-icons/Fontisto'
+
 // Import theme
 import { Theme } from '../../constants/Theme'
 
@@ -15,16 +17,25 @@ const ShowResult = props => {
       style={styles.container}
       onPress={props.onPress}
     >
-      <Text style={styles.title}>{props.title}</Text>
-      <View style={{ paddingVertical: 2 }} />
-      <Text style={styles.description}>{props.description}</Text>
+      <Fontisto
+        name='clock'
+        color={Theme.COLORS.colorSecondaryAlt}
+        size={30}
+      />
+
+      <View style={styles.containerText}>
+        <Text allowFontScaling={false} style={styles.title}>{props.title}</Text>
+        <View style={{ paddingVertical: 2 }} />
+        <Text allowFontScaling={false} style={styles.description}>{props.description}</Text>
+      </View>
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 5
+    paddingVertical: 8,
+    flexDirection: 'row'
   },
   title: {
     color: Theme.COLORS.colorSecondary,
@@ -35,6 +46,9 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorParagraphSecondary,
     fontFamily: 'Lato-Bold',
     fontSize: 12
+  },
+  containerText: {
+    marginLeft: 15
   }
 })
 

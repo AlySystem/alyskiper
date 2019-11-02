@@ -54,7 +54,7 @@ const InputControl = props => {
           iconSize={20}
           iconColor={props.iconColor || Theme.COLORS.colorSecondary}
           onPress={() => setValue('')}
-          stylesButton={styles.button}
+          stylesButton={props.stylesButton || styles.button}
           isActiveButton
         />
       )}

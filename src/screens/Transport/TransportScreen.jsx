@@ -21,6 +21,10 @@ import Icon from '../../components/icon/Icon'
 import Search from '../../components/search/Search'
 import Loader from '../../components/loader/Loader'
 import Button from '../../components/button/Button'
+import Details from '../../components/details/Details'
+
+// Import container
+import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
 
 // Import utils
 import { routeDirection } from '../../utils/Directions'
@@ -33,19 +37,22 @@ const TransportScreen = props => {
   const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
   const [isVisible, setIsVisible] = useState(false)
+  const [details, setDetails] = useState('')
   const [steps, setSteps] = useState(null)
   const [destination, setDestination] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const mapView = useRef(null)
   const inputRef = useRef(null)
 
-  const handleDetails = async (placeId) => {
+  const handleDetails = async (placeId, details) => {
     setIsLoading(true)
     const { latitude, longitude } = location
     const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
+
     setIsLoading(false)
     setDestination(pointCoords)
     setSteps(steps)
+    setDetails(details)
     mapView.current.fitToCoordinates(pointCoords, {
       edgePadding: {
         right: getPixelSize(50),
@@ -68,8 +75,8 @@ const TransportScreen = props => {
   useEffect(() => {
     if (location.details) {
       const details = location.details
-      const { placeId, destination } = details
-      handleDetails(placeId, destination.latitude, destination.longitude)
+      const { placeId, address } = details
+      handleDetails(placeId, address)
     }
   }, [location])
 
@@ -95,7 +102,11 @@ const TransportScreen = props => {
         />
 
         <View style={styles.modalLayout}>
-          <Search />
+          <Search
+            navigation={props.navigation}
+            setIsVisible={setIsVisible}
+            isVisible={isVisible}
+          />
           <TouchableOpacity
             style={styles.modalItem}
             onPress={() => {
@@ -135,6 +146,14 @@ const TransportScreen = props => {
                 strokeWidth={3}
                 strokeColor={Theme.COLORS.colorMain}
               />
+              <Marker
+                coordinate={destination[destination.length - 1]}
+                anchor={{ x: 0, y: 0 }}
+              >
+                <Details
+                  title={details}
+                />
+              </Marker>
             </>
           )}
 
@@ -158,13 +177,15 @@ const TransportScreen = props => {
       {destination ? (
         <>
           <Button
-            onPress={() => {
-              return setDestination(null)
-            }}
+            onPress={() => setDestination(null)}
             iconName='arrow-back'
             iconSize={30}
             stylesButton={styles.buttonBack}
             iconColor={Theme.COLORS.colorMainAlt}
+          />
+          <ListOfCategoryServices
+            navigation={props.navigation}
+            steps={steps}
           />
         </>
       ) : isLoading ? (
