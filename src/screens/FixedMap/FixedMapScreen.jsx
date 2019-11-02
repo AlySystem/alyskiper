@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   View,
   StyleSheet,
@@ -23,12 +23,14 @@ import InputControl from '../../components/input/InputControl'
 import { keys } from '../../utils/keys'
 
 Geocoder.init(`${keys.googleMaps.apiKey}`)
-const FixedMapScreen = () => {
+const FixedMapScreen = props => {
+  const { navigate } = props.navigation
   const dispatch = useDispatch()
   const [region, setRegion] = useState(useSelector(state => state.location))
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [details, setDetails] = useState({})
+  const mapView = useRef(null)
 
   const handleOnRegionChange = async location => {
     setRegion(location)
@@ -41,7 +43,7 @@ const FixedMapScreen = () => {
     const newLocation = address.substring(0, address.indexOf(','))
     setValue(newLocation)
     setDetails({
-      location: { lat, lng },
+      destination: { latitude: lat, longitude: lng },
       placeId: place_id,
       address: newLocation
     })
@@ -55,6 +57,7 @@ const FixedMapScreen = () => {
         details
       }
     })
+    navigate('Transport')
   }
 
   return (
@@ -67,6 +70,9 @@ const FixedMapScreen = () => {
         loadingEnabled
         initialRegion={region}
         onRegionChangeComplete={handleOnRegionChange}
+        showsCompass={false}
+        showsMyLocationButton={false}
+        ref={mapView}
       />
       <View style={styles.containerInput}>
         <InputControl
