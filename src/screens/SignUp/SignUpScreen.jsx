@@ -192,6 +192,7 @@ const SignUpScreen = props => {
       if (handleIsChecked()) {
         if (nameIsValid.isValid && lastNameIsValid.isValid && userNameIsValid.isValid && emailIsValid.isValid && passwordIsValid.isValid) {
           Keyboard.dismiss()
+
           const result = await SignUp({
             variables: {
               input: {
@@ -202,13 +203,12 @@ const SignUpScreen = props => {
                 password: password,
                 phone: numberPhone,
                 country_id: details,
-                sponsor_id: sponsorId || 1
+                sponsor_id: parseInt(sponsorId) || 1
               }
             }
           })
 
           const { error, data } = result.data.signup
-          // console.log(result)
           if (error) {
             if (error.message === 'This email or phone is already exist in the database!') {
               showMessage({
