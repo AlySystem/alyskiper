@@ -24,6 +24,12 @@ import Loader from '../../components/loader/Loader'
 import Button from '../../components/button/Button'
 import Details from '../../components/details/Details'
 
+// Import image
+import silver from '../../../assets/images/img-icon-silver.png'
+import golden from '../../../assets/images/img-icon-golden.png'
+import vip from '../../../assets/images/img-icon-vip.png'
+import president from '../../../assets/images/img-icon-president.png'
+
 // Import custom hooks
 import { usePubnub } from '../../hooks/usePubnub'
 
@@ -165,6 +171,85 @@ const TransportScreen = props => {
           showsCompass={false}
           showsMyLocationButton={false}
         >
+          {drivers && (
+            drivers.map(drive => {
+              if (drive.silver) {
+                return drive.silver.map(item => (
+                  <MarkerAnimated
+                    style={styles.marker}
+                    key={item.uuid}
+                    coordinate={{
+                      latitude: item.state.coords.latitude,
+                      longitude: item.state.coords.longitude
+                    }}
+                    ref={marker}
+                  >
+                    <Image
+                      style={styles.drive}
+                      source={silver}
+                    />
+                  </MarkerAnimated>
+                ))
+              }
+
+              if (drive.golden) {
+                return drive.golden.map(item => (
+                  <MarkerAnimated
+                    style={styles.marker}
+                    key={item.uuid}
+                    coordinate={{
+                      latitude: item.state.coords.latitude,
+                      longitude: item.state.coords.longitude
+                    }}
+                    ref={marker}
+                  >
+                    <Image
+                      style={styles.drive}
+                      source={silver}
+                    />
+                  </MarkerAnimated>
+                ))
+              }
+
+              if (drive.vip) {
+                return drive.vip.map(item => (
+                  <MarkerAnimated
+                    style={styles.marker}
+                    key={item.uuid}
+                    coordinate={{
+                      latitude: item.state.coords.latitude,
+                      longitude: item.state.coords.longitude
+                    }}
+                    ref={marker}
+                  >
+                    <Image
+                      style={styles.drive}
+                      source={silver}
+                    />
+                  </MarkerAnimated>
+                ))
+              }
+
+              if (drive.president) {
+                return drive.president.map(item => (
+                  <MarkerAnimated
+                    style={styles.marker}
+                    key={item.uuid}
+                    coordinate={{
+                      latitude: item.state.coords.latitude,
+                      longitude: item.state.coords.longitude
+                    }}
+                    ref={marker}
+                  >
+                    <Image
+                      style={styles.drive}
+                      source={silver}
+                    />
+                  </MarkerAnimated>
+                ))
+              }
+            })
+          )}
 
           {/* {drivers && (
             drivers.map(drive => (

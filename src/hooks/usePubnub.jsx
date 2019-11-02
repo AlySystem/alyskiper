@@ -7,8 +7,8 @@ import { keys } from '../utils/keys'
 export const usePubnub = () => {
   const [drivers, setDrivers] = useState()
   const pubnub = new PubNubReact({
-    publishKey: 'pub-c-1271b42f-b90f-402d-99a8-749d0d2a13a7',
-    subscribeKey: 'sub-c-36cd6120-e9e6-11e9-bee7-82748ed6f7e5',
+    publishKey: 'pub-c-b5350d6e-9a1f-4d33-b5c9-918fe9bff121',
+    subscribeKey: 'sub-c-e286360e-fdc3-11e9-be22-ea7c5aada356',
     subscribeRequestTimeout: 60000,
     presenceTimeout: 122
   })
@@ -27,23 +27,23 @@ export const usePubnub = () => {
 
     function (status, response) {
       const silverChannel = response.channels.SkiperDrive_1.occupants
-      const arraySilver = silverChannel.filter(item => item.state !== undefined)
+      const silver = silverChannel.filter(item => item.state !== undefined)
 
       const goldenChannel = response.channels.SkiperDrive_2.occupants
-      const arrayGolden = goldenChannel.filter(item => item.state !== undefined)
+      const golden = goldenChannel.filter(item => item.state !== undefined)
 
       const vipChannel = response.channels.SkiperDrive_3.occupants
-      const arrayVip = vipChannel.filter(item => item.state !== undefined)
+      const vip = vipChannel.filter(item => item.state !== undefined)
 
       const presidentChannel = response.channels.SkiperDrive_4.occupants
-      const arrayPresident = presidentChannel.filter(item => item.state !== undefined)
+      const president = presidentChannel.filter(item => item.state !== undefined)
 
-      setDrivers({
-        silver: arraySilver,
-        golden: arrayGolden,
-        vip: arrayVip,
-        president: arrayPresident
-      })
+      setDrivers([
+        silver,
+        golden,
+        vip,
+        president
+      ])
     })
 
     //   pubnub.addListener({
