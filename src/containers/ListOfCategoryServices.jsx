@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useQuery } from '@apollo/react-hooks'
 
 // Import actions types
-import { SERVICES } from '../store/actionTypes'
+import { SERVICES, DETAILSTRAVEL } from '../store/actionTypes'
 
 // Import querys
 import { CATEGORYTRAVEL } from '../graphql/querys/Querys'
@@ -42,11 +42,25 @@ const ListOfCategoryServices = props => {
         <SkeletonServices />
       </Animatable.View>
     )
-  } else {
+  }
+
+  if (data) {
     dispatch({
       type: SERVICES,
       payload: data
     })
+  }
+
+  const handleOnSelected = (categoryId, categoryName) => {
+    dispatch({
+      type: DETAILSTRAVEL,
+      payload: {
+        categoryId: categoryId,
+        category: categoryName,
+        steps: props.steps
+      }
+    })
+    return navigate('DetailsTransport')
   }
 
   return (
@@ -61,11 +75,7 @@ const ListOfCategoryServices = props => {
       >
         {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
           <CategoryServices
-            onPress={() => navigate('DetailsTransport', {
-              steps: props.steps,
-              id: category.id,
-              category: category.name
-            })}
+            onPress={() => handleOnSelected(category.id, category.name)}
             key={category.id}
             source={{ uri: category.url_img_category }}
           />

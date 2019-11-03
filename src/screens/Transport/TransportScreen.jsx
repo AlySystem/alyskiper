@@ -25,10 +25,10 @@ import Button from '../../components/button/Button'
 import Details from '../../components/details/Details'
 
 // Import image
-import silver from '../../../assets/images/img-icon-silver.png'
-import golden from '../../../assets/images/img-icon-golden.png'
-import vip from '../../../assets/images/img-icon-vip.png'
-import president from '../../../assets/images/img-icon-president.png'
+import silverMarker from '../../../assets/images/img-icon-silver.png'
+import goldenMarker from '../../../assets/images/img-icon-golden.png'
+import vipMarker from '../../../assets/images/img-icon-vip.png'
+import presidentMarker from '../../../assets/images/img-icon-president.png'
 
 // Import custom hooks
 import { usePubnub } from '../../hooks/usePubnub'
@@ -48,7 +48,7 @@ const { width, height } = Dimensions.get('window')
 const TransportScreen = props => {
   const { navigate } = props.navigation
   const dispatch = useDispatch()
-  const { drivers } = usePubnub()
+  const { silver, golden, vip, president } = usePubnub()
   const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
   const [isVisible, setIsVisible] = useState(false)
@@ -169,86 +169,81 @@ const TransportScreen = props => {
           showsCompass={false}
           showsMyLocationButton={false}
         >
-          {/* {drivers && (
-            drivers.map(drive => {
-              return drive.map(item => {
-                if (item.state.categoria === 1) {
-                  return (
-                    <Marker
-                      style={styles.marker}
-                      key={item.uuid}
-                      coordinate={{
-                        latitude: item.state.coords.latitude,
-                        longitude: item.state.coords.longitude
-                      }}
-                      ref={marker}
-                    >
-                      <Image
-                        style={styles.drive}
-                        source={silver}
-                      />
-                    </Marker>
-                  )
-                }
-                if (item.state.categoria === 2) {
-                  return (
-                    <Marker
-                      style={styles.marker}
-                      key={item.uuid}
-                      coordinate={{
-                        latitude: item.state.coords.latitude,
-                        longitude: item.state.coords.longitude
-                      }}
-                      ref={marker}
-                    >
-                      <Image
-                        style={styles.drive}
-                        source={golden}
-                      />
-                    </Marker>
-                  )
-                }
+          {silver && (
+            silver.map(drive => (
+              <Marker
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={styles.drive}
+                  source={silverMarker}
+                />
+              </Marker>
+            ))
+          )}
 
-                if (item.state.categoria === 3) {
-                  return (
-                    <Marker
-                      style={styles.marker}
-                      key={item.uuid}
-                      coordinate={{
-                        latitude: item.state.coords.latitude,
-                        longitude: item.state.coords.longitude
-                      }}
-                      ref={marker}
-                    >
-                      <Image
-                        style={styles.drive}
-                        source={vip}
-                      />
-                    </Marker>
-                  )
-                }
+          {golden && (
+            golden.map(drive => (
+              <Marker
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={styles.drive}
+                  source={goldenMarker}
+                />
+              </Marker>
+            ))
+          )}
 
-                if (item.state.categoria === 4) {
-                  return (
-                    <Marker
-                      style={styles.marker}
-                      key={item.uuid}
-                      coordinate={{
-                        latitude: item.state.coords.latitude,
-                        longitude: item.state.coords.longitude
-                      }}
-                      ref={marker}
-                    >
-                      <Image
-                        style={styles.drive}
-                        source={president}
-                      />
-                    </Marker>
-                  )
-                }
-              })
-            })
-          )} */}
+          {vip && (
+            vip.map(drive => (
+              <Marker
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={styles.drive}
+                  source={vipMarker}
+                />
+              </Marker>
+            ))
+          )}
+
+          {president && (
+            president.map(drive => (
+              <Marker
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={styles.drive}
+                  source={presidentMarker}
+                />
+              </Marker>
+            ))
+          )}
 
           {destination && (
             <>
