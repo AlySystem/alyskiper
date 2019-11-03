@@ -24,6 +24,7 @@ import AlyMoneyScreen from '../../screens/AlyMoney/AlyMoneyScreen'
 import DetailsTransportScreen from '../../screens/Transport/DetailsTransportScreen'
 import FixedMapScreen from '../../screens/FixedMap/FixedMapScreen'
 import ScannerScreen from '../../screens/Scanner/ScannerScreen'
+import TravelTrancingScreen from '../../screens/Transport/TravelTracingScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -144,6 +145,12 @@ const StackNavigation = createStackNavigator({
   Scanner: {
     screen: ScannerScreen,
     navigationOptions
+  },
+  TravelTrancing: {
+    screen: TravelTrancingScreen,
+    navigationOptions: {
+      header: null
+    }
   }
 })
 

@@ -169,7 +169,7 @@ const TransportScreen = props => {
           showsCompass={false}
           showsMyLocationButton={false}
         >
-          {drivers && (
+          {/* {drivers && (
             drivers.map(drive => {
               return drive.map(item => {
                 if (item.state.categoria === 1) {
@@ -248,7 +248,7 @@ const TransportScreen = props => {
                 }
               })
             })
-          )}
+          )} */}
 
           {destination && (
             <>
