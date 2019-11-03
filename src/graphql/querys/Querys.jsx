@@ -113,3 +113,17 @@ export const GETTRAVELBYUSERID = gql`
     }
   }
 `
+
+export const GETFAVORITE = gql`
+  query GetFavorite ($id_user: Int!) {
+    getAllCommerceFavoriteByUserId(id_user: $id_user) {
+      id
+      skiperCommerce {
+        address
+        url_logo
+        url_art
+        namecommerce
+      }
+    }
+  }
+`

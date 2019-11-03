@@ -110,6 +110,22 @@ export const EDITPASSWORD = gql`
   }
 `
 
+export const ADDFAVORITE = gql`
+  mutation AddFavorite($input: CommerceFavoriteInput) {
+    registerCommerceFavorite (input: $input) {
+      ok
+    }
+  }
+`
+
+export const REMOVEFAVORITE = gql`
+  mutation RemoveFavorite($id: Int!) {
+    removeCommerceFavorite (id: $id) {
+      ok
+    }
+  }
+`
+
 export const GENERATETRAVEL = gql`
   mutation GenerateTravel($inputviaje: SkiperTravelsInput!) {
     GenerateTravel (inputviaje: $inputviaje) {

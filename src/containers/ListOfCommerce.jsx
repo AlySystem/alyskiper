@@ -1,7 +1,7 @@
 import React from 'react'
 import { FlatList, Text } from 'react-native'
-import { useQuery } from '@apollo/react-hooks'
-import { useSelector } from 'react-redux'
+import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useSelector, useDispatch } from 'react-redux'
 
 // Import components
 import Card from '../components/card/Card'
@@ -12,13 +12,21 @@ import ListEmpty from '../containers/ListEmpty'
 // Import query
 import { COMMERCERS } from '../graphql/querys/Querys'
 
+// Import mutations
+import { ADDFAVORITE } from '../graphql/mutations/Mutations'
+
 // Import skeleton
 import SkeletonProduct from '../skeleton/SkeletonProduct'
 
+// Import actions types
+import { FAVORITE } from '../store/actionTypes'
+
 const ListOfCommerce = props => {
   const { navigate } = props.navigation
+  const dispatch = useDispatch()
   const region = useSelector(state => state.location)
-
+  const { userId } = useSelector(state => state.user)
+  const [AddFavorite] = useMutation(ADDFAVORITE)
   const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude, radio: 40000, id_category_product: props.categoryId } })
 
   if (loading) return <SkeletonProduct />
@@ -33,10 +41,10 @@ const ListOfCommerce = props => {
           sourceLogo={{ uri: item.url_logo }}
           sourceImage={{ uri: item.url_art }}
           onPress={() => navigate('ProfileCommerce', { commerce: item })}
+          onPressFavorite={() => AddFavorite({ variables: { input: { user_id: userId, commerce_id: item.id } } })}
         />
       )}
       keyExtractor={(item, index) => index.toString()}
-      // ListEmptyComponent={<ListEmpty />}
     />
   )
 }

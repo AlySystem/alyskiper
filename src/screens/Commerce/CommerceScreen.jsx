@@ -12,6 +12,7 @@ import {
 import ListOfCommerce from '../../containers/ListOfCommerce'
 import ListOfCategory from '../../containers/ListOfCategory'
 import ListOfSwiper from '../../containers/ListOfSwiper'
+import ListOfFavorite from '../../containers/ListOfFavorite'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -24,7 +25,6 @@ import { Theme } from '../../constants/Theme'
 const CommerceScreen = props => {
   const [categoryId, setCategoryId] = useState(0)
   const [dropDown, setDropDown] = useState(false)
-  console.log(dropDown)
 
   const handleOnPress = (categoryId) => {
     setCategoryId(categoryId)
@@ -52,6 +52,7 @@ const CommerceScreen = props => {
               {/* <ListOfPromotion /> */}
             </>
           )}
+          <ListOfFavorite />
           <View style={{ paddingVertical: 10 }} />
           <ListOfCommerce
             categoryId={categoryId}
