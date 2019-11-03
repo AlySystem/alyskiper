@@ -86,25 +86,30 @@ export const CATEGORYTRAVEL = gql`
 export const GETTRAVELBYUSERID = gql`
   query GetTravelByUserId ($iduser: Int!) {
     getTravelByUserId(iduser: $iduser) {
-      id
-      lat_initial
-      lng_initial
-      users {
-        id
-        firstname
-      }
       skiperagent {
         id
         state
-      }
-      skiperTravelsTracing {
-        id
-        travelstatus {
-          id
-          name
+        user {
+          firstname
+          lastname
+          avatar
+        }
+        skiperVehicleAgent {
+          skiperVehicle {
+            id
+            license_plate
+            vehicleModel {
+              name
+            }
+            vehicleYear {
+              year
+            }
+            vehicleTrademark {
+              name
+            }
+          }
         }
       }
-      distance
     }
   }
 `

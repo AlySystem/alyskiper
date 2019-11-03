@@ -13,14 +13,14 @@ import { Theme } from '../../constants/Theme'
 
 const DetailsDrive = props => {
   const drive = props.drive
-  console.log(drive)
-  // const { avatar, firstname, lastname } = drive.skiperagent.user
+  const { avatar, firstname, lastname } = drive.skiperagent.user
+  const { license_plate, vehicleModel, vehicleTrademark } = drive.skiperagent.skiperVehicleAgent.skiperVehicle
 
   return (
     <View style={styles.container}>
       <Text allowFontScaling={false} style={styles.title}>Informacion del conductor</Text>
 
-      {/* <View style={{ paddingVertical: 3 }} />
+      <View style={{ paddingVertical: 3 }} />
       <View style={styles.containerImage}>
         <LazyImage
           styleLazyImage={{
@@ -46,29 +46,29 @@ const DetailsDrive = props => {
         </View>
       </View>
 
-      <View style={{ paddingVertical: 3 }} /> */}
+      <View style={{ paddingVertical: 3 }} />
 
       <Text allowFontScaling={false} style={styles.title}>Informacion del vehiculo</Text>
-      {/*
+
       <View>
         <View style={styles.containerDetails}>
           <Text allowFontScaling={false} style={styles.key}>Placa:</Text>
-          <Text allowFontScaling={false} style={styles.value}>{}</Text>
+          <Text allowFontScaling={false} style={styles.value}>{license_plate}</Text>
         </View>
 
         <View style={{ paddingVertical: 5 }} />
         <View style={styles.containerDetails}>
           <Text allowFontScaling={false} style={styles.key}>Modelo:</Text>
-          <Text allowFontScaling={false} style={styles.value}>{}</Text>
+          <Text allowFontScaling={false} style={styles.value}>{vehicleModel.name}</Text>
         </View>
 
         <View style={{ paddingVertical: 5 }} />
         <View style={styles.containerDetails}>
-          <Text allowFontScaling={false} style={styles.key}>Color:</Text>
-          <Text allowFontScaling={false} style={styles.value}>{}</Text>
+          <Text allowFontScaling={false} style={styles.key}>Marca:</Text>
+          <Text allowFontScaling={false} style={styles.value}>{vehicleTrademark.name}</Text>
         </View>
 
-      </View> */}
+      </View>
     </View>
   )
 }
