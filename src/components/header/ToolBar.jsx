@@ -74,16 +74,16 @@ const styles = StyleSheet.create({
     right: -5,
     top: -5,
     borderRadius: 100,
-    width: 18,
-    height: 18,
+    width: 15,
+    height: 15,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 4
   },
   notificationValue: {
     color: Theme.COLORS.colorParagraph,
-    fontFamily: 'Lato-Bold'
-
+    fontFamily: 'Lato-Bold',
+    fontSize: 10
   },
   containerRight: {
     flexDirection: 'row',

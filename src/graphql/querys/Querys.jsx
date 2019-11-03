@@ -82,3 +82,29 @@ export const CATEGORYTRAVEL = gql`
     }
   }
 `
+
+export const GETTRAVELBYUSERID = gql`
+  query GetTravelByUserId ($iduser: Int!) {
+    getTravelByUserId(iduser: $iduser) {
+      id
+      lat_initial
+      lng_initial
+      users {
+        id
+        firstname
+      }
+      skiperagent {
+        id
+        state
+      }
+      skiperTravelsTracing {
+        id
+        travelstatus {
+          id
+          name
+        }
+      }
+      distance
+    }
+  }
+`

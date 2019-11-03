@@ -43,7 +43,7 @@ const ScannerScreen = props => {
       <View style={{ flex: 1 }}>
         <Loader />
         <View style={{ paddingVertical: 10 }} />
-        <Text style={styles.text}>Confirmando viaje....</Text>
+        <Text allowFontScaling={false} style={styles.text}>Confirmando viaje....</Text>
       </View>
     )
   }
