@@ -34,7 +34,13 @@ const TravelTracingScreen = props => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{
+        flex: 1,
+        backgroundColor: Theme.COLORS.colorMainAlt,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+      >
         <Loader />
         <View style={{ paddingVertical: 10 }} />
         <Text>Cargando viaje...</Text>
