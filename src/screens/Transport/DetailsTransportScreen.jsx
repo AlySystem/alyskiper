@@ -1,16 +1,24 @@
 import React from 'react'
 import {
   View,
-  StyleSheet
+  StyleSheet,
+  Button
 } from 'react-native'
 
 // Import components
 import Background from '../../components/background/Background'
 
 const DetailsTransportScreen = props => {
+  const { navigate } = props.navigation
+
   return (
     <Background>
-      <View style={styles.screen} />
+      <View style={styles.screen}>
+        <Button
+          title='Escanear QR'
+          onPress={() => navigate('Scanner')}
+        />
+      </View>
     </Background>
   )
 }

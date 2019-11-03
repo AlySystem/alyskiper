@@ -23,6 +23,7 @@ import NotificationScreen from '../../screens/Notification/NotificationScreen'
 import AlyMoneyScreen from '../../screens/AlyMoney/AlyMoneyScreen'
 import DetailsTransportScreen from '../../screens/Transport/DetailsTransportScreen'
 import FixedMapScreen from '../../screens/FixedMap/FixedMapScreen'
+import ScannerScreen from '../../screens/Scanner/ScannerScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -139,6 +140,10 @@ const StackNavigation = createStackNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  Scanner: {
+    screen: ScannerScreen,
+    navigationOptions
   }
 })
 

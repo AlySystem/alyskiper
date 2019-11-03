@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   View,
   Text,
   StyleSheet
 } from 'react-native'
-import * as Animatable from 'react-native-animatable'
 
 // Import components
 import Picture from '../picture/Picture'
@@ -27,11 +26,7 @@ const ToolBar = props => {
         onPress={() => props.navigation.goBack()}
       />
 
-      <Animatable.View
-        style={styles.containerRight}
-        animation='fadeInDown'
-        iterationCount={1}
-      >
+      <View style={styles.containerRight}>
         <Picture
           source={logo}
           styles={styles.image}
@@ -52,7 +47,7 @@ const ToolBar = props => {
           iconSize={30}
           onPress={() => props.setDropDown(!props.dropDown)}
         />
-      </Animatable.View>
+      </View>
     </View>
   )
 }

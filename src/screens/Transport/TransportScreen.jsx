@@ -10,7 +10,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome5'
-import MapView, { Polyline, Marker, MarkerAnimated } from 'react-native-maps'
+import MapView, { Polyline, Marker } from 'react-native-maps'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -49,7 +49,6 @@ const TransportScreen = props => {
   const { navigate } = props.navigation
   const dispatch = useDispatch()
   const { drivers } = usePubnub()
-  console.log(drivers)
   const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
   const [isVisible, setIsVisible] = useState(false)
@@ -110,7 +109,6 @@ const TransportScreen = props => {
       }
     })
   }
-
   return (
     <View style={styles.screen}>
       <Modal
@@ -173,102 +171,84 @@ const TransportScreen = props => {
         >
           {drivers && (
             drivers.map(drive => {
-              if (drive.silver) {
-                return drive.silver.map(item => (
-                  <MarkerAnimated
-                    style={styles.marker}
-                    key={item.uuid}
-                    coordinate={{
-                      latitude: item.state.coords.latitude,
-                      longitude: item.state.coords.longitude
-                    }}
-                    ref={marker}
-                  >
-                    <Image
-                      style={styles.drive}
-                      source={silver}
-                    />
-                  </MarkerAnimated>
-                ))
-              }
+              return drive.map(item => {
+                if (item.state.categoria === 1) {
+                  return (
+                    <Marker
+                      style={styles.marker}
+                      key={item.uuid}
+                      coordinate={{
+                        latitude: item.state.coords.latitude,
+                        longitude: item.state.coords.longitude
+                      }}
+                      ref={marker}
+                    >
+                      <Image
+                        style={styles.drive}
+                        source={silver}
+                      />
+                    </Marker>
+                  )
+                }
+                if (item.state.categoria === 2) {
+                  return (
+                    <Marker
+                      style={styles.marker}
+                      key={item.uuid}
+                      coordinate={{
+                        latitude: item.state.coords.latitude,
+                        longitude: item.state.coords.longitude
+                      }}
+                      ref={marker}
+                    >
+                      <Image
+                        style={styles.drive}
+                        source={golden}
+                      />
+                    </Marker>
+                  )
+                }
 
-              if (drive.golden) {
-                return drive.golden.map(item => (
-                  <MarkerAnimated
-                    style={styles.marker}
-                    key={item.uuid}
-                    coordinate={{
-                      latitude: item.state.coords.latitude,
-                      longitude: item.state.coords.longitude
-                    }}
-                    ref={marker}
-                  >
-                    <Image
-                      style={styles.drive}
-                      source={silver}
-                    />
-                  </MarkerAnimated>
-                ))
-              }
+                if (item.state.categoria === 3) {
+                  return (
+                    <Marker
+                      style={styles.marker}
+                      key={item.uuid}
+                      coordinate={{
+                        latitude: item.state.coords.latitude,
+                        longitude: item.state.coords.longitude
+                      }}
+                      ref={marker}
+                    >
+                      <Image
+                        style={styles.drive}
+                        source={vip}
+                      />
+                    </Marker>
+                  )
+                }
 
-              if (drive.vip) {
-                return drive.vip.map(item => (
-                  <MarkerAnimated
-                    style={styles.marker}
-                    key={item.uuid}
-                    coordinate={{
-                      latitude: item.state.coords.latitude,
-                      longitude: item.state.coords.longitude
-                    }}
-                    ref={marker}
-                  >
-                    <Image
-                      style={styles.drive}
-                      source={silver}
-                    />
-                  </MarkerAnimated>
-                ))
-              }
-
-              if (drive.president) {
-                return drive.president.map(item => (
-                  <MarkerAnimated
-                    style={styles.marker}
-                    key={item.uuid}
-                    coordinate={{
-                      latitude: item.state.coords.latitude,
-                      longitude: item.state.coords.longitude
-                    }}
-                    ref={marker}
-                  >
-                    <Image
-                      style={styles.drive}
-                      source={silver}
-                    />
-                  </MarkerAnimated>
-                ))
-              }
+                if (item.state.categoria === 4) {
+                  return (
+                    <Marker
+                      style={styles.marker}
+                      key={item.uuid}
+                      coordinate={{
+                        latitude: item.state.coords.latitude,
+                        longitude: item.state.coords.longitude
+                      }}
+                      ref={marker}
+                    >
+                      <Image
+                        style={styles.drive}
+                        source={president}
+                      />
+                    </Marker>
+                  )
+                }
+              })
             })
           )}
-
-          {/* {drivers && (
-            drivers.map(drive => (
-              <MarkerAnimated
-                style={styles.marker}
-                key={drive.uuid}
-                coordinate={{
-                  latitude: drive.state.coords.latitude,
-                  longitude: drive.state.coords.longitude
-                }}
-                ref={marker}
-              >
-                <Image
-                  style={styles.drive}
-                  source={require('../../../assets/images/img-location.png')}
-                />
-              </MarkerAnimated>
-            ))
-          )} */}
 
           {destination && (
             <>
@@ -421,6 +401,11 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.COLORS.colorMain,
     borderRadius: 200,
     padding: 10
+  },
+  drive: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain'
   }
 })
 
