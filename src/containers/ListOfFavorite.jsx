@@ -22,14 +22,14 @@ import { GETFAVORITE } from '../graphql/querys/Querys'
 import { REMOVEFAVORITE } from '../graphql/mutations/Mutations'
 
 // Import skeleton
-import SkeletonCommerce from '../skeleton/SkeletonProduct'
+import SkeletonFavorite from '../skeleton/SkeletonFavorite'
 
 const ListOfFavorite = () => {
   const { userId } = useSelector(state => state.user)
   const { data, loading } = useQuery(GETFAVORITE, { variables: { id_user: userId } })
   const [RemoveFavorite] = useMutation(REMOVEFAVORITE)
 
-  if (loading) return <SkeletonCommerce />
+  if (loading) return <SkeletonFavorite />
 
   return (
     <View style={styles.container}>
