@@ -145,3 +145,9 @@ export const TRAVELTRACING = gql`
     }
   }
 `
+
+export const GETDRIVERNEARBY = gql`
+  mutation GetDriverNearby ($lat: Float!, $lng: Float!, $inputdrive: [AgentDriveInput!]!) {
+    ObtenerDriveCercano(lat: $lat, lng: $lng, inputdrive: $inputdrive)
+  }
+`

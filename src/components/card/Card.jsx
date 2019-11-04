@@ -61,7 +61,6 @@ const Card = props => {
           iconName={icon ? 'favorite' : 'favorite-border'}
           iconSize={32}
           iconColor={Theme.COLORS.colorSecondary}
-          // onPress={() => setIcon(!icon)}
           onPress={() => {
             setIcon(!icon)
             return props.onPressFavorite

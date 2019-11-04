@@ -1,55 +1,95 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   View,
   StyleSheet,
   Button
 } from 'react-native'
-import { useMutation, useQuery } from '@apollo/react-hooks'
-import { useSelector } from 'react-redux'
+import { useMutation } from '@apollo/react-hooks'
+import { useSelector, useDispatch } from 'react-redux'
 
 // Import querys
-import { GETDRIVERNEARBY } from '../../graphql/querys/Querys'
+import { GETDRIVERNEARBY, GENERATETRAVEL } from '../../graphql/mutations/Mutations'
+
+// Import theme
+import { Theme } from '../../constants/Theme'
 
 // Import components
 import Background from '../../components/background/Background'
-import Loader from '../../components/loader/Loader'
+import IconButton from '../../components/button/IconButton'
 
 const DetailsTransportScreen = props => {
   const { navigate } = props.navigation
-  const [arrayDriver, setArrayDriver] = useState([])
+  const dispatch = useDispatch()
   const { categoryId, category, steps } = useSelector(state => state.travel)
-  const { silver, golden, vip, president } = useSelector(state => state.drivers)
+  const { userId } = useSelector(state => state.user)
   const { latitude, longitude } = useSelector(state => state.location)
-  const { data, loading, fetchMore } = useQuery(GETDRIVERNEARBY)
+  const { silver, golden, vip, president } = useSelector(state => state.drivers)
+  const [GetDriverNearby, { data, loading }] = useMutation(GETDRIVERNEARBY)
+  const [GenerateTravel] = useMutation(GENERATETRAVEL)
 
-  if (loading) return <Loader />
-
-  const handleOnSubmit = () => {
+  const handleOnSubmit = async () => {
+    const finalArray = []
     switch (categoryId) {
       case 1:
-        setArrayDriver(silver)
+        silver.map(drive => {
+          return finalArray.push({
+            iddrive: drive.state.SkiperAgentId,
+            lat: drive.state.coords.latitude,
+            lng: drive.state.coords.longitude
+          })
+        })
         break
       case 2:
-        setArrayDriver(golden)
+        golden.map(drive => {
+          return finalArray.push({
+            iddrive: drive.state.SkiperAgentId,
+            lat: drive.state.coords.latitude,
+            lng: drive.state.coords.longitude
+          })
+        })
         break
       case 3:
-        setArrayDriver(vip)
+        vip.map(drive => {
+          return finalArray.push({
+            iddrive: drive.state.SkiperAgentId,
+            lat: drive.state.coords.latitude,
+            lng: drive.state.coords.longitude
+          })
+        })
         break
       case 4:
-        setArrayDriver(president)
+        president.map(drive => {
+          return finalArray.push({
+            iddrive: drive.state.SkiperAgentId,
+            lat: drive.state.coords.latitude,
+            lng: drive.state.coords.longitude
+          })
+        })
         break
     }
-    fetchMore({
-      variables: { lat: latitude, lng: longitude, inputdrive: arrayDriver },
-      updateQuery: (prev, { fetchMoreResult, ...rest }) => {
-        if (!fetchMoreResult) return prev
-        return console.log(fetchMoreResult)
-      }
-    })
+    GetDriverNearby({ variables: { lat: latitude, lng: longitude, inputdrive: finalArray } })
   }
 
   if (data) {
-    console.log(data)
+    const driverId = data.ObtenerDriveCercano
+    const { duration, distance, end_address, start_address } = steps
+    const distanceFinal = distance.text.split(' ')
+    GenerateTravel({
+      variables: {
+        inputviaje: {
+          idusers: userId,
+          iddriver: driverId,
+          lat_initial: start_location.lat,
+          lng_initial: start_location.lng,
+          lat_final: end_location.lat,
+          lng_final: end_location.lng,
+          distance: distanceFinal[0],
+          time: duration.value,
+          address_initial: start_address,
+          address_final: end_address
+        }
+      }
+    })
   }
 
   return (
@@ -60,8 +100,10 @@ const DetailsTransportScreen = props => {
           title='Escanear QR'
           onPress={() => navigate('Scanner')}
         /> */}
-        <Button
-          title='SOLICITAR DRIVE'
+        <IconButton
+          message='SOLICITAR'
+          isActiveIcon
+          isLoading={loading}
           onPress={handleOnSubmit}
         />
       </View>
