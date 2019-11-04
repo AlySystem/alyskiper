@@ -40,7 +40,7 @@ const Banner = props => {
           resizeMode: 'cover'
         }}
         sourceLazy={require('../../../assets/images/img-lazy.png')}
-        source={props.sourceImage}
+        source={props.sourceLogo}
         styleImage={{
           position: 'absolute',
           bottom: -30,

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import FlashMessage from 'react-native-flash-message'
-import ApolloClient from 'apollo-boost'
+import { ApolloClient, split, HttpLink } from 'apollo-boost'
 import { Provider } from 'react-redux'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from '@apollo/react-hooks'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
+import { setContext } from 'apollo-link-context'
 
 import NetInfo from '@react-native-community/netinfo'
 
@@ -18,20 +21,44 @@ import store from './src/store/store'
 import Navigation from './src/navigation/Navigation'
 import OfflineScreen from './src/screens/Offline/OfflineScreen'
 
-const client = new ApolloClient({
+import { configure } from './src/hooks/usePushNotification'
+
+const httpLink = new HttpLink({
+  uri: keys.urlApi
+})
+
+const wsLink = new WebSocketLink({
   uri: keys.urlApi,
-  cache: new InMemoryCache(),
-  request: async operation => {
-    const userData = await getAsyncStorage(keys.asyncStorageKey)
-    if (userData) {
-      const userToken = JSON.parse(userData).userToken
-      operation.setContext({
-        headers: {
-          Authorization: userToken ? `Bearer ${userToken}` : ''
-        }
-      })
-    }
+  options: {
+    reconnect: true
+  }
+})
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query)
+    return kind === 'OperationDefinition' && operation === 'subscription'
   },
+  wsLink,
+  httpLink
+)
+
+const authLink = setContext(async (_, { headers }) => {
+  const userData = await getAsyncStorage(keys.asyncStorageKey)
+  if (userData) {
+    const userToken = JSON.parse(userData).userToken
+    return {
+      headers: {
+        ...headers,
+        Authorization: userToken ? `Bearer ${userToken}` : ''
+      }
+    }
+  }
+})
+
+const client = new ApolloClient({
+  link: authLink.concat(link),
+  cache: new InMemoryCache(),
   onError: error => {
     const { networkError } = error
     console.log(networkError)
@@ -39,6 +66,7 @@ const client = new ApolloClient({
 })
 
 const Skiper = () => {
+  configure()
   const [isConnected, setIsConnected] = useState(true)
 
   useEffect(() => {

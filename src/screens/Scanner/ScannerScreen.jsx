@@ -34,7 +34,7 @@ const ScannerScreen = props => {
     if (parseInt(idUser) !== userId) {
       showMessage({
         message: 'Error',
-        description: '',
+        description: 'No se ha podido generar el viaje',
         backgroundColor: 'red',
         color: '#fff',
         icon: 'danger',
