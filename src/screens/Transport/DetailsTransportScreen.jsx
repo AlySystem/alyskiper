@@ -4,12 +4,15 @@ import {
   StyleSheet
 } from 'react-native'
 import { useMutation } from '@apollo/react-hooks'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 
 // Import custom hooks
 import { useNotification } from '../../hooks/useNotification'
 import { notification } from '../../hooks/usePushNotification'
+
+// Import actions types
+import { ACTIVETRAVEL } from '../../store/actionTypes'
 
 // Import querys
 import { GETDRIVERNEARBY, GENERATETRAVEL } from '../../graphql/mutations/Mutations'
@@ -23,6 +26,7 @@ import IconButton from '../../components/button/IconButton'
 
 const DetailsTransportScreen = props => {
   const { navigate } = props.navigation
+  const dispatch = useDispatch()
   const { categoryId, category, steps } = useSelector(state => state.travel)
   const { userId } = useSelector(state => state.user)
   const { latitude, longitude } = useSelector(state => state.location)
@@ -30,7 +34,7 @@ const DetailsTransportScreen = props => {
   const [GetDriverNearby, { data, loading, error }] = useMutation(GETDRIVERNEARBY)
   const [isLoading, setIsLoading] = useState(false)
   const [GenerateTravel] = useMutation(GENERATETRAVEL)
-  const { status } = useNotification()
+  const { status, idTravel } = useNotification()
 
   if (error) {
     showMessage({
@@ -163,10 +167,17 @@ const DetailsTransportScreen = props => {
           break
         case 3:
           notification('Transporte', 'Tu solicitud de viaje fue aceptada con exito.')
-          navigate('TravelTrancing')
+          navigate('TravelTrancing', {
+            idTravel: idTravel
+          })
+          dispatch({
+            type: ACTIVETRAVEL,
+            payload: idTravel
+          })
           break
         case 4:
           notification('AlySkiper', 'El conductor ya se encuentra cerca de ti.')
+          navigate('Scanner')
           break
       }
     }

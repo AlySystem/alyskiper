@@ -1,10 +1,12 @@
 import React from 'react'
 import {
   StyleSheet,
+  View,
   TouchableOpacity
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import { createStackNavigator } from 'react-navigation-stack'
+import { useSelector } from 'react-redux'
 
 // Import drawer
 import DrawerStack from '../drawer/DrawerStack'
@@ -71,15 +73,30 @@ const StackNavigation = createStackNavigator({
           </Animatable.View>
         ),
         headerRight: (
-          <TouchableOpacity
-            onPress={() => navigation.toggleDrawer()}
-            style={styles.icon}
+          <View style={{
+            flexDirection: 'row'
+          }}
           >
-            <Icon
-              iconName='menu'
-              iconSize={30}
-            />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('TravelTrancing')}
+              style={styles.icon}
+            >
+              <Icon
+                iconName='local-taxi'
+                iconSize={30}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.toggleDrawer()}
+              style={styles.icon}
+            >
+              <Icon
+                iconName='menu'
+                iconSize={30}
+              />
+            </TouchableOpacity>
+          </View>
         )
       }
     }

@@ -7,6 +7,7 @@ import { services } from './services'
 import { travel } from './travel'
 import { drivers } from './driver'
 import { favorite } from './favorite'
+import { activeTravel } from './activeTravel'
 
 const reducers = combineReducers({
   user,
@@ -15,7 +16,8 @@ const reducers = combineReducers({
   services,
   travel,
   drivers,
-  favorite
+  favorite,
+  activeTravel
 })
 
 export default reducers

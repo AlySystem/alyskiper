@@ -15,7 +15,7 @@ export const GETNOTIFICATIONTRAVEL = gql`
       address_initial
       address_final
       skiperagent {
-        id
+        id 
         identity
         state
       }

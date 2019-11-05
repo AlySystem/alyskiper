@@ -43,7 +43,7 @@ export const CATEGORYTRAVEL = gql`
     skipercattravels {
       id
       name
-      url_img_category
+      url_img_category 
       mode_drive
       url_img_drive
       btaxy
@@ -56,6 +56,7 @@ export const CATEGORYTRAVEL = gql`
 export const GETTRAVELBYUSERID = gql`
   query GetTravelByUserId ($iduser: Int!) {
     getTravelByUserId(iduser: $iduser) {
+      id
       skiperagent {
         id
         state

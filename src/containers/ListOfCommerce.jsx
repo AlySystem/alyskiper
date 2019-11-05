@@ -47,7 +47,7 @@ const ListOfCommerce = props => {
           sourceImage={{ uri: item.url_art }}
           onPress={() => navigate('ProfileCommerce', { commerce: item })}
           onPressFavorite={() => handleOnFavorite(item.id)}
-          icon={}
+          icon=''
         />
       )}
       keyExtractor={(item, index) => index.toString()}

@@ -61,7 +61,7 @@ const StartupScreen = props => {
         type: USERDATA,
         payload
       })
-      navigate('Location')
+      navigate('Location', { userId: userParse.userId })
     }
     trySignIn()
   }, [])

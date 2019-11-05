@@ -13,14 +13,15 @@ import { Theme } from '../../constants/Theme'
 
 const DetailsDrive = props => {
   const drive = props.drive
-  const { avatar, firstname, lastname } = drive.skiperagent.user
-  const { license_plate, vehicleModel, vehicleTrademark } = drive.skiperagent.skiperVehicleAgent.skiperVehicle
+  console.log(drive)
+  // const { avatar, firstname, lastname } = drive.skiperagent.user
+  // const { license_plate, vehicleModel, vehicleTrademark } = drive.skiperagent.skiperVehicleAgent.skiperVehicle
 
   return (
     <View style={styles.container}>
       <Text allowFontScaling={false} style={styles.title}>Informacion del conductor</Text>
 
-      <View style={{ paddingVertical: 3 }} />
+      {/* <View style={{ paddingVertical: 3 }} />
       <View style={styles.containerImage}>
         <LazyImage
           styleLazyImage={{
@@ -68,7 +69,7 @@ const DetailsDrive = props => {
           <Text allowFontScaling={false} style={styles.value}>{vehicleTrademark.name}</Text>
         </View>
 
-      </View>
+      </View> */}
     </View>
   )
 }

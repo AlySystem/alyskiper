@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   View,
@@ -6,7 +6,14 @@ import {
   Text
 } from 'react-native'
 import LottieView from 'lottie-react-native'
-import * as Animatable from 'react-native-animatable'
+import { useQuery } from '@apollo/react-hooks'
+import { useDispatch } from 'react-redux'
+
+// Import action types
+import { ACTIVETRAVEL } from '../../store/actionTypes'
+
+// Import querys
+import { GETTRAVELBYUSERID } from '../../graphql/querys/Querys'
 
 // Import animations
 import Location from '../../../world-locations.json'
@@ -16,19 +23,36 @@ import { useVerifyLocation } from '../../hooks/useVerifyLocation'
 
 // Import theme
 import { Theme } from '../../constants/Theme.js'
-import Picture from '../../components/picture/Picture.jsx'
 
 const LocationScreen = props => {
+  const dispatch = useDispatch()
   const { navigate } = props.navigation
+  const [userId] = useState(props.navigation.getParam('userId'))
+  const { loading, data } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
   const { isLoading } = useVerifyLocation(navigate)
 
   const verifyState = (isLoading) => {
     if (!isLoading) return navigate('Home')
   }
 
+  const verifyTravel = (loading) => {
+    if (!loading) {
+      if (data !== null && data !== undefined) {
+        dispatch({
+          type: ACTIVETRAVEL,
+          payload: data
+        })
+      }
+    }
+  }
+
   useEffect(() => {
     verifyState(isLoading)
   }, [verifyState, isLoading])
+
+  useEffect(() => {
+    verifyTravel(loading)
+  }, [loading])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

@@ -105,7 +105,7 @@ export const EDITPASSWORD = gql`
     editPassword (input: $input) {
       message
       ok
-      status
+      status 
     }
   }
 `
