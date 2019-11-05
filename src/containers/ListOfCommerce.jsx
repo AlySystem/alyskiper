@@ -31,6 +31,11 @@ const ListOfCommerce = props => {
 
   if (loading) return <SkeletonProduct />
 
+  const handleOnFavorite = (idCommerce) => {
+    console.log(idCommerce)
+    return AddFavorite({ variables: { input: { user_id: userId, commerce_id: idCommerce } } })
+  }
+
   return (
     <FlatList
       data={data.CommercesIntoRadio}
@@ -41,7 +46,8 @@ const ListOfCommerce = props => {
           sourceLogo={{ uri: item.url_logo }}
           sourceImage={{ uri: item.url_art }}
           onPress={() => navigate('ProfileCommerce', { commerce: item })}
-          onPressFavorite={() => AddFavorite({ variables: { input: { user_id: userId, commerce_id: item.id } } })}
+          onPressFavorite={() => handleOnFavorite(item.id)}
+          icon={}
         />
       )}
       keyExtractor={(item, index) => index.toString()}
