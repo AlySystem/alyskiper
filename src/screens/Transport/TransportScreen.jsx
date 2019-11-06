@@ -51,7 +51,6 @@ const TransportScreen = props => {
   const { silver, golden, vip, president } = usePubnub()
   const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
-  const [showTooltip, setShowTooltip] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [details, setDetails] = useState('')
   const [steps, setSteps] = useState(null)
@@ -60,7 +59,6 @@ const TransportScreen = props => {
   const mapView = useRef(null)
   const inputRef = useRef(null)
   const marker = useRef(null)
-  console.log(silver)
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
@@ -328,6 +326,18 @@ const TransportScreen = props => {
               />
             </View>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => navigate('Address')}
+          >
+            <Text style={{
+              color: Theme.COLORS.colorSecondary,
+              fontFamily: 'Lato-Regular',
+              fontSize: Theme.SIZES.normal
+            }}
+            >Agregar direcciones
+            </Text>
+          </TouchableOpacity>
         </Animatable.View>
       )}
 
@@ -356,7 +366,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: Theme.COLORS.colorMainDark,
-    height: 100,
+    height: 170,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%'

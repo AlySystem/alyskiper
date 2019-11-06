@@ -6,14 +6,48 @@ import {
 
 // Import components
 import Background from '../../components/background/Background'
+import Title from '../../components/title/Title'
+import FloatingActionButton from '../../components/button/FloatingActionButton'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
+// Import container
+import ListOfAddress from '../../containers/ListOfAddress'
+
 const AddressScreen = props => {
   return (
     <Background>
-      <View style={styles.screen} />
+      <View style={styles.screen}>
+        <Title
+          title='Registra tus direcciones'
+          styles={{
+            color: Theme.COLORS.colorParagraph,
+            fontFamily: 'Lato-Bold',
+            fontSize: Theme.SIZES.subTitle
+          }}
+        />
+        <ListOfAddress />
+
+        <FloatingActionButton
+          stylesButton={{
+            position: 'absolute',
+            bottom: 15,
+            right: 10,
+            width: 70,
+            height: 70,
+            backgroundColor: Theme.COLORS.colorMain,
+            borderRadius: 200,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderColor: Theme.COLORS.colorSecondary,
+            borderWidth: 0.2
+          }}
+          onPress={() => {}}
+          iconName='add'
+          iconSize={40}
+        />
+      </View>
     </Background>
   )
 }

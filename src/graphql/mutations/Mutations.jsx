@@ -151,3 +151,16 @@ export const GETDRIVERNEARBY = gql`
     ObtenerDriveCercano(lat: $lat, lng: $lng, inputdrive: $inputdrive)
   }
 `
+export const REGISTERUSERADDRESS = gql`
+  mutation RegisterAddress ($input: UsersAddressInput) {
+    registerUsersAddress(input: $input) {
+      id
+      placeid
+      lat
+      lng
+      address
+      point_references
+      apt_house_number
+    }
+  }
+`

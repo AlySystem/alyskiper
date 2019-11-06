@@ -143,3 +143,21 @@ export const COMMERCERS = gql`
     }
   }
 `
+export const GETALLADDRESS = gql`
+  query getAllAddress ($id: Int!) {
+    getUsersAddressById (id: $id) {
+      id
+      placeid
+      lat
+      lng
+      address
+      point_references
+      apt_house_number
+      catplaceuser {
+        id
+        name
+        url_img
+      }
+    }
+  }
+`

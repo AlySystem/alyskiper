@@ -12,22 +12,18 @@ import { Theme } from '../../constants/Theme'
 
 const FloatingActionButton = props => {
   return (
-    <>
-      {props.isActive && (
-        <TouchableOpacity
-          style={props.stylesButton || styles.button}
-          onPress={props.onPress}
-          activeOpacity={props.activeOpacity}
-        >
-          <Icon
-            iconName={props.iconName}
-            iconSize={props.iconSize}
-            iconColor={props.iconColor}
-            stylesIcon={props.stylesIcon}
-          />
-        </TouchableOpacity>
-      )}
-    </>
+    <TouchableOpacity
+      style={props.stylesButton || styles.button}
+      onPress={props.onPress}
+      activeOpacity={props.activeOpacity}
+    >
+      <Icon
+        iconName={props.iconName}
+        iconSize={props.iconSize}
+        iconColor={props.iconColor}
+        stylesIcon={props.stylesIcon}
+      />
+    </TouchableOpacity>
   )
 }
 
