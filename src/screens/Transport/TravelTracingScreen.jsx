@@ -17,6 +17,9 @@ import Modal from '../../components/modal/Modal'
 import DetailsDrive from '../../components/details/DetailsDrive'
 import Button from '../../components/button/Button'
 
+// Import custom hooks
+import { useNotification } from '../../hooks/useNotification'
+
 // Import query
 import { GETTRAVELBYUSERID } from '../../graphql/querys/Querys'
 
@@ -25,7 +28,8 @@ import { Theme } from '../../constants/Theme'
 import Picture from '../../components/picture/Picture'
 
 const TravelTracingScreen = props => {
-  const { userId, firstName } = useSelector(state => state.user)
+  const { navigate } = props.navigation
+  const { userId, firstName, lastName } = useSelector(state => state.user)
   const location = useSelector(state => state.location)
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErroTravel] = useState(false)
@@ -33,6 +37,7 @@ const TravelTracingScreen = props => {
   const [idTravel] = useState(props.navigation.getParam('idTravel'))
   const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
   const mapView = useRef(null)
+  useNotification(navigate)
 
   const pubnub = new PubNubReact({
     publishKey: 'pub-c-b5350d6e-9a1f-4d33-b5c9-918fe9bff121',
@@ -44,10 +49,9 @@ const TravelTracingScreen = props => {
 
   useEffect(() => {
     if (!loading) {
-      if (data !== null && data !== undefined) {
+      if (data.getTravelByUserId !== null) {
         pubnub.subscribe({
           channels: [`Driver_${idTravel || data.getTravelByUserId.id}`],
-          // channels: [`Driver_${idTravel}`],
           withPresence: true
         })
 
@@ -55,36 +59,42 @@ const TravelTracingScreen = props => {
           includeUUIDs: true,
           includeState: true,
           channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
-          // channels: [`Driver_${idTravel}`]
         },
 
         function (status, response) {
           console.log(response)
-        })
-
-        pubnub.addListener({
-          status: function (statusEvent) {
-
-          },
-          message: function (message) {
-
-          },
-          presence: function (presenceEvent) {
-            // console.log(presenceEvent)
+          if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
+            const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
+            if (channels !== undefined) {
+              const drive = channels.occupants.filter(item => item.state !== undefined)
+              setDriver(drive)
+            }
           }
         })
 
-        return () => {
-          pubnub.unsubscribe({
-            channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
-            // channels: [`Driver_${idTravel}`]
-          })
-        }
+        // pubnub.setState({
+        //   state: {
+        //     coords: {
+        //       latitude: location.latitude,
+        //       longitude: location.longitude
+        //     },
+        //     firstName: firstName,
+        //     lastName: lastName
+        //   }
+        // }).then(result => {
+        //   console.log(result)
+        // })
+
+        // return () => {
+        //   pubnub.unsubscribe({
+        //     channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
+        //   })
+        // }
       } else {
         setErroTravel(true)
       }
     }
-  }, [pubnub, loading])
+  }, [loading, pubnub])
 
   const handleToggleModal = () => {
     setShowDetails(!showDetails)
@@ -117,6 +127,11 @@ const TravelTracingScreen = props => {
       <Modal
         isVisible={showDetails}
         backdropColor='#B4B3DB'
+        style={{
+          backgroundColor: 'rgba(0,0,0,.8)',
+          margin: 0,
+          justifyContent: 'flex-start'
+        }}
         backdropOpacity={0.8}
         animationIn='zoomInDown'
         animationOut='zoomOutUp'
@@ -132,6 +147,11 @@ const TravelTracingScreen = props => {
           iconName='close'
           iconSize={30}
           onPress={handleToggleModal}
+          stylesButton={{
+            position: 'absolute',
+            top: 10,
+            left: 12
+          }}
         />
       </Modal>
       <MapView
@@ -145,28 +165,39 @@ const TravelTracingScreen = props => {
         showsCompass={false}
         showsMyLocationButton={false}
       >
-        {/* {driver && (
-          driver.map(drive => (
-            <Marker
-              style={styles.marker}
-              key={drive.uuid}
-              coordinate={{
-                latitude: drive.state.coords.latitude,
-                longitude: drive.state.coords.longitude
-              }}
-            >
-              <Image
-                style={styles.drive}
-                source={require('../../../assets/images/img-icon-silver.png')}
-              />
-            </Marker>
-          ))
-        )} */}
+        {driver && (
+          driver.map(drive => {
+            console.log(drive)
+            return (
+              <Marker
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+              >
+                <Image
+                  style={styles.drive}
+                  source={require('../../../assets/images/img-icon-silver.png')}
+                />
+              </Marker>
+            )
+          })
+        )}
       </MapView>
       <TouchableOpacity
         style={styles.containerButton}
         onPress={handleToggleModal}
       >
+        <View
+          style={{
+            backgroundColor: Theme.COLORS.colorSecondary,
+            borderRadius: 100,
+            width: 100,
+            height: 8
+          }}
+        />
         <Text allowFontScaling={false} style={styles.text}>Toca para mostrar detalles</Text>
       </TouchableOpacity>
       {errorTravel && (
@@ -215,9 +246,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 10,
+    height: 70,
     paddingHorizontal: 10,
     backgroundColor: Theme.COLORS.colorMainAlt
   },
@@ -225,6 +257,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
     color: Theme.COLORS.colorParagraph,
     fontSize: Theme.SIZES.normal
+  },
+  drive: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain'
   }
 })
 

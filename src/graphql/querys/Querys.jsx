@@ -57,30 +57,43 @@ export const GETTRAVELBYUSERID = gql`
   query GetTravelByUserId ($iduser: Int!) {
     getTravelByUserId(iduser: $iduser) {
       id
+      lat_initial
+      lng_initial
+      users {
+        id
+        firstname
+        lastname
+      }
       skiperagent {
         id
         state
-        user {
-          firstname
-          lastname
-          avatar
-        }
         skiperVehicleAgent {
+          id
           skiperVehicle {
-            id
             license_plate
-            vehicleModel {
-              name
-            }
-            vehicleYear {
-              year
-            }
             vehicleTrademark {
               name
             }
+            vehicleModel {
+              name
+            }
+            
           }
         }
+        user {
+          id
+          firstname
+          lastname
+        }
       }
+      skiperTravelsTracing {
+        id
+        travelstatus {
+          id
+          name
+        }
+      }
+      distance
     }
   }
 `

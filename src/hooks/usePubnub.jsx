@@ -35,24 +35,32 @@ export const usePubnub = () => {
     function (status, response) {
       let silver, golden, vip, president
 
-      const silverChannel = response.channels.SkiperDrive_1
-      if (silverChannel !== undefined) {
-        silver = silverChannel.occupants.filter(item => item.state !== undefined)
+      if ('SkiperDrive_1' in response.channels) {
+        const silverChannel = response.channels.SkiperDrive_1
+        if (silverChannel !== undefined) {
+          silver = silverChannel.occupants.filter(item => item.state !== undefined)
+        }
       }
 
-      const goldenChannel = response.channels.SkiperDrive_2
-      if (goldenChannel !== undefined) {
-        golden = goldenChannel.occupants.filter(item => item.state !== undefined)
+      if ('SkiperDrive_2' in response.channels) {
+        const goldenChannel = response.channels.SkiperDrive_2
+        if (goldenChannel !== undefined) {
+          golden = goldenChannel.occupants.filter(item => item.state !== undefined)
+        }
       }
 
-      const vipChannel = response.channels.SkiperDrive_3
-      if (vipChannel !== undefined) {
-        vip = vipChannel.occupants.filter(item => item.state !== undefined)
+      if ('SkiperDrive_3' in response.channels) {
+        const vipChannel = response.channels.SkiperDrive_3
+        if (vipChannel !== undefined) {
+          vip = vipChannel.occupants.filter(item => item.state !== undefined)
+        }
       }
 
-      const presidentChannel = response.channels.SkiperDrive_4
-      if (presidentChannel !== undefined) {
-        president = presidentChannel.occupants.filter(item => item.state !== undefined)
+      if ('SkiperDrive_4' in response.channels) {
+        const presidentChannel = response.channels.SkiperDrive_4
+        if (presidentChannel !== undefined) {
+          president = presidentChannel.occupants.filter(item => item.state !== undefined)
+        }
       }
 
       setDrivers({ silver, golden, vip, president })
@@ -79,11 +87,11 @@ export const usePubnub = () => {
       }
     })
 
-    return () => {
-      pubnub.unsubscribe({
-        channels: [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`]
-      })
-    }
+    // return () => {
+    //   pubnub.unsubscribe({
+    //     channels: [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`]
+    //   })
+    // }
   }, [])
 
   return { silver: drivers.silver, golden: drivers.golden, vip: drivers.vip, president: drivers.president }

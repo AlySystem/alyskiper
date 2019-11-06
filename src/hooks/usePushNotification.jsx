@@ -2,6 +2,8 @@
 import { PushNotificationIOS } from 'react-native'
 import PushNotification from 'react-native-push-notification'
 
+import sound from '../../assets/sounds/notificacion.mp3'
+
 // Import theme
 import { Theme } from '../constants/Theme'
 
@@ -35,6 +37,6 @@ export const notification = (title, message, description, subTitle) => {
     title: title,
     message: message,
     playSound: true,
-    soundName: 'default'
+    soundName: sound.mp3
   })
 }

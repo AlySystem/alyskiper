@@ -13,28 +13,27 @@ import { Theme } from '../../constants/Theme'
 
 const DetailsDrive = props => {
   const drive = props.drive
-  console.log(drive)
-  // const { avatar, firstname, lastname } = drive.skiperagent.user
-  // const { license_plate, vehicleModel, vehicleTrademark } = drive.skiperagent.skiperVehicleAgent.skiperVehicle
+  const { avatar, firstname, lastname } = drive.getTravelByUserId.skiperagent.user
+  const { license_plate, vehicleModel, vehicleTrademark } = drive.getTravelByUserId.skiperagent.skiperVehicleAgent[0].skiperVehicle
 
   return (
     <View style={styles.container}>
       <Text allowFontScaling={false} style={styles.title}>Informacion del conductor</Text>
 
-      {/* <View style={{ paddingVertical: 3 }} />
+      <View style={{ paddingVertical: 3 }} />
       <View style={styles.containerImage}>
         <LazyImage
           styleLazyImage={{
-            width: 85,
-            height: 85,
+            width: 70,
+            height: 70,
             resizeMode: 'cover',
             borderRadius: 200
           }}
           sourceLazy={require('../../../assets/images/img-lazy.png')}
           source={{ uri: avatar }}
           styleImage={{
-            width: 85,
-            height: 85,
+            width: 70,
+            height: 70,
             borderRadius: 200,
             resizeMode: 'cover',
             borderColor: Theme.COLORS.colorSecondary,
@@ -42,8 +41,8 @@ const DetailsDrive = props => {
           }}
         />
         <View style={styles.containerDetails}>
-          <Text allowFontScaling={false} style={styles.key}>Nombre:</Text>
-          <Text allowFontScaling={false} style={styles.value}>{firstname} {lastname}</Text>
+          <Text allowFontScaling={false} style={styles.keyAlt}>Nombre:</Text>
+          <Text allowFontScaling={false} style={styles.valueAlt}>{firstname} {lastname}</Text>
         </View>
       </View>
 
@@ -69,7 +68,7 @@ const DetailsDrive = props => {
           <Text allowFontScaling={false} style={styles.value}>{vehicleTrademark.name}</Text>
         </View>
 
-      </View> */}
+      </View>
     </View>
   )
 }
@@ -77,10 +76,12 @@ const DetailsDrive = props => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    paddingVertical: 10
+    paddingVertical: 10,
+    marginTop: 35
   },
   containerImage: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
   title: {
     color: Theme.COLORS.colorSecondary,
@@ -91,6 +92,18 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorParagraph,
     fontFamily: 'Lato-Bold',
     fontSize: Theme.SIZES.normal
+  },
+  keyAlt: {
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.normal,
+    marginLeft: 15
+  },
+  valueAlt: {
+    color: Theme.COLORS.colorParagraphSecondary,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    marginLeft: 15
   },
   value: {
     color: Theme.COLORS.colorParagraphSecondary,
