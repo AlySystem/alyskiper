@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   View,
   StyleSheet
@@ -16,18 +16,32 @@ import { Theme } from '../../constants/Theme'
 import ListOfAddress from '../../containers/ListOfAddress'
 
 const AddressScreen = props => {
+  const { navigate } = props.navigation
+
   return (
     <Background>
       <View style={styles.screen}>
-        <Title
-          title='Registra tus direcciones'
-          styles={{
-            color: Theme.COLORS.colorParagraph,
-            fontFamily: 'Lato-Bold',
-            fontSize: Theme.SIZES.subTitle
-          }}
-        />
-        <ListOfAddress />
+        <View style={{
+          paddingTop: 20,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+        >
+          <Title
+            title='REGISTRA TUS DIRECCIONES'
+            styles={{
+              color: Theme.COLORS.colorParagraph,
+              fontFamily: 'Lato-Bold',
+              fontSize: Theme.SIZES.small
+            }}
+          />
+        </View>
+        <View style={{
+          paddingHorizontal: 10
+        }}
+        >
+          <ListOfAddress />
+        </View>
 
         <FloatingActionButton
           stylesButton={{
@@ -43,7 +57,7 @@ const AddressScreen = props => {
             borderColor: Theme.COLORS.colorSecondary,
             borderWidth: 0.2
           }}
-          onPress={() => {}}
+          onPress={() => navigate('MapAddress')}
           iconName='add'
           iconSize={40}
         />

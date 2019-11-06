@@ -27,6 +27,8 @@ import DetailsTransportScreen from '../../screens/Transport/DetailsTransportScre
 import FixedMapScreen from '../../screens/FixedMap/FixedMapScreen'
 import ScannerScreen from '../../screens/Scanner/ScannerScreen'
 import TravelTrancingScreen from '../../screens/Transport/TravelTracingScreen'
+import AddAddressScreen from '../../screens/Address/AddAddressScreen'
+import MapAddressScreen from '../../screens/Address/MapAddressScreen'
 // import FinalTravelScreen from '../../screens/Transport/FinalTravelScreen'
 
 // Import components
@@ -169,11 +171,17 @@ const StackNavigation = createStackNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  AddAddress: {
+    screen: AddAddressScreen,
+    navigationOptions
+  },
+  MapAddress: {
+    screen: MapAddressScreen,
+    navigationOptions: {
+      header: null
+    }
   }
-  // FinalTravel: {
-  //   screen: FinalTravelScreen,
-  //   navigationOptions
-  // }
 })
 
 const styles = StyleSheet.create({

@@ -145,7 +145,7 @@ export const COMMERCERS = gql`
 `
 export const GETALLADDRESS = gql`
   query getAllAddress ($id: Int!) {
-    getUsersAddressById (id: $id) {
+    getUsersAddressByUser (iduser: $id) {
       id
       placeid
       lat

@@ -30,7 +30,6 @@ const ListOfAddress = props => {
   if (loading) {
     return (
       <View style={{
-        backgroundColor: Theme.COLORS.colorMainAlt,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
@@ -61,18 +60,18 @@ const ListOfAddress = props => {
     )
   }
 
-  if (data.getUsersAddressById) {
+  if (data.getUsersAddressByUser) {
     dispatch({
       type: ADDRESS,
       payload: {
-        address: data.getUsersAddressById
+        address: data.getUsersAddressByUser
       }
     })
   }
 
   return (
     <FlatList
-      data={data.getUsersAddressById}
+      data={data.getUsersAddressByUser}
       renderItem={({ item }) => (
         <TouchableOpacity
           style={styles.container}
@@ -87,6 +86,7 @@ const ListOfAddress = props => {
           }}
           >
             <Text allowFontScaling={false} style={styles.title}>{item.catplaceuser.name}</Text>
+            <View style={{ paddingVertical: 2 }} />
             <Text allowFontScaling={false} style={styles.description}>{item.address}</Text>
           </View>
         </TouchableOpacity>
@@ -99,11 +99,14 @@ const ListOfAddress = props => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    paddingVertical: 10
+    paddingVertical: 20,
+    borderBottomColor: Theme.COLORS.colorSecondary,
+    borderBottomWidth: 0.2,
+    borderRadius: 200
   },
   image: {
-    width: 70,
-    height: 70,
+    width: 40,
+    height: 40,
     resizeMode: 'contain'
   },
   title: {
