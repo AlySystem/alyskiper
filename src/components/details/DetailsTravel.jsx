@@ -37,6 +37,7 @@ const DetailsTravel = props => {
       date_init: `${moment().format('YYYY-MM-DD')} ${moment().format('HH:mm:ss')}`
     }
   })
+  console.log(loading)
 
   useEffect(() => {
     const calculate = () => {
