@@ -62,12 +62,13 @@ const TravelTracingScreen = props => {
         },
 
         function (status, response) {
-          console.log(response)
-          if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
-            const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
-            if (channels !== undefined) {
-              const drive = channels.occupants.filter(item => item.state !== undefined)
-              setDriver(drive)
+          if (response !== undefined) {
+            if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
+              const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
+              if (channels !== undefined) {
+                const drive = channels.occupants.filter(item => item.state !== undefined)
+                setDriver(drive)
+              }
             }
           }
         })

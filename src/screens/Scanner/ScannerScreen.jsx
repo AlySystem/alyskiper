@@ -34,9 +34,10 @@ const ScannerScreen = props => {
     if (parseInt(idUser) !== userId) {
       showMessage({
         message: 'Error',
-        description: 'No se ha podido generar el viaje',
+        description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
         backgroundColor: 'red',
         color: '#fff',
+        duration: 4000,
         icon: 'danger',
         titleStyle: {
           fontFamily: 'Lato-Bold'
@@ -47,7 +48,7 @@ const ScannerScreen = props => {
       })
       return
     }
-    TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 5, lat: latitude, lng: longitude } } })
+    TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
   }
 
   if (loading) {

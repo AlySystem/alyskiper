@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {
   View,
   StyleSheet,
-  Text,
-  ScrollView
+  Text
 } from 'react-native'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
@@ -37,32 +36,30 @@ const DetailsTravel = props => {
       date_init: `${moment().format('YYYY-MM-DD')} ${moment().format('HH:mm:ss')}`
     }
   })
-  console.log(loading)
 
-  useEffect(() => {
-    const calculate = () => {
-      if (!loading) {
-        const durationMin = duration.text.split(' ')[0]
-        const distanceKm = distance.text.split(' ')[0]
+  const calculate = (isLoading) => {
+    if (!isLoading) {
+      const durationMin = duration.text.split(' ')[0]
+      const distanceKm = distance.text.split(' ')[0]
 
-        const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
-        const minutes = durationMin * priceminute
-        const km = distanceKm * priceckilometer
+      const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
+      const minutes = durationMin * priceminute
+      const km = distanceKm * priceckilometer
 
-        const total = minutes + km + pricebase
-        if (total < priceminimun) {
-          setPriceTotal(priceminimun)
-        } else {
-          setPriceTotal(total)
-        }
+      const total = minutes + km + pricebase
+      if (total < priceminimun) {
+        setPriceTotal(priceminimun)
+      } else {
+        setPriceTotal(total)
       }
     }
-    calculate()
+  }
+  useEffect(() => {
+    calculate(loading)
   }, [loading])
 
   return (
     <View style={styles.layout}>
-
       <View style={styles.container}>
         <View style={styles.itemAlt}>
           <Text allowFontScaling={false} style={styles.text}>DURACION</Text>

@@ -1,4 +1,4 @@
-import { ACTIVETRAVEL } from '../actionTypes'
+import { ACTIVETRAVEL, REMOVETRALVEL } from '../actionTypes'
 
 const INITIAL_STATE = {
   travel: null
@@ -11,6 +11,9 @@ export const activeTravel = (state = INITIAL_STATE, action) => {
         ...state,
         ...action.payload
       }
+    }
+    case REMOVETRALVEL: {
+      return INITIAL_STATE
     }
     default:
       return state

@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
 import { useSelector, useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
+import PubNubReact from 'pubnub-react'
 
 // Import actions types
-import { ACTIVETRAVEL } from '../store/actionTypes'
+import { ACTIVETRAVEL, REMOVETRAVEL, REMOVEDETAILSTRAVEL, REMOVEACTIVETRAVEL } from '../store/actionTypes'
 
 // Import subcriptions
 import { GETNOTIFICATIONTRAVEL } from '../graphql/subscription/Subcription'
@@ -13,9 +14,18 @@ import { notification } from '../hooks/usePushNotification'
 
 export const useNotification = (navigate) => {
   const dispatch = useDispatch()
-  const { userId } = useSelector(state => state.user)
+  const { userId, firstName } = useSelector(state => state.user)
   const [status, setStatus] = useState()
   const [idTravel, setIdTravel] = useState()
+
+  const pubnub = new PubNubReact({
+    publishKey: 'pub-c-b5350d6e-9a1f-4d33-b5c9-918fe9bff121',
+    subscribeKey: 'sub-c-e286360e-fdc3-11e9-be22-ea7c5aada356',
+    subscribeRequestTimeout: 60000,
+    presenceTimeout: 122,
+    uuid: firstName
+  })
+
   const { loading, error } = useSubscription(GETNOTIFICATIONTRAVEL, {
     variables: { idusuario: userId },
     onSubscriptionData: ({ subscriptionData }) => {
@@ -56,6 +66,18 @@ export const useNotification = (navigate) => {
         case 8:
           notification('AlySkiper', 'Felicidades, has llegado a tu destino.')
           navigate('FinalTravel')
+          pubnub.unsubscribe({
+            channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
+          })
+          dispatch({
+            type: REMOVETRAVEL
+          })
+          dispatch({
+            type: REMOVEDETAILSTRAVEL
+          })
+          dispatch({
+            type: REMOVEACTIVETRAVEL
+          })
           break
       }
     }

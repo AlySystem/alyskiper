@@ -5,7 +5,7 @@ import {
   ScrollView
 } from 'react-native'
 import { useMutation } from '@apollo/react-hooks'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 
 // Import custom hooks
@@ -21,7 +21,6 @@ import DetailsTravel from '../../components/details/DetailsTravel'
 
 const DetailsTransportScreen = props => {
   const { navigate } = props.navigation
-  const dispatch = useDispatch()
   const { categoryId, category, steps } = useSelector(state => state.travel)
   const { userId } = useSelector(state => state.user)
   const { latitude, longitude } = useSelector(state => state.location)

@@ -6,7 +6,6 @@ import {
   ScrollView
 } from 'react-native'
 import { useSelector } from 'react-redux'
-import * as Animatable from 'react-native-animatable'
 
 // Import theme
 import { Theme } from '../../constants/Theme'

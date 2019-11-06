@@ -139,7 +139,7 @@ export const TRAVELTRACING = gql`
   mutation TravelTracing($input: SkiperTravelsTracingInput!) {
     registerTravelsTracing(input: $input) {
       id
-      travelstatus{
+      travelstatus {
         id
       }
     }
