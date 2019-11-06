@@ -51,6 +51,7 @@ const TransportScreen = props => {
   const { silver, golden, vip, president } = usePubnub()
   const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
+  const [showTooltip, setShowTooltip] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [details, setDetails] = useState('')
   const [steps, setSteps] = useState(null)
@@ -59,6 +60,7 @@ const TransportScreen = props => {
   const mapView = useRef(null)
   const inputRef = useRef(null)
   const marker = useRef(null)
+  console.log(silver)
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
@@ -401,6 +403,17 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     resizeMode: 'contain'
+  },
+  marker: {
+    // position: 'relative'
+  },
+  containerTooltip: {
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: Theme.COLORS.colorMainAlt,
+    position: 'absolute',
+    top: 0,
+    left: 0
   }
 })
 

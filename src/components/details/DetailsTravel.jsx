@@ -39,8 +39,10 @@ const DetailsTravel = props => {
 
   const calculate = (isLoading) => {
     if (!isLoading) {
-      const durationMin = duration.text.split(' ')[0]
-      const distanceKm = distance.text.split(' ')[0]
+      // const durationMin = duration.text.split(' ')[0]
+      const durationMin = duration.value / 60
+      // const distanceKm = distance.text.split(' ')[0]
+      const distanceKm = distance.value / 1000
 
       const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
       const minutes = durationMin * priceminute

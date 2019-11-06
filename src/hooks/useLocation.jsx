@@ -32,7 +32,7 @@ export const useLocation = () => {
           setIsLoading(false)
         }, error => {
           setErrorRegion(error)
-        }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 10 }
+        }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 0 }
       )
     }
     fetchLocation()

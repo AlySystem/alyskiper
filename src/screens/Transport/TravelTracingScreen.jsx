@@ -35,7 +35,7 @@ const TravelTracingScreen = props => {
   const [errorTravel, setErroTravel] = useState(false)
   const [driver, setDriver] = useState()
   const [idTravel] = useState(props.navigation.getParam('idTravel'))
-  const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
+  const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId }, pollInterval: 500 })
   const mapView = useRef(null)
   useNotification(navigate)
 
@@ -168,7 +168,6 @@ const TravelTracingScreen = props => {
       >
         {driver && (
           driver.map(drive => {
-            console.log(drive)
             return (
               <Marker
                 style={styles.marker}
@@ -182,6 +181,7 @@ const TravelTracingScreen = props => {
                   style={styles.drive}
                   source={require('../../../assets/images/img-icon-silver.png')}
                 />
+
               </Marker>
             )
           })

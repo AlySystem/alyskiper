@@ -9,6 +9,7 @@ import StartupScreen from '../StartupScreen'
 import ErrorScreen from '../screens/Error/Error'
 import LocationScreen from '../screens/Location/LocationScreen'
 import OfflineScreen from '../screens/Offline/OfflineScreen'
+import FinalTravelScreen from '../screens/Transport/FinalTravelScreen'
 
 const STACKS = createSwitchNavigator({
   Location: LocationScreen,
@@ -16,7 +17,8 @@ const STACKS = createSwitchNavigator({
   Offline: OfflineScreen,
   Public: PublicStack,
   Private: PrivateStack,
-  Startup: StartupScreen
+  Startup: StartupScreen,
+  FinalTravel: FinalTravelScreen
 }, { initialRouteName: 'Startup' })
 
 export default createAppContainer(STACKS)
