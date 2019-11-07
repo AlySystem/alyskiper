@@ -74,14 +74,6 @@ const AddAddressScreen = props => {
           }
         }
       })
-      console.log('id', userId)
-      console.log(details.placeId)
-      console.log(categoryId)
-      console.log(details.destination.latitude)
-      console.log(details.destination.longitude)
-      console.log(details.address)
-      console.log(numberHouse)
-      console.log(point)
     } else {
       showMessage({
         message: 'Error',

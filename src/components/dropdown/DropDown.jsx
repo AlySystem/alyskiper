@@ -1,21 +1,17 @@
 import React from 'react'
 import {
-  StyleSheet
+  StyleSheet,
+  View
 } from 'react-native'
-import * as Animatable from 'react-native-animatable'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
 const DropDown = props => {
   return (
-    <Animatable.View
-      style={styles.containerDropDown}
-      animation='lightSpeedIn'
-      iterationCount={1}
-    >
+    <View style={styles.containerDropDown}>
       {props.children}
-    </Animatable.View>
+    </View>
   )
 }
 
