@@ -18,6 +18,7 @@ import { ADDRESS } from '../store/actionTypes'
 // Import components
 import Loader from '../components/loader/Loader'
 import Picture from '../components/picture/Picture'
+import { LazyImage } from '../components/lazy/LazyImage'
 
 // Import theme
 import { Theme } from '../constants/Theme'
@@ -80,10 +81,21 @@ const ListOfAddress = props => {
           style={styles.container}
           onPress={props.result ? () => props.handleResult(item) : () => {}}
         >
-          <Picture
+          <LazyImage
+            styleLazyImage={{
+              width: 40,
+              height: 40,
+              resizeMode: 'contain'
+            }}
+            sourceLazy={require('../../assets/images/img-lazy.png')}
             source={{ uri: item.catplaceuser.url_img }}
-            styles={styles.image}
+            styleImage={{
+              width: 40,
+              height: 40,
+              resizeMode: 'contain'
+            }}
           />
+
           <View style={{
             marginLeft: 10
           }}
@@ -107,11 +119,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.2,
     borderRadius: 200,
     width: '100%'
-  },
-  image: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain'
   },
   title: {
     fontFamily: 'Lato-Bold',

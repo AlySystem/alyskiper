@@ -3,7 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  FlatList
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
 
@@ -23,6 +24,18 @@ const ListOfCountries = props => {
   const { data, error, loading } = useQuery(COUNTRIES)
 
   if (error) return <Text allowFontScaling={false}>Error {error}</Text>
+  if (loading) {
+    return (
+      <View style={{ flex: 1, width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <Loader />
+        <View style={{ paddingVertical: 2 }} />
+        <Title
+          title='Cargando paises'
+          styles={styles.subTitle}
+        />
+      </View>
+    )
+  }
 
   return (
     <>
@@ -39,30 +52,20 @@ const ListOfCountries = props => {
           onPress={() => props.setIsVisible(!props.isVisible)}
         />
       </View>
-      <ScrollView
+      <FlatList
         keyboardShouldPersistTaps='always'
-        style={{ paddingHorizontal: 10 }}
-      >
-        {loading ? (
-          <View style={{ flex: 1, width: '100%', height: '100%' }}>
-            <Loader />
-            <View style={{ paddingVertical: 2 }} />
-            <Title
-              title='Cargando paises'
-              styles={styles.subTitle}
-            />
-          </View>
-        ) : data.countries.map(country => (
+        data={data.countries}
+        renderItem={({ item }) => (
           <Country
-            key={country.id}
-            {...country}
+            {...item}
             onPress={() => {
               props.setIsVisible(!props.isVisible)
-              return props.handleOnSelect({ ...country })
+              return props.handleOnSelect({ ...item })
             }}
           />
-        ))}
-      </ScrollView>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </>
   )
 }
