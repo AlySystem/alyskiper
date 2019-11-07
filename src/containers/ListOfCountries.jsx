@@ -27,7 +27,6 @@ const ListOfCountries = props => {
   const [search, setSearch] = useState('')
   const [sourceData, setSourceData] = useState('')
   const [backupData, setBackupData] = useState('')
-  const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
     const verifyData = () => {
@@ -66,11 +65,6 @@ const ListOfCountries = props => {
     setSourceData(newData)
   }
 
-  const onRefresh = () => {
-    setSourceData([])
-    setRefreshing(true)
-  }
-
   const renderItem = (item) => {
     return (
       <Country
@@ -88,48 +82,52 @@ const ListOfCountries = props => {
   return (
     <>
       <View style={styles.containerHeader}>
-        <Title
-          title='Selecciona tu país'
-          styles={styles.title}
-        />
-        <Button
-          iconName='cancel'
-          iconSize={25}
-          stylesButton={styles.button}
-          iconColor={Theme.COLORS.colorSecondary}
-          onPress={() => props.setIsVisible(!props.isVisible)}
-        />
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%'
+        }}
+        >
+          <Title
+            title='Selecciona tu país'
+            styles={styles.title}
+          />
+          <Button
+            iconName='cancel'
+            iconSize={25}
+            stylesButton={styles.button}
+            iconColor={Theme.COLORS.colorSecondary}
+            onPress={() => props.setIsVisible(!props.isVisible)}
+          />
+        </View>
+        <View style={{
+          paddingHorizontal: 10,
+          paddingVertical: 20,
+          width: '100%'
+        }}
+        >
+          <InputControl
+            value={search}
+            setValue={setSearch}
+            placeholder='Buscar...'
+            placeholderTextColor={Theme.COLORS.colorParagraph}
+            onChangeText={(value) => filterList(value)}
+            isActiveButton
+            isActiveIcon
+            iconSize={25}
+            iconColor={Theme.COLORS.colorSecondary}
+            iconName='search'
+            stylesInput={styles.stylesInput}
+          />
+        </View>
       </View>
-      <View>
-        <InputControl
-          value={search}
-          setValue={setSearch}
-          placeholder='Buscar...'
-          placeholderTextColor={Theme.COLORS.colorParagraph}
-          onChangeText={(value) => filterList(value)}
-          isActiveButton
-          isActiveIcon
-          iconSize={25}
-          iconColor={Theme.COLORS.colorSecondary}
-          iconName='search'
-        />
-      </View>
+      <View style={{ paddingVertical: 5 }} />
       <FlatList
         keyboardShouldPersistTaps='always'
         data={sourceData}
         renderItem={({ item }) => renderItem(item)}
-        // renderItem={({ item }) => (
-        //   <Country
-        //     {...item}
-        //     onPress={() => {
-        //       props.setIsVisible(!props.isVisible)
-        //       return props.handleOnSelect({ ...item })
-        //     }}
-        //   />
-        // )}
         keyExtractor={(item, index) => index.toString()}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
       />
     </>
   )
@@ -137,13 +135,13 @@ const ListOfCountries = props => {
 
 const styles = StyleSheet.create({
   containerHeader: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: Theme.COLORS.colorMain,
     borderBottomColor: Theme.COLORS.colorSecondary,
     borderBottomWidth: 0.3,
-    paddingVertical: 10
+    paddingTop: 10,
+    width: '100%'
   },
   title: {
     color: Theme.COLORS.colorParagraph,
@@ -158,6 +156,18 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingRight: 10
+  },
+  stylesInput: {
+    backgroundColor: Theme.COLORS.colorMainDark,
+    borderRadius: 100,
+    paddingLeft: 55,
+    paddingRight: 50,
+    paddingVertical: 12,
+    borderWidth: 0.3,
+    borderColor: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    color: Theme.COLORS.colorParagraph
   }
 })
 
