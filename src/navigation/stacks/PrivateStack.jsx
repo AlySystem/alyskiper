@@ -22,6 +22,7 @@ import CryptoWalletScreen from '../../screens/CryptoWallet/CryptoWalletScreen'
 import ProductScreen from '../../screens/Product/ProductScreen'
 import AddressScreen from '../../screens/Address/AddressScreen'
 import NotificationScreen from '../../screens/Notification/NotificationScreen'
+import OfflineScreen from '../../screens/Offline/OfflineScreen'
 import AlyMoneyScreen from '../../screens/AlyMoney/AlyMoneyScreen'
 import DetailsTransportScreen from '../../screens/Transport/DetailsTransportScreen'
 import FixedMapScreen from '../../screens/FixedMap/FixedMapScreen'
@@ -178,6 +179,12 @@ const StackNavigation = createStackNavigator({
   },
   MapAddress: {
     screen: MapAddressScreen,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Offline: {
+    screen: OfflineScreen,
     navigationOptions: {
       header: null
     }
