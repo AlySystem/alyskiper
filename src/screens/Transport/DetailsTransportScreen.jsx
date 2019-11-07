@@ -112,7 +112,9 @@ const DetailsTransportScreen = props => {
               distance: parseInt(distance.value / 1000),
               time: duration.value / 60,
               address_initial: start_address,
-              address_final: end_address
+              address_final: end_address,
+              idcurrency: 2,
+              idpayment_methods: 2
             }
           }
         })

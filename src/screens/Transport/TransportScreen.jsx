@@ -35,6 +35,7 @@ import { usePubnub } from '../../hooks/usePubnub'
 
 // Import container
 import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
+import ListOfAddress from '../../containers/ListOfAddress'
 
 // Import utils
 import { routeDirection } from '../../utils/Directions'
@@ -51,6 +52,7 @@ const TransportScreen = props => {
   const { silver, golden, vip, president } = usePubnub()
   const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
+  const address = useSelector(state => state.address)
   const [isVisible, setIsVisible] = useState(false)
   const [details, setDetails] = useState('')
   const [steps, setSteps] = useState(null)
@@ -59,6 +61,8 @@ const TransportScreen = props => {
   const mapView = useRef(null)
   const inputRef = useRef(null)
   const marker = useRef(null)
+  // console.log(address === {} ? 280 : 170)
+  console.log('aqui', address)
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
@@ -304,7 +308,13 @@ const TransportScreen = props => {
         <Animatable.View
           animation='slideInUp'
           iterationCount={1}
-          style={styles.container}
+          style={[
+            styles.container,
+            {
+              height: address.flag ? 280 : 170,
+              justifyContent: address.flag ? 'space-between' : 'space-evenly'
+            }
+          ]}
         >
           <TouchableOpacity
             onPress={() => setIsVisible(!isVisible)}
@@ -327,17 +337,36 @@ const TransportScreen = props => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => navigate('Address')}
-          >
-            <Text style={{
-              color: Theme.COLORS.colorSecondary,
-              fontFamily: 'Lato-Regular',
-              fontSize: Theme.SIZES.normal
+          {address.flag ? (
+            <View style={{
+              width: '100%',
+              paddingHorizontal: 10
             }}
-            >Agregar direcciones
-            </Text>
-          </TouchableOpacity>
+            >
+              <Text
+                allowFontScaling={false} style={{
+                  color: Theme.COLORS.colorSecondary,
+                  fontFamily: 'Lato-Bold',
+                  fontSize: 18,
+                  textAlign: 'center'
+                }}
+              >DIRECCIONES
+              </Text>
+              <ListOfAddress />
+            </View>
+          ) : (
+            <TouchableOpacity
+              onPress={() => navigate('Address')}
+            >
+              <Text style={{
+                color: Theme.COLORS.colorSecondary,
+                fontFamily: 'Lato-Regular',
+                fontSize: Theme.SIZES.normal
+              }}
+              >Agregar direcciones
+              </Text>
+            </TouchableOpacity>
+          )}
         </Animatable.View>
       )}
 
@@ -366,10 +395,9 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: Theme.COLORS.colorMainDark,
-    height: 170,
-    justifyContent: 'center',
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
+    paddingVertical: 20
   },
   modalLayout: {
     flex: 1,

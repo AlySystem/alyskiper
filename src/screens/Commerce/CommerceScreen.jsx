@@ -23,6 +23,7 @@ import DropDown from '../../components/dropdown/DropDown'
 import { Theme } from '../../constants/Theme'
 
 const CommerceScreen = props => {
+  const { navigate } = props.navigation
   const [categoryId, setCategoryId] = useState(0)
   const [dropDown, setDropDown] = useState(false)
 
@@ -61,7 +62,7 @@ const CommerceScreen = props => {
         </ScrollView>
         {dropDown && (
           <DropDown>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigate('Address')}>
               <Text allowFontScaling={false} style={styles.textItem}>Agregar direcciones</Text>
             </TouchableOpacity>
             <TouchableOpacity>

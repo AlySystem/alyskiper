@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   FlatList,
   Text,
@@ -7,12 +7,12 @@ import {
   StyleSheet
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 // Import query
 import { GETALLADDRESS } from '../graphql/querys/Querys'
 
-// Import action types
+// Import actions types
 import { ADDRESS } from '../store/actionTypes'
 
 // Import components
@@ -27,10 +27,22 @@ const ListOfAddress = props => {
   const { userId } = useSelector(state => state.user)
   const { loading, error, data } = useQuery(GETALLADDRESS, { variables: { id: userId } })
 
+  useEffect(() => {
+    const verifyData = () => {
+      if (!loading) {
+        dispatch({
+          type: ADDRESS,
+          payload: data.getUsersAddressByUser.length === 0 ? { flag: false } : data.getUsersAddressByUser
+        })
+      }
+    }
+    verifyData()
+  }, [loading])
+
   if (loading) {
     return (
       <View style={{
-        flex: 1,
+        flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center'
       }}
@@ -58,15 +70,6 @@ const ListOfAddress = props => {
         </Text>
       </View>
     )
-  }
-
-  if (data.getUsersAddressByUser) {
-    dispatch({
-      type: ADDRESS,
-      payload: {
-        address: data.getUsersAddressByUser
-      }
-    })
   }
 
   return (
@@ -102,7 +105,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderBottomColor: Theme.COLORS.colorSecondary,
     borderBottomWidth: 0.2,
-    borderRadius: 200
+    borderRadius: 200,
+    width: '100%'
   },
   image: {
     width: 40,

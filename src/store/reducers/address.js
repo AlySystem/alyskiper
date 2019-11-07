@@ -1,14 +1,13 @@
 import { ADDRESS, REMOVEADDRESS } from '../actionTypes'
 
 const INITIAL_STATE = {
-  address: null
+  address: { flag: true }
 }
 
 export const address = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADDRESS: {
       return {
-        ...state,
         ...action.payload
       }
     }

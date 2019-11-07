@@ -22,8 +22,9 @@ export const user = (state = INITIAL_STATE, action) => {
       return { ...action.payload }
     }
     case USERREMOVEDATA: {
-      return INITIAL_STATE
+      return null
     }
+
     default:
       return state
   }
