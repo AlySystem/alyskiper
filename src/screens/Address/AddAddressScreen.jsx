@@ -77,19 +77,18 @@ const AddAddressScreen = props => {
   return (
     <Background>
       <View style={styles.screen}>
-        <View style={{ paddingVertical: 10 }} />
-        <Title
-          styles={{
-            color: Theme.COLORS.colorParagraph,
-            fontFamily: 'Lato-Bold',
-            fontSize: Theme.SIZES.normal,
-            textAlign: 'center'
-          }}
-          title='COMPLETA LOS DATOS'
-        />
-        <View style={{ paddingVertical: 10 }} />
-
         <ScrollView keyboardShouldPersistTaps='always'>
+          <View style={{ paddingVertical: 10 }} />
+          <Title
+            styles={{
+              color: Theme.COLORS.colorParagraph,
+              fontFamily: 'Lato-Bold',
+              fontSize: Theme.SIZES.normal,
+              textAlign: 'center'
+            }}
+            title='COMPLETA LOS DATOS'
+          />
+          <View style={{ paddingVertical: 10 }} />
           <View style={styles.layout}>
             <InputControl
               value={details.address}

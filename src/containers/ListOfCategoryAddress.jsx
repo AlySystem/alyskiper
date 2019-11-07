@@ -1,16 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity
+  View
 } from 'react-native'
 
 // Import components
-import Picture from '../components/picture/Picture'
-
-// Import theme
-import { Theme } from '../constants/Theme'
+import Address from '../components/address/Address'
 
 const items = [
   {
@@ -31,41 +25,32 @@ const items = [
 ]
 
 const ListOfCategoryAddress = props => {
+  const [active, setActive] = useState('')
+
+  const handleActive = id => {
+    setActive(id)
+    props.handleOnSelect(id)
+  }
+
   return (
     <View style={{ justifyContent: 'space-between', flexDirection: 'row', width: '100%' }}>
-      {items.map(item => (
-        <TouchableOpacity
-          onPress={() => props.handleOnSelect(item.key)}
-          key={item.key}
-          style={styles.container}
-        >
-          <Picture
-            source={{ uri: item.image }}
-            styles={styles.image}
+      {items.map(item => {
+        const isActive = active === item.key
+        const className = !!isActive
+
+        return (
+          <Address
+            key={item.key}
+            name={item.name}
+            image={{ uri: item.image }}
+            handleActive={handleActive}
+            id={item.key}
+            classActive={className}
           />
-          <View style={{ paddingVertical: 4 }} />
-          <Text style={styles.name}>{item.name}</Text>
-        </TouchableOpacity>
-      ))}
+        )
+      })}
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  name: {
-    fontFamily: 'Lato-Bold',
-    color: Theme.COLORS.colorSecondary,
-    fontSize: Theme.SIZES.small
-  },
-  image: {
-    resizeMode: 'contain',
-    width: 60,
-    height: 60
-  }
-})
 
 export default ListOfCategoryAddress
