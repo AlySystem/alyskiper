@@ -24,6 +24,9 @@ import { useVerifyLocation } from '../../hooks/useVerifyLocation'
 // Import theme
 import { Theme } from '../../constants/Theme.js'
 
+// Import components
+import Background from '../../components/background/Background'
+
 const LocationScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
@@ -55,22 +58,26 @@ const LocationScreen = props => {
   }, [loading])
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <LottieView
-          style={{
-            width: 300,
-            height: 300
-          }}
-          source={Location}
-          autoPlay
-          autoSize
-          resizeMode='contain'
-          loop
-        />
-        <Text allowFontScaling={false} style={styles.title}>OBTENIENDO UBICACION...</Text>
-      </View>
-    </SafeAreaView>
+    <Background
+      source={require('../../../assets/images/img-background-alyskiper.png')}
+    >
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <LottieView
+            style={{
+              width: 300,
+              height: 300
+            }}
+            source={Location}
+            autoPlay
+            autoSize
+            resizeMode='contain'
+            loop
+          />
+          <Text allowFontScaling={false} style={styles.title}>OBTENIENDO UBICACION...</Text>
+        </View>
+      </SafeAreaView>
+    </Background>
   )
 }
 
@@ -78,7 +85,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,.45)'
   },
   title: {
     color: Theme.COLORS.colorParagraph,
