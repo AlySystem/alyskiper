@@ -32,7 +32,7 @@ const ListOfAddress = props => {
       if (!loading) {
         dispatch({
           type: ADDRESS,
-          payload: data.getUsersAddressByUser.length === 0 ? { flag: false } : data.getUsersAddressByUser
+          payload: data.getUsersAddressByUser.length === 0 ? { flag: false } : { address: data.getUsersAddressByUser, flag: true }
         })
       }
     }
@@ -78,7 +78,7 @@ const ListOfAddress = props => {
       renderItem={({ item }) => (
         <TouchableOpacity
           style={styles.container}
-          onPress={() => {}}
+          onPress={props.result ? () => props.handleResult(item) : () => {}}
         >
           <Picture
             source={{ uri: item.catplaceuser.url_img }}

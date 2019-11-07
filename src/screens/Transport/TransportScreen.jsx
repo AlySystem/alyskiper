@@ -61,8 +61,6 @@ const TransportScreen = props => {
   const mapView = useRef(null)
   const inputRef = useRef(null)
   const marker = useRef(null)
-  // console.log(address === {} ? 280 : 170)
-  console.log('aqui', address)
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
@@ -331,7 +329,7 @@ const TransportScreen = props => {
                 isActiveIcon
                 iconName='search'
                 iconSize={28}
-                placeholder={`${userData.firstName}, ¿Donde quires ir?`}
+                placeholder={`${userData.firstName.toLowerCase()}, ¿Donde quires ir?`}
                 placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
               />
             </View>
@@ -352,7 +350,10 @@ const TransportScreen = props => {
                 }}
               >DIRECCIONES
               </Text>
-              <ListOfAddress />
+              <ListOfAddress
+                result
+                handleResult={result => handleDetails(result.placeid, result.address)}
+              />
             </View>
           ) : (
             <TouchableOpacity
@@ -361,9 +362,9 @@ const TransportScreen = props => {
               <Text style={{
                 color: Theme.COLORS.colorSecondary,
                 fontFamily: 'Lato-Regular',
-                fontSize: Theme.SIZES.normal
+                fontSize: Theme.SIZES.small
               }}
-              >Agregar direcciones
+              >AGREGAR DIRECCIONES
               </Text>
             </TouchableOpacity>
           )}

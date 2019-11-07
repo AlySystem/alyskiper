@@ -152,7 +152,7 @@ export const GETDRIVERNEARBY = gql`
   }
 `
 export const REGISTERUSERADDRESS = gql`
-  mutation RegisterAddress ($input: UsersAddressInput) {
+  mutation RegisterAddress ($input: UsersAddressInput!) {
     registerUsersAddress(input: $input) {
       id
       placeid

@@ -34,6 +34,7 @@ const AddAddressScreen = props => {
   const [numberHouse, setNumberHouse] = useState('')
   const [point, setPoint] = useState('')
   const { userId } = useSelector(state => state.user)
+
   const [RegisterAddress, { data, loading }] = useMutation(REGISTERUSERADDRESS)
 
   useEffect(() => {
@@ -58,20 +59,44 @@ const AddAddressScreen = props => {
   }, [data])
 
   const handleOnSubmit = () => {
-    RegisterAddress({
-      variables: {
-        input: {
-          iduser: userId,
-          placeid: details.placeId,
-          id_cat_place_user: categoryId,
-          lat: details.destination.latitude,
-          lng: details.destination.longitude,
-          address: details.address,
-          apt_house_number: numberHouse,
-          point_references: point
+    if (numberHouse.length > 0 && point.length > 0 && categoryId !== null) {
+      RegisterAddress({
+        variables: {
+          input: {
+            iduser: userId,
+            placeid: details.placeId,
+            id_cat_place_user: categoryId,
+            lat: details.destination.latitude,
+            lng: details.destination.longitude,
+            address: details.address,
+            apt_house_number: numberHouse,
+            point_references: point
+          }
         }
-      }
-    })
+      })
+      console.log('id', userId)
+      console.log(details.placeId)
+      console.log(categoryId)
+      console.log(details.destination.latitude)
+      console.log(details.destination.longitude)
+      console.log(details.address)
+      console.log(numberHouse)
+      console.log(point)
+    } else {
+      showMessage({
+        message: 'Error',
+        description: 'Por favor completa todos los datos.',
+        backgroundColor: 'red',
+        color: '#fff',
+        icon: 'error',
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+    }
   }
 
   return (

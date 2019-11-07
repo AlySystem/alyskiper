@@ -71,6 +71,7 @@ const TravelTracingScreen = props => {
               }
             }
           }
+          console.log(response)
         })
 
         // pubnub.setState({
