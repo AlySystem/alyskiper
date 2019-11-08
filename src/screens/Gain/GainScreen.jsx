@@ -1,22 +1,44 @@
 import React from 'react'
 import {
   View,
-  StyleSheet
+  StyleSheet,
+  Text
 } from 'react-native'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
+// Import components
+import Background from '../../components/background/Background'
+
 const GainScreen = props => {
   return (
-    <View style={styles.container} />
+    <Background
+      source={require('../../../assets/images/img-background-alyskiper.png')}
+    >
+      <View style={styles.screen}>
+        <View style={styles.container}>
+          <Text style={styles.description} allowFontScaling={false}>Aqui puedes ver tus ganancias generadas por la aplicaion.</Text>
+        </View>
+      </View>
+    </Background>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    backgroundColor: Theme.COLORS.colorMainDark
+    backgroundColor: 'rgba(0,0,0,.4)'
+  },
+  container: {
+    paddingHorizontal: 20,
+    marginVertical: 20
+  },
+  description: {
+    color: Theme.COLORS.colorParagraphSecondary,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    textAlign: 'center'
   }
 })
 
