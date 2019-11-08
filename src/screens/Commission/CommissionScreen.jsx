@@ -8,27 +8,34 @@ import {
 // Import theme
 import { Theme } from '../../constants/Theme'
 
+// Import components
+import Background from '../../components/background/Background'
+
 // Import containers
 import ListOfCryptocurrency from '../../containers/ListOfCryptocurrency'
 
 const CommissionScreen = props => {
   return (
-    <View style={styles.container}>
-      <ScrollView
-        keyboardShouldPersistTaps='always'
-      >
-        <View style={styles.layout}>
-          <ListOfCryptocurrency />
-        </View>
-      </ScrollView>
-    </View>
+    <Background
+      source={require('../../../assets/images/img-background-alyskiper.png')}
+    >
+      <View style={styles.screen}>
+        <ScrollView
+          keyboardShouldPersistTaps='always'
+        >
+          <View style={styles.layout}>
+            <ListOfCryptocurrency />
+          </View>
+        </ScrollView>
+      </View>
+    </Background>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    backgroundColor: Theme.COLORS.colorMainDark
+    backgroundColor: 'rgba(0,0,0,.4)'
   },
   layout: {
     paddingHorizontal: 10,

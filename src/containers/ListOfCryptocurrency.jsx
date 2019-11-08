@@ -7,7 +7,7 @@ const items = [
   {
     key: 1,
     img: require('../../assets/images/img-logo-alycoin-alt.png'),
-    name: 'AlyCoin',
+    name: 'Alycoin',
     symbol: 'ALY',
     price: 1,
     percent_change: 0.30
@@ -39,8 +39,8 @@ const items = [
   {
     key: 5,
     img: require('../../assets/images/img-logo-litecoin.png'),
-    name: 'LiteCoin',
-    symbol: 'BCH',
+    name: 'Litecoin',
+    symbol: 'LTC',
     price: 180,
     percent_change: 1.20
   }

@@ -1,9 +1,10 @@
 import React from 'react'
 import {
-  Image,
   StyleSheet,
   Dimensions
 } from 'react-native'
+
+import FastImage from 'react-native-fast-image'
 
 // Import defaultImage
 import defaultImage from '../../../assets/images/img-logo-skiper.png'
@@ -12,10 +13,10 @@ const { width, height } = Dimensions.get('window')
 
 const Picture = props => {
   return (
-    <Image
+    <FastImage
       {...props}
-      source={props.source}
       style={props.styles || styles.image}
+      source={props.source}
     />
   )
 }

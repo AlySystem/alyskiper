@@ -16,13 +16,13 @@ const PaymentMethodScreen = props => {
         <Item
           onPress={() => navigate('CryptoWallet')}
           icon=''
-          name='Criptomoneda'
+          name='CRIPTOMONEDA'
           description='Registro de tu wallet'
         />
         <Item
           onPress={() => navigate('CreditCard')}
           icon='credit-card'
-          name='Tarjeta bancaria'
+          name='TARJETA BANCARIA'
           description='Retiro automatico de tu cuenta'
         />
       </View>

@@ -1,34 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
-  View,
-  Animated,
-  Image
+  View
 } from 'react-native'
+import FastImage from 'react-native-fast-image'
 
 export const LazyImage = props => {
-  const [opacity] = useState(new Animated.Value(0))
-
-  const onLoad = event => {
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 300
-    }).start()
-  }
-
   return (
     <View style={props.stylesContainer}>
-      <Image
+      <FastImage
         {...props}
         style={props.styleLazyImage}
         source={props.sourceLazy}
       />
-      <Animated.Image
+
+      <FastImage
         {...props}
         style={[
           props.styleImage,
-          { position: 'absolute', opacity: opacity }
+          { position: 'absolute', opacity: 1 }
         ]}
-        onLoad={onLoad}
       />
     </View>
   )

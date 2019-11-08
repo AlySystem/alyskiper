@@ -6,7 +6,6 @@ import {
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import { createStackNavigator } from 'react-navigation-stack'
-import { useSelector } from 'react-redux'
 
 // Import drawer
 import DrawerStack from '../drawer/DrawerStack'
@@ -200,7 +199,7 @@ const styles = StyleSheet.create({
   logo: {
     resizeMode: 'contain',
     width: 130,
-    height: 40,
+    height: 35,
     marginHorizontal: 10
   },
   image: {

@@ -18,7 +18,7 @@ const GainScreen = props => {
     >
       <View style={styles.screen}>
         <View style={styles.container}>
-          <Text style={styles.description} allowFontScaling={false}>Aqui puedes ver tus ganancias generadas por la aplicaion.</Text>
+          <Text style={styles.description} allowFontScaling={false}>Aqui puedes ver tus ganancias generadas por la aplicacion.</Text>
         </View>
       </View>
     </Background>

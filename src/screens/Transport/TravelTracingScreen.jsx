@@ -35,7 +35,7 @@ const TravelTracingScreen = props => {
   const [errorTravel, setErroTravel] = useState(false)
   const [driver, setDriver] = useState()
   const [idTravel] = useState(props.navigation.getParam('idTravel'))
-  const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId }, pollInterval: 500 })
+  const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
   const mapView = useRef(null)
   useNotification(navigate)
 
@@ -234,7 +234,7 @@ const TravelTracingScreen = props => {
             fontFamily: 'Lato-Bold',
             fontSize: Theme.SIZES.normal
           }}
-          >No hay viajes activos
+          >No hay viajes activos {userId}
           </Text>
         </View>
       )}

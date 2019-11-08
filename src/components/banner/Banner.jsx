@@ -29,28 +29,30 @@ const Banner = props => {
         }}
       />
 
-      <LazyImage
-        styleLazyImage={{
-          position: 'absolute',
-          bottom: -30,
-          right: 20,
-          width: 80,
-          height: 80,
-          borderRadius: 200,
-          resizeMode: 'cover'
-        }}
-        sourceLazy={require('../../../assets/images/img-lazy.png')}
-        source={props.sourceLogo}
-        styleImage={{
-          position: 'absolute',
-          bottom: -30,
-          right: 20,
-          width: 80,
-          height: 80,
-          borderRadius: 200,
-          resizeMode: 'cover'
-        }}
-      />
+      {props.sourceLogo && (
+        <LazyImage
+          styleLazyImage={{
+            position: 'absolute',
+            bottom: -30,
+            right: 20,
+            width: 80,
+            height: 80,
+            borderRadius: 200,
+            resizeMode: 'cover'
+          }}
+          sourceLazy={require('../../../assets/images/img-lazy.png')}
+          source={props.sourceLogo}
+          styleImage={{
+            position: 'absolute',
+            bottom: -30,
+            right: 20,
+            width: 80,
+            height: 80,
+            borderRadius: 200,
+            resizeMode: 'cover'
+          }}
+        />
+      )}
     </View>
   )
 }

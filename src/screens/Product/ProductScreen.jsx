@@ -60,7 +60,6 @@ const ProductScreen = props => {
           keyboardShouldPersistTaps='always'
         >
           <Banner
-            sourceLogo={{}}
             sourceImage={{ uri: commerce.url_img_product }}
           />
           <View style={{ paddingVertical: 5 }} />
