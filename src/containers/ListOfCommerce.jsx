@@ -1,13 +1,10 @@
 import React from 'react'
-import { FlatList, Text } from 'react-native'
+import { FlatList, View } from 'react-native'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // Import components
 import Card from '../components/card/Card'
-
-// Import containers
-import ListEmpty from '../containers/ListEmpty'
 
 // Import query
 import { COMMERCERS } from '../graphql/querys/Querys'
@@ -18,12 +15,8 @@ import { ADDFAVORITE } from '../graphql/mutations/Mutations'
 // Import skeleton
 import SkeletonProduct from '../skeleton/SkeletonProduct'
 
-// Import actions types
-import { FAVORITE } from '../store/actionTypes'
-
 const ListOfCommerce = props => {
   const { navigate } = props.navigation
-  const dispatch = useDispatch()
   const region = useSelector(state => state.location)
   const { userId } = useSelector(state => state.user)
   const [AddFavorite] = useMutation(ADDFAVORITE)
@@ -32,16 +25,18 @@ const ListOfCommerce = props => {
   if (loading) return <SkeletonProduct />
 
   const handleOnFavorite = (idCommerce) => {
-    console.log(idCommerce)
     return AddFavorite({ variables: { input: { user_id: userId, commerce_id: idCommerce } } })
   }
 
-  return (
-    <FlatList
-      data={data.CommercesIntoRadio}
-      renderItem={({ item }) => (
+  const renderItem = (item) => {
+    return (
+      <View
+        style={{
+          width: '100%'
+        }}
+      >
         <Card
-          name={item.namecommerce}
+          name={`${item.namecommerce}`}
           description={item.address}
           sourceLogo={{ uri: item.url_logo }}
           sourceImage={{ uri: item.url_art }}
@@ -49,8 +44,16 @@ const ListOfCommerce = props => {
           onPressFavorite={() => handleOnFavorite(item.id)}
           icon=''
         />
-      )}
+      </View>
+    )
+  }
+
+  return (
+    <FlatList
+      data={data.CommercesIntoRadio}
+      renderItem={({ item }) => renderItem(item)}
       keyExtractor={(item, index) => index.toString()}
+      onViewableItemsChanged={(value) => console.log(value)}
     />
   )
 }

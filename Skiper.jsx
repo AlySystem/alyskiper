@@ -71,7 +71,7 @@ const Skiper = () => {
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
-      if (!state.isConnected) setIsConnected(false)
+      setIsConnected(state.isConnected)
     })
     return () => {
       unsubscribe()
