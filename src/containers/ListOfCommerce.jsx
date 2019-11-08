@@ -53,7 +53,6 @@ const ListOfCommerce = props => {
       data={data.CommercesIntoRadio}
       renderItem={({ item }) => renderItem(item)}
       keyExtractor={(item, index) => index.toString()}
-      onViewableItemsChanged={(value) => console.log(value)}
     />
   )
 }
