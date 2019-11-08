@@ -30,6 +30,7 @@ import ScannerScreen from '../../screens/Scanner/ScannerScreen'
 import TravelTrancingScreen from '../../screens/Transport/TravelTracingScreen'
 import AddAddressScreen from '../../screens/Address/AddAddressScreen'
 import MapAddressScreen from '../../screens/Address/MapAddressScreen'
+import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 // import FinalTravelScreen from '../../screens/Transport/FinalTravelScreen'
 
 // Import components
@@ -127,6 +128,10 @@ const StackNavigation = createStackNavigator({
   },
   PaymentMethod: {
     screen: PaymentMethodScreen,
+    navigationOptions
+  },
+  CreditCard: {
+    screen: CreditCardScreen,
     navigationOptions
   },
   Product: {

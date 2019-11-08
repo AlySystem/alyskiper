@@ -20,7 +20,7 @@ const PaymentMethodScreen = props => {
           description='Registro de tu wallet'
         />
         <Item
-          onPress={() => {}}
+          onPress={() => navigate('CreditCard')}
           icon='credit-card'
           name='Tarjeta bancaria'
           description='Retiro automatico de tu cuenta'
