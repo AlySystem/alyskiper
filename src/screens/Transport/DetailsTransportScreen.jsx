@@ -97,9 +97,7 @@ const DetailsTransportScreen = props => {
       if (data) {
         const driverId = data.ObtenerDriveCercano
         const { duration, distance, end_address, start_address, start_location, end_location } = steps
-        // const distanceFinal = distance.text.split(' ')
-        console.log(distance)
-        console.log(duration)
+
         GenerateTravel({
           variables: {
             inputviaje: {

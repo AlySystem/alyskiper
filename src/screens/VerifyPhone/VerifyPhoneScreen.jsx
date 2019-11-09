@@ -68,6 +68,7 @@ const VerifyPhoneScreen = props => {
           <View style={styles.container}>
             <Picture
               source={logo}
+              // resizeMode={}
             />
             <Title
               title='INGRESE EL CODIGO'

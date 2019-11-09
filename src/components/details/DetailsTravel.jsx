@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'Lato-Regular',
-    color: Theme.COLORS.colorParagraph,
+    color: Theme.COLORS.colorSecondary,
     fontSize: Theme.SIZES.small,
     marginVertical: 3
   },

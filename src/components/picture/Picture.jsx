@@ -17,6 +17,7 @@ const Picture = props => {
       {...props}
       style={props.styles || styles.image}
       source={props.source}
+      resizeMode={FastImage.resizeMode.contain}
     />
   )
 }

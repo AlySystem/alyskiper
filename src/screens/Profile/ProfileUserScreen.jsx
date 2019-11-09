@@ -10,6 +10,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { showMessage } from 'react-native-flash-message'
 import ImagePicker from 'react-native-image-picker'
 import { useSelector, useDispatch } from 'react-redux'
+import FastImage from 'react-native-fast-image'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -20,10 +21,10 @@ import { USERDATA } from '../../store/actionTypes'
 // Import components
 import Background from '../../components/background/Background'
 import Title from '../../components/title/Title'
-import Picture from '../../components/picture/Picture'
 import Button from '../../components/button/Button'
 import InputControl from '../../components/input/InputControl'
 import IconButton from '../../components/button/IconButton'
+import Loader from '../../components/loader/Loader'
 // import ModalPicker from '../../components/modal/ModalPicker'
 
 // Import mutations
@@ -34,6 +35,8 @@ const { height } = Dimensions.get('window')
 const ProfileUserScreen = () => {
   const userData = useSelector(state => state.user)
   const dispatch = useDispatch()
+  const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   const [UpdateUser, { loading }] = useMutation(UPDATEUSER)
 
   const [photo, setPhoto] = useState({ uri: userData.avatar })
@@ -49,6 +52,7 @@ const ProfileUserScreen = () => {
   }
 
   const selectPhoto = () => {
+    console.log('entrre')
     ImagePicker.showImagePicker(options, response => {
       console.log('Response = ', response)
       if (response.didCancel) {
@@ -58,7 +62,34 @@ const ProfileUserScreen = () => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton)
       } else {
-        setPhoto(response.data)
+        const image = {
+          uri: response.uri,
+          type: 'image/jpeg',
+          name: 'myImage' + '-' + Date.now() + '.jpg'
+        }
+
+        const imgBody = new FormData()
+        imgBody.append('image', image)
+        const url = 'https://backend-subir-imagenes.herokuapp.com/upload'
+        setIsLoading(true)
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Accept: 'application/json'
+          },
+          body: imgBody
+        })
+          .then(response => response.json())
+          .then(result => {
+            const uri = result[0].path
+            setPhoto({ uri })
+            setIsLoading(false)
+          })
+          .catch(error => {
+            setError(error)
+            setIsLoading(false)
+          })
       }
     })
   }
@@ -205,17 +236,37 @@ const ProfileUserScreen = () => {
             <Text allowFontScaling={false} style={styles.description}>Toda tu informacion personal</Text>
           </View>
           <View style={styles.containerImage}>
-            <Picture
+            <FastImage
+              style={styles.image}
               source={photo}
-              styles={styles.image}
+              resizeMode={FastImage.resizeMode.cover}
             />
 
-            <Button
-              stylesButton={styles.button}
-              iconName='add-a-photo'
-              iconSize={35}
-              onPress={selectPhoto}
-            />
+            {isLoading && (
+              <View style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'rgba(0,0,0,.9)',
+                borderRadius: 200
+              }}
+              >
+                <Loader />
+              </View>
+            )}
+
+            {!isLoading && (
+              <Button
+                stylesButton={styles.button}
+                iconName='add-a-photo'
+                iconSize={35}
+                onPress={selectPhoto}
+              />
+            )}
           </View>
         </View>
         <ScrollView

@@ -5,12 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity
 } from 'react-native'
+import FastImage from 'react-native-fast-image'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-
-// Import components
-import Picture from '../picture/Picture'
 
 const Profile = (props) => {
   return (
@@ -27,9 +25,10 @@ const Profile = (props) => {
         )}
 
         {props.sourceImage && (
-          <Picture
+          <FastImage
+            style={styles.image}
             source={{ uri: props.sourceImage }}
-            styles={styles.image}
+            resizeMode={FastImage.resizeMode.cover}
           />
         )}
 

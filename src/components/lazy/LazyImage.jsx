@@ -11,6 +11,7 @@ export const LazyImage = props => {
         {...props}
         style={props.styleLazyImage}
         source={props.sourceLazy}
+        resizeMode={FastImage.resizeMode.cover}
       />
 
       <FastImage

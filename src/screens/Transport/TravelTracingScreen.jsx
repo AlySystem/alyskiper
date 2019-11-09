@@ -33,6 +33,7 @@ const TravelTracingScreen = props => {
   const location = useSelector(state => state.location)
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErroTravel] = useState(false)
+  const [connectionDriver, setConnectionDriver] = useState(false)
   const [driver, setDriver] = useState()
   const [idTravel] = useState(props.navigation.getParam('idTravel'))
   const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
@@ -66,12 +67,15 @@ const TravelTracingScreen = props => {
             if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
               const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
               if (channels !== undefined) {
+                setConnectionDriver(true)
                 const drive = channels.occupants.filter(item => item.state !== undefined)
                 setDriver(drive)
               }
             }
+          } else {
+            setConnectionDriver(true)
           }
-          console.log(response)
+          console.log('driver', response)
         })
 
         // pubnub.setState({
@@ -188,6 +192,21 @@ const TravelTracingScreen = props => {
           })
         )}
       </MapView>
+      {connectionDriver && (
+        <Text style={{
+          position: 'absolute',
+          bottom: 70,
+          left: 0,
+          width: '100%',
+          backgroundColor: 'red',
+          paddingVertical: 5,
+          textAlign: 'center',
+          fontFamily: 'Lato-Bold',
+          color: Theme.COLORS.colorParagraph
+        }}
+        >EL CONDUCTOR SE DESCONECTO
+        </Text>
+      )}
       <TouchableOpacity
         style={styles.containerButton}
         onPress={handleToggleModal}
@@ -253,7 +272,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     height: 70,
     paddingHorizontal: 10,
-    backgroundColor: Theme.COLORS.colorMainAlt
+    backgroundColor: 'rgba(0,0,0,.8)'
   },
   text: {
     fontFamily: 'Lato-Regular',

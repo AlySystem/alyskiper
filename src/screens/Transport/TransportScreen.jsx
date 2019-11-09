@@ -61,6 +61,7 @@ const TransportScreen = props => {
   const mapView = useRef(null)
   const inputRef = useRef(null)
   const marker = useRef(null)
+  console.log('location', location)
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
@@ -165,12 +166,21 @@ const TransportScreen = props => {
           ref={mapView}
           loadingBackgroundColor={Theme.COLORS.colorMainDark}
           loadingIndicatorColor={Theme.COLORS.colorSecondary}
-          showsUserLocation
           loadingEnabled
           initialRegion={location}
           showsCompass={false}
           showsMyLocationButton={false}
         >
+          <Marker
+            coordinate={location}
+            style={styles.marker}
+          >
+            <Image
+              style={styles.drive}
+              source={require('../../../assets/images/img-marker-user.png')}
+            />
+          </Marker>
+
           {silver && (
             silver.map(drive => (
               <Marker
