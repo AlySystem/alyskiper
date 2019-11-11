@@ -42,32 +42,31 @@ import { routeDirection } from '../../utils/Directions'
 import { getPixelSize } from '../../utils/Pixel'
 
 // Import actions types
-import { REMOVEDETAILSLOCATION } from '../../store/actionTypes'
+import { REMOVELOCATIONDETAILS } from '../../store/actionTypes'
 
 const { width, height } = Dimensions.get('window')
 
 const TransportScreen = props => {
   const { navigate } = props.navigation
   const dispatch = useDispatch()
-  const { silver, golden, vip, president } = usePubnub()
-  const location = useSelector(state => state.location)
   const userData = useSelector(state => state.user)
   const address = useSelector(state => state.address)
+  const { location, directionsDetails } = useSelector(state => state.location)
+  const { silver, golden, vip, president } = usePubnub()
   const [isVisible, setIsVisible] = useState(false)
   const [details, setDetails] = useState('')
   const [steps, setSteps] = useState(null)
   const [destination, setDestination] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+
   const mapView = useRef(null)
   const inputRef = useRef(null)
   const marker = useRef(null)
-  console.log('location', location)
 
   const handleDetails = async (placeId, details) => {
     setIsLoading(true)
     const { latitude, longitude } = location
     const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
-
     setIsLoading(false)
     setDestination(pointCoords)
     setSteps(steps)
@@ -92,26 +91,23 @@ const TransportScreen = props => {
   }
 
   useEffect(() => {
-    if (location.details) {
-      const details = location.details
-      const { placeId, address } = details
+    if (directionsDetails !== null) {
+      const { placeId, address } = directionsDetails
       handleDetails(placeId, address)
     }
-  }, [location])
+  }, [directionsDetails])
 
   const handleBack = () => {
     setDestination(null)
 
     dispatch({
-      type: REMOVEDETAILSLOCATION,
+      type: REMOVELOCATIONDETAILS,
       payload: {
-        latitude: location.latitude,
-        longitude: location.longitude,
-        latitudeDelta: 0.0143,
-        longitudeDelta: 0.0134
+        directionsDetails: null
       }
     })
   }
+
   return (
     <View style={styles.screen}>
       <Modal
@@ -339,7 +335,7 @@ const TransportScreen = props => {
                 isActiveIcon
                 iconName='search'
                 iconSize={28}
-                placeholder={`${userData.firstName.toLowerCase()}, ¿Donde quires ir?`}
+                placeholder={`${userData.firstName.toLowerCase()}, ¿Donde quieres ir?`}
                 placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
               />
             </View>
@@ -356,7 +352,7 @@ const TransportScreen = props => {
                   color: Theme.COLORS.colorSecondary,
                   fontFamily: 'Lato-Bold',
                   fontSize: 18,
-                  textAlign: 'center'
+                  paddingHorizontal: 5
                 }}
               >DIRECCIONES
               </Text>

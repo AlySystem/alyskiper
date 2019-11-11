@@ -9,7 +9,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux'
 
 // Import action types
-import { LOCATION } from '../../store/actionTypes'
+import { LOCATIONDETAILS } from '../../store/actionTypes'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -22,11 +22,10 @@ import ShowResult from './ShowResult'
 import { keys } from '../../utils/keys'
 
 const Search = props => {
-  const { navigate } = props.navigation
   const dispatch = useDispatch()
   const [value, setValue] = useState('')
   const { iso } = useSelector(state => state.user)
-  const { latitude, longitude } = useSelector(state => state.location)
+  const { location: { latitude, longitude } } = useSelector(state => state.location)
   const [predictions, setPredictions] = useState()
 
   const handleOnChange = async value => {
@@ -71,9 +70,9 @@ const Search = props => {
               setValue(item.structured_formatting.main_text)
               Keyboard.dismiss()
               dispatch({
-                type: LOCATION,
+                type: LOCATIONDETAILS,
                 payload: {
-                  details: {
+                  directionsDetails: {
                     placeId: item.place_id,
                     address: item.structured_formatting.main_text
                   }
