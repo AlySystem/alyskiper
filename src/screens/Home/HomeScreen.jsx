@@ -15,12 +15,18 @@ import ListOfSwiper from '../../containers/ListOfSwiper'
 import ListOfBanner from '../../containers/ListOfBanner'
 import ListOfServices from '../../containers/ListOfServices'
 
+// Import hooks
+import { useVerifyLocation } from '../../hooks/useVerifyLocation'
+
 // Import components
 import Background from '../../components/background/Background'
 
 const HomeScreen = props => {
   const { navigate } = props.navigation
+  const { location, isLoading } = useVerifyLocation()
   const userData = useSelector(state => state.user)
+
+  console.log(location, isLoading)
 
   return (
     <Background>

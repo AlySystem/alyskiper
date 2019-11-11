@@ -14,6 +14,9 @@ import ListOfCategory from '../../containers/ListOfCategory'
 import ListOfSwiper from '../../containers/ListOfSwiper'
 import ListOfFavorite from '../../containers/ListOfFavorite'
 
+// Import hooks
+import { useVerifyLocation } from '../../hooks/useVerifyLocation'
+
 // Import components
 import Background from '../../components/background/Background'
 import ToolBar from '../../components/header/ToolBar'
@@ -23,9 +26,12 @@ import DropDown from '../../components/dropdown/DropDown'
 import { Theme } from '../../constants/Theme'
 
 const CommerceScreen = props => {
+  const { isLoading, location } = useVerifyLocation()
   const { navigate } = props.navigation
   const [categoryId, setCategoryId] = useState(0)
   const [dropDown, setDropDown] = useState(false)
+
+  console.log(isLoading, location)
 
   const handleOnPress = (categoryId) => {
     setCategoryId(categoryId)
