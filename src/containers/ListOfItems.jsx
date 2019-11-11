@@ -24,12 +24,6 @@ import { Theme } from '../constants/Theme'
 
 const items = [
   {
-    key: 1,
-    name: 'Inicio',
-    icon: 'home',
-    routeName: 'Home'
-  },
-  {
     key: 2,
     name: 'Metodo de pago',
     icon: 'credit-card',
