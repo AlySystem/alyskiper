@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet
 } from 'react-native'
-import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box'
+// import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -23,26 +23,26 @@ const ErrorScreen = props => {
   const message = props.navigation.getParam('message')
   const routeName = props.navigation.getParam('routeName')
 
-  const handleRequestDialog = async () => {
-    LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message: `<font color=${Theme.COLORS.colorParagraph}>Por favor activa el GPS del dispositivo.</font>`,
-      ok: 'ACEPTAR',
-      cancel: 'CANCELAR',
-      style: {
-        backgroundColor: Theme.COLORS.colorMain,
+  // const handleRequestDialog = async () => {
+  //   LocationServicesDialogBox.checkLocationServicesIsEnabled({
+  //     message: `<font color=${Theme.COLORS.colorParagraph}>Por favor activa el GPS del dispositivo.</font>`,
+  //     ok: 'ACEPTAR',
+  //     cancel: 'CANCELAR',
+  //     style: {
+  //       backgroundColor: Theme.COLORS.colorMain,
 
-        positiveButtonTextColor: Theme.COLORS.colorParagraph,
-        positiveButtonBackgroundColor: Theme.COLORS.colorMainAlt,
+  //       positiveButtonTextColor: Theme.COLORS.colorParagraph,
+  //       positiveButtonBackgroundColor: Theme.COLORS.colorMainAlt,
 
-        negativeButtonTextColor: Theme.COLORS.colorParagraph,
-        negativeButtonBackgroundColor: Theme.COLORS.colorMainAlt
-      }
-    }).then(function (success) {
-      navigate(routeName)
-    }).catch((error) => {
-      console.log(error.message)
-    })
-  }
+  //       negativeButtonTextColor: Theme.COLORS.colorParagraph,
+  //       negativeButtonBackgroundColor: Theme.COLORS.colorMainAlt
+  //     }
+  //   }).then(function (success) {
+  //     navigate(routeName)
+  //   }).catch((error) => {
+  //     console.log(error.message)
+  //   })
+  // }
 
   return (
     <View style={styles.container}>
@@ -66,7 +66,7 @@ const ErrorScreen = props => {
           stylesMessage={styles.message}
           isActiveIcon
           iconName='location-on'
-          onPress={handleRequestDialog}
+          // onPress={handleRequestDialog}
         />
         {/* <View style={{ paddingVertical: 10 }} />
         <IconButton
