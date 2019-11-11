@@ -37,9 +37,9 @@ export const useLocation = () => {
     }
     fetchLocation()
 
-    // return () => {
-    //   Geolocation.clearWatch(watchId)
-    // }
+    return () => {
+      Geolocation.clearWatch(watchId)
+    }
   }, [watchId, dispatch])
 
   return { errorRegion, isLoading }
