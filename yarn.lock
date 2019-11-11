@@ -5816,6 +5816,11 @@ react-native-gesture-handler@1.4.1:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-gps-state@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-gps-state/-/react-native-gps-state-2.0.3.tgz#855d147a73a9f4ea851c6cbe9fe968957e341ef9"
+  integrity sha512-gWFpxO5ztNSuwiIYL9Cf6iRuQiCz2B5esGdtX1m8oFSt5k6qJgLwEL79N0jnh2asRREqCqaB/LdJ74sxBuAVaA==
+
 react-native-image-picker@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-1.1.0.tgz#c2a0523886edb4cf2cdc008ad0a71433142a4d53"
@@ -5842,6 +5847,11 @@ react-native-maps@0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.25.0.tgz#81bc51eb50e33811a9e1c345cc48869413ead67d"
   integrity sha512-PFJuW1pt+HnnnN0m0OGk29RSvICFVkK/DScX6cUk0SuCSN2DAHx0y6y57lZyYXcYqU4J4usNpfxgp/ccjASDiw==
+
+react-native-mask-loader@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-mask-loader/-/react-native-mask-loader-0.0.3.tgz#4081db3a17b574c7b9057c89b39d23fbb2105a6e"
+  integrity sha512-qZ3UpaTCGxa7whx+v+zlqV6XaZlOEi68WN8ropG9lThGEFFgvD6CvUVx7OYUcX+o2eysldQ70cNczeOybKQ38w==
 
 react-native-modal@11.4.0:
   version "11.4.0"
