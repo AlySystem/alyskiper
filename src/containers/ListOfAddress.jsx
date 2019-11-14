@@ -17,7 +17,6 @@ import { ADDRESS } from '../store/actionTypes'
 
 // Import components
 import Loader from '../components/loader/Loader'
-import Picture from '../components/picture/Picture'
 import { LazyImage } from '../components/lazy/LazyImage'
 
 // Import theme
@@ -25,6 +24,7 @@ import { Theme } from '../constants/Theme'
 
 const ListOfAddress = props => {
   const dispatch = useDispatch()
+  const { navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
   const { loading, error, data } = useQuery(GETALLADDRESS, { variables: { id: userId } })
 
@@ -107,6 +107,15 @@ const ListOfAddress = props => {
         </TouchableOpacity>
       )}
       keyExtractor={(item, index) => index.toString()}
+      ListEmptyComponent={
+        <Text style={{
+          color: Theme.COLORS.colorSecondary,
+          fontFamily: 'Lato-Regular',
+          fontSize: Theme.SIZES.small
+        }}
+        >No tienes direcciones agregadas
+        </Text>
+      }
     />
   )
 }
