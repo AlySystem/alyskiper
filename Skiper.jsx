@@ -14,12 +14,15 @@ import NetInfo from '@react-native-community/netinfo'
 import { keys } from './src/utils/keys'
 import { getAsyncStorage } from './src/utils/AsyncStorage'
 
+// Import hooks
+import { useStatusGps } from './src/hooks/useStatusGps'
+
 // Import store
 import store from './src/store/store'
 
 // Import navigation
 import Navigation from './src/navigation/Navigation'
-import OfflineScreen from './src/screens/Offline/OfflineScreen'
+import TemplateError from './src/screens/TemplateError/TemplateError'
 
 import { configure } from './src/hooks/usePushNotification'
 
@@ -67,6 +70,7 @@ const client = new ApolloClient({
 
 const Skiper = () => {
   configure()
+  const { message, denied } = useStatusGps()
   const [isConnected, setIsConnected] = useState(true)
 
   useEffect(() => {
@@ -78,17 +82,14 @@ const Skiper = () => {
     }
   }, [setIsConnected])
 
+  if (!isConnected) return <TemplateError isOnline title='Ooppss!' description='Revisa tu conexion a internet e intenta nuevamente.' />
+  if (denied) return <TemplateError isGps title='Ooppss!' description={message} />
+
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
-        {isConnected ? (
-          <>
-            <Navigation />
-            <FlashMessage position='top' />
-          </>
-        ) : (
-          <OfflineScreen />
-        )}
+        <Navigation />
+        <FlashMessage position='top' />
       </ApolloProvider>
     </Provider>
   )

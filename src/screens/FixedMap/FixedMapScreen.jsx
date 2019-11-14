@@ -10,7 +10,7 @@ import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome5'
 import Geocoder from 'react-native-geocoding'
 
 // Import actions types
-import { LOCATION } from '../../store/actionTypes'
+import { LOCATIONDETAILS } from '../../store/actionTypes'
 
 // Import Theme
 import { Theme } from '../../constants/Theme'
@@ -52,9 +52,9 @@ const FixedMapScreen = props => {
 
   const handleOnSubmit = () => {
     dispatch({
-      type: LOCATION,
+      type: LOCATIONDETAILS,
       payload: {
-        details
+        directionsDetails: details
       }
     })
     navigate('Transport')
@@ -68,7 +68,7 @@ const FixedMapScreen = props => {
         loadingIndicatorColor={Theme.COLORS.colorSecondary}
         showsUserLocation
         loadingEnabled
-        initialRegion={region}
+        initialRegion={region.location}
         onRegionChangeComplete={handleOnRegionChange}
         showsCompass={false}
         showsMyLocationButton={false}

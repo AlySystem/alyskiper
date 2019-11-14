@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet
 } from 'react-native'
-// import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -12,7 +11,6 @@ import { Theme } from '../../constants/Theme'
 // Import components
 import Picture from '../../components/picture/Picture'
 import Title from '../../components/title/Title'
-import IconButton from '../../components/button/IconButton'
 
 // Import image
 import image from '../../../assets/images/img-alyskiper-warning.png'
@@ -52,7 +50,7 @@ const ErrorScreen = props => {
       />
       <View style={{ paddingVertical: 10 }} />
       <Title
-        title={title}
+        title={props.title}
         styles={styles.title}
         stylesContainer={{}}
       />
@@ -60,14 +58,14 @@ const ErrorScreen = props => {
       <Text allowFontScaling={false} style={styles.message}>{message}</Text>
 
       <View style={{ marginTop: 50 }}>
-        <IconButton
+        {/* <IconButton
           message='ACTIVAR GPS'
           stylesButton={styles.button}
           stylesMessage={styles.message}
           isActiveIcon
           iconName='location-on'
           // onPress={handleRequestDialog}
-        />
+        /> */}
         {/* <View style={{ paddingVertical: 10 }} />
         <IconButton
           message='SACAME DE AQUI'
@@ -78,6 +76,7 @@ const ErrorScreen = props => {
           onPress={() => navigate('Home')}
         /> */}
       </View>
+      <Text allowFontScaling={false} style={styles.message}>{props.message}</Text>
     </View>
   )
 }
@@ -104,24 +103,6 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorParagraphSecondary,
     fontSize: Theme.SIZES.small,
     textAlign: 'center'
-  },
-  button: {
-    backgroundColor: Theme.COLORS.colorMainAlt,
-    borderRadius: 100,
-    paddingHorizontal: 20,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: 210,
-    borderColor: Theme.COLORS.colorSecondary,
-    borderWidth: 0.5
-  },
-  stylesMessage: {
-    color: Theme.COLORS.colorParagraph,
-    fontFamily: 'Lato-Bold',
-    paddingLeft: 5,
-    fontSize: Theme.SIZES.xsmall
   }
 })
 

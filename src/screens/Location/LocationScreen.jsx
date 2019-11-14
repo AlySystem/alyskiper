@@ -1,102 +1,69 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
-  StyleSheet,
   View,
-  SafeAreaView,
+  StyleSheet,
   Text
 } from 'react-native'
 import LottieView from 'lottie-react-native'
-import { useQuery } from '@apollo/react-hooks'
-import { useDispatch } from 'react-redux'
 
-// Import action types
-import { ACTIVETRAVEL } from '../../store/actionTypes'
+// Import theme
+import { Theme } from '../../constants/Theme'
 
-// Import querys
-import { GETTRAVELBYUSERID } from '../../graphql/querys/Querys'
-
-// Import animations
+// Import animation
 import Location from '../../../world-locations.json'
 
 // Import hooks
-import { useVerifyLocation } from '../../hooks/useVerifyLocation'
-
-// Import theme
-import { Theme } from '../../constants/Theme.js'
+import { useLocation } from '../../hooks/useLocation'
 
 // Import components
 import Background from '../../components/background/Background'
 
 const LocationScreen = props => {
-  const dispatch = useDispatch()
   const { navigate } = props.navigation
-  const [userId] = useState(props.navigation.getParam('userId'))
-  const { loading, data } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
-  const { isLoading } = useVerifyLocation(navigate)
+  const { isLoaded } = useLocation()
 
-  const verifyState = (isLoading) => {
-    if (!isLoading) return navigate('Home')
-  }
-
-  const verifyTravel = (loading) => {
-    if (!loading) {
-      if (data !== null && data !== undefined) {
-        dispatch({
-          type: ACTIVETRAVEL,
-          payload: data
-        })
-      }
+  useEffect(() => {
+    const verifyLoaded = () => {
+      if (!isLoaded) return navigate('Home')
     }
-  }
-
-  useEffect(() => {
-    verifyState(isLoading)
-  }, [verifyState, isLoading])
-
-  useEffect(() => {
-    verifyTravel(loading)
-  }, [loading])
+    verifyLoaded()
+  }, [isLoaded])
 
   return (
     <Background
       source={require('../../../assets/images/img-background-alyskiper.png')}
     >
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <LottieView
-            style={{
-              width: 300,
-              height: 300
-            }}
-            source={Location}
-            autoPlay
-            autoSize
-            resizeMode='contain'
-            loop
-          />
-          <Text allowFontScaling={false} style={styles.title}>OBTENIENDO UBICACION...</Text>
-        </View>
-      </SafeAreaView>
+      <View
+        style={{
+          backgroundColor: 'rgba(0,0,0,.3)',
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <LottieView
+          style={{
+            width: 300,
+            height: 300
+          }}
+          source={Location}
+          autoPlay
+          autoSize
+          resizeMode='contain'
+          loop
+        />
+        <Text style={styles.text}>OBTENIENDO UBICACION</Text>
+      </View>
     </Background>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,.45)'
-  },
-  title: {
+  text: {
     color: Theme.COLORS.colorParagraph,
     fontFamily: 'Lato-Bold',
-    fontSize: Theme.SIZES.small
-  },
-  image: {
-    resizeMode: 'contain',
-    width: 130,
-    height: 40
+    fontSize: Theme.SIZES.normal
   }
 })
 
