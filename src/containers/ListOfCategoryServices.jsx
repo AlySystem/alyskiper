@@ -6,7 +6,6 @@ import {
   Text
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
-import { useSelector } from 'react-redux'
 import { Picker } from '@react-native-community/picker'
 import { useQuery } from '@apollo/react-hooks'
 

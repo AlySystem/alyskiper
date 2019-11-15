@@ -104,7 +104,26 @@ const SignUpScreen = props => {
     setEmail(value.toLowerCase())
   }
 
-  const [numberPhone] = useState(props.navigation.getParam('number'))
+  const [numberPhone, setNumberPhone] = useState('')
+  const [phoneCode, setPhoneCode] = useState({})
+  const [numberPhoneIsValid, setNumberPhoneIsValid] = useState({
+    isValid: false,
+    message: '',
+    errorStyle: true
+  })
+  const handleOnChange = value => {
+    if (!value) {
+      setNumberPhoneIsValid({ isValid: false, message: 'El numero es requerido.', errorStyle: false })
+    } else {
+      setNumberPhoneIsValid({ isValid: true, message: '', errorStyle: true })
+    }
+    setNumberPhone(value)
+  }
+
+  const handleOnSelectPhone = (details) => {
+    setPhoneCode(details)
+  }
+
   const [details, setDetails] = useState('')
 
   const [password, setPassword] = useState('')
@@ -201,7 +220,7 @@ const SignUpScreen = props => {
                 email: email,
                 user: userName,
                 password: password,
-                phone: numberPhone,
+                phone: `${phoneCode.phoneCode}${numberPhone}`,
                 country_id: details,
                 sponsor_id: parseInt(sponsorId) || 1
               }
@@ -322,6 +341,28 @@ const SignUpScreen = props => {
                 isValid={userNameIsValid.isValid}
                 errorText={userNameIsValid.message}
               />
+
+              <View style={styles.containerRow}>
+                <ModalPicker
+                  handleOnSelect={handleOnSelectPhone}
+                />
+                <InputControl
+                  stylesContainer={styles.containerInput}
+                  value={numberPhone}
+                  isActiveIcon
+                  iconName='phone'
+                  iconSize={22}
+                  stylesIcon={styles.icon}
+                  placeholder='7728  9801'
+                  placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
+                  onChangeText={handleOnChange}
+                  keyboardType='number-pad'
+                  stylesError={styles.stylesError}
+                  stylesInput={[styles.input, { borderColor: numberPhoneIsValid.errorStyle ? Theme.COLORS.colorSecondary : 'red' }]}
+                  isValid={numberPhoneIsValid.isValid}
+                  errorText={numberPhoneIsValid.message}
+                />
+              </View>
 
               <InputControl
                 value={email}
@@ -485,6 +526,35 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorSecondary,
     fontFamily: 'Lato-Bold',
     fontSize: 14
+  },
+  containerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderColor: Theme.COLORS.colorSecondary,
+    borderWidth: 0.3,
+    borderRadius: 100,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    backgroundColor: Theme.COLORS.colorMainAlt,
+    marginBottom: height * 0.03
+  },
+  containerInput: {
+    position: 'relative'
+  },
+  input: {
+    width: 180,
+    height: 40,
+    paddingLeft: 48,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    color: Theme.COLORS.colorParagraph,
+    borderLeftColor: Theme.COLORS.colorSecondary,
+    borderLeftWidth: 0.3
+  },
+  icon: {
+    position: 'absolute',
+    top: 9,
+    left: 15
   }
 })
 
