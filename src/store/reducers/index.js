@@ -9,6 +9,7 @@ import { drivers } from './driver'
 import { favorite } from './favorite'
 import { activeTravel } from './activeTravel'
 import { address } from './address'
+import { direction } from './direction'
 
 const reducers = combineReducers({
   user,
@@ -19,7 +20,8 @@ const reducers = combineReducers({
   drivers,
   favorite,
   activeTravel,
-  address
+  address,
+  direction
 })
 
 export default reducers

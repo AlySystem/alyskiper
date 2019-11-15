@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Geolocation from 'react-native-geolocation-service'
 
 // Import screen

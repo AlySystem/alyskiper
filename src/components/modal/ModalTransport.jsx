@@ -18,7 +18,7 @@ import ListOfAddress from '../../containers/ListOfAddress'
 import { Theme } from '../../constants/Theme'
 
 const ModalTransport = props => {
-  const { isVisible, setIsVisible, navigation } = props
+  const { isVisible, setIsVisible, navigation, location } = props
 
   return (
     <Modal
@@ -47,6 +47,7 @@ const ModalTransport = props => {
             navigation={navigation}
             setIsVisible={setIsVisible}
             isVisible={isVisible}
+            location={location}
           />
           <View style={{ marginVertical: 20 }} />
           <Text

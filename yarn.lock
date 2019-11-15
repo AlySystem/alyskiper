@@ -958,6 +958,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-4.4.0.tgz#a18eb9ba082b6aca6add004b4a918250ad7d13bc"
   integrity sha512-qqNWMOsrDjj/daqV21ID2T8mNUjZD4pdx3PuWyE65gzKh2w+oMnzKb+J0NbLyZPn3wwLwU1+Cpf58A0ff5szjQ==
 
+"@react-native-community/picker@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/picker/-/picker-1.1.2.tgz#f6f8a0c7a3ec4bbf2cb9c05813e32ddfa090ce00"
+  integrity sha512-0bw1VmAt9q3aEIXnaELqkrFNEtuoIvok/JVG0SDoMIPrDGpv8YL7KMlGqu/kw8Zi52du/rTSx7Avv9Bc5mIJ9w==
+
 "@react-native-community/push-notification-ios@^1.0.1":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.0.2.tgz#541bc8ce088d726c4a98fff0e261b4d0f555cacf"
