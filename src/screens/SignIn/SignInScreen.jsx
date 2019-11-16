@@ -123,7 +123,7 @@ const SignInScreen = props => {
           type: USERDATA,
           payload
         })
-        navigate('Location')
+        navigate('Home')
       }
     }
   }
