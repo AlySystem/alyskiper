@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Vibration,
   Text,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { CameraKitCameraScreen } from 'react-native-camera-kit'
@@ -15,6 +16,8 @@ import { TRAVELTRACING } from '../../graphql/mutations/Mutations'
 
 // Import components
 import Loader from '../../components/loader/Loader'
+import InputControl from '../../components/input/InputControl'
+import IconButton from '../../components/button/IconButton'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -22,16 +25,43 @@ import { Theme } from '../../constants/Theme'
 const ScannerScreen = props => {
   const { navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
-  const { latitude, longitude } = useSelector(state => state.location)
+  const latitude = props.navigation.getParam('latitude')
+  const longitude = props.navigation.getParam('longitude')
+  const [manualQR, setManualQR] = useState(false)
+  const [codeQR, setCodeQR] = useState('')
   const [TravelTracing, { loading, data }] = useMutation(TRAVELTRACING)
 
   const handleOnReadyCode = async event => {
     Vibration.vibrate(1000)
-    const codeQR = event.nativeEvent.codeStringValue.split(' ')
-    const idTravel = codeQR[0]
-    const idUser = codeQR[1]
+    const scannerQR = event.nativeEvent.codeStringValue.split(' ')
+    const idTravel = scannerQR[0]
+    const idUser = scannerQR[1]
 
     if (parseInt(idUser) !== userId) {
+      showMessage({
+        message: 'Error',
+        description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
+        backgroundColor: 'red',
+        color: '#fff',
+        duration: 4000,
+        icon: 'danger',
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+      return
+    }
+    TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
+  }
+
+  const handleOnSubmit = () => {
+    const result = codeQR.split(' ')
+    const idTravel = result[0]
+    const idUser = result[1]
+    if (idUser !== userId) {
       showMessage({
         message: 'Error',
         description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
@@ -75,16 +105,63 @@ const ScannerScreen = props => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <CameraKitCameraScreen
-        style={{ flex: 1 }}
-        showFrame
-        scanBarcode
-        frameColor={Theme.COLORS.colorSecondary}
-        laserColor={Theme.COLORS.colorMainDark}
-        colorForScannerFrame='black'
-        onReadCode={handleOnReadyCode}
-      />
+    <View style={{
+      flex: 1,
+      backgroundColor: Theme.COLORS.colorMainAlt
+    }}
+    >
+      <TouchableOpacity
+        style={{
+          width: '100%',
+          marginVertical: 20,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+        onPress={() => setManualQR(!manualQR)}
+      >
+        <Text allowFontScaling={false} style={styles.text}>{manualQR ? 'ESCANEAR QR' : 'AGREGAR MANUAL'}</Text>
+      </TouchableOpacity>
+      {!manualQR && (
+        <CameraKitCameraScreen
+          style={{ flex: 1 }}
+          showFrame
+          scanBarcode
+          frameColor={Theme.COLORS.colorSecondary}
+          laserColor={Theme.COLORS.colorMainDark}
+          colorForScannerFrame='black'
+          onReadCode={handleOnReadyCode}
+        />
+      )}
+      {manualQR && (
+        <View style={{
+          flex: 1,
+          backgroundColor: Theme.COLORS.colorMainAlt,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: 20
+        }}
+        >
+          <Text style={{
+            color: Theme.COLORS.colorParagraph,
+            fontFamily: 'Lato-Bold',
+            fontSize: Theme.SIZES.small
+          }}
+          />
+          <InputControl
+            value={codeQR}
+            setValue={setCodeQR}
+            placeholder='Ingresa codigos'
+            placeholderTextColor={Theme.COLORS.colorParagraph}
+            onChangeText={value => setCodeQR(value)}
+            isActiveButton
+          />
+          <IconButton
+            isActiveIcon
+            message='CONFIRMAR'
+            onPress={handleOnSubmit}
+          />
+        </View>
+      )}
     </View>
   )
 }

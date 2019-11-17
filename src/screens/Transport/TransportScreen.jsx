@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { Polyline, Marker } from 'react-native-maps'
+import AnimatedPolyline from 'react-native-maps-animated-polyline'
 
 // Import actions
 import { REMOVEDIRECTION, DIRECTION } from '../../store/actionTypes'
@@ -83,6 +84,10 @@ const TransportScreen = props => {
       }
     })
   }
+
+  useEffect(() => {
+    console.log('cambio')
+  }, [silver, golden, president, vip])
 
   useEffect(() => {
     if (directions !== null) {
@@ -221,10 +226,16 @@ const TransportScreen = props => {
 
           {destination && (
             <>
-              <Polyline
+              {/* <Polyline
                 coordinates={destination}
                 strokeWidth={3}
                 strokeColor={Theme.COLORS.colorMainAlt}
+              /> */}
+              <AnimatedPolyline
+                coordinates={destination}
+                strokeWidth={3}
+                strokeColor={Theme.COLORS.colorMainAlt}
+                interval={20}
               />
               <Marker coordinate={destination[destination.length - 1]} />
             </>

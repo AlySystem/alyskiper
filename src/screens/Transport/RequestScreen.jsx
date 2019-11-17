@@ -90,8 +90,6 @@ const RequestScreen = props => {
         break
     }
 
-    console.log(finalArray)
-
     GetDriverNearby({
       variables: {
         lat: latitude, lng: longitude, inputdrive: finalArray
@@ -99,9 +97,7 @@ const RequestScreen = props => {
     })
       .then(({ data }) => {
         const driverId = data.ObtenerDriveCercano
-        console.log(data.ObtenerDriveCercano, 'idDriver')
         const { duration, distance, end_address, start_address, start_location, end_location } = steps
-        console.log(driverId)
         GenerateTravel({
           variables: {
             inputviaje: {
@@ -121,7 +117,6 @@ const RequestScreen = props => {
           }
         })
           .catch(error => {
-            console.log(error)
             showMessage({
               message: 'Error',
               description: `${error}`,

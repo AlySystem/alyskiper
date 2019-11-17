@@ -5,7 +5,7 @@ import { showMessage } from 'react-native-flash-message'
 import PubNubReact from 'pubnub-react'
 
 // Import actions types
-import { ACTIVETRAVEL, REMOVETRAVEL, REMOVEDETAILSTRAVEL, REMOVEACTIVETRAVEL } from '../store/actionTypes'
+import { ACTIVETRAVEL } from '../store/actionTypes'
 
 // Import subcriptions
 import { GETNOTIFICATIONTRAVEL } from '../graphql/subscription/Subcription'
@@ -68,15 +68,6 @@ export const useNotification = (navigate) => {
           notification('AlySkiper', 'Felicidades, has llegado a tu destino.')
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
-          })
-          dispatch({
-            type: REMOVETRAVEL
-          })
-          dispatch({
-            type: REMOVEDETAILSTRAVEL
-          })
-          dispatch({
-            type: REMOVEACTIVETRAVEL
           })
           navigate('FinalTravel')
           break

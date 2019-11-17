@@ -10,6 +10,7 @@ import { Marker } from 'react-native-maps'
 import { useQuery } from '@apollo/react-hooks'
 import { useSelector, useDispatch } from 'react-redux'
 import PubNubReact from 'pubnub-react'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 // Import actions
 import { DETAILSTRAVEL } from '../../store/actionTypes'
@@ -20,28 +21,30 @@ import Modal from '../../components/modal/Modal'
 import DetailsDrive from '../../components/details/DetailsDrive'
 import Button from '../../components/button/Button'
 import { Map } from '../../components/map/MapView'
+import Picture from '../../components/picture/Picture'
 
 // Import custom hooks
 import { useNotification } from '../../hooks/useNotification'
+import { useLocation } from '../../hooks/useLocation'
 
 // Import query
 import { GETTRAVELBYUSERID } from '../../graphql/querys/Querys'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-import Picture from '../../components/picture/Picture'
 
 const TravelTracingScreen = props => {
   const { navigate } = props.navigation
   const dispatch = useDispatch()
   const { userId, firstName } = useSelector(state => state.user)
-  const location = useSelector(state => state.location)
+  const { location } = useLocation()
   const [showDetails, setShowDetails] = useState(false)
-  const [errorTravel, setErroTravel] = useState(false)
+  const [errorTravel, setErrorTravel] = useState(false)
   const [connectionDriver, setConnectionDriver] = useState(false)
   const [driver, setDriver] = useState()
   const [idTravel] = useState(props.navigation.getParam('idTravel'))
   const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
+
   const mapView = useRef(null)
   useNotification(navigate)
 
@@ -56,6 +59,7 @@ const TravelTracingScreen = props => {
   useEffect(() => {
     if (!loading) {
       if (data.getTravelByUserId !== null) {
+        setErrorTravel(false)
         dispatch({
           type: DETAILSTRAVEL,
           payload: {
@@ -78,8 +82,8 @@ const TravelTracingScreen = props => {
             if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
               const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
               if (channels !== undefined) {
-                setConnectionDriver(true)
                 const drive = channels.occupants.filter(item => item.state !== undefined)
+                setConnectionDriver(false)
                 setDriver(drive)
               }
             }
@@ -107,10 +111,12 @@ const TravelTracingScreen = props => {
         //   })
         // }
       } else {
-        setErroTravel(true)
+        setErrorTravel(true)
       }
     }
   }, [loading, pubnub])
+
+  console.log(data)
 
   const handleToggleModal = () => {
     setShowDetails(!showDetails)
@@ -168,28 +174,49 @@ const TravelTracingScreen = props => {
           }}
         />
       </Modal>
-      <Map mapView={mapView} location={location}>
-        {driver && (
-          driver.map(drive => {
-            return (
-              <Marker
-                style={styles.marker}
-                key={drive.uuid}
-                coordinate={{
-                  latitude: drive.state.coords.latitude,
-                  longitude: drive.state.coords.longitude
-                }}
-              >
-                <Image
-                  style={styles.drive}
-                  source={require('../../../assets/images/img-icon-silver.png')}
-                />
+      {location.latitude && (
+        <Map mapView={mapView} location={location}>
+          {driver && (
+            driver.map(drive => {
+              return (
+                <Marker
+                  style={styles.marker}
+                  key={drive.uuid}
+                  coordinate={{
+                    latitude: drive.state.coords.latitude,
+                    longitude: drive.state.coords.longitude
+                  }}
+                >
+                  <Image
+                    style={styles.drive}
+                    source={require('../../../assets/images/img-icon-silver.png')}
+                  />
+                </Marker>
+              )
+            })
+          )}
+        </Map>
+      )}
 
-              </Marker>
-            )
-          })
-        )}
-      </Map>
+      {
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            right: 20,
+            top: 15,
+            width: 40,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+          onPress={() => navigate('Scanner', { latitude: location.latitude, longitude: location.longitude })}
+        >
+          <Icon
+            name='qrcode-scan'
+            size={40}
+            color={Theme.COLORS.colorMain}
+          />
+        </TouchableOpacity>
+      }
       {connectionDriver && (
         <Text style={{
           position: 'absolute',
@@ -261,7 +288,7 @@ const TravelTracingScreen = props => {
 
 const styles = StyleSheet.create({
   containerButton: {
-    position: 'absolute',
+    position: 'relative',
     bottom: 0,
     left: 0,
     width: '100%',

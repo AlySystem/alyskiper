@@ -69,7 +69,9 @@ const ListOfCategoryServices = props => {
       type: LOCATION,
       payload: {
         latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        latitudeDelta: 0.0143,
+        longitudeDelta: 0.0134
       }
     })
     navigate('Request')

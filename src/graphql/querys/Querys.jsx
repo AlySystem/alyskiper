@@ -84,6 +84,7 @@ export const GETTRAVELBYUSERID = gql`
           id
           firstname
           lastname
+          avatar
         }
       }
       skiperTravelsTracing {
