@@ -28,13 +28,13 @@ const items = [
     key: 2,
     icon: iconCommerce,
     title: 'Comercios',
-    routeName: 'Commerce'
+    routeName: 'Commerces'
   },
   {
     key: 3,
     icon: iconTransport,
     title: 'Transporte',
-    routeName: 'Transport'
+    routeName: 'Transports'
   }
 ]
 

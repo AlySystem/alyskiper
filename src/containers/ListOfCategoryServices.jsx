@@ -8,6 +8,10 @@ import {
 import * as Animatable from 'react-native-animatable'
 import { Picker } from '@react-native-community/picker'
 import { useQuery } from '@apollo/react-hooks'
+import { useDispatch } from 'react-redux'
+
+// Import actions
+import { DETAILSTRAVEL, LOCATION } from '../store/actionTypes'
 
 // Import querys
 import { CATEGORYTRAVEL } from '../graphql/querys/Querys'
@@ -16,7 +20,6 @@ import { CATEGORYTRAVEL } from '../graphql/querys/Querys'
 import { Theme } from '../constants/Theme'
 
 // Import components
-import CategoryServices from '../components/category/CategoryServices'
 import PriceService from '../components/price/PriceService'
 import IconButton from '../components/button/IconButton'
 import Background from '../components/background/Background'
@@ -28,6 +31,9 @@ import SkeletonServices from '../skeleton/SkeletonServices'
 const { height } = Dimensions.get('window')
 
 const ListOfCategoryServices = props => {
+  const dispatch = useDispatch()
+  const { navigate } = props.navigation
+  const { latitude, longitude } = props.location
   const [selectCategory, setSelectCategory] = useState(1)
   const { data, loading } = useQuery(CATEGORYTRAVEL)
 
@@ -52,12 +58,21 @@ const ListOfCategoryServices = props => {
     )
   }
 
-  const handleOnSelected = (categoryId, categoryName) => {
-
-  }
-
   const handleOnSubmit = () => {
-
+    dispatch({
+      type: DETAILSTRAVEL,
+      payload: {
+        travel: { categoryId: selectCategory, paymentMethod: 1 }
+      }
+    })
+    dispatch({
+      type: LOCATION,
+      payload: {
+        latitude: latitude,
+        longitude: longitude
+      }
+    })
+    navigate('Request')
   }
 
   return (
@@ -73,7 +88,6 @@ const ListOfCategoryServices = props => {
             <View style={{ marginVertical: 2 }} />
             <PriceService
               categoryId={selectCategory}
-              steps={props.steps}
               navigation={props.navigation}
             />
           </View>

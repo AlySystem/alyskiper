@@ -39,12 +39,8 @@ const CommerceScreen = props => {
           setDropDown={setDropDown}
           dropDown={dropDown}
         />
-        <ScrollView
-          keyboardShouldPersistTaps='always'
-        >
-          <ListOfCategory
-            handleOnPress={handleOnPress}
-          />
+        <ScrollView keyboardShouldPersistTaps='always'>
+          <ListOfCategory handleOnPress={handleOnPress} />
           {!categoryId && (
             <>
               <View style={{ marginVertical: 20 }}>
@@ -56,6 +52,7 @@ const CommerceScreen = props => {
           <ListOfFavorite />
           <View style={{ paddingVertical: 10 }} />
           <ListOfCommerce
+            location
             categoryId={categoryId}
             navigation={props.navigation}
           />

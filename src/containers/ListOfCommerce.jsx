@@ -17,10 +17,10 @@ import SkeletonProduct from '../skeleton/SkeletonProduct'
 
 const ListOfCommerce = props => {
   const { navigate } = props.navigation
-  const region = useSelector(state => state.location)
+  const { latitude, longitude, categoryId } = props.location
   const { userId } = useSelector(state => state.user)
   const [AddFavorite] = useMutation(ADDFAVORITE)
-  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: region.latitude, longitud: region.longitude, radio: 40000, id_category_product: props.categoryId } })
+  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: latitude, longitud: longitude, radio: 40000, id_category_product: categoryId } })
 
   if (loading) return <SkeletonProduct />
 
@@ -49,11 +49,13 @@ const ListOfCommerce = props => {
   }
 
   return (
-    <FlatList
-      data={data.CommercesIntoRadio}
-      renderItem={({ item }) => renderItem(item)}
-      keyExtractor={(item, index) => index.toString()}
-    />
+    <View>
+      <FlatList
+        data={data.CommercesIntoRadio}
+        renderItem={({ item }) => renderItem(item)}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
   )
 }
 

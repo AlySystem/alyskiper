@@ -1,28 +1,20 @@
-import { LOCATIONDETAILS, REMOVELOCATIONDETAILS } from '../actionTypes'
+import { LOCATION, REMOVELOCATION } from '../actionTypes'
 
 const INITIAL_STATE = {
-  location: {
-    latitude: null,
-    longitude: null,
-    latitudeDelta: 0.0143,
-    longitudeDelta: 0.0134
-  },
-  directionsDetails: null
+  latitude: null,
+  longitude: null
 }
 
 export const location = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case LOCATIONDETAILS: {
+    case LOCATION: {
       return {
         ...state,
         ...action.payload
       }
     }
-    case REMOVELOCATIONDETAILS: {
-      return {
-        ...state,
-        ...action.payload
-      }
+    case REMOVELOCATION: {
+      return INITIAL_STATE
     }
     default:
       return state

@@ -6,16 +6,20 @@ import {
   StyleSheet,
   Image
 } from 'react-native'
-import MapView, { Marker } from 'react-native-maps'
+import { Marker } from 'react-native-maps'
 import { useQuery } from '@apollo/react-hooks'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import PubNubReact from 'pubnub-react'
+
+// Import actions
+import { DETAILSTRAVEL } from '../../store/actionTypes'
 
 // Import components
 import Loader from '../../components/loader/Loader'
 import Modal from '../../components/modal/Modal'
 import DetailsDrive from '../../components/details/DetailsDrive'
 import Button from '../../components/button/Button'
+import { Map } from '../../components/map/MapView'
 
 // Import custom hooks
 import { useNotification } from '../../hooks/useNotification'
@@ -29,7 +33,8 @@ import Picture from '../../components/picture/Picture'
 
 const TravelTracingScreen = props => {
   const { navigate } = props.navigation
-  const { userId, firstName, lastName } = useSelector(state => state.user)
+  const dispatch = useDispatch()
+  const { userId, firstName } = useSelector(state => state.user)
   const location = useSelector(state => state.location)
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErroTravel] = useState(false)
@@ -51,6 +56,12 @@ const TravelTracingScreen = props => {
   useEffect(() => {
     if (!loading) {
       if (data.getTravelByUserId !== null) {
+        dispatch({
+          type: DETAILSTRAVEL,
+          payload: {
+            drive: data.getTravelByUserId
+          }
+        })
         pubnub.subscribe({
           channels: [`Driver_${idTravel || data.getTravelByUserId.id}`],
           withPresence: true
@@ -145,9 +156,7 @@ const TravelTracingScreen = props => {
         backdropTransitionInTiming={600}
         backdropTransitionOutTiming={600}
       >
-        <DetailsDrive
-          drive={data}
-        />
+        <DetailsDrive drive={data} />
         <Button
           iconName='close'
           iconSize={30}
@@ -159,17 +168,7 @@ const TravelTracingScreen = props => {
           }}
         />
       </Modal>
-      <MapView
-        style={{ flex: 1 }}
-        ref={mapView}
-        loadingBackgroundColor={Theme.COLORS.colorMainDark}
-        loadingIndicatorColor={Theme.COLORS.colorSecondary}
-        showsUserLocation
-        loadingEnabled
-        initialRegion={location}
-        showsCompass={false}
-        showsMyLocationButton={false}
-      >
+      <Map mapView={mapView} location={location}>
         {driver && (
           driver.map(drive => {
             return (
@@ -190,7 +189,7 @@ const TravelTracingScreen = props => {
             )
           })
         )}
-      </MapView>
+      </Map>
       {connectionDriver && (
         <Text style={{
           position: 'absolute',

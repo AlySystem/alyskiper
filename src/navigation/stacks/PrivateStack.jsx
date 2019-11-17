@@ -13,7 +13,11 @@ import DrawerStack from '../drawer/DrawerStack'
 // Import screens
 import CommerceScreen from '../../screens/Commerce/CommerceScreen'
 import ProfileCommerceScreen from '../../screens/Profile/ProfileCommerceScreen'
+
 import TransportScreen from '../../screens/Transport/TransportScreen'
+import RequestScreen from '../../screens/Transport/RequestScreen'
+import TravelTrancingScreen from '../../screens/Transport/TravelTracingScreen'
+
 import InvitedFriendScreen from '../../screens/InvitedFriend/InvitedFriendScreen'
 import ProfileUserScreen from '../../screens/Profile/ProfileUserScreen'
 import PaymentMethodScreen from '../../screens/PaymentMethod/PaymentMethodScreen'
@@ -21,12 +25,9 @@ import CryptoWalletScreen from '../../screens/CryptoWallet/CryptoWalletScreen'
 import ProductScreen from '../../screens/Product/ProductScreen'
 import AddressScreen from '../../screens/Address/AddressScreen'
 import NotificationScreen from '../../screens/Notification/NotificationScreen'
-import OfflineScreen from '../../screens/Offline/OfflineScreen'
 import AlyMoneyScreen from '../../screens/AlyMoney/AlyMoneyScreen'
-import DetailsTransportScreen from '../../screens/Transports/DetailsTransportScreen'
 import FixedMapScreen from '../../screens/FixedMap/FixedMapScreen'
 import ScannerScreen from '../../screens/Scanner/ScannerScreen'
-import TravelTrancingScreen from '../../screens/Transports/TravelTracingScreen'
 import AddAddressScreen from '../../screens/Address/AddAddressScreen'
 import MapAddressScreen from '../../screens/Address/MapAddressScreen'
 import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
@@ -157,9 +158,11 @@ const StackNavigation = createStackNavigator({
       header: null
     }
   },
-  DetailsTransport: {
-    screen: DetailsTransportScreen,
-    navigationOptions
+  Request: {
+    screen: RequestScreen,
+    navigationOptions: {
+      header: null
+    }
   },
   FixedMap: {
     screen: FixedMapScreen,
@@ -183,12 +186,6 @@ const StackNavigation = createStackNavigator({
   },
   MapAddress: {
     screen: MapAddressScreen,
-    navigationOptions: {
-      header: null
-    }
-  },
-  Offline: {
-    screen: OfflineScreen,
     navigationOptions: {
       header: null
     }

@@ -18,7 +18,7 @@ import Loader from '../loader/Loader'
 const PriceService = props => {
   const { navigate } = props.navigation
   const { country_id, cidy_id } = useSelector(state => state.user)
-  const { distance, duration } = props.steps
+  const { steps } = useSelector(state => state.direction)
   const [priceTotal, setPriceTotal] = useState(0)
 
   const { loading, data, error } = useQuery(CALCULATERATE, {
@@ -34,6 +34,7 @@ const PriceService = props => {
   useEffect(() => {
     const calculate = () => {
       if (!loading) {
+        const { duration, distance } = steps
         const durationMin = duration.value / 60
         const distanceKm = distance.value / 1000
 

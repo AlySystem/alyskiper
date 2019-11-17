@@ -9,7 +9,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux'
 
 // Import action types
-import { DIRECCION } from '../../store/actionTypes'
+import { DIRECTION } from '../../store/actionTypes'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -35,7 +35,6 @@ const Search = props => {
     const data = await response.json()
 
     setPredictions(data.predictions)
-    console.log(data)
   }
 
   return (
@@ -71,7 +70,7 @@ const Search = props => {
               setValue(item.structured_formatting.main_text)
               Keyboard.dismiss()
               dispatch({
-                type: DIRECCION,
+                type: DIRECTION,
                 payload: {
                   directions: {
                     placeId: item.place_id,

@@ -3,13 +3,15 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  BackHandler,
+  Image
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { Polyline, Marker } from 'react-native-maps'
 
 // Import actions
-import { DIRECCION } from '../../store/actionTypes'
+import { REMOVEDIRECTION, DIRECTION } from '../../store/actionTypes'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -24,6 +26,15 @@ import ModalTransport from '../../components/modal/ModalTransport'
 import Button from '../../components/button/Button'
 import Loader from '../../components/loader/Loader'
 
+// Import image
+import silverMarker from '../../../assets/images/img-icon-silver.png'
+import goldenMarker from '../../../assets/images/img-icon-golden.png'
+import vipMarker from '../../../assets/images/img-icon-vip.png'
+import presidentMarker from '../../../assets/images/img-icon-president.png'
+
+// Import hooks
+import { usePubnub } from '../../hooks/usePubnub'
+
 // Import containers
 import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
 
@@ -35,16 +46,19 @@ const { height, width } = Dimensions.get('window')
 
 const TransportScreen = props => {
   const dispatch = useDispatch()
+  const { navigate } = props.navigation
   const { location, loading } = useLocation()
   const { firstName } = useSelector(state => state.user)
   const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)
   const [destination, setDestination] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const { silver, golden, vip, president } = usePubnub()
   const [, setDetails] = useState('')
-  const [steps, setSteps] = useState(null)
+  const marker = useRef(null)
 
   const mapView = useRef(null)
+  let backHandler
 
   const handleDirecctions = async (placeId, details) => {
     setIsLoading(true)
@@ -52,8 +66,14 @@ const TransportScreen = props => {
     const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
     setIsLoading(false)
     setDestination(pointCoords)
-    setSteps(steps)
     setDetails(details)
+
+    dispatch({
+      type: DIRECTION,
+      payload: {
+        steps
+      }
+    })
     mapView.current.fitToCoordinates(pointCoords, {
       edgePadding: {
         right: getPixelSize(50),
@@ -71,14 +91,25 @@ const TransportScreen = props => {
     }
   }, [directions])
 
+  useEffect(() => {
+    backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      setDestination(null)
+      dispatch({
+        type: REMOVEDIRECTION
+      })
+      navigate('home')
+      return false
+    })
+    return () => {
+      backHandler.remove()
+    }
+  }, [])
+
   const handleBack = () => {
     setDestination(null)
 
     dispatch({
-      type: DIRECCION,
-      payload: {
-        directions: null
-      }
+      type: REMOVEDIRECTION
     })
   }
 
@@ -95,6 +126,99 @@ const TransportScreen = props => {
           mapView={mapView}
           location={location}
         >
+
+          {silver && (
+            silver.map(drive => (
+              <Marker
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={{
+                    width: 35,
+                    height: 35,
+                    resizeMode: 'contain'
+                  }}
+                  source={silverMarker}
+                />
+              </Marker>
+            ))
+          )}
+
+          {golden && (
+            golden.map(drive => (
+              <Marker
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={{
+                    width: 35,
+                    height: 35,
+                    resizeMode: 'contain'
+                  }}
+                  source={goldenMarker}
+                />
+              </Marker>
+            ))
+          )}
+
+          {vip && (
+            vip.map(drive => (
+              <Marker
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={{
+                    width: 35,
+                    height: 35,
+                    resizeMode: 'contain'
+                  }}
+                  source={vipMarker}
+                />
+              </Marker>
+            ))
+          )}
+
+          {president && (
+            president.map(drive => (
+              <Marker
+                style={styles.marker}
+                key={drive.uuid}
+                coordinate={{
+                  latitude: drive.state.coords.latitude,
+                  longitude: drive.state.coords.longitude
+                }}
+                ref={marker}
+              >
+                <Image
+                  style={{
+                    width: 35,
+                    height: 35,
+                    resizeMode: 'contain'
+                  }}
+                  source={presidentMarker}
+                />
+              </Marker>
+            ))
+          )}
+
           {destination && (
             <>
               <Polyline
@@ -117,7 +241,7 @@ const TransportScreen = props => {
             iconColor={Theme.COLORS.colorMainAlt}
           />
           <ListOfCategoryServices
-            steps={steps}
+            location={location}
             navigation={props.navigation}
           />
         </>

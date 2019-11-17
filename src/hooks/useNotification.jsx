@@ -48,6 +48,7 @@ export const useNotification = (navigate) => {
               fontFamily: 'Lato-Regular'
             }
           })
+          navigate('Transport')
           break
         case 3:
           notification('Transporte', 'Tu solicitud de viaje fue aceptada con exito.')
@@ -65,7 +66,6 @@ export const useNotification = (navigate) => {
           break
         case 8:
           notification('AlySkiper', 'Felicidades, has llegado a tu destino.')
-          navigate('FinalTravel')
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
@@ -78,6 +78,7 @@ export const useNotification = (navigate) => {
           dispatch({
             type: REMOVEACTIVETRAVEL
           })
+          navigate('FinalTravel')
           break
       }
     }
