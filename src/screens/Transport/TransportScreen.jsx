@@ -226,16 +226,10 @@ const TransportScreen = props => {
 
           {destination && (
             <>
-              {/* <Polyline
+              <Polyline
                 coordinates={destination}
                 strokeWidth={3}
                 strokeColor={Theme.COLORS.colorMainAlt}
-              /> */}
-              <AnimatedPolyline
-                coordinates={destination}
-                strokeWidth={3}
-                strokeColor={Theme.COLORS.colorMainAlt}
-                interval={20}
               />
               <Marker coordinate={destination[destination.length - 1]} />
             </>

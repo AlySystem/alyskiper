@@ -34,7 +34,7 @@ const items = [
     key: 3,
     icon: iconTransport,
     title: 'Transporte',
-    routeName: 'FinalTravel'
+    routeName: 'Transport'
   }
 ]
 

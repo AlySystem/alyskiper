@@ -26,7 +26,8 @@ const FinalTravelScreen = props => {
   const dispatch = useDispatch()
   const [star, setStar] = useState()
   const [value, setValue] = useState('')
-  const { drive } = useSelector(state => state.drive)
+  const { drive } = useSelector(state => state.travel)
+  // const driverId = drive.id
   console.log(drive)
 
   const handleOnSubmit = () => {
@@ -62,7 +63,7 @@ const FinalTravelScreen = props => {
                 borderRadius: 200
               }}
               sourceLazy={require('../../../assets/images/img-lazy.png')}
-              source={require('../../../assets/images/img-lazy.png')}
+              source={{ uri: drive.skiperagent.user.avatar }}
               styleImage={{
                 width: 100,
                 height: 100,
@@ -72,7 +73,7 @@ const FinalTravelScreen = props => {
               }}
             />
             <View style={{ marginVertical: 10 }} />
-            <Text allowFontScaling={false} style={styles.driveName}>Nombre del drive</Text>
+            <Text allowFontScaling={false} style={styles.driveName}>{drive.skiperagent.user.firstname}</Text>
             <View style={{ marginVertical: 5 }} />
             <Stars
               default={2.5}

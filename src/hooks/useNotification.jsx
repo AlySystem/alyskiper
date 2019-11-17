@@ -11,6 +11,7 @@ import { ACTIVETRAVEL } from '../store/actionTypes'
 import { GETNOTIFICATIONTRAVEL } from '../graphql/subscription/Subcription'
 
 import { notification } from '../hooks/usePushNotification'
+import { useLocation } from '../hooks/useLocation'
 
 export const useNotification = (navigate) => {
   const dispatch = useDispatch()

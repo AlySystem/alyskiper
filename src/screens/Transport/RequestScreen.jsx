@@ -29,7 +29,6 @@ import { Theme } from '../../constants/Theme'
 const RequestScreen = props => {
   const dispatch = useDispatch()
   const { goBack, navigate } = props.navigation
-  useNotification(navigate)
   const { userId } = useSelector(state => state.user)
   const { travel } = useSelector(state => state.travel)
   const { steps } = useSelector(state => state.direction)
@@ -37,6 +36,7 @@ const RequestScreen = props => {
   const { silver, golden, vip, president } = useSelector(state => state.drivers)
   const [GetDriverNearby, { error }] = useMutation(GETDRIVERNEARBY)
   const [GenerateTravel] = useMutation(GENERATETRAVEL)
+  useNotification(navigate)
 
   const handleOnCancel = () => {
     dispatch({

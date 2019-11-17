@@ -116,8 +116,6 @@ const TravelTracingScreen = props => {
     }
   }, [loading, pubnub])
 
-  console.log(data)
-
   const handleToggleModal = () => {
     setShowDetails(!showDetails)
   }

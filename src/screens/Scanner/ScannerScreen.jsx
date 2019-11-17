@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Vibration,
@@ -10,6 +10,9 @@ import { showMessage } from 'react-native-flash-message'
 import { CameraKitCameraScreen } from 'react-native-camera-kit'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
+
+// Import utils
+import { permissionCamera } from '../../utils/PermissionCamera'
 
 // Import mutations
 import { TRAVELTRACING } from '../../graphql/mutations/Mutations'
@@ -30,6 +33,13 @@ const ScannerScreen = props => {
   const [manualQR, setManualQR] = useState(false)
   const [codeQR, setCodeQR] = useState('')
   const [TravelTracing, { loading, data }] = useMutation(TRAVELTRACING)
+
+  useEffect(() => {
+    const verifyPermission = async () => {
+      await permissionCamera()
+    }
+    verifyPermission()
+  }, [])
 
   const handleOnReadyCode = async event => {
     Vibration.vibrate(1000)
@@ -58,7 +68,7 @@ const ScannerScreen = props => {
   }
 
   const handleOnSubmit = () => {
-    const result = codeQR.split(' ')
+    const result = codeQR.split(',')
     const idTravel = result[0]
     const idUser = result[1]
     if (idUser !== userId) {
@@ -150,7 +160,7 @@ const ScannerScreen = props => {
           <InputControl
             value={codeQR}
             setValue={setCodeQR}
-            placeholder='Ingresa codigos'
+            placeholder='Ingresa el codigo'
             placeholderTextColor={Theme.COLORS.colorParagraph}
             onChangeText={value => setCodeQR(value)}
             isActiveButton
