@@ -116,7 +116,7 @@ const SignInScreen = props => {
           avatar: data.avatar,
           country: data.country.name,
           country_id: data.country.id,
-          cidy_id: data.city ? data.cidy.id : null,
+          city_id: data.city ? data.city.id : null,
           iso: data.country.iso.toLowerCase()
         }
         setAsyncStorage(keys.asyncStorageKey, payload)

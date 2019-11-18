@@ -49,7 +49,7 @@ const TransportScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { location, loading } = useLocation()
-  const { firstName, cidy_id } = useSelector(state => state.user)
+  const { firstName, city_id } = useSelector(state => state.user)
   const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)
   const [destination, setDestination] = useState(null)
@@ -63,11 +63,10 @@ const TransportScreen = props => {
 
   useEffect(() => {
     const verifyCity = () => {
-      console.log(cidy_id)
-      if (cidy_id === null || cidy_id === undefined) {
+      if (city_id === null || city_id === undefined) {
         Alert.alert(
           'ADVERTENCIA',
-          'Para usar nuestros servicios complete su perfil',
+          'Para usar nuestros servicios complete su perfil.',
           [
             {
               text: 'Cancel',
@@ -81,7 +80,7 @@ const TransportScreen = props => {
       }
     }
     verifyCity()
-  }, [cidy_id])
+  }, [city_id])
 
   const handleDirecctions = async (placeId, details) => {
     setIsLoading(true)
@@ -279,7 +278,7 @@ const TransportScreen = props => {
         >
           <Loader color={Theme.COLORS.colorMainAlt} />
         </View>
-      ) : (
+      ) : city_id && (
         <TouchableOpacity
           onPress={() => setIsVisible(!isVisible)}
           style={styles.containerInput}
