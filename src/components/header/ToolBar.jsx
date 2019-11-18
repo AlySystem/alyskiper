@@ -17,7 +17,6 @@ import { Theme } from '../../constants/Theme'
 
 const ToolBar = props => {
   const { navigate } = props.navigation
-
   return (
     <View style={styles.container}>
       <Button

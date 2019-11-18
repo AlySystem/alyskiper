@@ -24,7 +24,6 @@ import { Theme } from '../constants/Theme'
 
 const ListOfAddress = props => {
   const dispatch = useDispatch()
-  const { navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
   const { loading, error, data } = useQuery(GETALLADDRESS, { variables: { id: userId } })
 

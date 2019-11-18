@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react'
 import {
   View,
+  Text,
   StyleSheet,
   SafeAreaView
 } from 'react-native'
 import MapView from 'react-native-maps'
-import { useSelector } from 'react-redux'
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome5'
 import Geocoder from 'react-native-geocoding'
 
@@ -19,11 +19,15 @@ import InputControl from '../../components/input/InputControl'
 // Import utils
 import { keys } from '../../utils/keys'
 
+// Import hooks
+import { useLocation } from '../../hooks/useLocation'
+
 Geocoder.init(`${keys.googleMaps.apiKey}`)
 
 const MapAddressScreen = props => {
   const { navigate } = props.navigation
-  const [region, setRegion] = useState(useSelector(state => state.location))
+  const { location, loading } = useLocation()
+  const [region, setRegion] = useState('')
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [details, setDetails] = useState({})
@@ -47,6 +51,25 @@ const MapAddressScreen = props => {
     setIsLoading(false)
   }
 
+  if (loading) {
+    return (
+      <View style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Theme.COLORS.colorMainAlt
+      }}
+      >
+        <Text style={{
+          color: Theme.COLORS.colorParagraph,
+          fontFamily: 'Lato-Regular'
+        }}
+        >CARGANDO...
+        </Text>
+      </View>
+    )
+  }
+
   const handleOnSubmit = () => {
     navigate('AddAddress', { details })
   }
@@ -59,7 +82,7 @@ const MapAddressScreen = props => {
         loadingIndicatorColor={Theme.COLORS.colorSecondary}
         showsUserLocation
         loadingEnabled
-        initialRegion={region}
+        initialRegion={location}
         onRegionChangeComplete={handleOnRegionChange}
         showsCompass={false}
         showsMyLocationButton={false}

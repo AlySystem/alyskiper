@@ -17,7 +17,8 @@ import SkeletonProduct from '../skeleton/SkeletonProduct'
 
 const ListOfCommerce = props => {
   const { navigate } = props.navigation
-  const { latitude, longitude, categoryId } = props.location
+  const { latitude, longitude } = props.location
+  const { categoryId } = props
   const { userId } = useSelector(state => state.user)
   const [AddFavorite] = useMutation(ADDFAVORITE)
   const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: latitude, longitud: longitude, radio: 40000, id_category_product: categoryId } })

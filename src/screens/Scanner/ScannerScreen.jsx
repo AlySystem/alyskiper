@@ -68,7 +68,7 @@ const ScannerScreen = props => {
   }
 
   const handleOnSubmit = () => {
-    const result = codeQR.split(',')
+    const result = codeQR.split('-')
     const idTravel = result[0]
     const idUser = result[1]
     if (idUser !== userId) {
@@ -88,6 +88,7 @@ const ScannerScreen = props => {
       })
       return
     }
+    console.log(idTravel, latitude, longitude)
     TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
   }
 

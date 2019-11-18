@@ -86,10 +86,6 @@ const TransportScreen = props => {
   }
 
   useEffect(() => {
-    console.log('cambio')
-  }, [silver, golden, president, vip])
-
-  useEffect(() => {
     if (directions !== null) {
       const { placeId, address } = directions
       handleDirecctions(placeId, address)

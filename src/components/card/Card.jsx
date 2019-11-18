@@ -112,7 +112,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   containerTitle: {
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    flexWrap: 'wrap'
   },
   name: {
     color: Theme.COLORS.colorParagraph,
@@ -122,7 +123,8 @@ const styles = StyleSheet.create({
   description: {
     color: Theme.COLORS.colorParagraphSecondary,
     fontFamily: 'Lato-Regular',
-    fontSize: Theme.SIZES.xsmall
+    fontSize: Theme.SIZES.xsmall,
+    flexWrap: 'wrap'
   },
   containerImage: {
     position: 'relative'

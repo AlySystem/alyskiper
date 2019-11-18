@@ -58,7 +58,7 @@ export const useNotification = (navigate) => {
           })
           dispatch({
             type: ACTIVETRAVEL,
-            payload: idTravel
+            payload: { travel: idTravel }
           })
           break
         case 4:
