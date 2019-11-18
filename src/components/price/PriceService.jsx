@@ -24,7 +24,7 @@ const PriceService = props => {
   const { loading, data, error } = useQuery(CALCULATERATE, {
     variables: {
       idcountry: country_id,
-      idcity: 1,
+      idcity: cidy_id,
       idcategoriaviaje: props.categoryId,
       date_init: `${moment().format('YYYY-MM-DD')} ${moment().format('HH:mm:ss')}`
     }

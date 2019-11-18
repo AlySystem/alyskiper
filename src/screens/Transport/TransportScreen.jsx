@@ -5,11 +5,11 @@ import {
   StyleSheet,
   Dimensions,
   BackHandler,
-  Image
+  Image,
+  Alert
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { Polyline, Marker } from 'react-native-maps'
-import AnimatedPolyline from 'react-native-maps-animated-polyline'
 
 // Import actions
 import { REMOVEDIRECTION, DIRECTION } from '../../store/actionTypes'
@@ -49,7 +49,7 @@ const TransportScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { location, loading } = useLocation()
-  const { firstName } = useSelector(state => state.user)
+  const { firstName, cidy_id } = useSelector(state => state.user)
   const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)
   const [destination, setDestination] = useState(null)
@@ -60,6 +60,28 @@ const TransportScreen = props => {
 
   const mapView = useRef(null)
   let backHandler
+
+  useEffect(() => {
+    const verifyCity = () => {
+      console.log(cidy_id)
+      if (cidy_id === null || cidy_id === undefined) {
+        Alert.alert(
+          'ADVERTENCIA',
+          'Para usar nuestros servicios complete su perfil',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => navigate('Home'),
+              style: 'cancel'
+            },
+            { text: 'OK', onPress: () => navigate('ProfileUser') }
+          ],
+          { cancelable: false }
+        )
+      }
+    }
+    verifyCity()
+  }, [cidy_id])
 
   const handleDirecctions = async (placeId, details) => {
     setIsLoading(true)

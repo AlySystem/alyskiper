@@ -141,7 +141,7 @@ const RequestScreen = props => {
       if (error) {
         showMessage({
           message: 'Error',
-          description: `${error.graphQLErrors[0].message} en tu zona para esta categoria, por favor seleccione otra categorias.`,
+          description: `${error.graphQLErrors[0].message} en tu zona para esta categoria, por favor seleccione otra categoria.`,
           backgroundColor: 'red',
           color: '#fff',
           icon: 'danger',
