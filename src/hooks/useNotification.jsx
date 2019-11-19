@@ -5,12 +5,13 @@ import { showMessage } from 'react-native-flash-message'
 import PubNubReact from 'pubnub-react'
 
 // Import actions types
-import { ACTIVETRAVEL, REMOVETRAVEL, REMOVEDETAILSTRAVEL, REMOVEACTIVETRAVEL } from '../store/actionTypes'
+import { ACTIVETRAVEL } from '../store/actionTypes'
 
 // Import subcriptions
 import { GETNOTIFICATIONTRAVEL } from '../graphql/subscription/Subcription'
 
 import { notification } from '../hooks/usePushNotification'
+import { useLocation } from '../hooks/useLocation'
 
 export const useNotification = (navigate) => {
   const dispatch = useDispatch()
@@ -48,6 +49,7 @@ export const useNotification = (navigate) => {
               fontFamily: 'Lato-Regular'
             }
           })
+          navigate('Transport')
           break
         case 3:
           notification('Transporte', 'Tu solicitud de viaje fue aceptada con exito.')
@@ -56,7 +58,7 @@ export const useNotification = (navigate) => {
           })
           dispatch({
             type: ACTIVETRAVEL,
-            payload: idTravel
+            payload: { travel: idTravel }
           })
           break
         case 4:
@@ -65,19 +67,10 @@ export const useNotification = (navigate) => {
           break
         case 8:
           notification('AlySkiper', 'Felicidades, has llegado a tu destino.')
-          navigate('FinalTravel')
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
-          dispatch({
-            type: REMOVETRAVEL
-          })
-          dispatch({
-            type: REMOVEDETAILSTRAVEL
-          })
-          dispatch({
-            type: REMOVEACTIVETRAVEL
-          })
+          navigate('FinalTravel')
           break
       }
     }

@@ -34,6 +34,7 @@ export const usePubnub = () => {
 
     function (status, response) {
       let silver, golden, vip, president
+      console.log(response)
 
       if (response !== undefined) {
         if ('SkiperDrive_1' in response.channels) {

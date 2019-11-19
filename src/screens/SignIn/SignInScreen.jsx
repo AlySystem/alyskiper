@@ -116,14 +116,17 @@ const SignInScreen = props => {
           avatar: data.avatar,
           country: data.country.name,
           country_id: data.country.id,
+          city_id: data.city ? data.city.id : null,
+          cityName: data.city ? data.city.name : null,
           iso: data.country.iso.toLowerCase()
         }
+        console.log('data signin', payload)
         setAsyncStorage(keys.asyncStorageKey, payload)
         dispatch({
           type: USERDATA,
           payload
         })
-        navigate('Location')
+        navigate('Home')
       }
     }
   }

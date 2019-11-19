@@ -84,6 +84,7 @@ export const GETTRAVELBYUSERID = gql`
           id
           firstname
           lastname
+          avatar
         }
       }
       skiperTravelsTracing {
@@ -158,6 +159,15 @@ export const GETALLADDRESS = gql`
         name
         url_img
       }
+    }
+  }
+`
+
+export const SEARCHCITY = gql`
+  query searchCityByCountryId ($id: Int!) {
+    searchCityByCountryId (id: $id) {
+      id
+      name
     }
   }
 `

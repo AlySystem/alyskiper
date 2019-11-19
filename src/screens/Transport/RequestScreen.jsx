@@ -1,55 +1,56 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
-  StyleSheet,
-  ScrollView
+  Text,
+  StyleSheet
 } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/react-hooks'
-import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
-
-// Import custom hooks
-import { useNotification } from '../../hooks/useNotification'
 
 // Import querys
 import { GETDRIVERNEARBY, GENERATETRAVEL } from '../../graphql/mutations/Mutations'
 
+// Import actions
+import { REMOVEDETAILSTRAVEL, REMOVELOCATION } from '../../store/actionTypes'
+
+// Import hooks
+import { useNotification } from '../../hooks/useNotification'
+
 // Import components
 import Background from '../../components/background/Background'
 import IconButton from '../../components/button/IconButton'
-import DetailsTravel from '../../components/details/DetailsTravel'
+import Picture from '../../components/picture/Picture'
+import Loader from '../../components/loader/Loader'
 
-const DetailsTransportScreen = props => {
-  const { navigate } = props.navigation
-  const { categoryId, category, steps } = useSelector(state => state.travel)
+// Import theme
+import { Theme } from '../../constants/Theme'
+
+const RequestScreen = props => {
+  const dispatch = useDispatch()
+  const { goBack, navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
+  const { travel } = useSelector(state => state.travel)
+  const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
   const { silver, golden, vip, president } = useSelector(state => state.drivers)
-  const [isLoading, setIsLoading] = useState(false)
-  const [GetDriverNearby, { data, error, loading }] = useMutation(GETDRIVERNEARBY)
+  const [GetDriverNearby, { error }] = useMutation(GETDRIVERNEARBY)
   const [GenerateTravel] = useMutation(GENERATETRAVEL)
   useNotification(navigate)
 
-  if (error) {
-    showMessage({
-      message: 'Error',
-      description: `${error.graphQLErrors[0].message} en tu zona para esta categoria, por favor seleccione otra categorias.`,
-      backgroundColor: 'red',
-      color: '#fff',
-      icon: 'danger',
-      duration: 4000,
-      titleStyle: {
-        fontFamily: 'Lato-Bold'
-      },
-      textStyle: {
-        fontFamily: 'Lato-Regular'
-      }
+  const handleOnCancel = () => {
+    dispatch({
+      type: REMOVEDETAILSTRAVEL
     })
+    dispatch({
+      type: REMOVELOCATION
+    })
+    goBack()
   }
 
-  const handleOnSubmit = async () => {
+  useEffect(() => {
     const finalArray = []
-    setIsLoading(true)
+    const { categoryId } = travel
     switch (categoryId) {
       case 1:
         silver.map(drive => {
@@ -88,16 +89,15 @@ const DetailsTransportScreen = props => {
         })
         break
     }
-    GetDriverNearby({ variables: { lat: latitude, lng: longitude, inputdrive: finalArray } })
-    setIsLoading(false)
-  }
 
-  useEffect(() => {
-    const verifyData = () => {
-      if (data) {
+    GetDriverNearby({
+      variables: {
+        lat: latitude, lng: longitude, inputdrive: finalArray
+      }
+    })
+      .then(({ data }) => {
         const driverId = data.ObtenerDriveCercano
         const { duration, distance, end_address, start_address, start_location, end_location } = steps
-
         GenerateTravel({
           variables: {
             inputviaje: {
@@ -116,16 +116,14 @@ const DetailsTransportScreen = props => {
             }
           }
         })
-          .then(result => {
-            console.log('no tiene nada que ver', result)
-          })
           .catch(error => {
             showMessage({
               message: 'Error',
-              description: `${error.graphQLErrors[0].message}`,
+              description: `${error}`,
               backgroundColor: 'red',
               color: '#fff',
               icon: 'danger',
+              duration: 8000,
               titleStyle: {
                 fontFamily: 'Lato-Bold'
               },
@@ -133,34 +131,57 @@ const DetailsTransportScreen = props => {
                 fontFamily: 'Lato-Regular'
               }
             })
+            goBack()
           })
+      })
+  }, [])
+
+  useEffect(() => {
+    const verifyError = () => {
+      if (error) {
+        showMessage({
+          message: 'Error',
+          description: `${error.graphQLErrors[0].message} en tu zona para esta categoria, por favor seleccione otra categoria.`,
+          backgroundColor: 'red',
+          color: '#fff',
+          icon: 'danger',
+          duration: 12000,
+          titleStyle: {
+            fontFamily: 'Lato-Bold'
+          },
+          textStyle: {
+            fontFamily: 'Lato-Regular'
+          }
+        })
+        goBack()
       }
     }
-    verifyData()
-  }, [data])
+    verifyError()
+  }, [error])
 
   return (
     <Background>
       <View style={styles.screen}>
-        <ScrollView
-          keyboardShouldPersistTaps='always'
-        >
-          <DetailsTravel
-            steps={steps}
-            categoryId={categoryId}
-            category={category}
-          />
-          <View
-            style={{ marginBottom: 30, justifyContent: 'center', alignItems: 'center' }}
-          >
+        <View style={styles.layout}>
+          <Picture source={require('../../../assets/images/img-alyskiper-masked.png')} />
+          <View style={{ marginVertical: 5 }} />
+          <Loader />
+          <View style={{ marginVertical: 10 }} />
+          <Text style={{
+            color: Theme.COLORS.colorParagraph,
+            fontFamily: 'Lato-Bold',
+            fontSize: Theme.SIZES.normal
+          }}
+          >SOLICITANDO SKIPER...
+          </Text>
+          <View style={styles.containerButton}>
             <IconButton
-              message='SOLICITAR'
-              isLoading={loading || isLoading}
               isActiveIcon
-              onPress={handleOnSubmit}
+              onPress={() => handleOnCancel}
+              message='CANCELAR SKIPER'
             />
           </View>
-        </ScrollView>
+        </View>
       </View>
     </Background>
   )
@@ -168,9 +189,23 @@ const DetailsTransportScreen = props => {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: 'rgba(0,0,0,.5)',
-    flex: 1
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,.5)'
+  },
+  layout: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  containerButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 30
   }
 })
 
-export default DetailsTransportScreen
+export default RequestScreen

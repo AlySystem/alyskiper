@@ -1,7 +1,8 @@
 import { DETAILSTRAVEL, REMOVEDETAILSTRAVEL } from '../actionTypes'
 
 const INITIAL_STATE = {
-  travel: null
+  travel: null,
+  drive: null
 }
 
 export const travel = (state = INITIAL_STATE, action) => {

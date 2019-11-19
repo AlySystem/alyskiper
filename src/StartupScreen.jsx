@@ -42,6 +42,7 @@ const StartupScreen = props => {
         navigate('Welcome')
         return
       }
+      console.log('userParse', userParse)
 
       const payload = {
         auth: true,
@@ -55,13 +56,16 @@ const StartupScreen = props => {
         avatar: userParse.avatar,
         country: userParse.country,
         country_id: userParse.country_id,
+        city_id: userParse.city_id ? userParse.city_id : null,
+        cityName: userParse.cityName ? userParse.cityName : null,
         iso: userParse.iso
       }
+      console.log('PAYLOAD STARTUP', payload)
       dispatch({
         type: USERDATA,
         payload
       })
-      navigate('Location')
+      navigate('Home')
     }
     trySignIn()
   }, [])

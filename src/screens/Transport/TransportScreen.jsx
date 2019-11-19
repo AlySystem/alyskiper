@@ -1,28 +1,31 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import {
   View,
+  TouchableOpacity,
   StyleSheet,
   Dimensions,
-  TouchableOpacity,
-  Text,
-  Image
+  BackHandler,
+  Image,
+  Alert
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import * as Animatable from 'react-native-animatable'
-import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome5'
-import MapView, { Polyline, Marker } from 'react-native-maps'
+import { Polyline, Marker } from 'react-native-maps'
+
+// Import actions
+import { REMOVEDIRECTION, DIRECTION } from '../../store/actionTypes'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
+// Import custom hooks
+import { useLocation } from '../../hooks/useLocation'
+
 // Import components
+import { Map } from '../../components/map/MapView'
 import InputControl from '../../components/input/InputControl'
-import Modal from '../../components/modal/Modal'
-import Icon from '../../components/icon/Icon'
-import Search from '../../components/search/Search'
-import Loader from '../../components/loader/Loader'
+import ModalTransport from '../../components/modal/ModalTransport'
 import Button from '../../components/button/Button'
-import Details from '../../components/details/Details'
+import Loader from '../../components/loader/Loader'
 
 // Import image
 import silverMarker from '../../../assets/images/img-icon-silver.png'
@@ -30,152 +33,121 @@ import goldenMarker from '../../../assets/images/img-icon-golden.png'
 import vipMarker from '../../../assets/images/img-icon-vip.png'
 import presidentMarker from '../../../assets/images/img-icon-president.png'
 
-// Import custom hooks
+// Import hooks
 import { usePubnub } from '../../hooks/usePubnub'
 
-// Import container
+// Import containers
 import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
-import ListOfAddress from '../../containers/ListOfAddress'
 
 // Import utils
-import { routeDirection } from '../../utils/Directions'
 import { getPixelSize } from '../../utils/Pixel'
+import { routeDirection } from '../../utils/Directions'
 
-// Import actions types
-import { REMOVELOCATIONDETAILS } from '../../store/actionTypes'
-
-const { width, height } = Dimensions.get('window')
+const { height, width } = Dimensions.get('window')
 
 const TransportScreen = props => {
-  const { navigate } = props.navigation
   const dispatch = useDispatch()
-  const userData = useSelector(state => state.user)
-  const address = useSelector(state => state.address)
-  const { location, directionsDetails } = useSelector(state => state.location)
-  const { silver, golden, vip, president } = usePubnub()
+  const { navigate } = props.navigation
+  const { location, loading } = useLocation()
+  const { firstName, city_id } = useSelector(state => state.user)
+  const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)
-  const [details, setDetails] = useState('')
-  const [steps, setSteps] = useState(null)
   const [destination, setDestination] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-
-  const mapView = useRef(null)
-  const inputRef = useRef(null)
+  const { silver, golden, vip, president } = usePubnub()
+  const [, setDetails] = useState('')
   const marker = useRef(null)
 
-  const handleDetails = async (placeId, details) => {
+  const mapView = useRef(null)
+  let backHandler
+
+  useEffect(() => {
+    const verifyCity = () => {
+      if (city_id === null || city_id === undefined) {
+        Alert.alert(
+          'ADVERTENCIA',
+          'Para usar nuestros servicios complete su perfil.',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => navigate('Home'),
+              style: 'cancel'
+            },
+            { text: 'OK', onPress: () => navigate('ProfileUser') }
+          ],
+          { cancelable: false }
+        )
+      }
+    }
+    verifyCity()
+  }, [city_id])
+
+  const handleDirecctions = async (placeId, details) => {
     setIsLoading(true)
     const { latitude, longitude } = location
     const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
     setIsLoading(false)
     setDestination(pointCoords)
-    setSteps(steps)
     setDetails(details)
+
+    dispatch({
+      type: DIRECTION,
+      payload: {
+        steps
+      }
+    })
     mapView.current.fitToCoordinates(pointCoords, {
       edgePadding: {
         right: getPixelSize(50),
         left: getPixelSize(50),
         top: getPixelSize(50),
-        bottom: getPixelSize(280)
+        bottom: getPixelSize(250)
       }
     })
   }
 
-  const handleCenterToRegion = () => {
-    mapView.current.animateToRegion({
-      latitude: location.latitude,
-      longitude: location.longitude,
-      latitudeDelta: location.latitudeDelta,
-      longitudeDelta: location.longitudeDelta
-    })
-  }
+  useEffect(() => {
+    if (directions !== null) {
+      const { placeId, address } = directions
+      handleDirecctions(placeId, address)
+    }
+  }, [directions])
 
   useEffect(() => {
-    if (directionsDetails !== null) {
-      const { placeId, address } = directionsDetails
-      handleDetails(placeId, address)
+    backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      setDestination(null)
+      dispatch({
+        type: REMOVEDIRECTION
+      })
+      navigate('home')
+      return false
+    })
+    return () => {
+      backHandler.remove()
     }
-  }, [directionsDetails])
+  }, [])
 
   const handleBack = () => {
     setDestination(null)
 
     dispatch({
-      type: REMOVELOCATIONDETAILS,
-      payload: {
-        directionsDetails: null
-      }
+      type: REMOVEDIRECTION
     })
   }
 
   return (
     <View style={styles.screen}>
-      <Modal
+      <ModalTransport
+        navigation={props.navigation}
         isVisible={isVisible}
-        animationInTiming={500}
-        style={{
-          margin: 0,
-          backgroundColor: Theme.COLORS.colorMainDark
-        }}
-      >
-        <Icon
-          iconName='close'
-          iconSize={30}
-          onPress={() => setIsVisible(!isVisible)}
-          styles={{
-            paddingHorizontal: 10,
-            position: 'absolute',
-            top: 10,
-            left: 5
-          }}
-        />
-
-        <View style={styles.modalLayout}>
-          <Search
-            navigation={props.navigation}
-            setIsVisible={setIsVisible}
-            isVisible={isVisible}
-          />
-          <TouchableOpacity
-            style={styles.modalItem}
-            onPress={() => {
-              setIsVisible(!isVisible)
-              return navigate('FixedMap')
-            }}
-          >
-            <FontAwesomeIcons
-              name='map-pin'
-              size={30}
-              color={Theme.COLORS.colorSecondary}
-              style={{
-                marginRight: 25
-              }}
-            />
-            <Text style={styles.textModal}>Seleccionar origen en el mapa</Text>
-          </TouchableOpacity>
-        </View>
-
-      </Modal>
-      <View style={{ flex: 1, position: 'relative' }}>
-        <MapView
-          style={{ flex: 1 }}
-          ref={mapView}
-          loadingBackgroundColor={Theme.COLORS.colorMainDark}
-          loadingIndicatorColor={Theme.COLORS.colorSecondary}
-          loadingEnabled
-          initialRegion={location}
-          showsCompass={false}
-          showsMyLocationButton={false}
+        setIsVisible={setIsVisible}
+        location={location}
+      />
+      {!loading && (
+        <Map
+          mapView={mapView}
+          location={location}
         >
-          <Marker
-            coordinate={location}
-            style={styles.marker}
-          >
-            <Image
-              style={styles.drive}
-              source={require('../../../assets/images/img-marker-user.png')}
-            />
-          </Marker>
 
           {silver && (
             silver.map(drive => (
@@ -189,7 +161,11 @@ const TransportScreen = props => {
                 ref={marker}
               >
                 <Image
-                  style={styles.drive}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    resizeMode: 'contain'
+                  }}
                   source={silverMarker}
                 />
               </Marker>
@@ -208,7 +184,11 @@ const TransportScreen = props => {
                 ref={marker}
               >
                 <Image
-                  style={styles.drive}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    resizeMode: 'contain'
+                  }}
                   source={goldenMarker}
                 />
               </Marker>
@@ -227,7 +207,11 @@ const TransportScreen = props => {
                 ref={marker}
               >
                 <Image
-                  style={styles.drive}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    resizeMode: 'contain'
+                  }}
                   source={vipMarker}
                 />
               </Marker>
@@ -246,7 +230,11 @@ const TransportScreen = props => {
                 ref={marker}
               >
                 <Image
-                  style={styles.drive}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    resizeMode: 'contain'
+                  }}
                   source={presidentMarker}
                 />
               </Marker>
@@ -258,36 +246,13 @@ const TransportScreen = props => {
               <Polyline
                 coordinates={destination}
                 strokeWidth={3}
-                strokeColor={Theme.COLORS.colorMain}
+                strokeColor={Theme.COLORS.colorMainAlt}
               />
-              <Marker
-                coordinate={destination[destination.length - 1]}
-                anchor={{ x: 0, y: 0 }}
-              >
-                <Details
-                  title={details}
-                />
-              </Marker>
+              <Marker coordinate={destination[destination.length - 1]} />
             </>
           )}
-
-        </MapView>
-        {location && (
-          <Animatable.View
-            style={styles.containerButtonRegion}
-            animation='zoomIn'
-            iterationCount={1}
-          >
-            <Button
-              iconName='my-location'
-              iconSize={35}
-              iconColor={Theme.COLORS.colorSecondary}
-              onPress={handleCenterToRegion}
-            />
-          </Animatable.View>
-        )}
-      </View>
-
+        </Map>
+      )}
       {destination ? (
         <>
           <Button
@@ -298,98 +263,39 @@ const TransportScreen = props => {
             iconColor={Theme.COLORS.colorMainAlt}
           />
           <ListOfCategoryServices
+            location={location}
             navigation={props.navigation}
-            steps={steps}
           />
         </>
       ) : isLoading ? (
-        <View style={styles.containerLoader}>
-          <Loader
-            color={Theme.COLORS.colorMainAlt}
-          />
+        <View style={{
+          position: 'absolute',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '50%'
+        }}
+        >
+          <Loader color={Theme.COLORS.colorMainAlt} />
         </View>
-      ) : (
-        <Animatable.View
-          animation='slideInUp'
-          iterationCount={1}
-          style={[
-            styles.container,
-            {
-              height: address.flag ? 280 : 170,
-              justifyContent: address.flag ? 'space-between' : 'space-evenly'
-            }
-          ]}
+      ) : city_id && (
+        <TouchableOpacity
+          onPress={() => setIsVisible(!isVisible)}
+          style={styles.containerInput}
         >
-          <TouchableOpacity
-            onPress={() => setIsVisible(!isVisible)}
-            style={{
-              paddingHorizontal: 10,
-              width: '100%'
-            }}
-          >
-            <View
-              pointerEvents='none'
-            >
-              <InputControl
-                references={inputRef}
-                isActiveIcon
-                iconName='search'
-                iconSize={28}
-                placeholder={`${userData.firstName.toLowerCase()}, ¿Donde quieres ir?`}
-                placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
-              />
-            </View>
-          </TouchableOpacity>
-
-          {address.flag ? (
-            <View style={{
-              width: '100%',
-              paddingHorizontal: 10
-            }}
-            >
-              <Text
-                allowFontScaling={false} style={{
-                  color: Theme.COLORS.colorSecondary,
-                  fontFamily: 'Lato-Bold',
-                  fontSize: 18,
-                  paddingHorizontal: 5
-                }}
-              >DIRECCIONES
-              </Text>
-              <ListOfAddress
-                result
-                handleResult={result => handleDetails(result.placeid, result.address)}
-              />
-            </View>
-          ) : (
-            <TouchableOpacity
-              onPress={() => navigate('Address')}
-            >
-              <Text style={{
-                color: Theme.COLORS.colorSecondary,
-                fontFamily: 'Lato-Regular',
-                fontSize: Theme.SIZES.small
-              }}
-              >AGREGAR DIRECCIONES
-              </Text>
-            </TouchableOpacity>
-          )}
-        </Animatable.View>
-      )}
-
-      {!destination && (
-        <Animatable.View
-          animation='fadeInRight'
-          iterationCount={1}
-          style={styles.buttonBack}
-        >
-          <Button
-            onPress={() => props.navigation.goBack()}
-            iconName='keyboard-backspace'
-            iconSize={35}
-            iconColor={Theme.COLORS.colorMainAlt}
-          />
-        </Animatable.View>
+          <View pointerEvents='none'>
+            <InputControl
+              stylesContainer={styles.container}
+              stylesInput={styles.input}
+              placeholder={`${firstName} ¿Donde quieres ir?`}
+              placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
+              isActiveIcon
+              iconSize={25}
+              iconColor={Theme.COLORS.colorSecondary}
+              iconName='search'
+            />
+          </View>
+        </TouchableOpacity>
       )}
     </View>
   )
@@ -397,68 +303,51 @@ const TransportScreen = props => {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: Theme.COLORS.colorMainDark,
-    flex: 1
-  },
-  container: {
-    backgroundColor: Theme.COLORS.colorMainDark,
-    alignItems: 'center',
-    width: '100%',
-    paddingVertical: 20
-  },
-  modalLayout: {
     flex: 1,
-    paddingVertical: 55,
+    backgroundColor: Theme.COLORS.colorMainAlt
+  },
+  fixed: {
+    backgroundColor: Theme.COLORS.colorMainDark,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    position: 'absolute',
+    width: '100%',
+    top: 0,
+    left: 0,
+    flexDirection: 'row'
+  },
+  fixedText: {
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.xsmall,
+    color: Theme.COLORS.colorParagraph
+  },
+  containerInput: {
+    position: 'absolute',
+    top: 20,
+    right: 0,
+    width: '100%',
     paddingHorizontal: 20
   },
-  modalItem: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
-    width: '100%',
-    paddingVertical: 10,
-    paddingHorizontal: 5
+  container: {
+
   },
-  textModal: {
-    color: Theme.COLORS.colorParagraph,
-    fontFamily: 'Lato-Bold',
-    fontSize: Theme.SIZES.small
+  input: {
+    backgroundColor: Theme.COLORS.colorMainDark,
+    borderRadius: 100,
+    paddingLeft: 50,
+    paddingVertical: 10,
+    borderWidth: 0.3,
+    borderColor: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    color: Theme.COLORS.colorParagraph
   },
   buttonBack: {
     position: 'absolute',
     top: height * 0.02,
     left: width * 0.05
-  },
-  containerLoader: {
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '50%'
-  },
-  containerButtonRegion: {
-    position: 'absolute',
-    bottom: 20,
-    right: 15,
-    backgroundColor: Theme.COLORS.colorMain,
-    borderRadius: 200,
-    padding: 10
-  },
-  drive: {
-    width: 50,
-    height: 50,
-    resizeMode: 'contain'
-  },
-  marker: {
-    // position: 'relative'
-  },
-  containerTooltip: {
-    padding: 10,
-    borderRadius: 8,
-    backgroundColor: Theme.COLORS.colorMainAlt,
-    position: 'absolute',
-    top: 0,
-    left: 0
   }
 })
 

@@ -12,7 +12,8 @@ const INITIAL_STATE = {
   avatar: null,
   country: null,
   country_id: null,
-  cidy_id: null,
+  city_id: null,
+  cityName: null,
   iso: null
 }
 

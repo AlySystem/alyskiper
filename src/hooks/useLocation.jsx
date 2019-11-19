@@ -1,44 +1,39 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Geolocation from 'react-native-geolocation-service'
-import { useDispatch } from 'react-redux'
-
-// Import actions types
-import { LOCATIONDETAILS } from '../store/actionTypes'
 
 // Import screen
-import Error from '../screens/Error/Error'
+import Error from '../screens/TemplateError/TemplateError'
 
 export const useLocation = () => {
-  const dispatch = useDispatch()
-  const [isLoading, setIsLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const [location, setLocation] = useState({
+    latitude: null,
+    longitude: null,
+    latitudeDelta: 0.0143,
+    longitudeDelta: 0.0134
+  })
 
   useEffect(() => {
     const fetchLocation = async () => {
-      setIsLoading(true)
+      setLoading(true)
       Geolocation.getCurrentPosition(
         ({ coords: { latitude, longitude } }) => {
-          console.log(latitude, longitude)
-          dispatch({
-            type: LOCATIONDETAILS,
-            payload: {
-              location: {
-                latitude,
-                longitude,
-                longitudeDelta: 0.0134,
-                latitudeDelta: 0.0143
-              }
-            }
+          setLocation({
+            latitude,
+            longitude,
+            latitudeDelta: 0.0143,
+            longitudeDelta: 0.0134
           })
-          setIsLoading(false)
+          setLoading(false)
         }, error => {
-          if (error) return <Error title='Error' message='Oh no, ocurrio un error al momento de obtener tu ubicacion, intente de nuevo o mas tarde.' />
+          if (error) return <Error title='Error' description='Oh no, ocurrio un error al momento de obtener tu ubicacion, intente de nuevo o mas tarde.' />
           setError(true)
-        }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 0 }
+        }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 20 }
       )
     }
     fetchLocation()
   }, [])
 
-  return { error, isLoaded: isLoading }
+  return { error, loading, location }
 }

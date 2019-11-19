@@ -39,26 +39,26 @@ const items = [
 ]
 
 const ListOfServices = props => {
-  const travel = useSelector(state => state.activeTravel)
+  const { travel } = useSelector(state => state.activeTravel)
   const handleOnSelect = (item) => {
-    // if (travel !== null && travel !== undefined) {
-    //   return showMessage({
-    //     message: 'Acceso denegado',
-    //     description: 'Tienes un viaje en curso',
-    //     backgroundColor: 'red',
-    //     color: '#fff',
-    //     icon: 'danger',
-    //     duration: 4000,
-    //     titleStyle: {
-    //       fontFamily: 'Lato-Bold'
-    //     },
-    //     textStyle: {
-    //       fontFamily: 'Lato-Regular'
-    //     }
-    //   })
-    // } else {
-    return props.navigate(item)
-    // }
+    if (travel !== null && travel !== undefined) {
+      return showMessage({
+        message: 'Acceso denegado',
+        description: 'Tienes un viaje en curso',
+        backgroundColor: 'red',
+        color: '#fff',
+        icon: 'danger',
+        duration: 4000,
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+    } else {
+      return props.navigate(item)
+    }
   }
 
   return (

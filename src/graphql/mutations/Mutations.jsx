@@ -16,6 +16,10 @@ export const SIGNIN = gql`
           id
           iso
         }
+        city {
+          id
+          name
+        }
       }
       error {
         message
@@ -81,6 +85,10 @@ export const UPDATEUSER = gql`
         name
         id
         iso
+      }
+      city {
+        id
+        name
       }
     }
   }

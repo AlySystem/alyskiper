@@ -17,7 +17,6 @@ import { ADDRESS } from '../store/actionTypes'
 
 // Import components
 import Loader from '../components/loader/Loader'
-import Picture from '../components/picture/Picture'
 import { LazyImage } from '../components/lazy/LazyImage'
 
 // Import theme
@@ -107,6 +106,15 @@ const ListOfAddress = props => {
         </TouchableOpacity>
       )}
       keyExtractor={(item, index) => index.toString()}
+      ListEmptyComponent={
+        <Text style={{
+          color: Theme.COLORS.colorSecondary,
+          fontFamily: 'Lato-Regular',
+          fontSize: Theme.SIZES.small
+        }}
+        >No tienes direcciones agregadas
+        </Text>
+      }
     />
   )
 }
