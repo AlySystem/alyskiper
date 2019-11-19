@@ -162,3 +162,12 @@ export const GETALLADDRESS = gql`
     }
   }
 `
+
+export const SEARCHCITY = gql`
+  query searchCityByCountryId ($id: Int!) {
+    searchCityByCountryId (id: $id) {
+      id
+      name
+    }
+  }
+`

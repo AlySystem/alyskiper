@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   country: null,
   country_id: null,
   city_id: null,
+  cityName: null,
   iso: null
 }
 

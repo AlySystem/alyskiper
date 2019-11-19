@@ -17,43 +17,41 @@ import Loader from '../loader/Loader'
 
 const PriceService = props => {
   const { navigate } = props.navigation
-  const { country_id, cidy_id } = useSelector(state => state.user)
+  const { country_id, city_id } = useSelector(state => state.user)
   const { steps } = useSelector(state => state.direction)
-  const [priceTotal, setPriceTotal] = useState(0)
+  // const [priceTotal, setPriceTotal] = useState(0)
 
   const { loading, data, error } = useQuery(CALCULATERATE, {
     variables: {
       idcountry: country_id,
-      idcity: cidy_id,
+      idcity: city_id,
       idcategoriaviaje: props.categoryId,
       date_init: `${moment().format('YYYY-MM-DD')} ${moment().format('HH:mm:ss')}`
     }
   })
+  console.log(loading)
 
   if (error) return navigate('Home')
-  useEffect(() => {
-    const calculate = () => {
-      if (!loading) {
-        const { duration, distance } = steps
-        const durationMin = duration.value / 60
-        const distanceKm = distance.value / 1000
-
-        const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
-        const minutes = durationMin * priceminute
-        const km = distanceKm * priceckilometer
-
-        const total = minutes + km + pricebase
-        if (total < priceminimun) {
-          setPriceTotal(priceminimun)
-        } else {
-          setPriceTotal(total)
-        }
-      }
-    }
-    calculate()
-  }, [loading])
-
   if (loading) return <Loader size='small' />
+
+  const calculate = () => {
+    const { duration, distance } = steps
+    const durationMin = duration.value / 60
+    const distanceKm = distance.value / 1000
+
+    const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
+    const minutes = durationMin * priceminute
+    const km = distanceKm * priceckilometer
+
+    const total = minutes + km + pricebase
+    if (total < priceminimun) {
+      // setPriceTotal(priceminimun)
+      return priceminimun
+    } else {
+      // setPriceTotal(total)
+      return total
+    }
+  }
 
   return (
     <Text
@@ -63,7 +61,7 @@ const PriceService = props => {
         color: Theme.COLORS.colorParagraph,
         fontSize: 18
       }}
-    >C$ {Math.round(priceTotal)}
+    >C$ {Math.round(calculate())}
     </Text>
   )
 }

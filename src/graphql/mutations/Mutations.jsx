@@ -86,6 +86,10 @@ export const UPDATEUSER = gql`
         id
         iso
       }
+      city {
+        id
+        name
+      }
     }
   }
 `

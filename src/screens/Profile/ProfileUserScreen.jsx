@@ -4,13 +4,19 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  TouchableOpacity,
+  FlatList,
+  ListView
 } from 'react-native'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import { showMessage } from 'react-native-flash-message'
 import ImagePicker from 'react-native-image-picker'
 import { useSelector, useDispatch } from 'react-redux'
 import FastImage from 'react-native-fast-image'
+
+// Import querys
+import { SEARCHCITY } from '../../graphql/querys/Querys'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -25,6 +31,7 @@ import Button from '../../components/button/Button'
 import InputControl from '../../components/input/InputControl'
 import IconButton from '../../components/button/IconButton'
 import Loader from '../../components/loader/Loader'
+import ModalCity from '../../components/modal/ModalCity'
 // import ModalPicker from '../../components/modal/ModalPicker'
 
 // Import mutations
@@ -36,6 +43,7 @@ const ProfileUserScreen = () => {
   const userData = useSelector(state => state.user)
   const dispatch = useDispatch()
   const [error, setError] = useState(null)
+  const [cityId, setCityId] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [UpdateUser, { loading }] = useMutation(UPDATEUSER)
 
@@ -171,6 +179,10 @@ const ProfileUserScreen = () => {
   //   setDetails(details.id)
   // }
 
+  const handleOnCity = cityId => {
+    setCityId(cityId)
+  }
+
   const handleOnSubmit = async () => {
     const result = await UpdateUser({
       variables: {
@@ -182,7 +194,8 @@ const ProfileUserScreen = () => {
           email: email,
           avatar: photo.uri,
           phone: userData.phoneNumber,
-          country_id: userData.country_id
+          country_id: userData.country_id,
+          city_id: cityId
         }
       }
     })
@@ -198,7 +211,8 @@ const ProfileUserScreen = () => {
         phoneNumber: result.data.updateUser.phone,
         avatar: result.data.updateUser.avatar,
         country: result.data.updateUser.country.name,
-        country_id: result.data.updateUser.country.id
+        country_id: result.data.updateUser.country.id,
+        city_id: result.data.updateUser.city.id
       }
 
       dispatch({
@@ -322,11 +336,6 @@ const ProfileUserScreen = () => {
               errorText={userNameIsValid.message}
             />
 
-            {/* <ModalPicker
-              activeCountry
-              handleOnSelect={handleOnSelect}
-            /> */}
-
             <InputControl
               value={email}
               setValue={setEmail}
@@ -343,6 +352,9 @@ const ProfileUserScreen = () => {
               isValid={emailIsValid.isValid}
               errorText={emailIsValid.message}
             />
+            <ModalCity
+              handleOnCity={handleOnCity}
+            />
             <View style={styles.containerButton}>
               <IconButton
                 message='ACEPTAR'
@@ -354,7 +366,6 @@ const ProfileUserScreen = () => {
               />
             </View>
           </View>
-
         </ScrollView>
       </View>
     </Background>

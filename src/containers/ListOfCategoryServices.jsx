@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Dimensions,
   View,
-  Text
+  Text,
+  Image
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import { Picker } from '@react-native-community/picker'
@@ -94,29 +95,32 @@ const ListOfCategoryServices = props => {
             />
           </View>
           <View style={styles.containerRow}>
-            <Picker
-              selectedValue={selectCategory}
-              style={{
-                textAlign: 'right',
-                height: 100,
-                width: 200,
-                color: Theme.COLORS.colorSecondary,
-                fontFamily: 'Lato-Regular',
-                borderColor: Theme.COLORS.colorSecondary,
-                borderWidth: 1
-              }}
-              mode='dialog'
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectCategory(itemValue)}
-            >
-              {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
-                <Picker.Item
-                  key={category.id}
-                  label={category.name.toUpperCase()}
-                  value={category.id}
-                />
-              ))}
-            </Picker>
+            <View>
+              <Text style={styles.category}>CATEGORIAS</Text>
+              <Picker
+                selectedValue={selectCategory}
+                style={{
+                  textAlign: 'right',
+                  height: 50,
+                  width: 200,
+                  color: Theme.COLORS.colorSecondary,
+                  fontFamily: 'Lato-Regular',
+                  borderColor: Theme.COLORS.colorSecondary,
+                  borderWidth: 1
+                }}
+                mode='dialog'
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectCategory(itemValue)}
+              >
+                {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
+                  <Picker.Item
+                    key={category.id}
+                    label={category.name.toUpperCase()}
+                    value={category.id}
+                  />
+                ))}
+              </Picker>
+            </View>
             <Payment />
           </View>
           <View style={{
@@ -197,6 +201,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
     color: Theme.COLORS.colorSecondary
+  },
+  category: {
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Bold'
   }
 })
 

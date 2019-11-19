@@ -35,6 +35,8 @@ const Search = props => {
     const data = await response.json()
 
     setPredictions(data.predictions)
+    console.log(data)
+    console.log(iso)
   }
 
   return (

@@ -56,6 +56,7 @@ const StartupScreen = props => {
         country: userParse.country,
         country_id: userParse.country_id,
         city_id: userParse.city_id ? userParse.city_id : null,
+        cityName: userParse.cityName ? userParse.cityName : null,
         iso: userParse.iso
       }
       dispatch({
