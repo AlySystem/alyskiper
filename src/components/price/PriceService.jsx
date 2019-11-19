@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
-  Text
+  Text,
+  View
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
@@ -16,7 +17,7 @@ import { CALCULATERATE } from '../../graphql/querys/Querys'
 import Loader from '../loader/Loader'
 
 const PriceService = props => {
-  const { navigate } = props.navigation
+  // const { navigate } = props.navigation
   const { country_id, city_id } = useSelector(state => state.user)
   const { steps } = useSelector(state => state.direction)
   // const [priceTotal, setPriceTotal] = useState(0)
@@ -29,9 +30,11 @@ const PriceService = props => {
       date_init: `${moment().format('YYYY-MM-DD')} ${moment().format('HH:mm:ss')}`
     }
   })
-  console.log(loading)
 
-  if (error) return navigate('Home')
+  if (error) {
+    props.error(error)
+    return <View />
+  }
   if (loading) return <Loader size='small' />
 
   const calculate = () => {

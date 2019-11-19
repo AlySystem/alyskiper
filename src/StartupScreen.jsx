@@ -42,6 +42,7 @@ const StartupScreen = props => {
         navigate('Welcome')
         return
       }
+      console.log('userParse', userParse)
 
       const payload = {
         auth: true,
@@ -59,6 +60,7 @@ const StartupScreen = props => {
         cityName: userParse.cityName ? userParse.cityName : null,
         iso: userParse.iso
       }
+      console.log('PAYLOAD STARTUP', payload)
       dispatch({
         type: USERDATA,
         payload

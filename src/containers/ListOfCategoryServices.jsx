@@ -3,8 +3,7 @@ import {
   StyleSheet,
   Dimensions,
   View,
-  Text,
-  Image
+  Text
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import { Picker } from '@react-native-community/picker'
@@ -28,6 +27,7 @@ import Payment from '../components/payment/Payment'
 
 // Import skeleton
 import SkeletonServices from '../skeleton/SkeletonServices'
+import Picture from '../components/picture/Picture'
 
 const { height } = Dimensions.get('window')
 
@@ -36,6 +36,7 @@ const ListOfCategoryServices = props => {
   const { navigate } = props.navigation
   const { latitude, longitude } = props.location
   const [selectCategory, setSelectCategory] = useState(1)
+  const [error, setError] = useState(null)
   const { data, loading } = useQuery(CATEGORYTRAVEL)
 
   if (loading) {
@@ -86,59 +87,90 @@ const ListOfCategoryServices = props => {
     >
       <Background source={require('../../assets/images/img-background-alyskiper.png')}>
         <View style={styles.layout}>
-          <View style={styles.containerHeader}>
-            <Text style={styles.textPrice}>Precio estimado</Text>
-            <View style={{ marginVertical: 2 }} />
-            <PriceService
-              categoryId={selectCategory}
-              navigation={props.navigation}
-            />
-          </View>
-          <View style={styles.containerRow}>
-            <View>
-              <Text style={styles.category}>CATEGORIAS</Text>
-              <Picker
-                selectedValue={selectCategory}
-                style={{
-                  textAlign: 'right',
-                  height: 50,
-                  width: 200,
-                  color: Theme.COLORS.colorSecondary,
-                  fontFamily: 'Lato-Regular',
-                  borderColor: Theme.COLORS.colorSecondary,
-                  borderWidth: 1
+          {error ? (
+            <View style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              width: '100%'
+            }}
+            >
+              <Picture
+                styles={{
+                  width: 100,
+                  height: 100,
+                  resizeMode: 'contain'
                 }}
-                mode='dialog'
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectCategory(itemValue)}
-              >
-                {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
-                  <Picker.Item
-                    key={category.id}
-                    label={category.name.toUpperCase()}
-                    value={category.id}
-                  />
-                ))}
-              </Picker>
+                source={require('../../assets/images/img-alyskiper-error.png')}
+              />
+              <View style={{ marginVertical: 10 }} />
+              <Text style={{
+                color: Theme.COLORS.colorParagraph,
+                fontFamily: 'Lato-Regular',
+                textAlign: 'center',
+                fontSize: Theme.SIZES.small
+              }}
+              >AlySkiper no esta disponible en tu zona.
+              </Text>
             </View>
-            <Payment />
-          </View>
-          <View style={{
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginVertical: 20
-          }}
-          >
-            <IconButton
-              message='PEDIR SKIPER'
-              isActiveIcon
-              iconName='check'
-              onPress={handleOnSubmit}
-              isLoading={false}
-              stylesButton={styles.button}
-            />
-          </View>
+          ) : (
+            <>
+              <View style={styles.containerHeader}>
+                <Text style={styles.textPrice}>Precio estimado</Text>
+                <View style={{ marginVertical: 2 }} />
+                <PriceService
+                  categoryId={selectCategory}
+                  navigation={props.navigation}
+                  error={(error) => setError(error)}
+                />
+              </View>
+              <View style={styles.containerRow}>
+                <View>
+                  <Text style={styles.category}>CATEGORIAS</Text>
+                  <Picker
+                    selectedValue={selectCategory}
+                    style={{
+                      textAlign: 'right',
+                      height: 50,
+                      width: 200,
+                      color: Theme.COLORS.colorSecondary,
+                      fontFamily: 'Lato-Regular',
+                      borderColor: Theme.COLORS.colorSecondary,
+                      borderWidth: 1
+                    }}
+                    mode='dialog'
+                    onValueChange={(itemValue, itemIndex) =>
+                      setSelectCategory(itemValue)}
+                  >
+                    {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
+                      <Picker.Item
+                        key={category.id}
+                        label={category.name.toUpperCase()}
+                        value={category.id}
+                      />
+                    ))}
+                  </Picker>
+                </View>
+                <Payment />
+              </View>
+              <View style={{
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginVertical: 20
+              }}
+              >
+                <IconButton
+                  message='PEDIR SKIPER'
+                  isActiveIcon
+                  iconName='check'
+                  onPress={handleOnSubmit}
+                  isLoading={false}
+                  stylesButton={styles.button}
+                />
+              </View>
+            </>
+          )}
         </View>
       </Background>
     </Animatable.View>

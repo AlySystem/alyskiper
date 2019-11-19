@@ -212,8 +212,12 @@ const ProfileUserScreen = () => {
         avatar: result.data.updateUser.avatar,
         country: result.data.updateUser.country.name,
         country_id: result.data.updateUser.country.id,
+        cityName: result.data.updateUser.city.name,
+        iso: result.data.updateUser.country.iso.toLowerCase(),
         city_id: result.data.updateUser.city.id
       }
+
+      console.log('UPDATE USER', payload)
 
       dispatch({
         type: USERDATA,

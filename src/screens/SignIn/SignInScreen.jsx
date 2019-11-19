@@ -120,7 +120,7 @@ const SignInScreen = props => {
           cityName: data.city ? data.city.name : null,
           iso: data.country.iso.toLowerCase()
         }
-        console.log(data)
+        console.log('data signin', payload)
         setAsyncStorage(keys.asyncStorageKey, payload)
         dispatch({
           type: USERDATA,
