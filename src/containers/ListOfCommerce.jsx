@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, View, Text } from 'react-native'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
 
@@ -12,6 +12,9 @@ import { COMMERCERS } from '../graphql/querys/Querys'
 // Import mutations
 import { ADDFAVORITE } from '../graphql/mutations/Mutations'
 
+// Import theme
+import { Theme } from '../constants/Theme'
+
 // Import skeleton
 import SkeletonProduct from '../skeleton/SkeletonProduct'
 
@@ -21,9 +24,27 @@ const ListOfCommerce = props => {
   const { categoryId } = props
   const { userId } = useSelector(state => state.user)
   const [AddFavorite] = useMutation(ADDFAVORITE)
-  const { loading, data } = useQuery(COMMERCERS, { variables: { latitud: latitude, longitud: longitude, radio: 40000, id_category_product: categoryId } })
+  const { loading, data, error } = useQuery(COMMERCERS, { variables: { latitud: latitude, longitud: longitude, radio: 40000, id_category_product: categoryId } })
 
   if (loading) return <SkeletonProduct />
+  if (error) {
+    return (
+      <View style={{
+        flex: 1,
+        backgroundColor: Theme.COLORS.colorMainAlt,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+      >
+        <Text style={{
+          color: Theme.COLORS.colorParagraph,
+          fontFamily: 'Lato-Regular'
+        }}
+        >SERVER INTERNAL ERROR
+        </Text>
+      </View>
+    )
+  }
 
   const handleOnFavorite = (idCommerce) => {
     return AddFavorite({ variables: { input: { user_id: userId, commerce_id: idCommerce } } })

@@ -23,7 +23,7 @@ import { Theme } from '../../constants/Theme'
 
 const ModalCity = props => {
   const { country_id, cityName } = useSelector(state => state.user)
-  const { data, error, loading } = useQuery(SEARCHCITY, { variables: { id: country_id } })
+  const { data, loading } = useQuery(SEARCHCITY, { variables: { id: country_id } })
   const [city, setCity] = useState({ id: 0, name: cityName || 'CIUDAD' })
   const [isVisible, setIsVisible] = useState(false)
 
@@ -59,42 +59,56 @@ const ModalCity = props => {
             onPress={() => setIsVisible(!isVisible)}
           />
         </View>
-        {error ? (
-          <Text style={{
-            color: Theme.COLORS.colorParagraph,
-            fontFamily: 'Lato-Regular'
-          }}
-          >Estamos fuera del area de operacion, AlySkiper no esta disponible en tu zona.
-          </Text>
-        ) : loading ? (
+        {loading ? (
           <Loader />
-        ) : (
-          <FlatList
-            data={data.searchCityByCountryId}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={{
-                  paddingHorizontal: 20,
-                  paddingVertical: 10
-                }}
-                onPress={() => {
-                  setIsVisible(!isVisible)
-                  setCity({ name: item.name, id: item.id })
-                  return props.handleOnCity(item.id)
-                }}
-              >
-                <Text style={{
-                  color: Theme.COLORS.colorParagraph,
-                  fontFamily: 'Lato-Regular'
-                }}
+        ) : data.searchCityByCountryId.length === 0 ? (
+          <>
+            <View style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingHorizontal: 20
+            }}
+            >
+              <Text style={{
+                color: Theme.COLORS.colorParagraph,
+                fontFamily: 'Lato-Regular',
+                fontSize: Theme.SIZES.small,
+                textAlign: 'center'
+              }}
+              >Estamos fuera del area de operacion, AlySkiper no esta disponible en tu zona.
+              </Text>
+            </View>
+          </>
+        )
+
+          : (
+            <FlatList
+              data={data.searchCityByCountryId}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={{
+                    paddingHorizontal: 20,
+                    paddingVertical: 10
+                  }}
+                  onPress={() => {
+                    setIsVisible(!isVisible)
+                    setCity({ name: item.name, id: item.id })
+                    return props.handleOnCity(item.id)
+                  }}
                 >
-                  {item.name}
-                </Text>
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        )}
+                  <Text style={{
+                    color: Theme.COLORS.colorParagraph,
+                    fontFamily: 'Lato-Regular'
+                  }}
+                  >
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          )}
       </Modal>
 
       <TouchableOpacity
