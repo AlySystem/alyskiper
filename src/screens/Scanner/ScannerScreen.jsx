@@ -4,7 +4,8 @@ import {
   Vibration,
   Text,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { CameraKitCameraScreen } from 'react-native-camera-kit'
@@ -32,7 +33,7 @@ const ScannerScreen = props => {
   const longitude = props.navigation.getParam('longitude')
   const [manualQR, setManualQR] = useState(false)
   const [codeQR, setCodeQR] = useState('')
-  const [TravelTracing, { loading, data }] = useMutation(TRAVELTRACING)
+  const [TravelTracing, { loading }] = useMutation(TRAVELTRACING)
 
   useEffect(() => {
     const verifyPermission = async () => {
@@ -64,7 +65,28 @@ const ScannerScreen = props => {
       })
       return
     }
+    console.log(idTravel, latitude, longitude)
     TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
+      .then(({ registerTravelsTracing }) => {
+        const id = registerTravelsTracing.id
+        if (id !== null || id !== undefined) {
+          showMessage({
+            message: 'AlySkiper',
+            description: 'El codigo se ha verificado correctamente.',
+            backgroundColor: 'green',
+            color: '#fff',
+            icon: 'success',
+            titleStyle: {
+              fontFamily: 'Lato-Bold'
+            },
+            textStyle: {
+              fontFamily: 'Lato-Regular'
+            }
+          })
+          navigate('TravelTrancing')
+        }
+      })
+      .catch(error => console.log(error))
   }
 
   const handleOnSubmit = () => {
@@ -90,6 +112,26 @@ const ScannerScreen = props => {
     }
     console.log(idTravel, latitude, longitude)
     TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
+      .then(({ registerTravelsTracing }) => {
+        const id = registerTravelsTracing.id
+        if (id !== null || id !== undefined) {
+          showMessage({
+            message: 'AlySkiper',
+            description: 'El codigo se ha verificado correctamente.',
+            backgroundColor: 'green',
+            color: '#fff',
+            icon: 'success',
+            titleStyle: {
+              fontFamily: 'Lato-Bold'
+            },
+            textStyle: {
+              fontFamily: 'Lato-Regular'
+            }
+          })
+          navigate('TravelTrancing')
+        }
+      })
+      .catch(error => console.log(error))
   }
 
   if (loading) {
@@ -108,12 +150,12 @@ const ScannerScreen = props => {
     )
   }
 
-  if (data) {
-    const { registerTravelsTracing: { id } } = data
-    if (id !== null || id !== undefined) {
-      navigate('TravelTrancing')
-    }
-  }
+  // if (data) {
+  //   const { registerTravelsTracing: { id } } = data
+  //   if (id !== null || id !== undefined) {
+  //     navigate('TravelTrancing')
+  //   }
+  // }
 
   return (
     <View style={{

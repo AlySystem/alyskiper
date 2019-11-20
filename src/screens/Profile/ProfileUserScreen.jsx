@@ -4,19 +4,13 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  ListView
+  Dimensions
 } from 'react-native'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import { showMessage } from 'react-native-flash-message'
 import ImagePicker from 'react-native-image-picker'
 import { useSelector, useDispatch } from 'react-redux'
 import FastImage from 'react-native-fast-image'
-
-// Import querys
-import { SEARCHCITY } from '../../graphql/querys/Querys'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -36,6 +30,10 @@ import ModalCity from '../../components/modal/ModalCity'
 
 // Import mutations
 import { UPDATEUSER } from '../../graphql/mutations/Mutations'
+
+// Import utils
+import { setAsyncStorage, removeAsyncStorage } from '../../utils/AsyncStorage'
+import { keys } from '../../utils/keys'
 
 const { height } = Dimensions.get('window')
 
@@ -204,6 +202,7 @@ const ProfileUserScreen = () => {
       const payload = {
         auth: true,
         userId: result.data.updateUser.id,
+        userToken: userData.userToken,
         firstName: result.data.updateUser.firstname,
         lastName: result.data.updateUser.lastname,
         userName: result.data.updateUser.user,
@@ -217,7 +216,8 @@ const ProfileUserScreen = () => {
         city_id: result.data.updateUser.city.id
       }
 
-      console.log('UPDATE USER', payload)
+      await removeAsyncStorage(keys.asyncStorageKey)
+      await setAsyncStorage(keys.asyncStorageKey, payload)
 
       dispatch({
         type: USERDATA,
