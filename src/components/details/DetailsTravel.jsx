@@ -19,7 +19,7 @@ import Picture from '../../components/picture/Picture'
 import Loader from '../../components/loader/Loader'
 
 const DetailsTravel = props => {
-  const { country_id, cidy_id } = useSelector(state => state.user)
+  const { country_id, city_id } = useSelector(state => state.user)
   const [steps] = useState(props.steps)
   const [id] = useState(props.categoryId)
   const [category] = useState(props.category)
@@ -31,7 +31,7 @@ const DetailsTravel = props => {
   const { data, loading } = useQuery(CALCULATERATE, {
     variables: {
       idcountry: country_id,
-      idcity: 1,
+      idcity: city_id,
       idcategoriaviaje: id,
       date_init: `${moment().format('YYYY-MM-DD')} ${moment().format('HH:mm:ss')}`
     }

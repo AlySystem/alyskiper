@@ -5,9 +5,14 @@ import {
   Text,
   ScrollView
 } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
 import { useSelector, useDispatch } from 'react-redux'
+import { useMutation } from '@apollo/react-hooks'
 import Stars from 'react-native-stars'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+
+// Import mutations
+import { SKIPERATING } from '../../graphql/mutations/Mutations'
 
 // Import actions
 import { REMOVEDIRECTION, REMOVEDETAILSTRAVEL, REMOVELOCATION, REMOVEACTIVETRAVEL } from '../../store/actionTypes'
@@ -22,12 +27,13 @@ import IconButton from '../../components/button/IconButton'
 import { Theme } from '../../constants/Theme'
 
 const FinalTravelScreen = props => {
-  const { navigate } = props.navigation
   const dispatch = useDispatch()
+  const { navigate } = props.navigation
+  const [SkiperRating, { loading }] = useMutation(SKIPERATING)
   const [star, setStar] = useState()
   const [value, setValue] = useState('')
   const { drive } = useSelector(state => state.travel)
-  // const driverId = drive.id
+  const { userId } = useSelector(state => state.user)
   console.log(drive)
 
   const handleOnSubmit = () => {
@@ -43,6 +49,54 @@ const FinalTravelScreen = props => {
     dispatch({
       type: REMOVEACTIVETRAVEL
     })
+
+    SkiperRating({
+      variables: {
+        input: {
+          iddriver: drive.skiperagent.user.id,
+          iduser: userId,
+          ratingNumber: star,
+          comments: value,
+          status: true
+        }
+      }
+    })
+      .then(result => {
+        if (result) {
+          showMessage({
+            message: 'AlySkiper',
+            description: 'Gracias por compatir tu experiencia con el conductor.',
+            backgroundColor: 'green',
+            color: '#fff',
+            icon: 'success',
+            titleStyle: {
+              fontFamily: 'Lato-Bold'
+            },
+            textStyle: {
+              fontFamily: 'Lato-Regular'
+            }
+          })
+          navigate('Home')
+        }
+      })
+      .catch(error => {
+        if (error) {
+          showMessage({
+            message: 'Error',
+            description: 'Error al valorar al conductor...',
+            backgroundColor: 'red',
+            color: '#fff',
+            icon: 'danger',
+            titleStyle: {
+              fontFamily: 'Lato-Bold'
+            },
+            textStyle: {
+              fontFamily: 'Lato-Regular'
+            }
+          })
+          navigate('Home')
+        }
+      })
 
     navigate('Home')
   }
@@ -98,7 +152,8 @@ const FinalTravelScreen = props => {
             <View style={{ marginVertical: 20 }} />
             <IconButton
               message='ENVIAR VALORACION'
-              onPress={() => handleOnSubmit}
+              onPress={handleOnSubmit}
+              isLoading={loading}
             />
           </View>
         </ScrollView>

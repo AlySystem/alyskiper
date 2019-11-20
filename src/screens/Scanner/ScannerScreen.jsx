@@ -91,6 +91,7 @@ const ScannerScreen = props => {
 
   const handleOnSubmit = () => {
     const result = codeQR.split('-')
+    console.log(result)
     const idTravel = result[0]
     const idUser = result[1]
     if (idUser !== userId) {
