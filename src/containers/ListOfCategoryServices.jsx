@@ -64,7 +64,10 @@ const ListOfCategoryServices = props => {
     dispatch({
       type: DETAILSTRAVEL,
       payload: {
-        travel: { categoryId: selectCategory, paymentMethod: 1 }
+        travel: {
+          categoryId: selectCategory,
+          paymentMethod: 1
+        }
       }
     })
     dispatch({

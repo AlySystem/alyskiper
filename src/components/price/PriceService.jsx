@@ -4,8 +4,11 @@ import {
   View
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import moment from 'moment'
+
+// Impoer actions
+import { DETAILSTRAVEL } from '../../store/actionTypes'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -17,10 +20,9 @@ import { CALCULATERATE } from '../../graphql/querys/Querys'
 import Loader from '../loader/Loader'
 
 const PriceService = props => {
-  // const { navigate } = props.navigation
+  const dispatch = useDispatch()
   const { country_id, city_id } = useSelector(state => state.user)
   const { steps } = useSelector(state => state.direction)
-  // const [priceTotal, setPriceTotal] = useState(0)
 
   const { loading, data, error } = useQuery(CALCULATERATE, {
     variables: {
@@ -48,10 +50,20 @@ const PriceService = props => {
 
     const total = minutes + km + pricebase
     if (total < priceminimun) {
-      // setPriceTotal(priceminimun)
+      dispatch({
+        type: DETAILSTRAVEL,
+        payload: {
+          priceTravel: priceminimun
+        }
+      })
       return priceminimun
     } else {
-      // setPriceTotal(total)
+      dispatch({
+        type: DETAILSTRAVEL,
+        payload: {
+          priceTravel: total
+        }
+      })
       return total
     }
   }

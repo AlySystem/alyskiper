@@ -177,7 +177,7 @@ const RequestScreen = props => {
           <View style={styles.containerButton}>
             <IconButton
               isActiveIcon
-              onPress={() => handleOnCancel}
+              onPress={handleOnCancel}
               message='CANCELAR SKIPER'
             />
           </View>

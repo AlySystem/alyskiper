@@ -34,7 +34,6 @@ export const usePubnub = () => {
 
     function (status, response) {
       let silver, golden, vip, president
-      console.log(response)
 
       if (response !== undefined) {
         if ('SkiperDrive_1' in response.channels) {
@@ -75,6 +74,10 @@ export const usePubnub = () => {
             president
           }
         })
+        console.log('SILVER', silver)
+        console.log('GOLDEN', golden)
+        console.log('VIP', vip)
+        console.log('PRESIDENT', president)
       }
     })
 

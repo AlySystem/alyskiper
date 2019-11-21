@@ -11,7 +11,6 @@ import { ACTIVETRAVEL } from '../store/actionTypes'
 import { GETNOTIFICATIONTRAVEL } from '../graphql/subscription/Subcription'
 
 import { notification } from '../hooks/usePushNotification'
-import { useLocation } from '../hooks/useLocation'
 
 export const useNotification = (navigate) => {
   const dispatch = useDispatch()
@@ -33,6 +32,7 @@ export const useNotification = (navigate) => {
       const { travelstatus: { id } } = subscriptionData.data.skiperTravel.skiperTravelsTracing[0]
       setStatus(id)
       setIdTravel(subscriptionData.data.skiperTravel.id)
+      console.log(id, 'STATUS TRAVEL')
 
       switch (id) {
         case 2:
@@ -64,6 +64,9 @@ export const useNotification = (navigate) => {
         case 4:
           notification('AlySkiper', 'El conductor ya se encuentra cerca de ti.')
           navigate('Scanner')
+          break
+        case 7:
+          // navigate('BillTransport')
           break
         case 8:
           notification('AlySkiper', 'Felicidades, has llegado a tu destino.')

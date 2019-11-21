@@ -4,8 +4,7 @@ import {
   Vibration,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  Alert
+  TouchableOpacity
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { CameraKitCameraScreen } from 'react-native-camera-kit'
@@ -33,8 +32,7 @@ const ScannerScreen = props => {
   const longitude = props.navigation.getParam('longitude')
   const [manualQR, setManualQR] = useState(false)
   const [codeQR, setCodeQR] = useState('')
-  const [TravelTracing, { loading }] = useMutation(TRAVELTRACING)
-
+  const [TravelTracing, { loading, error }] = useMutation(TRAVELTRACING)
   useEffect(() => {
     const verifyPermission = async () => {
       await permissionCamera()
@@ -42,64 +40,100 @@ const ScannerScreen = props => {
     verifyPermission()
   }, [])
 
+  if (error) {
+    showMessage({
+      message: 'AlySkiper',
+      description: 'Ya se ha confirmado el viaje, no necesita volver a ingresar el codigo de confirmacion.',
+      backgroundColor: 'green',
+      color: '#fff',
+      duration: 8000,
+      icon: 'success',
+      titleStyle: {
+        fontFamily: 'Lato-Bold'
+      },
+      textStyle: {
+        fontFamily: 'Lato-Regular'
+      }
+    })
+  }
+
   const handleOnReadyCode = async event => {
     Vibration.vibrate(1000)
     const scannerQR = event.nativeEvent.codeStringValue.split(' ')
-    const idTravel = scannerQR[0]
-    const idUser = scannerQR[1]
+    const idTravel = parseInt(scannerQR[0])
+    const idUser = parseInt(scannerQR[1])
 
-    if (parseInt(idUser) !== userId) {
-      showMessage({
-        message: 'Error',
-        description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
-        backgroundColor: 'red',
-        color: '#fff',
-        duration: 4000,
-        icon: 'danger',
-        titleStyle: {
-          fontFamily: 'Lato-Bold'
-        },
-        textStyle: {
-          fontFamily: 'Lato-Regular'
-        }
-      })
-      return
-    }
-    console.log(idTravel, latitude, longitude)
-    TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
-      .then(({ registerTravelsTracing }) => {
-        const id = registerTravelsTracing.id
-        if (id !== null || id !== undefined) {
-          showMessage({
-            message: 'AlySkiper',
-            description: 'El codigo se ha verificado correctamente.',
-            backgroundColor: 'green',
-            color: '#fff',
-            icon: 'success',
-            titleStyle: {
-              fontFamily: 'Lato-Bold'
-            },
-            textStyle: {
-              fontFamily: 'Lato-Regular'
-            }
-          })
-          navigate('TravelTrancing')
-        }
-      })
-      .catch(error => console.log(error))
-  }
-
-  const handleOnSubmit = () => {
-    const result = codeQR.split('-')
-    console.log(result)
-    const idTravel = result[0]
-    const idUser = result[1]
     if (idUser !== userId) {
       showMessage({
         message: 'Error',
         description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
         backgroundColor: 'red',
         color: '#fff',
+        duration: 8000,
+        icon: 'danger',
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+      return
+    }
+
+    TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
+      .then(({ registerTravelsTracing }) => {
+        const id = registerTravelsTracing.id
+        if (id !== null || id !== undefined) {
+          showMessage({
+            message: 'AlySkiper',
+            description: 'El codigo se ha verificado correctamente.',
+            backgroundColor: 'green',
+            color: '#fff',
+            icon: 'success',
+            duration: 8000,
+            titleStyle: {
+              fontFamily: 'Lato-Bold'
+            },
+            textStyle: {
+              fontFamily: 'Lato-Regular'
+            }
+          })
+          navigate('TravelTrancing')
+        }
+      })
+      .catch(error => {
+        if (error) {
+          showMessage({
+            message: 'Error',
+            description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
+            backgroundColor: 'red',
+            color: '#fff',
+            icon: 'danger',
+            titleStyle: {
+              fontFamily: 'Lato-Bold'
+            },
+            textStyle: {
+              fontFamily: 'Lato-Regular'
+            }
+          })
+        }
+      })
+  }
+
+  const handleOnSubmit = async () => {
+    const result = codeQR.split('-')
+    const idTravel = parseInt(result[0])
+    const idUser = parseInt(result[1])
+    console.log(idTravel)
+    console.log(idUser)
+
+    if (idUser !== userId) {
+      showMessage({
+        message: 'Error',
+        description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte...',
+        backgroundColor: 'red',
+        color: '#fff',
         duration: 4000,
         icon: 'danger',
         titleStyle: {
@@ -111,28 +145,41 @@ const ScannerScreen = props => {
       })
       return
     }
-    console.log(idTravel, latitude, longitude)
-    TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
-      .then(({ registerTravelsTracing }) => {
-        const id = registerTravelsTracing.id
-        if (id !== null || id !== undefined) {
-          showMessage({
-            message: 'AlySkiper',
-            description: 'El codigo se ha verificado correctamente.',
-            backgroundColor: 'green',
-            color: '#fff',
-            icon: 'success',
-            titleStyle: {
-              fontFamily: 'Lato-Bold'
-            },
-            textStyle: {
-              fontFamily: 'Lato-Regular'
-            }
-          })
-          navigate('TravelTrancing')
+    const { data } = await TravelTracing({ variables: { input: { idtravel: idTravel, idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
+
+    console.log(data)
+    if (data.registerTravelsTracing) {
+      showMessage({
+        message: 'AlySkiper',
+        description: 'El codigo se ha verificado correctamente.',
+        backgroundColor: 'green',
+        color: '#fff',
+        icon: 'success',
+        duration: 8000,
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
         }
       })
-      .catch(error => console.log(error))
+      return navigate('TravelTrancing')
+    } else {
+      showMessage({
+        message: 'Error',
+        description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
+        backgroundColor: 'red',
+        color: '#fff',
+        icon: 'danger',
+        duration: 8000,
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+    }
   }
 
   if (loading) {
@@ -150,13 +197,6 @@ const ScannerScreen = props => {
       </View>
     )
   }
-
-  // if (data) {
-  //   const { registerTravelsTracing: { id } } = data
-  //   if (id !== null || id !== undefined) {
-  //     navigate('TravelTrancing')
-  //   }
-  // }
 
   return (
     <View style={{
