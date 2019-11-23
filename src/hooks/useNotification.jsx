@@ -52,7 +52,7 @@ export const useNotification = (navigate) => {
           navigate('Transport')
           break
         case 3:
-          notification('Transporte', 'Tu solicitud de viaje fue aceptada con exito.')
+          notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
           navigate('TravelTrancing', {
             idTravel: idTravel
           })

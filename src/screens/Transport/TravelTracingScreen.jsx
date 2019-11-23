@@ -53,12 +53,15 @@ const TravelTracingScreen = props => {
     subscribeKey: 'sub-c-e286360e-fdc3-11e9-be22-ea7c5aada356',
     subscribeRequestTimeout: 60000,
     presenceTimeout: 122,
-    uuid: firstName
+    uuid: `${firstName}${userId}`
   })
+
+  console.log(loading)
 
   useEffect(() => {
     if (!loading) {
       if (data.getTravelByUserId !== null) {
+        console.log('entre')
         setErrorTravel(false)
         dispatch({
           type: DETAILSTRAVEL,
@@ -91,30 +94,11 @@ const TravelTracingScreen = props => {
             setConnectionDriver(true)
           }
         })
-
-        // pubnub.setState({
-        //   state: {
-        //     coords: {
-        //       latitude: location.latitude,
-        //       longitude: location.longitude
-        //     },
-        //     firstName: firstName,
-        //     lastName: lastName
-        //   }
-        // }).then(result => {
-        //   console.log(result)
-        // })
-
-        // return () => {
-        //   pubnub.unsubscribe({
-        //     channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
-        //   })
-        // }
       } else {
         setErrorTravel(true)
       }
     }
-  }, [loading, pubnub])
+  }, [loading])
 
   const handleToggleModal = () => {
     setShowDetails(!showDetails)
@@ -136,7 +120,7 @@ const TravelTracingScreen = props => {
           fontFamily: 'Lato-Bold',
           fontSize: Theme.SIZES.normal
         }}
-        >Cargando viaje...
+        >Cargando...
         </Text>
       </View>
     )
@@ -177,25 +161,27 @@ const TravelTracingScreen = props => {
           {driver && (
             driver.map(drive => {
               return (
-                <Marker
-                  style={styles.marker}
-                  key={drive.uuid}
+                <Marker.Animated
+                  key={`${drive.uuid}${drive.state.lastname}`}
                   coordinate={{
                     latitude: drive.state.coords.latitude,
                     longitude: drive.state.coords.longitude
                   }}
                 >
                   <Image
-                    style={styles.drive}
+                    style={{
+                      width: 35,
+                      height: 35,
+                      resizeMode: 'contain'
+                    }}
                     source={require('../../../assets/images/img-icon-silver.png')}
                   />
-                </Marker>
+                </Marker.Animated>
               )
             })
           )}
         </Map>
       )}
-
       {
         <TouchableOpacity
           style={{
@@ -276,7 +262,7 @@ const TravelTracingScreen = props => {
             fontFamily: 'Lato-Bold',
             fontSize: Theme.SIZES.normal
           }}
-          >No hay viajes activos {userId}
+          >No hay viajes activos
           </Text>
         </View>
       )}

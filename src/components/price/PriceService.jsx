@@ -53,7 +53,11 @@ const PriceService = props => {
       dispatch({
         type: DETAILSTRAVEL,
         payload: {
-          priceTravel: priceminimun
+          priceTravel: priceminimun,
+          priceBase: pricebase,
+          pricecKilometer: priceckilometer,
+          priceMinimun: priceminimun,
+          priceMinute: priceminute
         }
       })
       return priceminimun
@@ -61,7 +65,11 @@ const PriceService = props => {
       dispatch({
         type: DETAILSTRAVEL,
         payload: {
-          priceTravel: total
+          priceTravel: total,
+          priceBase: pricebase,
+          pricecKilometer: priceckilometer,
+          priceMinimun: priceminimun,
+          priceMinute: priceminute
         }
       })
       return total

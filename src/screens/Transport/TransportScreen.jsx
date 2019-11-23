@@ -140,47 +140,55 @@ const TransportScreen = props => {
 
   useEffect(() => {
     if (silver) {
-      setTimeout(() => {
-        silver.map(drive => {
-          const doAnimation = drive => {
-            markerSilver.current._component.animateMarkerToCoordinate(drive, 500)
-          }
-          doAnimation(drive)
-        })
-      }, 500)
+      if (markerSilver.current !== null) {
+        setTimeout(() => {
+          silver.map(drive => {
+            const doAnimation = drive => {
+              markerSilver.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
+            }
+            doAnimation(drive)
+          })
+        }, 500)
+      }
     }
 
     if (golden) {
-      setTimeout(() => {
-        golden.map(drive => {
-          const doAnimation = drive => {
-            markerGolden.current._component.animateMarkerToCoordinate(drive, 500)
-          }
-          doAnimation(drive)
-        })
-      }, 500)
+      if (markerGolden.current !== null) {
+        setTimeout(() => {
+          golden.map(drive => {
+            const doAnimation = drive => {
+              markerGolden.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
+            }
+            doAnimation(drive)
+          })
+        }, 500)
+      }
     }
 
     if (vip) {
-      setTimeout(() => {
-        vip.map(drive => {
-          const doAnimation = drive => {
-            markerVip.current._component.animateMarkerToCoordinate(drive, 500)
-          }
-          doAnimation(drive)
-        })
-      }, 500)
+      if (markerVip.current !== null) {
+        setTimeout(() => {
+          vip.map(drive => {
+            const doAnimation = drive => {
+              markerVip.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
+            }
+            doAnimation(drive)
+          })
+        }, 500)
+      }
     }
 
     if (president) {
-      setTimeout(() => {
-        president.map(drive => {
-          const doAnimation = drive => {
-            markerPresident.current._component.animateMarkerToCoordinate(drive, 500)
-          }
-          doAnimation(drive)
-        })
-      }, 500)
+      if (markerPresident.current !== null) {
+        setTimeout(() => {
+          president.map(drive => {
+            const doAnimation = drive => {
+              markerPresident.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
+            }
+            doAnimation(drive)
+          })
+        }, 500)
+      }
     }
   }, [silver, golden, vip, president])
 
@@ -201,7 +209,7 @@ const TransportScreen = props => {
           {silver && (
             silver.map(drive => {
               return (
-                <Marker
+                <Marker.Animated
                   key={drive.uuid}
                   coordinate={{
                     latitude: drive.state.coords.latitude,
@@ -219,14 +227,14 @@ const TransportScreen = props => {
                     }}
                     source={silverMarker}
                   />
-                </Marker>
+                </Marker.Animated>
               )
             })
           )}
 
           {golden && (
             golden.map(drive => (
-              <Marker
+              <Marker.Animated
                 style={styles.marker}
                 key={drive.uuid}
                 coordinate={{
@@ -245,13 +253,13 @@ const TransportScreen = props => {
                   }}
                   source={goldenMarker}
                 />
-              </Marker>
+              </Marker.Animated>
             ))
           )}
 
           {vip && (
             vip.map(drive => (
-              <Marker
+              <Marker.Animated
                 style={styles.marker}
                 key={drive.uuid}
                 coordinate={{
@@ -270,13 +278,13 @@ const TransportScreen = props => {
                   }}
                   source={vipMarker}
                 />
-              </Marker>
+              </Marker.Animated>
             ))
           )}
 
           {president && (
             president.map(drive => (
-              <Marker
+              <Marker.Animated
                 style={styles.marker}
                 key={drive.uuid}
                 coordinate={{
@@ -295,7 +303,7 @@ const TransportScreen = props => {
                   }}
                   source={presidentMarker}
                 />
-              </Marker>
+              </Marker.Animated>
             ))
           )}
 
