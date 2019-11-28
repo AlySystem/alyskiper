@@ -34,10 +34,11 @@ import { GETTRAVELBYUSERID } from '../../graphql/querys/Querys'
 import { Theme } from '../../constants/Theme'
 
 const TravelTracingScreen = props => {
-  const { navigate } = props.navigation
   const dispatch = useDispatch()
+  const { navigate } = props.navigation
   const { userId, firstName } = useSelector(state => state.user)
   const { location } = useLocation()
+  // console.log(location)
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErrorTravel] = useState(false)
   const [connectionDriver, setConnectionDriver] = useState(false)
@@ -46,22 +47,20 @@ const TravelTracingScreen = props => {
   const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
 
   const mapView = useRef(null)
+  const marker = useRef(null)
   useNotification(navigate)
 
   const pubnub = new PubNubReact({
-    publishKey: 'pub-c-b5350d6e-9a1f-4d33-b5c9-918fe9bff121',
-    subscribeKey: 'sub-c-e286360e-fdc3-11e9-be22-ea7c5aada356',
+    publishKey: 'pub-c-bd68b062-738a-44e5-91a1-cfdab437d40f',
+    subscribeKey: 'sub-c-41661912-108b-11ea-9132-cacb72695e2d',
     subscribeRequestTimeout: 60000,
     presenceTimeout: 122,
     uuid: `${firstName}${userId}`
   })
 
-  console.log(loading)
-
   useEffect(() => {
     if (!loading) {
       if (data.getTravelByUserId !== null) {
-        console.log('entre')
         setErrorTravel(false)
         dispatch({
           type: DETAILSTRAVEL,
@@ -86,8 +85,12 @@ const TravelTracingScreen = props => {
               const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
               if (channels !== undefined) {
                 const drive = channels.occupants.filter(item => item.state !== undefined)
+                // console.log(drive)
                 setConnectionDriver(false)
                 setDriver(drive)
+                if (marker.current !== null) {
+                  marker.current._component.animateMarkerToCoordinate({ latitude: drive[0].state.coords.latitude, longitude: drive[0].state.coords.longitude }, 500)
+                }
               }
             }
           } else {
@@ -98,7 +101,7 @@ const TravelTracingScreen = props => {
         setErrorTravel(true)
       }
     }
-  }, [loading])
+  }, [loading, driver])
 
   const handleToggleModal = () => {
     setShowDetails(!showDetails)
@@ -162,6 +165,7 @@ const TravelTracingScreen = props => {
             driver.map(drive => {
               return (
                 <Marker.Animated
+                  ref={marker}
                   key={`${drive.uuid}${drive.state.lastname}`}
                   coordinate={{
                     latitude: drive.state.coords.latitude,
@@ -169,11 +173,7 @@ const TravelTracingScreen = props => {
                   }}
                 >
                   <Image
-                    style={{
-                      width: 35,
-                      height: 35,
-                      resizeMode: 'contain'
-                    }}
+                    style={styles.drive}
                     source={require('../../../assets/images/img-icon-silver.png')}
                   />
                 </Marker.Animated>

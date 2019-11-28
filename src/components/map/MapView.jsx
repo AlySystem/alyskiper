@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
   Image,
   View,
   Platform
 } from 'react-native'
-import MapView, { Marker, AnimatedRegion } from 'react-native-maps'
+import MapView, { Marker } from 'react-native-maps'
 import * as Animatable from 'react-native-animatable'
 
 // Import theme
@@ -33,7 +33,7 @@ export const Map = props => {
     const animateMarker = () => {
       if (marker.current) {
         if (Platform.OS === 'android') {
-          marker.current._component.animateMarkerToCoordinate({ latitude: location.latitude, longitude: location.longitude }, 1)
+          marker.current._component.animateMarkerToCoordinate({ latitude: location.latitude, longitude: location.longitude }, 500)
         }
       }
     }
