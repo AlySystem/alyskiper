@@ -141,53 +141,45 @@ const TransportScreen = props => {
   useEffect(() => {
     if (silver) {
       if (markerSilver.current !== null) {
-        setTimeout(() => {
-          silver.map(drive => {
-            const doAnimation = drive => {
-              markerSilver.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
-            }
-            doAnimation(drive)
-          })
-        }, 500)
+        silver.map(drive => {
+          markerSilver.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
+          // const doAnimation = drive => {
+          // }
+          // doAnimation(drive)
+        })
       }
     }
 
     if (golden) {
       if (markerGolden.current !== null) {
-        setTimeout(() => {
-          golden.map(drive => {
-            const doAnimation = drive => {
-              markerGolden.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
-            }
-            doAnimation(drive)
-          })
-        }, 500)
+        golden.map(drive => {
+          markerGolden.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
+          // const doAnimation = drive => {
+          // }
+          // doAnimation(drive)
+        })
       }
     }
 
     if (vip) {
       if (markerVip.current !== null) {
-        setTimeout(() => {
-          vip.map(drive => {
-            const doAnimation = drive => {
-              markerVip.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
-            }
-            doAnimation(drive)
-          })
-        }, 500)
+        vip.map(drive => {
+          markerVip.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
+          // const doAnimation = drive => {
+          // }
+          // doAnimation(drive)
+        })
       }
     }
 
     if (president) {
       if (markerPresident.current !== null) {
-        setTimeout(() => {
-          president.map(drive => {
-            const doAnimation = drive => {
-              markerPresident.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
-            }
-            doAnimation(drive)
-          })
-        }, 500)
+        president.map(drive => {
+          markerPresident.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
+          // const doAnimation = drive => {
+          // }
+          // doAnimation(drive)
+        })
       }
     }
   }, [silver, golden, vip, president])

@@ -66,7 +66,7 @@ export const useNotification = (navigate) => {
           navigate('Scanner')
           break
         case 7:
-          // navigate('BillTransport')
+          navigate('BillTransport')
           break
         case 8:
           notification('AlySkiper', 'Felicidades, has llegado a tu destino.')

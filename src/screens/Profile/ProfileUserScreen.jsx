@@ -41,7 +41,7 @@ const ProfileUserScreen = () => {
   const userData = useSelector(state => state.user)
   const dispatch = useDispatch()
   const [error, setError] = useState(null)
-  const [cityId, setCityId] = useState('')
+  const [cityId, setCityId] = useState(userData.city_id)
   const [isLoading, setIsLoading] = useState(false)
   const [UpdateUser, { loading }] = useMutation(UPDATEUSER)
 
