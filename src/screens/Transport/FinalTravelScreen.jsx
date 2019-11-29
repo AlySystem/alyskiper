@@ -50,6 +50,11 @@ const FinalTravelScreen = props => {
       type: REMOVEACTIVETRAVEL
     })
 
+    console.log(drive.skiperagent.user.id)
+    console.log(userId)
+    console.log(star)
+    console.log(value)
+
     SkiperRating({
       variables: {
         input: {
@@ -97,8 +102,6 @@ const FinalTravelScreen = props => {
           navigate('Home')
         }
       })
-
-    navigate('Home')
   }
 
   return (

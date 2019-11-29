@@ -12,10 +12,12 @@
   "dependencies": {
     "@apollo/react-hooks": "3.1.2",
     "@mapbox/polyline": "1.1.0",
+    "@mapbox/store-locator-react-native": "^0.0.1",
     "@react-native-community/async-storage": "1.6.2",
     "@react-native-community/netinfo": "4.4.0",
     "@react-native-community/picker": "1.1.2",
     "@react-native-community/viewpager": "2.0.1",
+    "@react-native-mapbox-gl/maps": "^7.0.8",
     "apollo-boost": "0.4.4",
     "apollo-cache-inmemory": "1.6.3",
     "apollo-link-context": "1.0.19",

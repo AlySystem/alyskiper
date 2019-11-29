@@ -12,7 +12,7 @@ import { GETNOTIFICATIONTRAVEL } from '../graphql/subscription/Subcription'
 
 import { notification } from '../hooks/usePushNotification'
 
-export const useNotification = (navigate) => {
+export const useNotification = (navigate, latitude, longitude) => {
   const dispatch = useDispatch()
   const { userId, firstName } = useSelector(state => state.user)
   const [status, setStatus] = useState()
@@ -63,10 +63,10 @@ export const useNotification = (navigate) => {
           break
         case 4:
           notification('AlySkiper', 'El conductor ya se encuentra cerca de ti.')
-          navigate('Scanner')
+          navigate('Scanner', { latitude: latitude, longitude: longitude })
           break
         case 7:
-          navigate('BillTransport')
+          // navigate('BillTransport')
           break
         case 8:
           notification('AlySkiper', 'Felicidades, has llegado a tu destino.')

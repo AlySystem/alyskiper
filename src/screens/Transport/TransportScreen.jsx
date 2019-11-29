@@ -92,7 +92,7 @@ const TransportScreen = props => {
     setIsLoading(false)
     setDestination(pointCoords)
     setDetails(details)
-
+    console.log('Direction')
     dispatch({
       type: DIRECTION,
       payload: {

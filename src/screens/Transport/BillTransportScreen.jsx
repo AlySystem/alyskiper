@@ -8,18 +8,12 @@ import { useSelector } from 'react-redux'
 
 // Import components
 import Background from '../../components/background/Background'
-import PriceService from '../../components/price/PriceService'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
 const BillTransportScreen = props => {
-  const { steps } = useSelector(state => state.direction)
-  const { travel, priceTravel } = useSelector(state => state.travel)
-
-  console.log(steps)
-  console.log(travel)
-  console.log(priceTravel)
+  const { travel, direction } = useSelector(state => state)
 
   return (
     <Background>
@@ -28,22 +22,22 @@ const BillTransportScreen = props => {
           <View style={styles.container}>
             <View style={styles.itemAlt}>
               <Text allowFontScaling={false} style={styles.text}>DURACION</Text>
-              {/* <Text allowFontScaling={false} style={styles.value}>{duration.text}</Text> */}
+              <Text allowFontScaling={false} style={styles.value}>{direction.steps.duration.text}</Text>
             </View>
             <View style={styles.item}>
               <Text allowFontScaling={false} style={styles.text}>DISTANCIA</Text>
-              {/* <Text allowFontScaling={false} style={styles.value}>{distance.text}</Text> */}
+              <Text allowFontScaling={false} style={styles.value}>{direction.steps.distance.text}</Text>
             </View>
           </View>
 
           <View style={styles.containerAddress}>
             <Text allowFontScaling={false} style={styles.text}>ORIGEN</Text>
-            {/* <Text allowFontScaling={false} style={styles.textAddress}>{start_address}</Text> */}
+            <Text allowFontScaling={false} style={styles.textAddress}>{direction.start_address}</Text>
           </View>
 
           <View style={styles.containerAddress}>
             <Text allowFontScaling={false} style={styles.text}>DESTINO</Text>
-            {/* <Text allowFontScaling={false} style={styles.textAddress}>{end_address}</Text> */}
+            <Text allowFontScaling={false} style={styles.textAddress}>{direction.end_address}</Text>
           </View>
 
           <View style={styles.container}>
@@ -54,23 +48,23 @@ const BillTransportScreen = props => {
           <View style={styles.containerPrice}>
             <View style={styles.container}>
               <Text allowFontScaling={false} style={styles.text}>PRECIO BASE</Text>
-              {/* <Text allowFontScaling={false} style={styles.value}>{data.CalcularTarifa.pricebase}</Text> */}
+              <Text allowFontScaling={false} style={styles.value}>{travel.priceTravel.priceBase}</Text>
             </View>
 
             <View style={styles.container}>
               <Text allowFontScaling={false} style={styles.text}>PRECIO POR DISTANCIA</Text>
-              {/* <Text allowFontScaling={false} style={styles.value}>{Math.round(data.CalcularTarifa.priceckilometer * distance.text.split(' ')[0])}</Text> */}
+              <Text allowFontScaling={false} style={styles.value}>{travel.priceTravel.priceKilometer}</Text>
             </View>
 
             <View style={styles.container}>
               <Text allowFontScaling={false} style={styles.text}>PRECIO POR TIEMPO</Text>
-              {/* <Text allowFontScaling={false} style={styles.value}>{Math.round(duration.text.split(' ')[0] * data.CalcularTarifa.priceminute)}</Text> */}
+              <Text allowFontScaling={false} style={styles.value}>{travel.priceTravel.priceMinute}</Text>
             </View>
           </View>
 
           <View style={styles.container}>
             <Text allowFontScaling={false} style={styles.text}>TOTAL</Text>
-            <PriceService />
+            <Text allowFontScaling={false} style={styles.value}>{travel.priceTravel.priceTravel}</Text>
           </View>
         </View>
       </View>

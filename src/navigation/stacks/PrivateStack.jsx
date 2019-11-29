@@ -31,6 +31,7 @@ import ScannerScreen from '../../screens/Scanner/ScannerScreen'
 import AddAddressScreen from '../../screens/Address/AddAddressScreen'
 import MapAddressScreen from '../../screens/Address/MapAddressScreen'
 import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
+import BillTransport from '../../screens/Transport/BillTransportScreen'
 // import FinalTravelScreen from '../../screens/Transport/FinalTravelScreen'
 
 // Import components
@@ -189,6 +190,10 @@ const StackNavigation = createStackNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  BillTransport: {
+    screen: BillTransport,
+    navigationOptions
   }
 })
 
