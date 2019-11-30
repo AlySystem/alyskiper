@@ -5,7 +5,8 @@ import {
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
 import { useSelector, useDispatch } from 'react-redux'
-import moment from 'moment'
+import timezone from 'moment-timezone'
+import * as RNLocalize from 'react-native-localize'
 
 // Impoer actions
 import { DETAILSTRAVEL } from '../../store/actionTypes'
@@ -20,6 +21,8 @@ import { CALCULATERATE } from '../../graphql/querys/Querys'
 import Loader from '../loader/Loader'
 
 const PriceService = props => {
+  const time = RNLocalize.getTimeZone()
+  const date = timezone().tz(time).format('YYYY-MM-DD HH:mm:ss')
   const dispatch = useDispatch()
   const { country_id, city_id } = useSelector(state => state.user)
   const { steps } = useSelector(state => state.direction)
@@ -29,7 +32,7 @@ const PriceService = props => {
       idcountry: country_id,
       idcity: city_id,
       idcategoriaviaje: props.categoryId,
-      date_init: `${moment().format('YYYY-MM-DD')} ${moment().format('HH:mm:ss')}`
+      date_init: date
     }
   })
 

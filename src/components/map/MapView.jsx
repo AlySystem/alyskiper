@@ -9,6 +9,7 @@ import * as Animatable from 'react-native-animatable'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+import { mapStyle } from '../../../StylesMap'
 
 // Import components
 import Button from '../../components/button/Button'
@@ -45,6 +46,7 @@ export const Map = props => {
       <MapView
         style={{ flex: 1 }}
         ref={mapView}
+        customMapStyle={mapStyle}
         loadingBackgroundColor={Theme.COLORS.colorMainDark}
         loadingIndicatorColor={Theme.COLORS.colorSecondary}
         loadingEnabled
@@ -82,7 +84,7 @@ export const Map = props => {
       >
         <Button
           iconName='my-location'
-          iconSize={25}
+          iconSize={35}
           iconColor={Theme.COLORS.colorSecondary}
           onPress={centerToLocation}
         />

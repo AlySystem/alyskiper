@@ -34,27 +34,8 @@ const FinalTravelScreen = props => {
   const [value, setValue] = useState('')
   const { drive } = useSelector(state => state.travel)
   const { userId } = useSelector(state => state.user)
-  console.log(drive)
 
   const handleOnSubmit = () => {
-    dispatch({
-      type: REMOVEDIRECTION
-    })
-    dispatch({
-      type: REMOVEDETAILSTRAVEL
-    })
-    dispatch({
-      type: REMOVELOCATION
-    })
-    dispatch({
-      type: REMOVEACTIVETRAVEL
-    })
-
-    console.log(drive.skiperagent.user.id)
-    console.log(userId)
-    console.log(star)
-    console.log(value)
-
     SkiperRating({
       variables: {
         input: {
@@ -81,7 +62,19 @@ const FinalTravelScreen = props => {
               fontFamily: 'Lato-Regular'
             }
           })
-          navigate('Home')
+          dispatch({
+            type: REMOVEDIRECTION
+          })
+          dispatch({
+            type: REMOVEDETAILSTRAVEL
+          })
+          dispatch({
+            type: REMOVELOCATION
+          })
+          dispatch({
+            type: REMOVEACTIVETRAVEL
+          })
+          return navigate('Home')
         }
       })
       .catch(error => {
@@ -99,7 +92,19 @@ const FinalTravelScreen = props => {
               fontFamily: 'Lato-Regular'
             }
           })
-          navigate('Home')
+          dispatch({
+            type: REMOVEDIRECTION
+          })
+          dispatch({
+            type: REMOVEDETAILSTRAVEL
+          })
+          dispatch({
+            type: REMOVELOCATION
+          })
+          dispatch({
+            type: REMOVEACTIVETRAVEL
+          })
+          return navigate('Home')
         }
       })
   }

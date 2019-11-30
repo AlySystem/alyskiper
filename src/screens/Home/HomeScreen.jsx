@@ -20,8 +20,6 @@ import Background from '../../components/background/Background'
 
 const HomeScreen = props => {
   const { navigate } = props.navigation
-  const state = useSelector(state => state)
-  console.log(state)
   const userData = useSelector(state => state.user)
 
   return (
