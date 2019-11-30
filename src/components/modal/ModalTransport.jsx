@@ -2,8 +2,10 @@ import React from 'react'
 import {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native'
+import IconFont from 'react-native-vector-icons/FontAwesome'
 
 // Import components
 import Modal from './Modal'
@@ -19,6 +21,7 @@ import { Theme } from '../../constants/Theme'
 
 const ModalTransport = props => {
   const { isVisible, setIsVisible, navigation, location } = props
+  const { navigate } = navigation
 
   return (
     <Modal
@@ -49,7 +52,18 @@ const ModalTransport = props => {
             isVisible={isVisible}
             location={location}
           />
-          <View style={{ marginVertical: 20 }} />
+          <View style={{ marginVertical: 10 }} />
+          <TouchableOpacity
+            style={styles.containerText}
+            onPress={() => {
+              setIsVisible(!isVisible)
+              return navigate('pickerTransport')
+            }}
+          >
+            <IconFont name='map-pin' color={Theme.COLORS.colorSecondary} size={25} />
+            <Text style={styles.text}>Seleccionar punto en el mapa</Text>
+          </TouchableOpacity>
+          <View style={{ marginVertical: 10 }} />
           <Text
             allowFontScaling={false} style={{
               color: Theme.COLORS.colorSecondary,
@@ -74,6 +88,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 55,
     backgroundColor: 'rgba(0,0,0,.5)'
+  },
+  containerText: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  text: {
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.small,
+    marginLeft: 10
   }
 })
 

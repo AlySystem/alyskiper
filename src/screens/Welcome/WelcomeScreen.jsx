@@ -21,10 +21,7 @@ const WelcomeScreen = props => {
 
   return (
     <Background>
-
       <Snow />
-
-
       <View style={styles.screen}>
         <View style={styles.container}>
           <ListOfData />

@@ -1,39 +1,43 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import {
   View,
   StyleSheet,
   SafeAreaView
 } from 'react-native'
-import MapView from 'react-native-maps'
-import { useSelector, useDispatch } from 'react-redux'
-import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome5'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import Geocoder from 'react-native-geocoding'
+import { useDispatch } from 'react-redux'
 
 // Import actions types
-import { LOCATIONDETAILS } from '../../store/actionTypes'
-
-// Import Theme
-import { Theme } from '../../constants/Theme'
+import { DIRECTION } from '../../store/actionTypes'
 
 // Import components
+import { Map } from '../../components/map/MapView'
 import IconButton from '../../components/button/IconButton'
 import InputControl from '../../components/input/InputControl'
 
 // Import utils
 import { keys } from '../../utils/keys'
 
+// Import hooks
+import { useLocation } from '../../hooks/useLocation'
+
+// Import theme
+import { Theme } from '../../constants/Theme'
+
 Geocoder.init(`${keys.googleMaps.apiKey}`)
-const FixedMapScreen = props => {
+const PickerTransportScreen = props => {
   const { navigate } = props.navigation
+  const { location } = useLocation()
   const dispatch = useDispatch()
-  const [region, setRegion] = useState(useSelector(state => state.location))
+  const [changeLocation, setChangeLocation] = useState(null)
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [details, setDetails] = useState({})
   const mapView = useRef(null)
 
-  const handleOnRegionChange = async location => {
-    setRegion(location)
+  const onLocationChange = async location => {
+    setChangeLocation(location)
     setIsLoading(true)
     const { latitude, longitude } = location
     const response = await Geocoder.from({ latitude, longitude })
@@ -52,9 +56,12 @@ const FixedMapScreen = props => {
 
   const handleOnSubmit = () => {
     dispatch({
-      type: LOCATIONDETAILS,
+      type: DIRECTION,
       payload: {
-        directionsDetails: details
+        directions: {
+          placeId: details.placeId,
+          address: details.address
+        }
       }
     })
     navigate('Transport')
@@ -62,18 +69,18 @@ const FixedMapScreen = props => {
 
   return (
     <View style={styles.screen}>
-      <MapView
-        style={{ flex: 1 }}
-        loadingBackgroundColor={Theme.COLORS.colorMainDark}
-        loadingIndicatorColor={Theme.COLORS.colorSecondary}
-        showsUserLocation
-        loadingEnabled
-        initialRegion={region.location}
-        onRegionChangeComplete={handleOnRegionChange}
-        showsCompass={false}
-        showsMyLocationButton={false}
-        ref={mapView}
-      />
+      {location.latitude && (
+        <Map
+          location={changeLocation || location}
+          changeLocation={changeLocation}
+          mapView={mapView}
+          onLocationChange={onLocationChange}
+        >
+          <View style={styles.marker}>
+            <Icon name='map-pin' color={Theme.COLORS.colorSecondary} size={40} />
+          </View>
+        </Map>
+      )}
       <View style={styles.containerInput}>
         <InputControl
           value={value}
@@ -82,14 +89,7 @@ const FixedMapScreen = props => {
           stylesInput={styles.stylesInput}
         />
       </View>
-      <View style={styles.markerFixed}>
-        <FontAwesomeIcons
-          name='map-pin'
-          size={40}
-          color={Theme.COLORS.colorMainAlt}
-          style={styles.marker}
-        />
-      </View>
+
       <SafeAreaView style={styles.footer}>
         <IconButton
           message='LISTO, FIJAR!'
@@ -106,31 +106,14 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1
   },
-  markerFixed: {
+  marker: {
+    position: 'absolute',
     left: '50%',
-    marginLeft: -24,
+    top: '50%',
     marginTop: -48,
-    position: 'absolute',
-    top: '50%'
-  },
-  footer: {
-    bottom: 28,
-    position: 'absolute',
-    width: '100%',
+    marginLeft: -14,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  button: {
-    borderRadius: 100,
-    paddingHorizontal: 20,
-    height: 50,
-    backgroundColor: Theme.COLORS.colorMainAlt,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: 320,
-    borderBottomColor: Theme.COLORS.colorSecondary,
-    borderBottomWidth: 0.3
   },
   containerInput: {
     position: 'absolute',
@@ -151,7 +134,27 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small,
     color: Theme.COLORS.colorParagraph
+  },
+  footer: {
+    bottom: 28,
+    paddingHorizontal: 20,
+    position: 'absolute',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+  },
+  button: {
+    borderRadius: 100,
+    paddingHorizontal: 20,
+    height: 50,
+    backgroundColor: Theme.COLORS.colorMainAlt,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: 200,
+    borderBottomColor: Theme.COLORS.colorSecondary,
+    borderBottomWidth: 0.3
   }
 })
 
-export default FixedMapScreen
+export default PickerTransportScreen
