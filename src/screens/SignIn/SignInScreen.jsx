@@ -26,6 +26,7 @@ import Picture from '../../components/picture/Picture'
 import Title from '../../components/title/Title'
 import InputControl from '../../components/input/InputControl'
 import IconButton from '../../components/button/IconButton'
+import Snow from '../../components/snow/Snow'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -132,6 +133,9 @@ const SignInScreen = props => {
 
   return (
     <Background>
+
+      <Snow />
+
       <View style={styles.screen}>
         <ScrollView
           contentContainerStyle={styles.scrollView}
