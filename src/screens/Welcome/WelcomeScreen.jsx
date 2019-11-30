@@ -3,6 +3,7 @@ import {
   View,
   StyleSheet
 } from 'react-native'
+import LottieView from 'lottie-react-native'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -21,6 +22,17 @@ const WelcomeScreen = props => {
     <Background>
       <View style={styles.screen}>
         <View style={styles.container}>
+          <LottieView 
+            source={require('../../../animation.json')}
+            autoPlay
+            loop
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'stretch'
+            }}
+          />
           <ListOfData />
           <View style={styles.containerButtons}>
             <IconButton
