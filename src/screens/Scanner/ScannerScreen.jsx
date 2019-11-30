@@ -82,12 +82,8 @@ const ScannerScreen = props => {
       return
     }
 
-    console.log(idTravel)
-    console.log(latitude)
-    console.log(longitude)
-    TravelTracing({ variables: { input: { idtravel: parseInt(idTravel), idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
+    TravelTracing({ variables: { input: { idtravel: idTravel, idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
       .then(result => {
-        console.log(result)
         const { data } = result
         const id = data.registerTravelsTracing.id
         if (id !== null || id !== undefined) {
@@ -109,7 +105,6 @@ const ScannerScreen = props => {
         }
       })
       .catch(error => {
-        console.log(error, 'error')
         if (error) {
           showMessage({
             message: 'Error',
@@ -150,9 +145,6 @@ const ScannerScreen = props => {
       })
       return
     }
-    console.log(idTravel)
-    console.log(latitude)
-    console.log(longitude)
 
     TravelTracing({
       variables: {

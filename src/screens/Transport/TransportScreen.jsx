@@ -26,6 +26,7 @@ import InputControl from '../../components/input/InputControl'
 import ModalTransport from '../../components/modal/ModalTransport'
 import Button from '../../components/button/Button'
 import Loader from '../../components/loader/Loader'
+import AnimatedPolyline from '../../components/polyline/AnimtedPolyline'
 
 // Import image
 import silverMarker from '../../../assets/images/img-icon-silver.png'
@@ -92,7 +93,6 @@ const TransportScreen = props => {
     setIsLoading(false)
     setDestination(pointCoords)
     setDetails(details)
-
     dispatch({
       type: DIRECTION,
       payload: {
@@ -306,7 +306,7 @@ const TransportScreen = props => {
                 strokeWidth={3}
                 strokeColor={Theme.COLORS.colorMainAlt}
               />
-              <Marker coordinate={destination[destination.length - 1]} />
+              <AnimatedPolyline Direction={destination} />
             </>
           )}
         </Map>
@@ -318,7 +318,7 @@ const TransportScreen = props => {
             iconName='arrow-back'
             iconSize={30}
             stylesButton={styles.buttonBack}
-            iconColor={Theme.COLORS.colorMainAlt}
+            iconColor={Theme.COLORS.colorParagraph}
           />
           <ListOfCategoryServices
             location={location}
@@ -334,7 +334,7 @@ const TransportScreen = props => {
           height: '50%'
         }}
         >
-          <Loader color={Theme.COLORS.colorMainAlt} />
+          <Loader color={Theme.COLORS.colorSecondary} />
         </View>
       ) : city_id && (
         <TouchableOpacity

@@ -74,10 +74,10 @@ export const usePubnub = () => {
             president
           }
         })
-        console.log('SILVER', silver)
-        console.log('GOLDEN', golden)
-        console.log('VIP', vip)
-        console.log('PRESIDENT', president)
+        // console.log('SILVER', silver)
+        // console.log('GOLDEN', golden)
+        // console.log('VIP', vip)
+        // console.log('PRESIDENT', president)
       }
     })
 

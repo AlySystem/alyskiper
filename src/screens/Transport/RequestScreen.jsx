@@ -30,13 +30,13 @@ const RequestScreen = props => {
   const dispatch = useDispatch()
   const { goBack, navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
-  const { travel, priceTravel } = useSelector(state => state.travel)
+  const { travel } = useSelector(state => state.travel)
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
   const { silver, golden, vip, president } = useSelector(state => state.drivers)
   const [GetDriverNearby, { error }] = useMutation(GETDRIVERNEARBY)
   const [GenerateTravel] = useMutation(GENERATETRAVEL)
-  useNotification(navigate)
+  useNotification(navigate, latitude, longitude)
 
   const handleOnCancel = () => {
     dispatch({
@@ -98,8 +98,8 @@ const RequestScreen = props => {
       .then(({ data }) => {
         const driverId = data.ObtenerDriveCercano
         const { categoryId } = travel
-        console.log(categoryId, priceTravel)
         const { duration, distance, end_address, start_address, start_location, end_location } = steps
+
         GenerateTravel({
           variables: {
             inputviaje: {
@@ -115,7 +115,6 @@ const RequestScreen = props => {
               address_final: end_address,
               idcurrency: 2,
               idpayment_methods: 2,
-              Total: priceTravel,
               categoryId: categoryId
             }
           }

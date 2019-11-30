@@ -9,16 +9,17 @@ import * as Animatable from 'react-native-animatable'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+import { mapStyle } from '../../../StylesMap'
 
 // Import components
 import Button from '../../components/button/Button'
 
 // Import marker
-import markerUser from '../../../assets/images/img-marker-user.png'
+import markerUserImage from '../../../assets/images/img-marker-user.png'
 
 export const Map = props => {
   const { children, location, mapView } = props
-  const marker = useRef(null)
+  const markerUser = useRef(null)
 
   const centerToLocation = () => {
     mapView.current.animateToRegion({
@@ -31,9 +32,9 @@ export const Map = props => {
 
   useEffect(() => {
     const animateMarker = () => {
-      if (marker.current) {
+      if (markerUser.current) {
         if (Platform.OS === 'android') {
-          marker.current._component.animateMarkerToCoordinate({ latitude: location.latitude, longitude: location.longitude }, 500)
+          markerUser.current._component.animateMarkerToCoordinate({ latitude: location.latitude, longitude: location.longitude }, 500)
         }
       }
     }
@@ -45,6 +46,7 @@ export const Map = props => {
       <MapView
         style={{ flex: 1 }}
         ref={mapView}
+        customMapStyle={mapStyle}
         loadingBackgroundColor={Theme.COLORS.colorMainDark}
         loadingIndicatorColor={Theme.COLORS.colorSecondary}
         loadingEnabled
@@ -53,7 +55,7 @@ export const Map = props => {
         showsMyLocationButton={false}
       >
         <Marker.Animated
-          ref={marker}
+          ref={markerUser}
           coordinate={location}
         >
           <Image
@@ -62,7 +64,7 @@ export const Map = props => {
               height: 35,
               resizeMode: 'contain'
             }}
-            source={markerUser}
+            source={markerUserImage}
           />
         </Marker.Animated>
 
@@ -82,7 +84,7 @@ export const Map = props => {
       >
         <Button
           iconName='my-location'
-          iconSize={25}
+          iconSize={35}
           iconColor={Theme.COLORS.colorSecondary}
           onPress={centerToLocation}
         />

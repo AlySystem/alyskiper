@@ -197,7 +197,7 @@ const TravelTracingScreen = props => {
           <Icon
             name='qrcode-scan'
             size={40}
-            color={Theme.COLORS.colorMain}
+            color={Theme.COLORS.colorSecondary}
           />
         </TouchableOpacity>
       }
