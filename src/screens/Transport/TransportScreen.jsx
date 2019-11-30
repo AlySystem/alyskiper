@@ -9,7 +9,7 @@ import {
   Alert
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import { Polyline, Marker, Circle } from 'react-native-maps'
+import { Polyline, Marker } from 'react-native-maps'
 
 // Import actions
 import { REMOVEDIRECTION, DIRECTION } from '../../store/actionTypes'
@@ -307,14 +307,6 @@ const TransportScreen = props => {
                 strokeColor={Theme.COLORS.colorMainAlt}
               />
               <AnimatedPolyline Direction={destination} />
-              {/* <Circle
-                center={destination[destination.length - 1]}
-                radius={50}
-                strokeColor={Theme.COLORS.colorMainAlt}
-                strokeWidth={5}
-                fillColor={Theme.COLORS.colorSecondaryAlt}
-                zIndex={1}
-              /> */}
             </>
           )}
         </Map>
