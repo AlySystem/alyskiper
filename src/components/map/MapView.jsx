@@ -53,6 +53,7 @@ export const Map = props => {
         initialRegion={location}
         showsCompass={false}
         showsMyLocationButton={false}
+        onRegionChangeComplete={props.onLocationChange}
       >
         <Marker.Animated
           ref={markerUser}
@@ -67,8 +68,8 @@ export const Map = props => {
             source={markerUserImage}
           />
         </Marker.Animated>
-
         {children}
+
       </MapView>
       <Animatable.View
         style={{

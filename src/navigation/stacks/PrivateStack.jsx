@@ -43,6 +43,7 @@ import logo from '../../../assets/images/logo.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
 
 const navigationOptions = ({ navigation }) => {
   return {
@@ -194,6 +195,12 @@ const StackNavigation = createStackNavigator({
   BillTransport: {
     screen: BillTransport,
     navigationOptions
+  },
+  pickerTransport: {
+    screen: PickerTransportScreen,
+    navigationOptions: {
+      header: null
+    }
   }
 })
 

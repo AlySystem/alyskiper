@@ -23,7 +23,7 @@ const snow = {
   one: require('./image/one.png'),
   two: require('./image/two.png'),
   three: require('./image/three.png'),
-  four: require('./image/four.png'),
+  four: require('./image/four.png')
 }
 
 count = 15
