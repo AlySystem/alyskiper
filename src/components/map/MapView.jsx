@@ -34,6 +34,7 @@ export const Map = props => {
     const animateMarker = () => {
       if (markerUser.current) {
         if (Platform.OS === 'android') {
+          console.log('User... ', location.latitude, location.longitude)
           markerUser.current._component.animateMarkerToCoordinate({ latitude: location.latitude, longitude: location.longitude }, 500)
         }
       }
@@ -78,7 +79,7 @@ export const Map = props => {
           right: 15,
           backgroundColor: Theme.COLORS.colorMainAlt,
           borderRadius: 200,
-          padding: 15
+          padding: 12
         }}
         animation='zoomIn'
         iterationCount={1}

@@ -31,7 +31,7 @@ import AddAddressScreen from '../../screens/Address/AddAddressScreen'
 import MapAddressScreen from '../../screens/Address/MapAddressScreen'
 import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 import BillTransport from '../../screens/Transport/BillTransportScreen'
-// import FinalTravelScreen from '../../screens/Transport/FinalTravelScreen'
+import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -42,7 +42,6 @@ import logo from '../../../assets/images/logo.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
 
 const navigationOptions = ({ navigation }) => {
   return {
@@ -161,12 +160,6 @@ const StackNavigation = createStackNavigator({
   },
   Request: {
     screen: RequestScreen,
-    navigationOptions: {
-      header: null
-    }
-  },
-  FixedMap: {
-    screen: FixedMapScreen,
     navigationOptions: {
       header: null
     }

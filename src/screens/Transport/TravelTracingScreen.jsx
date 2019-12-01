@@ -36,9 +36,9 @@ import { Theme } from '../../constants/Theme'
 const TravelTracingScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
+  const { travel } = useSelector(state => state.activeTravel)
   const { userId, firstName } = useSelector(state => state.user)
   const { location } = useLocation()
-  // console.log(location)
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErrorTravel] = useState(false)
   const [connectionDriver, setConnectionDriver] = useState(false)
@@ -48,7 +48,7 @@ const TravelTracingScreen = props => {
 
   const mapView = useRef(null)
   const marker = useRef(null)
-  useNotification(navigate)
+  useNotification(navigate, location.latitude, location.longitude)
 
   const pubnub = new PubNubReact({
     publishKey: 'pub-c-bd68b062-738a-44e5-91a1-cfdab437d40f',
@@ -60,7 +60,7 @@ const TravelTracingScreen = props => {
 
   useEffect(() => {
     if (!loading) {
-      if (data.getTravelByUserId !== null) {
+      if (travel !== null) {
         setErrorTravel(false)
         dispatch({
           type: DETAILSTRAVEL,
@@ -85,10 +85,10 @@ const TravelTracingScreen = props => {
               const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
               if (channels !== undefined) {
                 const drive = channels.occupants.filter(item => item.state !== undefined)
-                // console.log(drive)
                 setConnectionDriver(false)
                 setDriver(drive)
                 if (marker.current !== null) {
+                  console.log('DRIVING... ', drive[0].state.coords.latitude, drive[0].state.coords.longitude)
                   marker.current._component.animateMarkerToCoordinate({ latitude: drive[0].state.coords.latitude, longitude: drive[0].state.coords.longitude }, 500)
                 }
               }
