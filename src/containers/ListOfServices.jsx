@@ -28,7 +28,7 @@ const items = [
     key: 2,
     icon: iconCommerce,
     title: 'Comercios',
-    routeName: 'TabStack'
+    routeName: 'Commerce'
   },
   {
     key: 3,

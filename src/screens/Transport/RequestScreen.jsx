@@ -45,7 +45,8 @@ const RequestScreen = props => {
     dispatch({
       type: REMOVELOCATION
     })
-    goBack()
+    // goBack()
+    props.navigation.pop()
   }
 
   useEffect(() => {

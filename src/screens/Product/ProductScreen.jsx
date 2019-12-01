@@ -23,6 +23,7 @@ import OrderCheck from '../../components/orderCheck/OrderCheck'
 
 const ProductScreen = props => {
   const userData = useSelector(state => state.user)
+  const [product] = useState(props.navigation.getParam('product'))
   const [commerce] = useState(props.navigation.getParam('commerce'))
   const [checked, setChecked] = useState()
   const [value, setValue] = useState('')
@@ -32,8 +33,10 @@ const ProductScreen = props => {
 
   const [isVisible, setIsVisible] = useState(false)
 
-  const handleOnSubmit = async (commerce) => {
-    setIsVisible(true)
+  const handleOnSubmit = async (product) => {
+    console.log(product)
+    console.log(commerce)
+    // setIsVisible(true)
   }
 
   return (
@@ -60,32 +63,32 @@ const ProductScreen = props => {
           keyboardShouldPersistTaps='always'
         >
           <Banner
-            sourceImage={{ uri: commerce.url_img_product }}
+            sourceImage={{ uri: product.url_img_product }}
           />
           <View style={{ paddingVertical: 5 }} />
           <View style={styles.containerMain}>
             <Title
-              title={commerce.name}
+              title={product.name}
               styles={{
                 fontFamily: 'Lato-Bold',
                 color: Theme.COLORS.colorParagraph,
                 fontSize: Theme.SIZES.normal
               }}
             />
-            <Text allowFontScaling={false} style={styles.price}>{commerce.price}</Text>
+            <Text allowFontScaling={false} style={styles.price}>{product.price}</Text>
           </View>
           <View style={styles.layout}>
-            <Text allowFontScaling={false} style={styles.description}>{commerce.description}</Text>
+            <Text allowFontScaling={false} style={styles.description}>{product.description}</Text>
             <View style={{ paddingVertical: 10 }} />
-            {commerce.optionAddon.length > 0 &&
+            {product.optionAddon.length > 0 &&
               <Title
                 stylesContainer={{}}
                 title='Extras'
                 styles={styles.title}
               />}
             <View style={{ paddingVertical: 10 }} />
-            {commerce.optionAddon.length > 0 &&
-              commerce.optionAddon.map(item => (
+            {product.optionAddon.length > 0 &&
+              product.optionAddon.map(item => (
                 <View
                   style={styles.containerPrice}
                   key={item.id}
@@ -97,7 +100,7 @@ const ProductScreen = props => {
                   <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
                 </View>
               ))}
-            {commerce.optionAddon.length > 0 && (
+            {product.optionAddon.length > 0 && (
               <View style={{ paddingVertical: 10 }} />
             )}
             <TextArea
@@ -125,7 +128,7 @@ const ProductScreen = props => {
                 message='AGREGAR ORDEN'
                 isActiveIcon
                 iconName='add'
-                onPress={() => handleOnSubmit(commerce)}
+                onPress={() => handleOnSubmit(product)}
               />
             </View>
           </View>
