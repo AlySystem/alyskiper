@@ -5,13 +5,15 @@ import {
   Text,
   Dimensions
 } from 'react-native'
-import { useDispatch } from 'react-redux'
 import { useMutation } from '@apollo/react-hooks'
 import { showMessage } from 'react-native-flash-message'
 import LottieView from 'lottie-react-native'
 
 // Import animation
 import animation from '../../../animation.json'
+
+// Import hooks
+import { useNotificationOrder } from '../../hooks/useNotificationOrder'
 
 // Import mutations
 import { GENERATEORDER } from '../../graphql/mutations/Mutations'
@@ -31,9 +33,10 @@ import { Theme } from '../../constants/Theme'
 const { width } = Dimensions.get('window')
 
 const OrderCheck = props => {
-  const { navigate } = props.navigation
+  const { commerce, product } = props.order
+  console.log(commerce.id)
+  const { status } = useNotificationOrder(commerce.id, props.navigation.navigate)
   const [isVisible, setIsVisible] = useState(false)
-  const order = props.order
   const [GenerateOrder, { loading, error }] = useMutation(GENERATEORDER, {
     onCompleted: () => {
       setIsVisible(!isVisible)
@@ -41,10 +44,11 @@ const OrderCheck = props => {
   })
 
   useEffect(() => {
-    setInterval(() => {
-      setIsVisible(true)
-    }, 3000)
-  })
+    if (status === 2) {
+      setIsVisible(!isVisible)
+      props.setIsVisible(!props.isVisible)
+    }
+  }, [status])
 
   if (error) {
     return showMessage({
@@ -62,33 +66,35 @@ const OrderCheck = props => {
     })
   }
 
-  // useEffect(() => {
-  //   GenerateOrder({
-  //     variables: {
-  //       inputorder: {
-  //         userphone: '77825484',
-  //         useraddress: 'Edificio escala',
-  //         orderdate: '2019-12-1 15:57:00',
-  //         totalprice: 200,
-  //         numitem: 1,
-  //         userID: 368,
-  //         commerceID: 13
-  //       },
-  //       inputorderdetalle: [
-  //         {
-  //           quantity: 1,
-  //           price: 0,
-  //           discount: 0,
-  //           size: 'prueba de tamano',
-  //           addon: 'sin extra',
-  //           extraPrice: 0,
-  //           orderID: 15,
-  //           itemID: 29
-  //         }
-  //       ]
-  //     }
-  //   })
-  // }, [])
+  useEffect(() => {
+    setTimeout(() => {
+      GenerateOrder({
+        variables: {
+          inputorder: {
+            userphone: '77825484',
+            useraddress: 'Edificio escala',
+            orderdate: '2019-12-1 15:57:00',
+            totalprice: 200,
+            numitem: 1,
+            userID: 368,
+            commerceID: 13
+          },
+          inputorderdetalle: [
+            {
+              quantity: 1,
+              price: 0,
+              discount: 0,
+              size: 'prueba de tamano',
+              addon: 'sin extra',
+              extraPrice: 0,
+              orderID: 15,
+              itemID: 29
+            }
+          ]
+        }
+      })
+    }, 3000)
+  }, [])
 
   return (
     <Background source={background}>
@@ -108,11 +114,13 @@ const OrderCheck = props => {
         )}
         <Title
           stylesContainer={{}}
-          title={loading ? 'PROCESANDO ORDEN...' : 'SOLICITUD ENVIADA'}
+          title={loading ? 'PROCESANDO ORDEN...' : 'ORDEN ENVIADA'}
           styles={styles.title}
         />
-        <View style={{ paddingVertical: 8 }} />
-        <Text allowFontScaling={false} style={styles.description}>Tu orden ha sido enviada correctamente, se te notificara cuando tu orden este siendo procesada.</Text>
+        <View style={{ paddingVertical: 4 }} />
+        {!loading && (
+          <Text allowFontScaling={false} style={styles.description}>Tu orden ha sido enviada correctamente</Text>
+        )}
         <Modal
           isVisible={isVisible}
           style={{
@@ -134,15 +142,11 @@ const OrderCheck = props => {
               alignItems: 'center'
             }}
           >
-            <Text style={styles.text}>Tu orden fue aceptada correctamente, ya puedes ver el estado de tu orden.</Text>
+            <Text style={styles.text}>Tu orden fue enviada correctamente, ya puedes ver el estado de tu orden.</Text>
             <View style={{ paddingVertical: 8 }} />
             <IconButton
               message='VER ESTADO DE LA ORDEN'
-              onPress={() => {
-                navigate('OrderTracing')
-                props.setIsVisible(!props.isVisible)
-                setIsVisible(!isVisible)
-              }}
+              onPress={() => props.navigation.replace('OrderTracing')}
             />
           </View>
         </Modal>

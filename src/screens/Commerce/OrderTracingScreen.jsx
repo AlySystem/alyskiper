@@ -9,17 +9,16 @@ import { Backdrop } from 'react-native-backdrop'
 // Import components
 import { Map } from '../../components/map/MapView'
 
-// Import utils
-// import { Location } from '../../utils/Location'
+// Import hooks
 import { useLocation } from '../../hooks/useLocation'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
 const OrderTracingScreen = props => {
-  // const { location } = Location()
   const { location } = useLocation()
   const [visible, setVisible] = useState(true)
+  // const [visible, setVisible] = useState(false)
   const mapView = useRef(null)
 
   return (
@@ -27,7 +26,8 @@ const OrderTracingScreen = props => {
       {location.latitude && (
         <Map mapView={mapView} location={location} />
       )}
-      <View style={{ height: 60 }} />
+      {/* <View style={{ height: 60 }} /> */}
+
       <Backdrop
         visible={visible}
         closedHeight={60}

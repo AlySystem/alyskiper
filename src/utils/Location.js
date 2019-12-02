@@ -19,7 +19,7 @@ export const Location = () => {
     return () => {
       unsubscribe()
     }
-  })
+  }, [location])
 
   return { location }
 }
