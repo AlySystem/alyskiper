@@ -180,3 +180,11 @@ export const SKIPERATING = gql`
     }
   }
 `
+
+export const GENERATEORDER = gql`
+  mutation GenerateOrder ($inputorder: SkiperOrderInput!, $inputorderdetalle: [SkiperOrderDetailInput!]!) {
+    GenereSkiperOrder(inputorder: $inputorder, inputorderdetalle: $inputorderdetalle) {
+      id
+    }
+  }
+`

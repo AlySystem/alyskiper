@@ -33,6 +33,8 @@ import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 import BillTransport from '../../screens/Transport/BillTransportScreen'
 import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
 
+import OrderTracingScreen from '../../screens/Commerce/OrderTracingScreen'
+
 // Import components
 import Picture from '../../components/picture/Picture'
 import Icon from '../../components/icon/Icon'
@@ -190,6 +192,12 @@ const StackNavigation = createStackNavigator({
   },
   pickerTransport: {
     screen: PickerTransportScreen,
+    navigationOptions: {
+      header: null
+    }
+  },
+  OrderTracing: {
+    screen: OrderTracingScreen,
     navigationOptions: {
       header: null
     }

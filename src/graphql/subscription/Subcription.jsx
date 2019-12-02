@@ -35,3 +35,19 @@ export const GETNOTIFICATIONTRAVEL = gql`
     }
   }
 `
+
+export const GETNOTIFICATIONORDER = gql`
+  subscription NotificationOrder($idcomercio: Int!) {
+    skiperOrders(idcomercio: $idcomercio) {
+      skiperOrderTracing {
+        orderStatus {
+          name
+          id
+          indicador
+        }
+        datetracing
+        id
+      }
+    }
+  }
+`

@@ -19,8 +19,8 @@ export const useNotification = (navigate, latitude, longitude) => {
   const [idTravel, setIdTravel] = useState()
 
   const pubnub = new PubNubReact({
-    publishKey: 'pub-c-b5350d6e-9a1f-4d33-b5c9-918fe9bff121',
-    subscribeKey: 'sub-c-e286360e-fdc3-11e9-be22-ea7c5aada356',
+    publishKey: 'pub-c-bd68b062-738a-44e5-91a1-cfdab437d40f',
+    subscribeKey: 'sub-c-41661912-108b-11ea-9132-cacb72695e2d',
     subscribeRequestTimeout: 60000,
     presenceTimeout: 122,
     uuid: firstName
@@ -53,12 +53,12 @@ export const useNotification = (navigate, latitude, longitude) => {
           break
         case 3:
           notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
-          navigate('TravelTrancing', {
-            idTravel: idTravel
-          })
           dispatch({
             type: ACTIVETRAVEL,
             payload: { travel: idTravel }
+          })
+          navigate('TravelTrancing', {
+            idTravel: idTravel
           })
           break
         case 4:

@@ -30,13 +30,16 @@ const ProductScreen = props => {
   const [count] = useState(0)
   const [totalPrice, setTotalPrice] = useState(0)
   const [address, setAddress] = useState('')
+  const [order, setOrder] = useState('')
 
   const [isVisible, setIsVisible] = useState(false)
 
-  const handleOnSubmit = async (product) => {
+  const handleOnCart = async (product) => {
     console.log(product)
     console.log(commerce)
-    // setIsVisible(true)
+
+    setOrder({ product, commerce })
+    setIsVisible(!isVisible)
   }
 
   return (
@@ -49,12 +52,13 @@ const ProductScreen = props => {
           style={{
             margin: 0
           }}
-
           isVisible={isVisible}
         >
           <OrderCheck
             setIsVisible={setIsVisible}
             isVisible={isVisible}
+            order={order}
+            navigation={props.navigation}
           />
         </Modal>
       )}
@@ -128,7 +132,7 @@ const ProductScreen = props => {
                 message='AGREGAR ORDEN'
                 isActiveIcon
                 iconName='add'
-                onPress={() => handleOnSubmit(product)}
+                onPress={() => handleOnCart(product)}
               />
             </View>
           </View>
