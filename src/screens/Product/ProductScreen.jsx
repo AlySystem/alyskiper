@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   View,
   Text,
-  ScrollView
+  ScrollView,
 } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -29,12 +29,21 @@ const ProductScreen = props => {
   const [count] = useState(0)
   const [totalPrice, setTotalPrice] = useState(0)
   const [address, setAddress] = useState('')
+  const [addOn, setAddOn] = useState([])
 
   const [isVisible, setIsVisible] = useState(false)
 
   const handleOnSubmit = async (commerce) => {
     setIsVisible(true)
   }
+
+  useEffect(
+    () => {
+      if (commerce.optionAddon.length) {
+        setAddOn(new Array(commerce.optionAddon.length).fill(true))
+      }
+    }, []
+  )
 
   return (
     <Background>
@@ -77,26 +86,41 @@ const ProductScreen = props => {
           <View style={styles.layout}>
             <Text allowFontScaling={false} style={styles.description}>{commerce.description}</Text>
             <View style={{ paddingVertical: 10 }} />
-            {commerce.optionAddon.length > 0 &&
+            {
+              commerce.optionAddon.length > 0 &&
               <Title
-                stylesContainer={{}}
                 title='Extras'
                 styles={styles.title}
-              />}
+              />
+            }
             <View style={{ paddingVertical: 10 }} />
-            {commerce.optionAddon.length > 0 &&
-              commerce.optionAddon.map(item => (
-                <View
-                  style={styles.containerPrice}
-                  key={item.id}
-                >
-                  <CheckBox
-                    name={item.name}
-                    handleCheck={() => console.log(item.id, item.name, item.extraPrice)}
-                  />
-                  <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
-                </View>
-              ))}
+            {
+              commerce.optionAddon.length > 0 &&
+              commerce.optionAddon.map(
+                (item, index) => (
+                  <View
+                    style={styles.containerPrice}
+                    key={item.id}>
+                    <CheckBox
+                      checked={addOn[index]}
+                      name={item.name}
+                      handleCheck={
+                        () => {
+                          const copyArr = Object.assign(addOn)
+                          copyArr[index] = !copyArr[index]
+
+                          setAddOn(copyArr)
+
+                          console.log(addOn[index])
+
+                        }
+                      }
+                    />
+                    <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
+                  </View>
+                )
+              )
+            }
             {commerce.optionAddon.length > 0 && (
               <View style={{ paddingVertical: 10 }} />
             )}

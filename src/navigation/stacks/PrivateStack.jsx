@@ -165,12 +165,12 @@ const StackNavigation = createStackNavigator({
       header: null
     }
   },
-  FixedMap: {
-    screen: FixedMapScreen,
-    navigationOptions: {
-      header: null
-    }
-  },
+  // FixedMap: {
+  //   screen: FixedMapScreen,
+  //   navigationOptions: {
+  //     header: null
+  //   }
+  // },
   Scanner: {
     screen: ScannerScreen,
     navigationOptions
