@@ -6,16 +6,13 @@ import {
   ScrollView
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useMutation } from '@apollo/react-hooks'
 import Stars from 'react-native-stars'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 // Import mutations
 import { SKIPERATING } from '../../graphql/mutations/Mutations'
-
-// Import actions
-import { REMOVEDIRECTION, REMOVEDETAILSTRAVEL, REMOVELOCATION, REMOVEACTIVETRAVEL } from '../../store/actionTypes'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -27,10 +24,9 @@ import IconButton from '../../components/button/IconButton'
 import { Theme } from '../../constants/Theme'
 
 const FinalTravelScreen = props => {
-  const dispatch = useDispatch()
   const { navigate } = props.navigation
   const [SkiperRating, { loading }] = useMutation(SKIPERATING)
-  const [star, setStar] = useState()
+  const [star, setStar] = useState(3.5)
   const [value, setValue] = useState('')
   const { drive } = useSelector(state => state.travel)
   const { userId } = useSelector(state => state.user)
@@ -39,10 +35,10 @@ const FinalTravelScreen = props => {
     SkiperRating({
       variables: {
         input: {
-          iddriver: drive.skiperagent.user.id,
+          iddriver: drive.skiperagent.id,
           iduser: userId,
-          ratingNumber: star,
-          comments: value,
+          ratingNumber: parseFloat(star),
+          comments: value || ' ',
           status: true
         }
       }
@@ -62,19 +58,7 @@ const FinalTravelScreen = props => {
               fontFamily: 'Lato-Regular'
             }
           })
-          dispatch({
-            type: REMOVEDIRECTION
-          })
-          dispatch({
-            type: REMOVEDETAILSTRAVEL
-          })
-          dispatch({
-            type: REMOVELOCATION
-          })
-          dispatch({
-            type: REMOVEACTIVETRAVEL
-          })
-          return navigate('Home')
+          return navigate('BillTransport', { idTravel: drive.id })
         }
       })
       .catch(error => {
@@ -92,19 +76,7 @@ const FinalTravelScreen = props => {
               fontFamily: 'Lato-Regular'
             }
           })
-          dispatch({
-            type: REMOVEDIRECTION
-          })
-          dispatch({
-            type: REMOVEDETAILSTRAVEL
-          })
-          dispatch({
-            type: REMOVELOCATION
-          })
-          dispatch({
-            type: REMOVEACTIVETRAVEL
-          })
-          return navigate('Home')
+          return navigate('BillTransport')
         }
       })
   }
