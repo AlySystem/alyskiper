@@ -146,7 +146,6 @@ const ScannerScreen = props => {
       })
       return
     }
-    console.log(idUser, idTravel, latitude, longitude)
 
     TravelTracing({
       variables: {
@@ -182,7 +181,7 @@ const ScannerScreen = props => {
       .catch(error => {
         console.log(error, 'error')
         if (error) {
-          return showMessage({
+          showMessage({
             message: 'Error',
             description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
             backgroundColor: 'red',

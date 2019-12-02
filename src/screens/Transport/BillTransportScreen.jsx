@@ -4,16 +4,69 @@ import {
   Text,
   StyleSheet
 } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useQuery } from '@apollo/react-hooks'
+import { showMessage } from 'react-native-flash-message'
 
 // Import components
 import Background from '../../components/background/Background'
+import IconButton from '../../components/button/IconButton'
+import Loader from '../../components/loader/Loader'
+
+// Import query
+import { INVOICE } from '../../graphql/querys/Querys'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
 const BillTransportScreen = props => {
-  const { travel, direction } = useSelector(state => state)
+  const { navigate } = props.navigation
+  const idTravel = props.navigation.getParam('idTravel')
+  console.log(idTravel)
+
+  const { loading, error, data } = useQuery(INVOICE, { variables: { idservice: idTravel } })
+
+  if (error) {
+    showMessage({
+      message: 'Error',
+      description: 'Oh no, ocurrio un error. No hemos podido mostrar la factura',
+      backgroundColor: 'red',
+      color: '#fff',
+      icon: 'danger',
+      titleStyle: {
+        fontFamily: 'Lato-Bold'
+      },
+      textStyle: {
+        fontFamily: 'Lato-Regular'
+      }
+    })
+    navigate('Home')
+  }
+
+  if (loading) {
+    return (
+      <View style={{
+        flex: 1,
+        backgroundColor: Theme.COLORS.colorMainAlt,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+      >
+        <Text style={{
+          color: Theme.COLORS.colorParagraph,
+          fontFamily: 'Lato-Regular',
+          fontSize: Theme.SIZES.small
+        }}
+        >Cargando factura...
+        </Text>
+        <View style={{ marginVertical: 5 }} />
+        <Loader />
+      </View>
+    )
+  }
+
+  const handleOnConfirm = () => {
+    return navigate('Home', { remove: true })
+  }
 
   return (
     <Background>
@@ -22,50 +75,44 @@ const BillTransportScreen = props => {
           <View style={styles.container}>
             <View style={styles.itemAlt}>
               <Text allowFontScaling={false} style={styles.text}>DURACION</Text>
-              <Text allowFontScaling={false} style={styles.value}>{direction.steps.duration.text}</Text>
+              <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.duration}</Text>
             </View>
             <View style={styles.item}>
               <Text allowFontScaling={false} style={styles.text}>DISTANCIA</Text>
-              <Text allowFontScaling={false} style={styles.value}>{direction.steps.distance.text}</Text>
+              <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.distance}</Text>
             </View>
           </View>
 
           <View style={styles.containerAddress}>
             <Text allowFontScaling={false} style={styles.text}>ORIGEN</Text>
-            <Text allowFontScaling={false} style={styles.textAddress}>{direction.start_address}</Text>
+            <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_initial}</Text>
           </View>
 
           <View style={styles.containerAddress}>
             <Text allowFontScaling={false} style={styles.text}>DESTINO</Text>
-            <Text allowFontScaling={false} style={styles.textAddress}>{direction.end_address}</Text>
+            <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_final}</Text>
           </View>
 
           <View style={styles.container}>
             <Text allowFontScaling={false} style={styles.text}>CATEGORIA</Text>
-            {/* <Text allowFontScaling={false} style={styles.textCategory}>{category.toUpperCase()}</Text> */}
-          </View>
-
-          <View style={styles.containerPrice}>
-            <View style={styles.container}>
-              <Text allowFontScaling={false} style={styles.text}>PRECIO BASE</Text>
-              <Text allowFontScaling={false} style={styles.value}>{travel.priceTravel.priceBase}</Text>
-            </View>
-
-            <View style={styles.container}>
-              <Text allowFontScaling={false} style={styles.text}>PRECIO POR DISTANCIA</Text>
-              <Text allowFontScaling={false} style={styles.value}>{travel.priceTravel.priceKilometer}</Text>
-            </View>
-
-            <View style={styles.container}>
-              <Text allowFontScaling={false} style={styles.text}>PRECIO POR TIEMPO</Text>
-              <Text allowFontScaling={false} style={styles.value}>{travel.priceTravel.priceMinute}</Text>
-            </View>
+            <Text allowFontScaling={false} style={styles.textCategory}>SILVER</Text>
           </View>
 
           <View style={styles.container}>
             <Text allowFontScaling={false} style={styles.text}>TOTAL</Text>
-            <Text allowFontScaling={false} style={styles.value}>{travel.priceTravel.priceTravel}</Text>
+            <Text allowFontScaling={false} style={styles.textValue}>{data.getInvoinceByIdservice.anyservice.total}</Text>
           </View>
+        </View>
+        <View style={{
+          width: '100%',
+          alignItems: 'center'
+        }}
+        >
+          <IconButton
+            message='CONFIRMAR'
+            isActiveIcon
+            onPress={handleOnConfirm}
+          />
         </View>
       </View>
     </Background>
@@ -112,6 +159,20 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorSecondary,
     fontSize: Theme.SIZES.small,
     marginVertical: 3
+  },
+  value: {
+    color: Theme.COLORS.colorParagraph,
+    fontSize: Theme.SIZES.small
+  },
+  textCategory: {
+    textTransform: 'uppercase',
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.normal,
+    color: Theme.COLORS.colorSecondary
+  },
+  textValue: {
+    color: Theme.COLORS.colorSecondary,
+    fontSize: Theme.SIZES.title
   }
 })
 

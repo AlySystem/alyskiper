@@ -37,7 +37,6 @@ const TravelTracingScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { travel } = useSelector(state => state.activeTravel)
-  console.log(travel)
   const { userId, firstName } = useSelector(state => state.user)
   const { location } = useLocation()
   const [showDetails, setShowDetails] = useState(false)
