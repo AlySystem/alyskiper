@@ -1,13 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import {
   View,
-  StyleSheet,
-  Text
+  TouchableHighlight
 } from 'react-native'
-import { Backdrop } from 'react-native-backdrop'
 
 // Import components
 import { Map } from '../../components/map/MapView'
+import Modal from '../../components/modal/Modal'
+import Button from '../../components/button/Button'
 
 // Import hooks
 import { useLocation } from '../../hooks/useLocation'
@@ -22,38 +22,49 @@ const OrderTracingScreen = props => {
   const mapView = useRef(null)
 
   return (
-    <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt }}>
+    <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorParagraph }}>
       {location.latitude && (
         <Map mapView={mapView} location={location} />
       )}
-      {/* <View style={{ height: 60 }} /> */}
-
-      <Backdrop
-        visible={visible}
-        closedHeight={60}
-        backdropHeight={60}
-        handleOpen={() => setVisible(true)}
-        handleClose={() => {}}
-        swipeConfig={{
-          velocityThreshold: 0.3,
-          directionalOffsetThreshold: 80
-        }}
-        animationConfig={{
-          speed: 14,
-          bounciness: 4
-        }}
-        overlayColor='rgba(0,0,0,0.5)'
-        backdropStyle={{
-          backgroundColor: Theme.COLORS.colorMainDark,
-          opacity: 0.8
+      <TouchableHighlight
+        onPress={() => setVisible(!visible)}
+        style={{
+          backgroundColor: Theme.COLORS.colorMainAlt,
+          height: 60,
+          position: 'relative',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          paddingVertical: 10
         }}
       >
-        <Text style={{ color: 'white' }}>Backdrop</Text>
-        <Text style={{ color: 'white' }}>Backdrop</Text>
-        <Text style={{ color: 'white' }}>Backdrop</Text>
-        <Text style={{ color: 'white' }}>Backdrop</Text>
-        <Text style={{ color: 'white' }}>Backdrop</Text>
-      </Backdrop>
+        <View style={{
+          backgroundColor: Theme.COLORS.colorSecondary,
+          height: 6,
+          width: 60,
+          borderRadius: 100
+        }}
+        />
+      </TouchableHighlight>
+      <Modal
+        isVisible={visible}
+        style={{
+          backgroundColor: Theme.COLORS.colorMainAlt,
+          margin: 0
+        }}
+      >
+        <Button
+          iconName='cancel'
+          stylesButton={{
+            position: 'absolute',
+            top: 5,
+            right: 10
+          }}
+          onPress={() => setVisible(!visible)}
+        />
+      </Modal>
     </View>
   )
 }

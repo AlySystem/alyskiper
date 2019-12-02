@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -30,17 +30,23 @@ const ProductScreen = props => {
   const [count] = useState(0)
   const [totalPrice, setTotalPrice] = useState(0)
   const [address, setAddress] = useState('')
+  const [addOn, setAddOn] = useState([])
   const [order, setOrder] = useState('')
 
   const [isVisible, setIsVisible] = useState(false)
 
   const handleOnCart = async (product) => {
-    console.log(product)
-    console.log(commerce)
-
     setOrder({ product, commerce })
     setIsVisible(!isVisible)
   }
+
+  useEffect(
+    () => {
+      if (product.optionAddon.length) {
+        setAddOn(new Array(product.optionAddon.length).fill(true))
+      }
+    }, []
+  )
 
   return (
     <Background>
@@ -63,12 +69,8 @@ const ProductScreen = props => {
         </Modal>
       )}
       <View style={styles.screen}>
-        <ScrollView
-          keyboardShouldPersistTaps='always'
-        >
-          <Banner
-            sourceImage={{ uri: product.url_img_product }}
-          />
+        <ScrollView keyboardShouldPersistTaps='always'>
+          <Banner sourceImage={{ uri: product.url_img_product }} />
           <View style={{ paddingVertical: 5 }} />
           <View style={styles.containerMain}>
             <Title
@@ -86,20 +88,24 @@ const ProductScreen = props => {
             <View style={{ paddingVertical: 10 }} />
             {product.optionAddon.length > 0 &&
               <Title
-                stylesContainer={{}}
                 title='Extras'
                 styles={styles.title}
               />}
             <View style={{ paddingVertical: 10 }} />
             {product.optionAddon.length > 0 &&
-              product.optionAddon.map(item => (
-                <View
-                  style={styles.containerPrice}
-                  key={item.id}
-                >
+              product.optionAddon.map((item, index) => (
+                <View style={styles.containerPrice} key={item.id}>
                   <CheckBox
+                    checked={addOn[index]}
                     name={item.name}
-                    handleCheck={() => console.log(item.id, item.name, item.extraPrice)}
+                    handleCheck={() => {
+                      const copyArr = Object.assign(addOn)
+                      copyArr[index] = !copyArr[index]
+
+                      setAddOn(copyArr)
+
+                      console.log(addOn[index])
+                    }}
                   />
                   <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
                 </View>

@@ -199,7 +199,6 @@ const TransportScreen = props => {
           mapView={mapView}
           location={location}
         >
-
           {silver && (
             silver.map(drive => {
               return (

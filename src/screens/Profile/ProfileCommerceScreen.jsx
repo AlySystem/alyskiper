@@ -24,10 +24,7 @@ const ProfileCommerceScreen = props => {
         <ScrollView
           keyboardShouldPersistTaps='always'
         >
-          <Banner
-            sourceLogo={{ uri: commerce.url_logo }}
-            sourceImage={{ uri: commerce.url_art }}
-          />
+          <Banner sourceLogo={{ uri: commerce.url_logo }} sourceImage={{ uri: commerce.url_art }} />
           <View style={{ paddingVertical: 8 }} />
           <View style={styles.container}>
             <Text allowFontScaling={false} style={styles.name}>{commerce.namecommerce}</Text>
@@ -36,10 +33,7 @@ const ProfileCommerceScreen = props => {
           <View style={{ paddingVertical: 8 }} />
 
           {commerce.skiperCatProductsCommerce.map(catProduct => (
-            <View
-              key={catProduct.id}
-              style={styles.containerProduct}
-            >
+            <View key={catProduct.id} style={styles.containerProduct}>
               <Text allowFontScaling={false} style={styles.title}>{catProduct.name}</Text>
               {catProduct.skiperProductCommerce.map(product => (
                 <ItemProduct
