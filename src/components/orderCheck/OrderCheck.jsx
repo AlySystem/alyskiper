@@ -21,7 +21,6 @@ import Title from '../title/Title'
 import IconButton from '../button/IconButton'
 import Background from '../background/Background'
 import Modal from '../modal/Modal'
-import Button from '../button/Button'
 
 // Import image
 import background from '../../../assets/images/img-background-check.png'
@@ -33,12 +32,18 @@ const { width } = Dimensions.get('window')
 
 const OrderCheck = props => {
   const { navigate } = props.navigation
-  const [isVisible, setIsVisisble] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
   const order = props.order
   const [GenerateOrder, { loading, error }] = useMutation(GENERATEORDER, {
     onCompleted: () => {
-      setIsVisisble(!isVisible)
+      setIsVisible(!isVisible)
     }
+  })
+
+  useEffect(() => {
+    setInterval(() => {
+      setIsVisible(true)
+    }, 3000)
   })
 
   if (error) {
@@ -115,7 +120,7 @@ const OrderCheck = props => {
             position: 'relative',
             justifyContent: 'flex-end'
           }}
-          onSwipeComplete={() => setIsVisisble(!isVisible)}
+          onSwipeComplete={() => setIsVisible(!isVisible)}
           swipeDirection={['down']}
         >
           <View
@@ -129,21 +134,15 @@ const OrderCheck = props => {
               alignItems: 'center'
             }}
           >
-            <Button
-              iconName='cancel'
-              iconSize={25}
-              onPress={() => setIsVisisble(!isVisible)}
-              stylesButton={{
-                position: 'absolute',
-                right: 8,
-                top: 5
-              }}
-            />
             <Text style={styles.text}>Tu orden fue aceptada correctamente, ya puedes ver el estado de tu orden.</Text>
             <View style={{ paddingVertical: 8 }} />
             <IconButton
               message='VER ESTADO DE LA ORDEN'
-              onPress={() => navigate('OrderTracing')}
+              onPress={() => {
+                navigate('OrderTracing')
+                props.setIsVisible(!props.isVisible)
+                setIsVisible(!isVisible)
+              }}
             />
           </View>
         </Modal>
@@ -166,7 +165,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Lato-Bold',
-    color: Theme.COLORS.colorParagraph,
+    color: Theme.COLORS.colorSecondary,
     fontSize: Theme.SIZES.normal
   },
   description: {
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   text: {
-    color: Theme.COLORS.colorParagraph,
+    color: Theme.COLORS.colorSecondary,
     fontFamily: 'Lato-Regular',
     textAlign: 'center',
     fontSize: Theme.SIZES.small
