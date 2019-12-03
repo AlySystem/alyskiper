@@ -34,21 +34,20 @@ const { width } = Dimensions.get('window')
 
 const OrderCheck = props => {
   const { commerce, product } = props.order
-  console.log(commerce.id)
   const { status } = useNotificationOrder(commerce.id, props.navigation.navigate)
   const [isVisible, setIsVisible] = useState(false)
-  const [GenerateOrder, { loading, error }] = useMutation(GENERATEORDER, {
+  const [GenerateOrder, { loading, error, data }] = useMutation(GENERATEORDER, {
     onCompleted: () => {
       setIsVisible(!isVisible)
     }
   })
 
-  useEffect(() => {
-    if (status === 2) {
-      setIsVisible(!isVisible)
-      props.setIsVisible(!props.isVisible)
-    }
-  }, [status])
+  // useEffect(() => {
+  //   if (status.code === 2) {
+  //     setIsVisible(!isVisible)
+  //     props.setIsVisible(!props.isVisible)
+  //   }
+  // }, [status])
 
   if (error) {
     return showMessage({
@@ -118,7 +117,7 @@ const OrderCheck = props => {
           styles={styles.title}
         />
         <View style={{ paddingVertical: 4 }} />
-        {!loading && (
+        {!data && (
           <Text allowFontScaling={false} style={styles.description}>Tu orden ha sido enviada correctamente</Text>
         )}
         <Modal
@@ -146,7 +145,7 @@ const OrderCheck = props => {
             <View style={{ paddingVertical: 8 }} />
             <IconButton
               message='VER ESTADO DE LA ORDEN'
-              onPress={() => props.navigation.replace('OrderTracing')}
+              onPress={() => props.navigation.replace('OrderTracing', { commerceId: commerce.id })}
             />
           </View>
         </Modal>

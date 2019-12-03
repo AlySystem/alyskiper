@@ -75,7 +75,7 @@ export const Map = props => {
       <Animatable.View
         style={{
           position: 'absolute',
-          bottom: 20,
+          bottom: 40,
           right: 15,
           backgroundColor: Theme.COLORS.colorMainAlt,
           borderRadius: 200,

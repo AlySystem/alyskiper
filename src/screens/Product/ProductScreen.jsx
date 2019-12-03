@@ -1,11 +1,10 @@
-import React, { useState, useEffect, Component } from 'react'
+import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
   Text,
   ScrollView
 } from 'react-native'
-import { useSelector } from 'react-redux'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -16,10 +15,10 @@ import ButtonQuantity from '../../components/button/ButtonQuantity'
 import IconButton from '../../components/button/IconButton'
 import CheckBox from '../../components/checkbox/CheckBox'
 import Modal from '../../components/modal/Modal'
+import OrderCheck from '../../components/orderCheck/OrderCheck'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-import OrderCheck from '../../components/orderCheck/OrderCheck'
 
 class ProductScreen extends Component {
   state = {
@@ -32,9 +31,9 @@ class ProductScreen extends Component {
     isVisible: false,
   }
 
-  handleOnCart = async (product) => {
-    this.setState({ order: { product, commerce: this.state.commerce } })
-    this.setState({ isVisible: !isVisible })
+  handleOnCart = async  => {
+    this.setState({ order: { product: this.state.product, commerce: this.state.commerce } })
+    this.setState({ isVisible: !this.state.isVisible })
   }
 
   render() {
@@ -45,16 +44,16 @@ class ProductScreen extends Component {
             animationIn='zoomIn'
             backgroundColor={Theme.COLORS.colorMainAlt}
             opacity={1}
+            isVisible={this.state.isVisible}
             style={{
               margin: 0
             }}
-            isVisible={this.state.isVisible}
           >
             <OrderCheck
               setIsVisible={(e) => this.setState({ isVisible: e })}
               isVisible={this.state.isVisible}
               order={this.state.order}
-              navigation={props.navigation}
+              navigation={this.props.navigation}
             />
           </Modal>
         )}
@@ -77,10 +76,7 @@ class ProductScreen extends Component {
               <Text allowFontScaling={false} style={styles.description}>{this.state.product.description}</Text>
               <View style={{ paddingVertical: 10 }} />
               {this.state.product.optionAddon.length > 0 &&
-                <Title
-                  title='Extras'
-                  styles={styles.title}
-                />}
+                <Title title='Extras' styles={styles.title} />}
               <View style={{ paddingVertical: 10 }} />
               {this.state.product.optionAddon.length > 0 &&
                 this.state.product.optionAddon.map((item, index) => (
@@ -91,7 +87,6 @@ class ProductScreen extends Component {
                       handleCheck={() => {
                         const addOn = Object.assign(this.state.addOn)
                         addOn[index] = !addOn[index]
-
                         this.setState({ addOn })
                       }}
                     />
@@ -112,13 +107,8 @@ class ProductScreen extends Component {
               />
               <View style={{ paddingVertical: 5 }} />
               <View style={styles.containerQuantity}>
-                <Title
-                  title='Escoge tu cantidad'
-                  styles={styles.smallTitle}
-                />
-                <ButtonQuantity
-                  count={this.state.count}
-                />
+                <Title title='Escoge tu cantidad' styles={styles.smallTitle} />
+                <ButtonQuantity count={this.state.count}/>
               </View>
 
               <View style={styles.containerButton}>
@@ -126,7 +116,7 @@ class ProductScreen extends Component {
                   message='AGREGAR ORDEN'
                   isActiveIcon
                   iconName='add'
-                  onPress={() => this.handleOnCart(product)}
+                  onPress={this.handleOnCart}
                 />
               </View>
             </View>

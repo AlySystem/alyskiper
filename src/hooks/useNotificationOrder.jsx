@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
+
+// Import actions types
+import { STATUSORDER, REMOVESTATUSORDER } from '../store/actionTypes'
 
 // Import subcriptions
 import { GETNOTIFICATIONORDER } from '../graphql/subscription/Subcription'
@@ -9,6 +12,7 @@ import { notification } from './usePushNotification'
 
 export const useNotificationOrder = (idCommerce, navigate) => {
   const dispatch = useDispatch()
+  const date = new Date()
   const [status, setStatus] = useState()
 
   const { loading, error } = useSubscription(GETNOTIFICATIONORDER, {
@@ -18,34 +22,83 @@ export const useNotificationOrder = (idCommerce, navigate) => {
       switch (id) {
         case 1:
           console.log(name)
-          setStatus(1)
+          dispatch({
+            type: STATUSORDER,
+            payload: {
+              message: 'SOLICITADO',
+              code: 1,
+              date: `${date.getHours()}:${date.getMinutes()}`
+            }
+          })
           break
         case 2:
           console.log(name)
-          setStatus(2)
+          dispatch({
+            type: STATUSORDER,
+            payload: {
+              message: 'RECHAZADO',
+              code: 2,
+              date: `${date.getHours()}:${date.getMinutes()}`
+            }
+          })
           notification('AlySkiper', 'Tu orden fue rechazada.')
-          // navigate('')
+          navigate('Commerce')
           break
         case 3:
-          setStatus(3)
+          dispatch({
+            type: STATUSORDER,
+            payload: {
+              message: 'ACEPTADO',
+              code: 3,
+              date: `${date.getHours()}:${date.getMinutes()}`
+            }
+          })
           notification('AlySkiper', 'Tu orden fue aceptada con exito.')
           console.log(name)
           break
         case 4:
-          setStatus(4)
+          dispatch({
+            type: STATUSORDER,
+            payload: {
+              message: 'ENPROCESO',
+              code: 4,
+              date: `${date.getHours()}:${date.getMinutes()}`
+            }
+          })
           console.log(name)
           break
         case 5:
-          setStatus(5)
+          dispatch({
+            type: STATUSORDER,
+            payload: {
+              message: 'FINALIZADO',
+              code: 5,
+              date: `${date.getHours()}:${date.getMinutes()}`
+            }
+          })
           console.log(name)
           break
         case 6:
-          setStatus(6)
+          dispatch({
+            type: STATUSORDER,
+            payload: {
+              message: 'ENCAMINO',
+              code: 6,
+              date: `${date.getHours()}:${date.getMinutes()}`
+            }
+          })
           notification('AlySkiper', 'Tu orden esta en camino.')
           console.log(name)
           break
         case 7:
-          setStatus(7)
+          dispatch({
+            type: STATUSORDER,
+            payload: {
+              message: 'ENTREGADO',
+              code: 7,
+              date: `${date.getHours()}:${date.getMinutes()}`
+            }
+          })
           console.log(name)
           break
       }
