@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -10,19 +10,50 @@ import {
 import { Theme } from '../../constants/Theme'
 
 const ButtonQuantity = props => {
+  const [price, setPrice] = (0)
+  const [count, setCount] = useState(1)
+
+  useEffect(
+    () => {
+      if (props.price) {
+        setPrice(props.price)
+      }
+    }, []
+  )
+
+  const onChange = () => {
+    if (props.onChange) {
+      props.onChange(price * count)
+    }
+  }
+
+  const add = () => {
+    if (count > 10) {
+      setCount(e => e + 1)
+
+      onChange()
+    }
+  }
+
+  const substract = () => {
+    if (count > 1) {
+      setCount(e => e - 1)
+
+      onChange()
+    }
+  }
+
   return (
-    <View
-      style={styles.button}
-    >
-      <TouchableOpacity
-        onPress={props.handleDecrement}
-      >
+    <View style={styles.button}>
+      <TouchableOpacity onPress={substract}>
         <Text allowFontScaling={false} style={styles.textButton}>-</Text>
       </TouchableOpacity>
-      <Text allowFontScaling={false} style={styles.count}>{props.count}</Text>
-      <TouchableOpacity
-        onPress={props.handleIncrement}
-      >
+
+      <Text allowFontScaling={false} style={styles.count}>
+        x {count}
+      </Text>
+
+      <TouchableOpacity onPress={add}>
         <Text allowFontScaling={false} style={styles.textButton}>+</Text>
       </TouchableOpacity>
     </View>

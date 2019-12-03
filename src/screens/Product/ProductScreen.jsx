@@ -3,9 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  ScrollView
+  ScrollView,
+  TextInput
 } from 'react-native'
 import { useSelector } from 'react-redux'
+import NumericInput from '../../components/numericInput'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -30,13 +32,23 @@ class ProductScreen extends Component {
     addOn: [],
     order: {},
     isVisible: false,
-
+    priceAdd: [],
     total: 0
   }
 
   componentDidMount() {
     if (this.state.product.price) {
       this.setState({ total: this.state.product.price })
+    }
+
+    if (this.state.product.optionAddon) {
+      const priceAdd = []
+
+      this.state.product.optionAddon.map(
+        ({ extraPrice }) => priceAdd.push(extraPrice)
+      )
+
+      this.setState({ priceAdd })
     }
   }
 
@@ -62,9 +74,8 @@ class ProductScreen extends Component {
           title='Escoge tu cantidad'
           styles={styles.smallTitle}
         />
-        <ButtonQuantity
-          count={this.state.count}
-        />
+        {/* <ButtonQuantity price={this.state.total} onChange={total => this.setState({ total })} /> */}
+        <NumericInput textColor="#FFF" onChange={total => this.setState({ total })} />
       </View>
 
       <View style={styles.containerButton}>
@@ -84,13 +95,17 @@ class ProductScreen extends Component {
     let total = 0
     addOn[index] = !addOn[index]
 
-    if(addOn[index]) {
+    if (addOn[index]) {
       total = this.state.total + optionAddon[index].extraPrice
     } else {
       total = this.state.total - optionAddon[index].extraPrice
     }
 
     this.setState({ addOn, total })
+  }
+
+  changeQuantityAddOn = () => {
+
   }
 
   componentAddOn = () => (
@@ -103,7 +118,26 @@ class ProductScreen extends Component {
             name={item.name}
             handleCheck={() => this.checkedAddOn(index)}
           />
-          <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
+
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 10 }}>
+
+              <NumericInput
+                iconSize={10}
+                iconStyle={{ fontSize: 12, borderRadius: 5, padding: 5 }}
+                inputStyle={{ fontSize: 14, backgroundColor: '#FFF' }}
+                valueType="real"
+                minValue={1}
+                rounded
+                totalWidth={120}
+                totalHeight={25}
+                enabled={this.state.addOn[index]}
+                onChange={value => console.log(value)} />
+            </View>
+            <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
+          </View>
+
         </View>
       )
     )
