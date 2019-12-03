@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -10,6 +10,11 @@ import CheckBox from 'react-native-check-box'
 import { Theme } from '../../constants/Theme'
 
 const Check = props => {
+  useEffect(
+    () => console.log(props),
+    [props]
+  )
+
   return (
     <View style={{
       flexDirection: 'row',

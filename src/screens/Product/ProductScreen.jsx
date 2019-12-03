@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Component } from 'react'
 import {
   StyleSheet,
   View,
@@ -21,131 +21,120 @@ import Modal from '../../components/modal/Modal'
 import { Theme } from '../../constants/Theme'
 import OrderCheck from '../../components/orderCheck/OrderCheck'
 
-const ProductScreen = props => {
-  const userData = useSelector(state => state.user)
-  const [product] = useState(props.navigation.getParam('product'))
-  const [commerce] = useState(props.navigation.getParam('commerce'))
-  const [checked, setChecked] = useState()
-  const [value, setValue] = useState('')
-  const [count] = useState(0)
-  const [totalPrice, setTotalPrice] = useState(0)
-  const [address, setAddress] = useState('')
-  const [addOn, setAddOn] = useState([])
-  const [order, setOrder] = useState('')
-
-  const [isVisible, setIsVisible] = useState(false)
-
-  const handleOnCart = async (product) => {
-    setOrder({ product, commerce })
-    setIsVisible(!isVisible)
+class ProductScreen extends Component {
+  state = {
+    product: this.props.navigation.getParam('product'),
+    commerce: this.props.navigation.getParam('commerce'),
+    value: '',
+    count: 0,
+    addOn: [],
+    order: {},
+    isVisible: false,
   }
 
-  useEffect(
-    () => {
-      if (product.optionAddon.length) {
-        setAddOn(new Array(product.optionAddon.length).fill(true))
-      }
-    }, []
-  )
+  handleOnCart = async (product) => {
+    this.setState({ order: { product, commerce: this.state.commerce } })
+    this.setState({ isVisible: !isVisible })
+  }
 
-  return (
-    <Background>
-      {isVisible && (
-        <Modal
-          animationIn='zoomIn'
-          backgroundColor={Theme.COLORS.colorMainAlt}
-          opacity={1}
-          style={{
-            margin: 0
-          }}
-          isVisible={isVisible}
-        >
-          <OrderCheck
-            setIsVisible={setIsVisible}
-            isVisible={isVisible}
-            order={order}
-            navigation={props.navigation}
-          />
-        </Modal>
-      )}
-      <View style={styles.screen}>
-        <ScrollView keyboardShouldPersistTaps='always'>
-          <Banner sourceImage={{ uri: product.url_img_product }} />
-          <View style={{ paddingVertical: 5 }} />
-          <View style={styles.containerMain}>
-            <Title
-              title={product.name}
-              styles={{
-                fontFamily: 'Lato-Bold',
-                color: Theme.COLORS.colorParagraph,
-                fontSize: Theme.SIZES.normal
-              }}
+  render() {
+    return (
+      <Background>
+        {this.state.isVisible && (
+          <Modal
+            animationIn='zoomIn'
+            backgroundColor={Theme.COLORS.colorMainAlt}
+            opacity={1}
+            style={{
+              margin: 0
+            }}
+            isVisible={this.state.isVisible}
+          >
+            <OrderCheck
+              setIsVisible={(e) => this.setState({ isVisible: e })}
+              isVisible={this.state.isVisible}
+              order={this.state.order}
+              navigation={props.navigation}
             />
-            <Text allowFontScaling={false} style={styles.price}>{product.price}</Text>
-          </View>
-          <View style={styles.layout}>
-            <Text allowFontScaling={false} style={styles.description}>{product.description}</Text>
-            <View style={{ paddingVertical: 10 }} />
-            {product.optionAddon.length > 0 &&
-              <Title
-                title='Extras'
-                styles={styles.title}
-              />}
-            <View style={{ paddingVertical: 10 }} />
-            {product.optionAddon.length > 0 &&
-              product.optionAddon.map((item, index) => (
-                <View style={styles.containerPrice} key={item.id}>
-                  <CheckBox
-                    checked={addOn[index]}
-                    name={item.name}
-                    handleCheck={() => {
-                      const copyArr = Object.assign(addOn)
-                      copyArr[index] = !copyArr[index]
-
-                      setAddOn(copyArr)
-
-                      console.log(addOn[index])
-                    }}
-                  />
-                  <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
-                </View>
-              ))}
-            {product.optionAddon.length > 0 && (
-              <View style={{ paddingVertical: 10 }} />
-            )}
-            <TextArea
-              onChangeText={(value) => setValue(value)}
-              maxLength={120}
-              value={value}
-              placeholder='Agrega una nota a tu orden...'
-              placeholderTextColor={Theme.COLORS.colorParagraph}
-              stylesContainer={styles.textArea}
-              stylesInput={styles.input}
-            />
+          </Modal>
+        )}
+        <View style={styles.screen}>
+          <ScrollView keyboardShouldPersistTaps='always'>
+            <Banner sourceImage={{ uri: this.state.product.url_img_product }} />
             <View style={{ paddingVertical: 5 }} />
-            <View style={styles.containerQuantity}>
+            <View style={styles.containerMain}>
               <Title
-                title='Escoge tu cantidad'
-                styles={styles.smallTitle}
+                title={this.state.product.name}
+                styles={{
+                  fontFamily: 'Lato-Bold',
+                  color: Theme.COLORS.colorParagraph,
+                  fontSize: Theme.SIZES.normal
+                }}
               />
-              <ButtonQuantity
-                count={count}
-              />
+              <Text allowFontScaling={false} style={styles.price}>{this.state.product.price}</Text>
             </View>
+            <View style={styles.layout}>
+              <Text allowFontScaling={false} style={styles.description}>{this.state.product.description}</Text>
+              <View style={{ paddingVertical: 10 }} />
+              {this.state.product.optionAddon.length > 0 &&
+                <Title
+                  title='Extras'
+                  styles={styles.title}
+                />}
+              <View style={{ paddingVertical: 10 }} />
+              {this.state.product.optionAddon.length > 0 &&
+                this.state.product.optionAddon.map((item, index) => (
+                  <View style={styles.containerPrice} key={item.id}>
+                    <CheckBox
+                      checked={this.state.addOn[index]}
+                      name={item.name}
+                      handleCheck={() => {
+                        const addOn = Object.assign(this.state.addOn)
+                        addOn[index] = !addOn[index]
 
-            <View style={styles.containerButton}>
-              <IconButton
-                message='AGREGAR ORDEN'
-                isActiveIcon
-                iconName='add'
-                onPress={() => handleOnCart(product)}
+                        this.setState({ addOn })
+                      }}
+                    />
+                    <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
+                  </View>
+                ))}
+              {this.state.product.optionAddon.length > 0 && (
+                <View style={{ paddingVertical: 10 }} />
+              )}
+              <TextArea
+                onChangeText={(value) => this.setState({ value })}
+                maxLength={120}
+                value={this.state.value}
+                placeholder='Agrega una nota a tu orden...'
+                placeholderTextColor={Theme.COLORS.colorParagraph}
+                stylesContainer={styles.textArea}
+                stylesInput={styles.input}
               />
+              <View style={{ paddingVertical: 5 }} />
+              <View style={styles.containerQuantity}>
+                <Title
+                  title='Escoge tu cantidad'
+                  styles={styles.smallTitle}
+                />
+                <ButtonQuantity
+                  count={this.state.count}
+                />
+              </View>
+
+              <View style={styles.containerButton}>
+                <IconButton
+                  message='AGREGAR ORDEN'
+                  isActiveIcon
+                  iconName='add'
+                  onPress={() => this.handleOnCart(product)}
+                />
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </View>
-    </Background>
-  )
+          </ScrollView>
+        </View>
+      </Background>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
