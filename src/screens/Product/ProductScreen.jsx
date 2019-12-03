@@ -30,12 +30,84 @@ class ProductScreen extends Component {
     addOn: [],
     order: {},
     isVisible: false,
+
+    total: 0
+  }
+
+  componentDidMount() {
+    if (this.state.product.price) {
+      this.setState({ total: this.state.product.price })
+    }
   }
 
   handleOnCart = async (product) => {
     this.setState({ order: { product, commerce: this.state.commerce } })
     this.setState({ isVisible: !isVisible })
   }
+
+  componentFooter = () => (
+    <React.Fragment>
+      <TextArea
+        onChangeText={(value) => this.setState({ value })}
+        maxLength={120}
+        value={this.state.value}
+        placeholder='Agrega una nota a tu orden...'
+        placeholderTextColor={Theme.COLORS.colorParagraph}
+        stylesContainer={styles.textArea}
+        stylesInput={styles.input}
+      />
+      <View style={{ paddingVertical: 5 }} />
+      <View style={styles.containerQuantity}>
+        <Title
+          title='Escoge tu cantidad'
+          styles={styles.smallTitle}
+        />
+        <ButtonQuantity
+          count={this.state.count}
+        />
+      </View>
+
+      <View style={styles.containerButton}>
+        <IconButton
+          message='AGREGAR ORDEN'
+          isActiveIcon
+          iconName='add'
+          onPress={() => this.handleOnCart(product)}
+        />
+      </View>
+    </React.Fragment>
+  )
+
+  checkedAddOn = (index) => {
+    const addOn = Object.assign(this.state.addOn)
+    const { optionAddon } = this.state.product
+    let total = 0
+    addOn[index] = !addOn[index]
+
+    if(addOn[index]) {
+      total = this.state.total + optionAddon[index].extraPrice
+    } else {
+      total = this.state.total - optionAddon[index].extraPrice
+    }
+
+    this.setState({ addOn, total })
+  }
+
+  componentAddOn = () => (
+    this.state.product.optionAddon.length > 0 &&
+    this.state.product.optionAddon.map(
+      (item, index) => (
+        <View style={styles.containerPrice} key={item.id}>
+          <CheckBox
+            checked={this.state.addOn[index]}
+            name={item.name}
+            handleCheck={() => this.checkedAddOn(index)}
+          />
+          <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
+        </View>
+      )
+    )
+  )
 
   render() {
     return (
@@ -62,6 +134,7 @@ class ProductScreen extends Component {
           <ScrollView keyboardShouldPersistTaps='always'>
             <Banner sourceImage={{ uri: this.state.product.url_img_product }} />
             <View style={{ paddingVertical: 5 }} />
+
             <View style={styles.containerMain}>
               <Title
                 title={this.state.product.name}
@@ -71,8 +144,10 @@ class ProductScreen extends Component {
                   fontSize: Theme.SIZES.normal
                 }}
               />
-              <Text allowFontScaling={false} style={styles.price}>{this.state.product.price}</Text>
+              {/* <Text allowFontScaling={false} style={styles.price}>{this.state.product.price}</Text> */}
+              <Text allowFontScaling={false} style={styles.price}>{this.state.total}</Text>
             </View>
+
             <View style={styles.layout}>
               <Text allowFontScaling={false} style={styles.description}>{this.state.product.description}</Text>
               <View style={{ paddingVertical: 10 }} />
@@ -82,53 +157,20 @@ class ProductScreen extends Component {
                   styles={styles.title}
                 />}
               <View style={{ paddingVertical: 10 }} />
-              {this.state.product.optionAddon.length > 0 &&
-                this.state.product.optionAddon.map((item, index) => (
-                  <View style={styles.containerPrice} key={item.id}>
-                    <CheckBox
-                      checked={this.state.addOn[index]}
-                      name={item.name}
-                      handleCheck={() => {
-                        const addOn = Object.assign(this.state.addOn)
-                        addOn[index] = !addOn[index]
 
-                        this.setState({ addOn })
-                      }}
-                    />
-                    <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
-                  </View>
-                ))}
-              {this.state.product.optionAddon.length > 0 && (
+              {
+                this.componentAddOn()
+              }
+
+              {
+                this.state.product.optionAddon.length > 0 &&
                 <View style={{ paddingVertical: 10 }} />
-              )}
-              <TextArea
-                onChangeText={(value) => this.setState({ value })}
-                maxLength={120}
-                value={this.state.value}
-                placeholder='Agrega una nota a tu orden...'
-                placeholderTextColor={Theme.COLORS.colorParagraph}
-                stylesContainer={styles.textArea}
-                stylesInput={styles.input}
-              />
-              <View style={{ paddingVertical: 5 }} />
-              <View style={styles.containerQuantity}>
-                <Title
-                  title='Escoge tu cantidad'
-                  styles={styles.smallTitle}
-                />
-                <ButtonQuantity
-                  count={this.state.count}
-                />
-              </View>
+              }
 
-              <View style={styles.containerButton}>
-                <IconButton
-                  message='AGREGAR ORDEN'
-                  isActiveIcon
-                  iconName='add'
-                  onPress={() => this.handleOnCart(product)}
-                />
-              </View>
+              {
+                this.componentFooter()
+              }
+
             </View>
           </ScrollView>
         </View>
