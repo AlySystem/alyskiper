@@ -8,6 +8,8 @@ import {
 } from 'react-native'
 import { useSelector } from 'react-redux'
 import NumericInput from '../../components/numericInput'
+import _ from 'lodash'
+// import NumericInput from 'react-native-numeric-input'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -40,16 +42,6 @@ class ProductScreen extends Component {
     if (this.state.product.price) {
       this.setState({ total: this.state.product.price })
     }
-
-    if (this.state.product.optionAddon) {
-      const priceAdd = []
-
-      this.state.product.optionAddon.map(
-        ({ extraPrice }) => priceAdd.push(extraPrice)
-      )
-
-      this.setState({ priceAdd })
-    }
   }
 
   handleOnCart = async (product) => {
@@ -74,8 +66,22 @@ class ProductScreen extends Component {
           title='Escoge tu cantidad'
           styles={styles.smallTitle}
         />
-        {/* <ButtonQuantity price={this.state.total} onChange={total => this.setState({ total })} /> */}
-        <NumericInput textColor="#FFF" onChange={total => this.setState({ total })} />
+        <NumericInput
+          iconSize={10}
+          iconStyle={{ fontSize: 12, borderRadius: 5, padding: 5, color: Theme.COLORS.colorSecondary }}
+          inputStyle={{ fontSize: 14, color: Theme.COLORS.colorSecondary, backgroundColor: Theme.COLORS.colorMain }}
+          valueType="real"
+          minValue={1}
+          initValue={1}
+          maxValue={10}
+          enabled={true}
+          rounded
+          borderColor={Theme.COLORS.colorSecondary}
+          totalWidth={200}
+          totalHeight={50}
+          rightButtonBackgroundColor={Theme.COLORS.colorMain}
+          leftButtonBackgroundColor={Theme.COLORS.colorMain}
+          onChange={this.changeQuantity} />
       </View>
 
       <View style={styles.containerButton}>
@@ -99,13 +105,29 @@ class ProductScreen extends Component {
       total = this.state.total + optionAddon[index].extraPrice
     } else {
       total = this.state.total - optionAddon[index].extraPrice
+      const priceAdd = Object.assign(this.state.priceAdd)
+      priceAdd[index] = 0
+
+      this.setState({ priceAdd })
+
     }
 
     this.setState({ addOn, total })
   }
 
-  changeQuantityAddOn = () => {
+  // 
+  changeQuantity = (value) => {
+    this.setState({ total: this.state.product.price * value })
+  }
 
+  changeQuantityAddOn = (value, index) => {
+    const priceAdd = Object.assign(this.state.priceAdd)
+
+    console.log(priceAdd)
+
+    priceAdd[index] = this.state.product.optionAddon[index].extraPrice * value
+
+    this.setState({ priceAdd })
   }
 
   componentAddOn = () => (
@@ -119,23 +141,32 @@ class ProductScreen extends Component {
             handleCheck={() => this.checkedAddOn(index)}
           />
 
-
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 10 }}>
 
               <NumericInput
                 iconSize={10}
-                iconStyle={{ fontSize: 12, borderRadius: 5, padding: 5 }}
-                inputStyle={{ fontSize: 14, backgroundColor: '#FFF' }}
+                iconStyle={{ fontSize: 12, borderRadius: 5, padding: 5, color: Theme.COLORS.colorSecondary }}
+                inputStyle={{ fontSize: 14, color: Theme.COLORS.colorSecondary, backgroundColor: Theme.COLORS.colorMain }}
                 valueType="real"
+                initValue={1}
                 minValue={1}
+                maxValue={10}
                 rounded
                 totalWidth={120}
                 totalHeight={25}
+                borderColor={Theme.COLORS.colorSecondary}
+                rightButtonBackgroundColor={Theme.COLORS.colorMain}
+                leftButtonBackgroundColor={Theme.COLORS.colorMain}
                 enabled={this.state.addOn[index]}
-                onChange={value => console.log(value)} />
+                onChange={value => this.changeQuantityAddOn(value, index)} />
             </View>
-            <Text allowFontScaling={false} style={styles.extraPrice}>+{item.extraPrice}</Text>
+            <Text allowFontScaling={false} style={styles.extraPrice}>
+              +
+              {
+                this.state.priceAdd[index] ? this.state.priceAdd[index] : item.extraPrice
+              }
+            </Text>
           </View>
 
         </View>
@@ -179,7 +210,7 @@ class ProductScreen extends Component {
                 }}
               />
               {/* <Text allowFontScaling={false} style={styles.price}>{this.state.product.price}</Text> */}
-              <Text allowFontScaling={false} style={styles.price}>{this.state.total}</Text>
+              <Text allowFontScaling={false} style={styles.price}>{this.state.total + _.sum(this.state.priceAdd)}</Text>
             </View>
 
             <View style={styles.layout}>
