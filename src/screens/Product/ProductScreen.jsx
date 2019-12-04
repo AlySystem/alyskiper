@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component } from 'react'
+import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
@@ -6,10 +6,13 @@ import {
   ScrollView,
   TextInput
 } from 'react-native'
+<<<<<<< HEAD
 import { useSelector } from 'react-redux'
 import NumericInput from '../../components/numericInput'
 import _ from 'lodash'
 // import NumericInput from 'react-native-numeric-input'
+=======
+>>>>>>> 15a199cd57c974e512cfcac21bb81ff240bf216d
 
 // Import components
 import Background from '../../components/background/Background'
@@ -20,10 +23,10 @@ import ButtonQuantity from '../../components/button/ButtonQuantity'
 import IconButton from '../../components/button/IconButton'
 import CheckBox from '../../components/checkbox/CheckBox'
 import Modal from '../../components/modal/Modal'
+import OrderCheck from '../../components/orderCheck/OrderCheck'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-import OrderCheck from '../../components/orderCheck/OrderCheck'
 
 class ProductScreen extends Component {
   state = {
@@ -44,9 +47,9 @@ class ProductScreen extends Component {
     }
   }
 
-  handleOnCart = async (product) => {
-    this.setState({ order: { product, commerce: this.state.commerce } })
-    this.setState({ isVisible: !isVisible })
+  handleOnCart = async  => {
+    this.setState({ order: { product: this.state.product, commerce: this.state.commerce } })
+    this.setState({ isVisible: !this.state.isVisible })
   }
 
   componentFooter = () => (
@@ -182,16 +185,16 @@ class ProductScreen extends Component {
             animationIn='zoomIn'
             backgroundColor={Theme.COLORS.colorMainAlt}
             opacity={1}
+            isVisible={this.state.isVisible}
             style={{
               margin: 0
             }}
-            isVisible={this.state.isVisible}
           >
             <OrderCheck
               setIsVisible={(e) => this.setState({ isVisible: e })}
               isVisible={this.state.isVisible}
               order={this.state.order}
-              navigation={props.navigation}
+              navigation={this.props.navigation}
             />
           </Modal>
         )}
@@ -217,10 +220,7 @@ class ProductScreen extends Component {
               <Text allowFontScaling={false} style={styles.description}>{this.state.product.description}</Text>
               <View style={{ paddingVertical: 10 }} />
               {this.state.product.optionAddon.length > 0 &&
-                <Title
-                  title='Extras'
-                  styles={styles.title}
-                />}
+                <Title title='Extras' styles={styles.title} />}
               <View style={{ paddingVertical: 10 }} />
 
               {

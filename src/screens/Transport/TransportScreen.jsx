@@ -44,6 +44,7 @@ import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
 import { getPixelSize } from '../../utils/Pixel'
 import { routeDirection } from '../../utils/Directions'
 import { useNotification } from '../../hooks/useNotification'
+import Picture from '../../components/picture/Picture'
 
 const { height, width } = Dimensions.get('window')
 
@@ -356,6 +357,10 @@ const TransportScreen = props => {
           </View>
         </TouchableOpacity>
       )}
+      <Picture
+        source={require('../../../assets/images/img-logo-alysystem.png')}
+        styles={styles.logo}
+      />
     </View>
   )
 }
@@ -407,6 +412,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: height * 0.02,
     left: width * 0.05
+  },
+  logo: {
+    position: 'absolute',
+    bottom: 5,
+    right: 8,
+    resizeMode: 'contain',
+    height: 30,
+    width: 100
   }
 })
 
