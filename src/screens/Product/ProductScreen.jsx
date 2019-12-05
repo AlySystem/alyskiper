@@ -34,6 +34,8 @@ class ProductScreen extends Component {
     addOn: [],
     order: {},
     isVisible: false,
+    productQuantity: 1,
+    productAddQuantity: [],
     priceAdd: [],
     total: 0
   }
@@ -48,9 +50,34 @@ class ProductScreen extends Component {
     }
   }
 
+  /**Creacion de objeto para enviarlo a carro de compras */
   handleOnCart = () => {
-    this.setState({ order: { product: this.state.product, commerce: this.state.commerce } })
-    this.setState({ isVisible: !this.state.isVisible })
+    const { product, productQuantity, productAddQuantity } = this.state
+    const { description, id, name, price } = product
+
+    const products = {
+      id,
+      name,
+      description,
+      price,
+      quantity: productQuantity,
+      addOn: productAddQuantity,
+    }
+
+    console.log(products)
+
+    // this.setState(
+    //   {
+    //     order: {
+    //       product: this.state.product,
+    //       commerce: this.state.commerce
+    //     }
+    //   }, () => {
+    //     console.log(this.state.order)
+    //   }
+    // )
+
+    // this.setState({ isVisible: !this.state.isVisible })
   }
 
   /**Renderizacion de pie de productos (cantidad, comentarios, agregar a carrito) */
@@ -94,7 +121,7 @@ class ProductScreen extends Component {
           message='AGREGAR ORDEN'
           isActiveIcon
           iconName='add'
-          onPress={() => this.handleOnCart(product)}
+          onPress={this.handleOnCart}
         />
       </View>
     </React.Fragment>
@@ -104,30 +131,55 @@ class ProductScreen extends Component {
   checkedAddOn = (index) => {
     const addOn = Object.assign(this.state.addOn)
     const priceAdd = Object.assign(this.state.priceAdd)
+    let productAddQuantity = Object.assign(this.state.productAddQuantity)
     const { optionAddon } = this.state.product
-    // let total = 0
+
+    // Checkbox Toggle
     addOn[index] = !addOn[index]
 
+    // Verficamos si el check esta en estado checked
     if (addOn[index]) {
+      // almacenamos el precio del producto extra
       priceAdd[index] = optionAddon[index].extraPrice
+
+      // Agregamos informacion detallada
+      productAddQuantity[index] = {
+        product: this.state.product.optionAddon[index],
+        quantity: 1
+      }
     } else {
+
+      // Si no, formateamos la informacion a cero
+      // Suprimimos el detalle del producto extra
       priceAdd[index] = 0
+      productAddQuantity = productAddQuantity.slice(index - 1, index)
     }
 
-    this.setState({ addOn, priceAdd })
+    this.setState({ addOn, priceAdd, productAddQuantity })
   }
 
   /**Precio del producto por la cantidad */
   changeQuantity = (value) => {
-    this.setState({ total: this.state.product.price * value })
+
+    // Multimplicamos el precio del producto por la cantidad
+    // Sumamos la cantidad del prodcuto
+    this.setState({
+      total: this.state.product.price * value,
+      productQuantity: value
+    })
   }
 
   /**Cambio de cantidad de extras, precio por cantidad */
-  changeQuantityAddOn = (value, index) => {
+  changeQuantityAddOn = (value, index, product) => {
     const priceAdd = Object.assign(this.state.priceAdd)
-    priceAdd[index] = this.state.product.optionAddon[index].extraPrice * value
+    const productAddQuantity = Object.assign(this.state.productAddQuantity)
 
-    console.log(priceAdd, value)
+    // Modificamos el precio total, multiplicamos el precio del producto por la cantidad 
+    priceAdd[index] = this.state.product.optionAddon[index].extraPrice * value
+    productAddQuantity[index] = {
+      product,
+      quantity: value
+    }
 
     this.setState({ priceAdd })
   }
@@ -155,6 +207,7 @@ class ProductScreen extends Component {
                 initValue={1}
                 minValue={1}
                 maxValue={10}
+                value={1}
                 rounded
                 totalWidth={120}
                 totalHeight={25}
@@ -162,7 +215,7 @@ class ProductScreen extends Component {
                 rightButtonBackgroundColor={Theme.COLORS.colorMain}
                 leftButtonBackgroundColor={Theme.COLORS.colorMain}
                 enabled={this.state.addOn[index]}
-                onChange={value => this.changeQuantityAddOn(value, index)} />
+                onChange={value => this.changeQuantityAddOn(value, index, item)} />
             </View>
             {/* <Text allowFontScaling={false} style={styles.extraPrice}>
               +
