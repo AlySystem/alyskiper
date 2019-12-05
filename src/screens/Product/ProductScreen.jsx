@@ -6,13 +6,10 @@ import {
   ScrollView,
   TextInput
 } from 'react-native'
-<<<<<<< HEAD
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 import NumericInput from '../../components/numericInput'
 import _ from 'lodash'
 // import NumericInput from 'react-native-numeric-input'
-=======
->>>>>>> 15a199cd57c974e512cfcac21bb81ff240bf216d
 
 // Import components
 import Background from '../../components/background/Background'
@@ -41,17 +38,22 @@ class ProductScreen extends Component {
     total: 0
   }
 
+  componentWillMount() {
+    console.disableYellowBox = true;
+  }
+
   componentDidMount() {
     if (this.state.product.price) {
       this.setState({ total: this.state.product.price })
     }
   }
 
-  handleOnCart = async  => {
+  handleOnCart = () => {
     this.setState({ order: { product: this.state.product, commerce: this.state.commerce } })
     this.setState({ isVisible: !this.state.isVisible })
   }
 
+  /**Renderizacion de pie de productos (cantidad, comentarios, agregar a carrito) */
   componentFooter = () => (
     <React.Fragment>
       <TextArea
@@ -98,6 +100,7 @@ class ProductScreen extends Component {
     </React.Fragment>
   )
 
+  /**Algorito de checkboxs dinamicos */
   checkedAddOn = (index) => {
     const addOn = Object.assign(this.state.addOn)
     const { optionAddon } = this.state.product
@@ -112,27 +115,27 @@ class ProductScreen extends Component {
       priceAdd[index] = 0
 
       this.setState({ priceAdd })
-
     }
 
     this.setState({ addOn, total })
   }
 
-  // 
+  /**Precio del producto por la cantidad */
   changeQuantity = (value) => {
     this.setState({ total: this.state.product.price * value })
   }
 
+  /**Cambio de cantidad de extras, precio por cantidad */
   changeQuantityAddOn = (value, index) => {
     const priceAdd = Object.assign(this.state.priceAdd)
-
-    console.log(priceAdd)
-
     priceAdd[index] = this.state.product.optionAddon[index].extraPrice * value
+
+    console.log(priceAdd, value)
 
     this.setState({ priceAdd })
   }
 
+  /**Renderizacion de productos extras */
   componentAddOn = () => (
     this.state.product.optionAddon.length > 0 &&
     this.state.product.optionAddon.map(
@@ -164,12 +167,14 @@ class ProductScreen extends Component {
                 enabled={this.state.addOn[index]}
                 onChange={value => this.changeQuantityAddOn(value, index)} />
             </View>
-            <Text allowFontScaling={false} style={styles.extraPrice}>
+            {/* <Text allowFontScaling={false} style={styles.extraPrice}>
               +
               {
                 this.state.priceAdd[index] ? this.state.priceAdd[index] : item.extraPrice
               }
-            </Text>
+            </Text> */}
+
+            <Text allowFontScaling={false} style={styles.extraPrice}>+ {item.extraPrice}</Text>
           </View>
 
         </View>

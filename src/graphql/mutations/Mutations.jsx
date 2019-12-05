@@ -94,17 +94,8 @@ export const UPDATEUSER = gql`
   }
 `
 export const RESET = gql`
-  mutation Reset($phone_number: String!){
-    reset_password (phone_number: $phone_number) {
-      error {
-        message
-        ok
-        status
-      }
-      data {
-        id
-      }
-    }
+  mutation Reset($input: ChangePasswordEmailInput!){
+    changePasswordByEmail(input: $input)
   }
 `
 
