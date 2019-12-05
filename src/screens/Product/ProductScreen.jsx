@@ -16,7 +16,7 @@ import Background from '../../components/background/Background'
 import Banner from '../../components/banner/Banner'
 import Title from '../../components/title/Title'
 import TextArea from '../../components/input/TextArea'
-import ButtonQuantity from '../../components/button/ButtonQuantity'
+// import ButtonQuantity from '../../components/button/ButtonQuantity'
 import IconButton from '../../components/button/IconButton'
 import CheckBox from '../../components/checkbox/CheckBox'
 import Modal from '../../components/modal/Modal'
@@ -103,21 +103,18 @@ class ProductScreen extends Component {
   /**Algorito de checkboxs dinamicos */
   checkedAddOn = (index) => {
     const addOn = Object.assign(this.state.addOn)
+    const priceAdd = Object.assign(this.state.priceAdd)
     const { optionAddon } = this.state.product
-    let total = 0
+    // let total = 0
     addOn[index] = !addOn[index]
 
     if (addOn[index]) {
-      total = this.state.total + optionAddon[index].extraPrice
+      priceAdd[index] = optionAddon[index].extraPrice
     } else {
-      total = this.state.total - optionAddon[index].extraPrice
-      const priceAdd = Object.assign(this.state.priceAdd)
       priceAdd[index] = 0
-
-      this.setState({ priceAdd })
     }
 
-    this.setState({ addOn, total })
+    this.setState({ addOn, priceAdd })
   }
 
   /**Precio del producto por la cantidad */
