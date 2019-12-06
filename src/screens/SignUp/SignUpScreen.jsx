@@ -22,7 +22,6 @@ import InputControl from '../../components/input/InputControl'
 import IconButton from '../../components/button/IconButton'
 import Title from '../../components/title/Title'
 import ModalPicker from '../../components/modal/ModalPicker'
-import Snow from '../../components/snow/Snow'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -284,8 +283,6 @@ const SignUpScreen = props => {
   return (
     <>
       <Background>
-        <Snow />
-
         <View style={styles.screen}>
           <ScrollView
             keyboardShouldPersistTaps='always'
