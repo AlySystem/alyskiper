@@ -14,14 +14,11 @@ import ListOfData from '../../containers/ListOfData'
 // Import theme
 import { Theme } from '../../constants/Theme'
 
-import Snow from '../../components/snow/Snow'
-
 const WelcomeScreen = props => {
   const { navigate } = props.navigation
 
   return (
     <Background>
-      <Snow />
       <View style={styles.screen}>
         <View style={styles.container}>
           <ListOfData />
