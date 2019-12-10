@@ -28,6 +28,9 @@ import TemplateError from './src/screens/TemplateError/TemplateError'
 
 import { configure } from './src/hooks/usePushNotification'
 
+// Import theme
+import { Theme } from './src/constants/Theme'
+
 const httpLink = new HttpLink({
   uri: keys.urlApi
 })
@@ -94,7 +97,7 @@ const Skiper = () => {
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
-        {Platform.OS === 'ios' && <StatusBar barStyle='dark-content' />}
+        {Platform.OS === 'ios' ? <StatusBar barStyle='dark-content' /> : <StatusBar backgroundColor={Theme.COLORS.colorMainAlt} />}
         <Navigation />
         <FlashMessage position='top' />
       </ApolloProvider>
