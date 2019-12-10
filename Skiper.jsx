@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Platform, StatusBar } from 'react-native'
+import SplashScreen from 'react-native-splash-screen'
 import FlashMessage from 'react-native-flash-message'
 import { ApolloClient, split, HttpLink } from 'apollo-boost'
 import { Provider } from 'react-redux'
@@ -8,7 +9,6 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import { setContext } from 'apollo-link-context'
-import SplashScreen from 'react-native-splash-screen'
 
 import NetInfo from '@react-native-community/netinfo'
 
@@ -77,7 +77,7 @@ const Skiper = () => {
 
   useEffect(() => {
     SplashScreen.hide()
-  }, [])
+  })
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
