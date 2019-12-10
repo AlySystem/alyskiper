@@ -36,12 +36,10 @@ import { Theme } from '../../constants/Theme'
 const TravelTracingScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
-  const { travel } = useSelector(state => state.activeTravel)
   const { userId, firstName } = useSelector(state => state.user)
   const { location } = useLocation()
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErrorTravel] = useState(false)
-  const [connectionDriver, setConnectionDriver] = useState(false)
   const [driver, setDriver] = useState()
   const [idTravel] = useState(props.navigation.getParam('idTravel'))
   const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
@@ -60,7 +58,7 @@ const TravelTracingScreen = props => {
 
   useEffect(() => {
     if (!loading) {
-      if (travel !== null) {
+      if (data.getTravelByUserId !== null) {
         setErrorTravel(false)
         dispatch({
           type: DETAILSTRAVEL,
@@ -85,7 +83,6 @@ const TravelTracingScreen = props => {
               const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
               if (channels !== undefined) {
                 const drive = channels.occupants.filter(item => item.state !== undefined)
-                setConnectionDriver(false)
                 setDriver(drive)
                 if (marker.current !== null) {
                   console.log('DRIVING... ', drive[0].state.coords.latitude, drive[0].state.coords.longitude)
@@ -93,8 +90,6 @@ const TravelTracingScreen = props => {
                 }
               }
             }
-          } else {
-            setConnectionDriver(true)
           }
         })
       } else {
@@ -201,21 +196,6 @@ const TravelTracingScreen = props => {
           />
         </TouchableOpacity>
       }
-      {connectionDriver && (
-        <Text style={{
-          position: 'absolute',
-          bottom: 70,
-          left: 0,
-          width: '100%',
-          backgroundColor: 'red',
-          paddingVertical: 5,
-          textAlign: 'center',
-          fontFamily: 'Lato-Bold',
-          color: Theme.COLORS.colorParagraph
-        }}
-        >EL CONDUCTOR SE DESCONECTO
-        </Text>
-      )}
       <TouchableOpacity
         style={styles.containerButton}
         onPress={handleToggleModal}

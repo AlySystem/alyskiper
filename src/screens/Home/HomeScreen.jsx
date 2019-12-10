@@ -47,9 +47,7 @@ const HomeScreen = props => {
   return (
     <Background>
       <View style={styles.screen}>
-        <ScrollView
-          keyboardShouldPersistTaps='always'
-        >
+        <ScrollView keyboardShouldPersistTaps='always'>
           <ListOfBanner />
 
           <View style={{ paddingVertical: 10 }} />
@@ -58,14 +56,10 @@ const HomeScreen = props => {
             <View style={{ paddingVertical: 2 }} />
             <Text allowFontScaling={false} style={styles.description}>Cuenta conmigo.</Text>
             <View style={{ paddingVertical: 15 }} />
-            <ListOfServices
-              navigate={navigate}
-            />
+            <ListOfServices navigate={navigate} />
           </View>
           <View style={{ paddingVertical: 20 }} />
-
           <ListOfSwiper />
-
         </ScrollView>
       </View>
     </Background>

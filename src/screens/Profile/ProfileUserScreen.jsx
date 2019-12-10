@@ -37,7 +37,7 @@ import { keys } from '../../utils/keys'
 
 const { height } = Dimensions.get('window')
 
-const ProfileUserScreen = () => {
+const ProfileUserScreen = props => {
   const userData = useSelector(state => state.user)
   const dispatch = useDispatch()
   const [, setError] = useState(null)
@@ -226,7 +226,7 @@ const ProfileUserScreen = () => {
 
       showMessage({
         message: 'AlySkiper',
-        description: `${result.data.updateUser.user} actualizado correctamente.`,
+        description: `${result.data.updateUser.user}, su cuenta se actualizo correctamente.`,
         backgroundColor: 'green',
         color: '#fff',
         icon: 'success',
@@ -237,6 +237,7 @@ const ProfileUserScreen = () => {
           fontFamily: 'Lato-Regular'
         }
       })
+      props.navigation.goBack()
     }
   }
 
