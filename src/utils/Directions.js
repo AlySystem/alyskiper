@@ -4,7 +4,7 @@ import { keys } from '../utils/keys'
 
 export const routeDirection = async (placeId, latitude, longitude) => {
   try {
-    const apiUrl = `${keys.googleMaps.directions}json?origin=${latitude}, ${longitude}&avoid=tolls&destination=place_id:${placeId}&key=${keys.googleMaps.apiKey}`
+    const apiUrl = `${keys.googleMaps.directions}json?origin=${latitude}, ${longitude}&destination=place_id:${placeId}&key=${keys.googleMaps.apiKey}`
     const response = await fetch(apiUrl)
     const result = await response.json()
 

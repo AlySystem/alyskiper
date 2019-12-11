@@ -26,7 +26,7 @@ import InputControl from '../../components/input/InputControl'
 import ModalTransport from '../../components/modal/ModalTransport'
 import Button from '../../components/button/Button'
 import Loader from '../../components/loader/Loader'
-import AnimatedPolyline from '../../components/polyline/AnimtedPolyline'
+// import AnimatedPolyline from '../../components/polyline/AnimtedPolyline'
 
 // Import image
 import silverMarker from '../../../assets/images/img-icon-silver.png'
@@ -302,14 +302,11 @@ const TransportScreen = props => {
           )}
 
           {destination && (
-            <>
-              <Polyline
-                coordinates={destination}
-                strokeWidth={3}
-                strokeColor={Theme.COLORS.colorMainAlt}
-              />
-              <AnimatedPolyline Direction={destination} />
-            </>
+            <Polyline
+              coordinates={destination}
+              strokeWidth={3}
+              strokeColor={Theme.COLORS.colorSecondary}
+            />
           )}
         </Map>
       )}

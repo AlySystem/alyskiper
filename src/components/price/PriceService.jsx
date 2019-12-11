@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Text,
   View
@@ -26,6 +26,7 @@ const PriceService = props => {
   const dispatch = useDispatch()
   const { country_id, city_id } = useSelector(state => state.user)
   const { steps } = useSelector(state => state.direction)
+  const [price, setPrice] = useState(0)
 
   const { loading, data, error } = useQuery(CALCULATERATE, {
     variables: {
@@ -36,66 +37,61 @@ const PriceService = props => {
     }
   })
 
-  console.log({ variables: {
-    idcountry: country_id,
-    idcity: city_id,
-    idcategoriaviaje: props.categoryId,
-    date_init: date
-  }})
+  useEffect(
+    () => {
+      if (loading === false && data) {
+        const { duration, distance } = steps
+        const durationMin = duration.value / 60
+        const distanceKm = distance.value / 1000
+
+        const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
+        const minutes = durationMin * priceminute
+        const km = distanceKm * priceckilometer
+
+        const total = minutes + km + pricebase
+
+        /**
+         * Si el total es menor al pecio minimo
+         * siempre cobraremos el precio minimo
+         */
+        if (total < priceminimun) {
+          dispatch({
+            type: DETAILSTRAVEL,
+            payload: {
+              priceTravel: {
+                priceTravel: priceminimun,
+                priceBase: pricebase,
+                pricecKilometer: km,
+                priceMinimun: priceminimun,
+                priceMinute: minutes
+              }
+            }
+          })
+
+          /**Seteamos el precios */
+          setPrice(priceminimun)
+        } else {
+          dispatch({
+            type: DETAILSTRAVEL,
+            payload: {
+              priceTravel: total,
+              priceBase: pricebase,
+              pricecKilometer: km,
+              priceMinimun: priceminimun,
+              priceMinute: minutes
+            }
+          })
+          setPrice(total)
+        }
+      }
+    }, [loading]
+  )
 
   if (error) {
     props.error(error)
     return <View />
   }
-  if (loading) return <Loader size='small' />
-
-  const calculate = () => {
-    const { duration, distance } = steps
-    console.log(duration, distance)
-    const durationMin = duration.value / 60
-    const distanceKm = distance.value / 1000
-
-    console.log({ durationMin })
-    console.log({ distanceKm })
-
-    const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
-    const minutes = durationMin * priceminute
-    const km = distanceKm * priceckilometer
-
-    console.log({ pricebase, priceminimun, priceminute, priceckilometer })
-    console.log({ minutes, km })
-
-    const total = minutes + km + pricebase
-    if (total < priceminimun) {
-      dispatch({
-        type: DETAILSTRAVEL,
-        payload: {
-          priceTravel: {
-            priceTravel: priceminimun,
-            priceBase: pricebase,
-            pricecKilometer: km,
-            priceMinimun: priceminimun,
-            priceMinute: minutes
-          }
-        }
-      })
-      console.log(priceminimun)
-      return priceminimun
-    } else {
-      dispatch({
-        type: DETAILSTRAVEL,
-        payload: {
-          priceTravel: total,
-          priceBase: pricebase,
-          pricecKilometer: km,
-          priceMinimun: priceminimun,
-          priceMinute: minutes
-        }
-      })
-      console.log(total)
-      return total
-    }
-  }
+  if (loading && !data) return <Loader size='small' />
 
   return (
     <Text
@@ -105,7 +101,7 @@ const PriceService = props => {
         color: Theme.COLORS.colorParagraph,
         fontSize: 18
       }}
-    >C$ {Math.round(calculate())}
+    >C$ {Math.ceil(price)}
     </Text>
   )
 }
