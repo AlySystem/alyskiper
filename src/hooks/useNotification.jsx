@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
 import { useSelector, useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
@@ -12,10 +12,10 @@ import { GETNOTIFICATIONTRAVEL } from '../graphql/subscription/Subcription'
 
 import { notification } from '../hooks/usePushNotification'
 
-export const useNotification = (navigate, latitude, longitude) => {
+export const useNotification = (navigate, latitude, longitude, navigation) => {
   const dispatch = useDispatch()
   const { userId, firstName } = useSelector(state => state.user)
-  const [status, setStatus] = useState()
+  // const [status, setStatus] = useState(0)
   const [idTravel, setIdTravel] = useState()
 
   const pubnub = new PubNubReact({
@@ -26,13 +26,13 @@ export const useNotification = (navigate, latitude, longitude) => {
     uuid: firstName
   })
 
-  const { loading, error } = useSubscription(GETNOTIFICATIONTRAVEL, {
+  const { loading, error, data } = useSubscription(GETNOTIFICATIONTRAVEL, {
     variables: { idusuario: userId },
     onSubscriptionData: ({ subscriptionData }) => {
       const { travelstatus: { id } } = subscriptionData.data.skiperTravel.skiperTravelsTracing[0]
-      setStatus(id)
       setIdTravel(subscriptionData.data.skiperTravel.id)
-      console.log(id, 'STATUS TRAVEL')
+
+      dispatch({ type: 'ESTADOVIAJE', payload: { id } })
 
       switch (id) {
         case 2:
@@ -52,6 +52,7 @@ export const useNotification = (navigate, latitude, longitude) => {
           navigate('Transport')
           break
         case 3:
+          // ACA QUEDAMOS 3:10 AM
           dispatch({
             type: ACTIVETRAVEL,
             payload: { travel: idTravel }
@@ -72,8 +73,27 @@ export const useNotification = (navigate, latitude, longitude) => {
           })
           navigate('FinalTravel')
           break
+        case 9:
+          navigate('Home')
+
+          notification('AlySkiper', 'Su viaje ha sido cancelado.')
+          pubnub.unsubscribe({
+            channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
+          })
+          break;
       }
     }
   })
-  return { status, idTravel, loading, error }
+
+  // useEffect(
+  //   () => {
+  //     if (status !== 0) {
+  //       return { status, idTravel, loading, error }
+  //     }
+  //   }, [status]
+  // )
+
+  // console.log('DATA -' + data !== undefined ? data.skiperTravel.skiperTravelsTracing[0].travelstatus.id : '0')
+
+  return { idTravel, loading, error }
 }

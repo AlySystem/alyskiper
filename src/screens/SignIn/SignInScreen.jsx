@@ -132,7 +132,6 @@ const SignInScreen = props => {
 
   return (
     <Background>
-
       <View style={styles.screen}>
         <ScrollView
           contentContainerStyle={styles.scrollView}

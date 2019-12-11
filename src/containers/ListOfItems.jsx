@@ -37,18 +37,24 @@ const items = [
   },
   {
     key: 4,
+    name: 'Wallets',
+    icon: 'account-balance-wallet',
+    routeName: 'Wallet'
+  },
+  {
+    key: 5,
     name: 'Invitar amigos',
     icon: 'card-giftcard',
     routeName: 'InvitedFriend'
   },
   {
-    key: 5,
+    key: 6,
     name: 'Soporte',
     icon: 'verified-user',
     routeName: 'Support'
   },
   {
-    key: 6,
+    key: 7,
     name: 'Legal',
     icon: 'security',
     routeName: 'Legal'

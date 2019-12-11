@@ -26,7 +26,7 @@ import InputControl from '../../components/input/InputControl'
 import ModalTransport from '../../components/modal/ModalTransport'
 import Button from '../../components/button/Button'
 import Loader from '../../components/loader/Loader'
-import AnimatedPolyline from '../../components/polyline/AnimtedPolyline'
+// import AnimatedPolyline from '../../components/polyline/AnimtedPolyline'
 
 // Import image
 import silverMarker from '../../../assets/images/img-icon-silver.png'
@@ -52,7 +52,7 @@ const TransportScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { location, loading } = useWatchLocation()
-  useNotification(navigate, location.latitude, location.longitude)
+  useNotification(navigate, location.latitude, location.longitude, props.navigation)
   const { firstName, city_id } = useSelector(state => state.user)
   const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)
@@ -91,25 +91,46 @@ const TransportScreen = props => {
 
   const handleDirecctions = async (placeId, details) => {
     setIsLoading(true)
+
     const { latitude, longitude } = location
     const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
-    setIsLoading(false)
-    setDestination(pointCoords)
-    setDetails(details)
-    dispatch({
-      type: DIRECTION,
-      payload: {
-        steps
-      }
-    })
-    mapView.current.fitToCoordinates(pointCoords, {
-      edgePadding: {
-        right: getPixelSize(50),
-        left: getPixelSize(50),
-        top: getPixelSize(50),
-        bottom: getPixelSize(250)
-      }
-    })
+
+    if (pointCoords === null || steps === null) {
+      Alert.alert(
+        'Atencion',
+        'La conexion ha fallado',
+        [
+          {
+            text: 'Ok',
+            style: 'default',
+            onPress: () => { }
+          },
+          {
+            text: 'Reintentar',
+            style: 'default',
+            onPress: () => handleDirecctions(placeId, details)
+          },
+        ]
+      )
+    } else {
+      setIsLoading(false)
+      setDestination(pointCoords)
+      setDetails(details)
+      dispatch({
+        type: DIRECTION,
+        payload: {
+          steps
+        }
+      })
+      mapView.current.fitToCoordinates(pointCoords, {
+        edgePadding: {
+          right: getPixelSize(50),
+          left: getPixelSize(50),
+          top: getPixelSize(50),
+          bottom: getPixelSize(250)
+        }
+      })
+    }
   }
 
   useEffect(() => {
@@ -302,14 +323,11 @@ const TransportScreen = props => {
           )}
 
           {destination && (
-            <>
-              <Polyline
-                coordinates={destination}
-                strokeWidth={3}
-                strokeColor={Theme.COLORS.colorMainAlt}
-              />
-              <AnimatedPolyline Direction={destination} />
-            </>
+            <Polyline
+              coordinates={destination}
+              strokeWidth={3}
+              strokeColor={Theme.COLORS.colorSecondary}
+            />
           )}
         </Map>
       )}

@@ -263,6 +263,7 @@ const ScannerScreen = props => {
             placeholder='Ingresa el codigo'
             placeholderTextColor={Theme.COLORS.colorParagraph}
             onChangeText={value => setCodeQR(value)}
+            keyboardType="numeric"
             isActiveButton
           />
           <IconButton

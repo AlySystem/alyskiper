@@ -14,7 +14,6 @@ import ListOfData from '../../containers/ListOfData'
 // Import theme
 import { Theme } from '../../constants/Theme'
 
-
 const WelcomeScreen = props => {
   const { navigate } = props.navigation
 
