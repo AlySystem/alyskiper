@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Platform, StatusBar } from 'react-native'
+import SplashScreen from 'react-native-splash-screen'
 import FlashMessage from 'react-native-flash-message'
 import { ApolloClient, split, HttpLink } from 'apollo-boost'
 import { Provider } from 'react-redux'
@@ -8,7 +9,6 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import { setContext } from 'apollo-link-context'
-import SplashScreen from 'react-native-splash-screen'
 
 import NetInfo from '@react-native-community/netinfo'
 
@@ -27,6 +27,9 @@ import Navigation from './src/navigation/Navigation'
 import TemplateError from './src/screens/TemplateError/TemplateError'
 
 import { configure } from './src/hooks/usePushNotification'
+
+// Import theme
+import { Theme } from './src/constants/Theme'
 
 const httpLink = new HttpLink({
   uri: keys.urlApi
@@ -77,7 +80,7 @@ const Skiper = () => {
 
   useEffect(() => {
     SplashScreen.hide()
-  }, [])
+  })
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -94,7 +97,7 @@ const Skiper = () => {
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
-        {Platform.OS === 'ios' && <StatusBar barStyle='dark-content' />}
+        {Platform.OS === 'ios' ? <StatusBar barStyle='dark-content' /> : <StatusBar backgroundColor={Theme.COLORS.colorMainAlt} />}
         <Navigation />
         <FlashMessage position='top' />
       </ApolloProvider>

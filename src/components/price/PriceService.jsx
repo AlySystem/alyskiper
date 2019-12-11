@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Text,
   View
@@ -26,6 +26,7 @@ const PriceService = props => {
   const dispatch = useDispatch()
   const { country_id, city_id } = useSelector(state => state.user)
   const { steps } = useSelector(state => state.direction)
+  const [loader, setLoader] = useState(true)
 
   const { loading, data, error } = useQuery(CALCULATERATE, {
     variables: {
@@ -36,11 +37,13 @@ const PriceService = props => {
     }
   })
 
-  if (error) {
-    props.error(error)
-    return <View />
-  }
-  if (loading) return <Loader size='small' />
+  useEffect(
+    () => {
+      if (loading !== false) {
+        setLoader(false)
+      }
+    }, [loading]
+  )
 
   const calculate = () => {
     const { duration, distance } = steps
@@ -79,6 +82,14 @@ const PriceService = props => {
       })
       return total
     }
+  }
+
+  if (error) {
+    props.error(error)
+    return <View />
+  }
+  if (loader) {
+    return <Loader size='small' />
   }
 
   return (

@@ -197,3 +197,14 @@ export const INVOICE = gql`
     }
   }
 `
+
+export const GETPACKAGES = gql`
+  query {
+    GetPackages {
+      id
+      name
+      price
+      img_url
+    }
+  }
+`
