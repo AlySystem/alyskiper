@@ -43,6 +43,7 @@ import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
 // Import utils
 import { getPixelSize } from '../../utils/Pixel'
 import { routeDirection } from '../../utils/Directions'
+import { useNotification } from '../../hooks/useNotification'
 
 const { height, width } = Dimensions.get('window')
 
@@ -50,6 +51,7 @@ const TransportScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { location, loading } = useWatchLocation()
+  useNotification(navigate, location.latitude, location.longitude)
   const { firstName, city_id } = useSelector(state => state.user)
   const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)

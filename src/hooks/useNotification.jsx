@@ -52,21 +52,18 @@ export const useNotification = (navigate, latitude, longitude) => {
           navigate('Transport')
           break
         case 3:
-          notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
-          navigate('TravelTrancing', {
-            idTravel: idTravel
-          })
           dispatch({
             type: ACTIVETRAVEL,
             payload: { travel: idTravel }
+          })
+          notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
+          navigate('TravelTrancing', {
+            idTravel: idTravel
           })
           break
         case 4:
           notification('AlySkiper', 'El conductor ya se encuentra cerca de ti.')
           navigate('Scanner', { latitude: latitude, longitude: longitude })
-          break
-        case 7:
-          // navigate('BillTransport')
           break
         case 8:
           notification('AlySkiper', 'Felicidades, has llegado a tu destino.')

@@ -36,6 +36,13 @@ const PriceService = props => {
     }
   })
 
+  console.log({ variables: {
+    idcountry: country_id,
+    idcity: city_id,
+    idcategoriaviaje: props.categoryId,
+    date_init: date
+  }})
+
   if (error) {
     props.error(error)
     return <View />
@@ -44,12 +51,19 @@ const PriceService = props => {
 
   const calculate = () => {
     const { duration, distance } = steps
+    console.log(duration, distance)
     const durationMin = duration.value / 60
     const distanceKm = distance.value / 1000
+
+    console.log({ durationMin })
+    console.log({ distanceKm })
 
     const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
     const minutes = durationMin * priceminute
     const km = distanceKm * priceckilometer
+
+    console.log({ pricebase, priceminimun, priceminute, priceckilometer })
+    console.log({ minutes, km })
 
     const total = minutes + km + pricebase
     if (total < priceminimun) {
@@ -65,6 +79,7 @@ const PriceService = props => {
           }
         }
       })
+      console.log(priceminimun)
       return priceminimun
     } else {
       dispatch({
@@ -77,6 +92,7 @@ const PriceService = props => {
           priceMinute: minutes
         }
       })
+      console.log(total)
       return total
     }
   }

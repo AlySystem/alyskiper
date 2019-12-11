@@ -26,13 +26,12 @@ import ProductScreen from '../../screens/Product/ProductScreen'
 import AddressScreen from '../../screens/Address/AddressScreen'
 import NotificationScreen from '../../screens/Notification/NotificationScreen'
 import AlyMoneyScreen from '../../screens/AlyMoney/AlyMoneyScreen'
-import FixedMapScreen from '../../screens/FixedMap/FixedMapScreen'
 import ScannerScreen from '../../screens/Scanner/ScannerScreen'
 import AddAddressScreen from '../../screens/Address/AddAddressScreen'
 import MapAddressScreen from '../../screens/Address/MapAddressScreen'
 import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 import BillTransport from '../../screens/Transport/BillTransportScreen'
-// import FinalTravelScreen from '../../screens/Transport/FinalTravelScreen'
+import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -165,12 +164,6 @@ const StackNavigation = createStackNavigator({
       header: null
     }
   },
-  FixedMap: {
-    screen: FixedMapScreen,
-    navigationOptions: {
-      header: null
-    }
-  },
   Scanner: {
     screen: ScannerScreen,
     navigationOptions
@@ -194,6 +187,12 @@ const StackNavigation = createStackNavigator({
   BillTransport: {
     screen: BillTransport,
     navigationOptions
+  },
+  pickerTransport: {
+    screen: PickerTransportScreen,
+    navigationOptions: {
+      header: null
+    }
   }
 })
 

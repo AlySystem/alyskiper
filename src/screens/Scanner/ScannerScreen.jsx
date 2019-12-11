@@ -63,6 +63,7 @@ const ScannerScreen = props => {
     const scannerQR = event.nativeEvent.codeStringValue.split(' ')
     const idTravel = parseInt(scannerQR[0])
     const idUser = parseInt(scannerQR[1])
+    console.log(idUser, idTravel, latitude, longitude)
 
     if (idUser !== userId) {
       showMessage({
@@ -180,7 +181,7 @@ const ScannerScreen = props => {
       .catch(error => {
         console.log(error, 'error')
         if (error) {
-          return showMessage({
+          showMessage({
             message: 'Error',
             description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
             backgroundColor: 'red',

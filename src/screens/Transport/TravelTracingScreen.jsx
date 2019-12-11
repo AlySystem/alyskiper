@@ -7,7 +7,7 @@ import {
   Image
 } from 'react-native'
 import { Marker } from 'react-native-maps'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useLazyQuery } from '@apollo/react-hooks'
 import { useSelector, useDispatch } from 'react-redux'
 import PubNubReact from 'pubnub-react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -38,18 +38,15 @@ const TravelTracingScreen = props => {
   const { navigate } = props.navigation
   const { userId, firstName } = useSelector(state => state.user)
   const { location } = useLocation()
-  // console.log(location)
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErrorTravel] = useState(false)
-  const [connectionDriver, setConnectionDriver] = useState(false)
   const [driver, setDriver] = useState()
   const [idTravel] = useState(props.navigation.getParam('idTravel'))
-  const { data, loading } = useQuery(GETTRAVELBYUSERID, { variables: { iduser: userId } })
+  const [GetTravelByUserId, { data, loading }] = useLazyQuery(GETTRAVELBYUSERID)
 
   const mapView = useRef(null)
   const marker = useRef(null)
-  useNotification(navigate)
-
+  useNotification(navigate, location.latitude, location.longitude)
   const pubnub = new PubNubReact({
     publishKey: 'pub-c-bd68b062-738a-44e5-91a1-cfdab437d40f',
     subscribeKey: 'sub-c-41661912-108b-11ea-9132-cacb72695e2d',
@@ -58,54 +55,53 @@ const TravelTracingScreen = props => {
     uuid: `${firstName}${userId}`
   })
 
-  useEffect(() => {
-    if (!loading) {
-      if (data.getTravelByUserId !== null) {
-        setErrorTravel(false)
-        dispatch({
-          type: DETAILSTRAVEL,
-          payload: {
-            drive: data.getTravelByUserId
-          }
-        })
-        pubnub.subscribe({
-          channels: [`Driver_${idTravel || data.getTravelByUserId.id}`],
-          withPresence: true
-        })
-
-        pubnub.hereNow({
-          includeUUIDs: true,
-          includeState: true,
-          channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
-        },
-
-        function (status, response) {
-          if (response !== undefined) {
-            if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
-              const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
-              if (channels !== undefined) {
-                const drive = channels.occupants.filter(item => item.state !== undefined)
-                // console.log(drive)
-                setConnectionDriver(false)
-                setDriver(drive)
-                if (marker.current !== null) {
-                  marker.current._component.animateMarkerToCoordinate({ latitude: drive[0].state.coords.latitude, longitude: drive[0].state.coords.longitude }, 500)
-                }
-              }
-            }
-          } else {
-            setConnectionDriver(true)
-          }
-        })
-      } else {
-        setErrorTravel(true)
-      }
-    }
-  }, [loading, driver])
-
   const handleToggleModal = () => {
     setShowDetails(!showDetails)
   }
+
+  useEffect(() => {
+    GetTravelByUserId({ variables: { iduser: userId } })
+  }, [])
+
+  useEffect(() => {
+    if (data && data.getTravelByUserId) {
+      setErrorTravel(false)
+      dispatch({
+        type: DETAILSTRAVEL,
+        payload: {
+          drive: data.getTravelByUserId
+        }
+      })
+      pubnub.subscribe({
+        channels: [`Driver_${idTravel || data.getTravelByUserId.id}`],
+        withPresence: true
+      })
+
+      pubnub.hereNow({
+        includeUUIDs: true,
+        includeState: true,
+        channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
+      },
+
+      function (status, response) {
+        if (response !== undefined) {
+          if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
+            const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
+            if (channels !== undefined) {
+              const drive = channels.occupants.filter(item => item.state !== undefined)
+              setDriver(drive)
+              if (marker.current !== null) {
+                console.log('DRIVING... ', drive[0].state.coords.latitude, drive[0].state.coords.longitude)
+                marker.current._component.animateMarkerToCoordinate({ latitude: drive[0].state.coords.latitude, longitude: drive[0].state.coords.longitude }, 500)
+              }
+            }
+          }
+        }
+      })
+    } else {
+      setErrorTravel(true)
+    }
+  }, [driver, data])
 
   if (loading) {
     return (
@@ -201,25 +197,7 @@ const TravelTracingScreen = props => {
           />
         </TouchableOpacity>
       }
-      {connectionDriver && (
-        <Text style={{
-          position: 'absolute',
-          bottom: 70,
-          left: 0,
-          width: '100%',
-          backgroundColor: 'red',
-          paddingVertical: 5,
-          textAlign: 'center',
-          fontFamily: 'Lato-Bold',
-          color: Theme.COLORS.colorParagraph
-        }}
-        >EL CONDUCTOR SE DESCONECTO
-        </Text>
-      )}
-      <TouchableOpacity
-        style={styles.containerButton}
-        onPress={handleToggleModal}
-      >
+      <TouchableOpacity style={styles.containerButton} onPress={handleToggleModal}>
         <View
           style={{
             backgroundColor: Theme.COLORS.colorSecondary,
@@ -289,8 +267,8 @@ const styles = StyleSheet.create({
     fontSize: Theme.SIZES.normal
   },
   drive: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     resizeMode: 'contain'
   }
 })

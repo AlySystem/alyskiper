@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     height: 50,
     borderBottomColor: Theme.COLORS.colorSecondary,
-    borderRadius: 200,
+    // borderRadius: 200,
     position: 'relative'
   },
   containerNotification: {

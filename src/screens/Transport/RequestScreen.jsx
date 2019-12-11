@@ -32,6 +32,7 @@ const RequestScreen = props => {
   const { userId } = useSelector(state => state.user)
   const { travel } = useSelector(state => state.travel)
   const { steps } = useSelector(state => state.direction)
+  console.log(steps)
   const { latitude, longitude } = useSelector(state => state.location)
   const { silver, golden, vip, president } = useSelector(state => state.drivers)
   const [GetDriverNearby, { error }] = useMutation(GETDRIVERNEARBY)
@@ -45,7 +46,8 @@ const RequestScreen = props => {
     dispatch({
       type: REMOVELOCATION
     })
-    goBack()
+    // goBack()
+    props.navigation.pop()
   }
 
   useEffect(() => {

@@ -171,3 +171,29 @@ export const SEARCHCITY = gql`
     }
   }
 `
+
+export const INVOICE = gql`
+  query Invoice ($idservice: Int!){
+    getInvoinceByIdservice(idservice: $idservice){
+      id,
+      invoice{
+        id
+        iduser
+        anyagent
+        numfac 
+        country{
+          id
+          name
+        }      
+      },
+      anyservice{
+        id
+        total
+        address_initial
+        address_final
+        duration
+        distance
+      }
+    }
+  }
+`

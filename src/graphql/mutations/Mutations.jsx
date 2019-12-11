@@ -175,8 +175,6 @@ export const REGISTERUSERADDRESS = gql`
 
 export const SKIPERATING = gql`
   mutation SkiperRating ($input: SkiperRatingInput) {
-    RegisterSkiperRating(input: $input) {
-      message
-    }
+    RegisterSkiperRating(input: $input)
   }
 `

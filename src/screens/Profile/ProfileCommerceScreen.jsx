@@ -49,7 +49,8 @@ const ProfileCommerceScreen = props => {
                   description={product.description}
                   price={product.price}
                   onPress={() => navigate('Product', {
-                    commerce: product
+                    product,
+                    commerce
                   })}
                 />
               ))}
