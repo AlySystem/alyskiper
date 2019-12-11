@@ -32,6 +32,7 @@ import MapAddressScreen from '../../screens/Address/MapAddressScreen'
 import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 import BillTransport from '../../screens/Transport/BillTransportScreen'
 import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
+import WalletScreen from '../../screens/Wallet/WalletScreen'
 
 // Import components
 import Picture from '../../components/picture/Picture'
@@ -193,6 +194,10 @@ const StackNavigation = createStackNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  Wallet: {
+    screen: WalletScreen,
+    navigationOptions
   }
 })
 
