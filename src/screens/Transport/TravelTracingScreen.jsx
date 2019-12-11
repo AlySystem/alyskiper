@@ -42,7 +42,9 @@ const TravelTracingScreen = props => {
   const [errorTravel, setErrorTravel] = useState(false)
   const [driver, setDriver] = useState()
   const [idTravel] = useState(props.navigation.getParam('idTravel'))
-  const [GetTravelByUserId, { data, loading }] = useLazyQuery(GETTRAVELBYUSERID)
+  const [GetTravelByUserId, { data, loading }] = useLazyQuery(GETTRAVELBYUSERID, {
+    fetchPolicy: 'no-cache'
+  })
 
   const mapView = useRef(null)
   const marker = useRef(null)
