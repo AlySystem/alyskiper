@@ -9,6 +9,7 @@ import { favorite } from './favorite'
 import { activeTravel } from './activeTravel'
 import { address } from './address'
 import { direction } from './direction'
+import { status } from './status'
 
 const reducers = combineReducers({
   user,
@@ -19,7 +20,8 @@ const reducers = combineReducers({
   favorite,
   activeTravel,
   address,
-  direction
+  direction,
+  status
 })
 
 export default reducers

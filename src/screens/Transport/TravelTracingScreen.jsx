@@ -4,10 +4,11 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Image
+  Image,
+  Alert
 } from 'react-native'
 import { Marker } from 'react-native-maps'
-import { useQuery, useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { useSelector, useDispatch } from 'react-redux'
 import PubNubReact from 'pubnub-react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -29,19 +30,23 @@ import { useLocation } from '../../hooks/useLocation'
 
 // Import query
 import { GETTRAVELBYUSERID } from '../../graphql/querys/Querys'
+import { TRAVELTRACING } from '../../graphql/mutations/Mutations'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+import { showMessage } from 'react-native-flash-message'
 
 const TravelTracingScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { userId, firstName } = useSelector(state => state.user)
+  const { id } = useSelector(state => state.status)
   const { location } = useLocation()
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErrorTravel] = useState(false)
   const [driver, setDriver] = useState()
   const [idTravel] = useState(props.navigation.getParam('idTravel'))
+  const [TravelTracing, { loading: loadingTracing, data: dataTravel, error: errorTravelMutation }] = useMutation(TRAVELTRACING)
   const [GetTravelByUserId, { data, loading }] = useLazyQuery(GETTRAVELBYUSERID, {
     fetchPolicy: 'no-cache'
   })
@@ -49,6 +54,7 @@ const TravelTracingScreen = props => {
   const mapView = useRef(null)
   const marker = useRef(null)
   useNotification(navigate, location.latitude, location.longitude)
+
   const pubnub = new PubNubReact({
     publishKey: 'pub-c-bd68b062-738a-44e5-91a1-cfdab437d40f',
     subscribeKey: 'sub-c-41661912-108b-11ea-9132-cacb72695e2d',
@@ -85,21 +91,21 @@ const TravelTracingScreen = props => {
         channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
       },
 
-      function (status, response) {
-        if (response !== undefined) {
-          if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
-            const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
-            if (channels !== undefined) {
-              const drive = channels.occupants.filter(item => item.state !== undefined)
-              setDriver(drive)
-              if (marker.current !== null) {
-                console.log('DRIVING... ', drive[0].state.coords.latitude, drive[0].state.coords.longitude)
-                marker.current._component.animateMarkerToCoordinate({ latitude: drive[0].state.coords.latitude, longitude: drive[0].state.coords.longitude }, 500)
+        function (status, response) {
+          if (response !== undefined) {
+            if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
+              const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
+              if (channels !== undefined) {
+                const drive = channels.occupants.filter(item => item.state !== undefined)
+                setDriver(drive)
+                if (marker.current !== null) {
+                  // console.log('DRIVING... ', drive[0].state.coords.latitude, drive[0].state.coords.longitude)
+                  marker.current._component.animateMarkerToCoordinate({ latitude: drive[0].state.coords.latitude, longitude: drive[0].state.coords.longitude }, 500)
+                }
               }
             }
           }
-        }
-      })
+        })
     } else {
       setErrorTravel(true)
     }
@@ -124,6 +130,37 @@ const TravelTracingScreen = props => {
         >Cargando...
         </Text>
       </View>
+    )
+  }
+
+  const cancelTrip = () => {
+    Alert.alert(
+      'Cancelar Viaje',
+      '¿Esta seguro de cancelar tu viaje?',
+      [
+        {
+          text: 'No',
+          style: 'cancel',
+          onPress: () => { }
+        },
+        {
+          text: 'Si, Cancelar',
+          style: 'default',
+          onPress: async () => {
+            await TravelTracing({
+              variables: {
+                input: {
+                  idtravel: idTravel || data.getTravelByUserId.id,
+                  idtravelstatus: 'CANCELADO',
+                  lat: location.latitude,
+                  lng: location.longitude,
+                }
+              }
+            })
+          }
+        },
+
+      ]
     )
   }
 
@@ -157,7 +194,9 @@ const TravelTracingScreen = props => {
           }}
         />
       </Modal>
-      {location.latitude && (
+
+      {
+        location.latitude &&
         <Map mapView={mapView} location={location}>
           {driver && (
             driver.map(drive => {
@@ -179,26 +218,26 @@ const TravelTracingScreen = props => {
             })
           )}
         </Map>
-      )}
-      {
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            right: 20,
-            top: 15,
-            width: 40,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-          onPress={() => navigate('Scanner', { latitude: location.latitude, longitude: location.longitude })}
-        >
-          <Icon
-            name='qrcode-scan'
-            size={40}
-            color={Theme.COLORS.colorSecondary}
-          />
-        </TouchableOpacity>
       }
+
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          right: 20,
+          top: 15,
+          width: 40,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+        onPress={() => navigate('Scanner', { latitude: location.latitude, longitude: location.longitude })}
+      >
+        <Icon
+          name='qrcode-scan'
+          size={40}
+          color={Theme.COLORS.colorSecondary}
+        />
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.containerButton} onPress={handleToggleModal}>
         <View
           style={{
@@ -210,7 +249,32 @@ const TravelTracingScreen = props => {
         />
         <Text allowFontScaling={false} style={styles.text}>Toca para mostrar detalles</Text>
       </TouchableOpacity>
-      {errorTravel && (
+
+      {
+        (id >= 3 && id <= 4) &&
+        <TouchableOpacity
+          style={{
+            alignItems: 'center',
+            backgroundColor: Theme.COLORS.colorMainDark,
+            borderWidth: 1,
+            borderColor: Theme.COLORS.colorSecondary,
+            borderRadius: 5,
+            elevation: 10,
+            flexDirection: 'row',
+            position: 'absolute',
+            top: 10,
+            left: 10,
+            height: 50,
+            justifyContent: 'center',
+            paddingHorizontal: 10,
+            zIndex: 200,
+          }} onPress={cancelTrip}>
+          <Text style={{ color: Theme.COLORS.colorSecondary }}>Cancelar Viaje</Text>
+        </TouchableOpacity>
+      }
+
+      {
+        errorTravel &&
         <View
           style={{
             backgroundColor: 'rgba(0,0,0,.8)',
@@ -245,7 +309,8 @@ const TravelTracingScreen = props => {
           >No hay viajes activos
           </Text>
         </View>
-      )}
+
+      }
     </View>
   )
 }

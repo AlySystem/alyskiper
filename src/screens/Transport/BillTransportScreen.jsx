@@ -5,7 +5,11 @@ import {
   StyleSheet
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
+import { useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
+
+// Import actions types
+import { REMOVEDIRECTION, REMOVEDETAILSTRAVEL, REMOVELOCATION, REMOVEACTIVETRAVEL } from '../../store/actionTypes'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -21,7 +25,8 @@ import { Theme } from '../../constants/Theme'
 const BillTransportScreen = props => {
   const { navigate } = props.navigation
   const idTravel = props.navigation.getParam('idTravel')
-  console.log(idTravel)
+  // console.log(idTravel)
+  const dispatch = useDispatch()
 
   const { loading, error, data } = useQuery(INVOICE, { variables: { idservice: idTravel } })
 
@@ -65,6 +70,19 @@ const BillTransportScreen = props => {
   }
 
   const handleOnConfirm = () => {
+    dispatch({
+      type: REMOVEDIRECTION
+    })
+    dispatch({
+      type: REMOVEDETAILSTRAVEL
+    })
+    dispatch({
+      type: REMOVELOCATION
+    })
+    dispatch({
+      type: REMOVEACTIVETRAVEL
+    })
+
     return navigate('Home', { remove: true })
   }
 

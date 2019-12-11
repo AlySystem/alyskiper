@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   View,
   Text,
   StyleSheet,
   ScrollView
 } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
-
-// Import actions types
-import { REMOVEDIRECTION, REMOVEDETAILSTRAVEL, REMOVELOCATION, REMOVEACTIVETRAVEL } from '../../store/actionTypes'
+import { useSelector } from 'react-redux'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -22,27 +19,8 @@ import ListOfServices from '../../containers/ListOfServices'
 import Background from '../../components/background/Background'
 
 const HomeScreen = props => {
-  const dispatch = useDispatch()
-  const remove = props.navigation.getParam('remove', false)
   const { navigate } = props.navigation
   const userData = useSelector(state => state.user)
-
-  useEffect(() => {
-    if (remove) {
-      dispatch({
-        type: REMOVEDIRECTION
-      })
-      dispatch({
-        type: REMOVEDETAILSTRAVEL
-      })
-      dispatch({
-        type: REMOVELOCATION
-      })
-      dispatch({
-        type: REMOVEACTIVETRAVEL
-      })
-    }
-  }, [remove])
 
   return (
     <Background>
