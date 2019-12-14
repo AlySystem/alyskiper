@@ -157,6 +157,8 @@ const TravelTracingScreen = props => {
                 }
               }
             })
+
+            return navigate('Home')
           }
         },
 
@@ -267,7 +269,6 @@ const TravelTracingScreen = props => {
             height: 50,
             justifyContent: 'center',
             paddingHorizontal: 10,
-            zIndex: 200,
           }} onPress={cancelTrip}>
           <Text style={{ color: Theme.COLORS.colorSecondary }}>Cancelar Viaje</Text>
         </TouchableOpacity>

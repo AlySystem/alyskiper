@@ -7,6 +7,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/react-hooks'
 import { showMessage } from 'react-native-flash-message'
+import PublicIp from 'react-native-public-ip'
 
 // Import querys
 import { GETDRIVERNEARBY, GENERATETRAVEL } from '../../graphql/mutations/Mutations'
@@ -101,42 +102,46 @@ const RequestScreen = props => {
         const { categoryId } = travel
         const { duration, distance, end_address, start_address, start_location, end_location } = steps
 
-        GenerateTravel({
-          variables: {
-            inputviaje: {
-              idusers: userId,
-              iddriver: driverId,
-              lat_initial: start_location.lat,
-              lng_initial: start_location.lng,
-              lat_final: end_location.lat,
-              lng_final: end_location.lng,
-              distance: parseInt(distance.value),
-              time: duration.value,
-              address_initial: start_address,
-              address_final: end_address,
-              idcurrency: 2,
-              idpayment_methods: 2,
-              categoryId: categoryId
-            }
-          }
-        })
-          .catch(error => {
-            showMessage({
-              message: 'Error',
-              description: `${error}`,
-              backgroundColor: 'red',
-              color: '#fff',
-              icon: 'danger',
-              duration: 8000,
-              titleStyle: {
-                fontFamily: 'Lato-Bold'
-              },
-              textStyle: {
-                fontFamily: 'Lato-Regular'
+        PublicIp().then(
+          _ip => {
+            GenerateTravel({
+              variables: {
+                inputviaje: {
+                  idusers: userId,
+                  iddriver: driverId,
+                  lat_initial: start_location.lat,
+                  lng_initial: start_location.lng,
+                  lat_final: end_location.lat,
+                  lng_final: end_location.lng,
+                  distance: parseInt(distance.value),
+                  time: duration.value,
+                  address_initial: start_address,
+                  address_final: end_address,
+                  idcurrency: 2,
+                  idpayment_methods: 2,
+                  categoryId: categoryId
+                },
+                ip: _ip
               }
-            })
-            goBack()
-          })
+            }).catch(error => {
+                showMessage({
+                  message: 'Error',
+                  description: `${error}`,
+                  backgroundColor: 'red',
+                  color: '#fff',
+                  icon: 'danger',
+                  duration: 8000,
+                  titleStyle: {
+                    fontFamily: 'Lato-Bold'
+                  },
+                  textStyle: {
+                    fontFamily: 'Lato-Regular'
+                  }
+                })
+                goBack()
+              })
+          }
+         )        
       })
   }, [])
 

@@ -126,8 +126,8 @@ export const REMOVEFAVORITE = gql`
 `
 
 export const GENERATETRAVEL = gql`
-  mutation GenerateTravel($inputviaje: SkiperTravelsInput!) {
-    GenerateTravel (inputviaje: $inputviaje) {
+  mutation GenerateTravel($inputviaje: SkiperTravelsInput!, $ip: String!) {
+    GenerateTravel (inputviaje: $inputviaje, ip: $ip) {
       id
       total
     }
