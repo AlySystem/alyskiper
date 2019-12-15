@@ -1,109 +1,119 @@
-import React, { useEffect, useState } from 'react'
-import {
-  Text,
-  View
-} from 'react-native'
-import { useQuery } from '@apollo/react-hooks'
-import { useSelector, useDispatch } from 'react-redux'
-import timezone from 'moment-timezone'
-import * as RNLocalize from 'react-native-localize'
-
+import React, { useEffect, useState } from "react";
+import { Text, View } from "react-native";
+import { useLazyQuery } from "@apollo/react-hooks";
+import { useSelector, useDispatch } from "react-redux";
+import publicIP from "react-native-public-ip";
 // Impoer actions
-import { DETAILSTRAVEL } from '../../store/actionTypes'
-
+import { DETAILSTRAVEL } from "../../store/actionTypes";
 // Import theme
-import { Theme } from '../../constants/Theme'
-
+import { Theme } from "../../constants/Theme";
 // Import querys
-import { CALCULATERATE } from '../../graphql/querys/Querys'
-
+import { CALCULATETARIFF } from "../../graphql/querys/Querys";
 // Import components
-import Loader from '../loader/Loader'
+import Loader from "../loader/Loader";
+// Import hooks
+import { useLocation } from "../../hooks/useLocation";
 
 const PriceService = props => {
-  const time = RNLocalize.getTimeZone()
-  const date = timezone().tz(time).format('YYYY-MM-DD HH:mm:ss')
-  const dispatch = useDispatch()
-  const { country_id, city_id } = useSelector(state => state.user)
-  const { steps } = useSelector(state => state.direction)
-  const [price, setPrice] = useState(0)
-
-  const { loading, data, error } = useQuery(CALCULATERATE, {
-    variables: {
-      idcountry: country_id,
-      idcity: city_id,
-      idcategoriaviaje: props.categoryId,
-      date_init: date
-    }
-  })
-
-  useEffect(
-    () => {
-      if (loading === false && data) {
-        const { duration, distance } = steps
-        const durationMin = duration.value / 60
-        const distanceKm = distance.value / 1000
-
-        const { pricebase, priceminute, priceckilometer, priceminimun } = data.CalcularTarifa
-        const minutes = durationMin * priceminute
-        const km = distanceKm * priceckilometer
-
-        const total = minutes + km + pricebase
-
-        /**
-         * Si el total es menor al pecio minimo
-         * siempre cobraremos el precio minimo
-         */
-        if (total < priceminimun) {
-          dispatch({
-            type: DETAILSTRAVEL,
-            payload: {
-              priceTravel: {
-                priceTravel: priceminimun,
-                priceBase: pricebase,
-                pricecKilometer: km,
-                priceMinimun: priceminimun,
-                priceMinute: minutes
-              }
+  const dispatch = useDispatch();
+  const { steps } = useSelector(state => state.direction);
+  const [price, setPrice] = useState("");
+  const [symbol, setSymbol] = useState("");
+  const [lastPrice, setLastPrice] = useState("");
+  const { location } = useLocation();
+  const [CalculateTariff, { loading, data, error }] = useLazyQuery(
+    CALCULATETARIFF
+  );
+  useEffect(() => {
+    const calculateRate = async () => {
+      if (location.latitude) {
+        const { latitude, longitude } = location;
+        publicIP().then(ipAddress => {
+          CalculateTariff({
+            variables: {
+              ip: ipAddress.toString(),
+              idcategoriaviaje: props.categoryId,
+              lat: latitude,
+              lng: longitude
             }
-          })
-
-          /**Seteamos el precios */
-          setPrice(priceminimun)
-        } else {
-          dispatch({
-            type: DETAILSTRAVEL,
-            payload: {
-              priceTravel: total,
+          });
+        });
+      }
+    };
+    calculateRate();
+  }, [location]);
+  useEffect(() => {
+    if (
+      loading === false &&
+      data &&
+      data.CalculateTariff.priceckilometer !== lastPrice
+    ) {
+      setLastPrice(data.CalculateTariff.priceckilometer);
+      const { duration, distance } = steps;
+      const durationMin = duration.value / 60;
+      const distanceKm = distance.value / 1000;
+      const {
+        pricebase,
+        priceminute,
+        priceckilometer,
+        priceminimun,
+        symbol
+      } = data.CalculateTariff;
+      const minutes = durationMin * priceminute;
+      const km = distanceKm * priceckilometer;
+      const total = minutes + km + pricebase;
+      setSymbol(symbol);
+      /**
+       * Si el total es menor al pecio minimo
+       * siempre cobraremos el precio minimo
+       */
+      if (total < priceminimun) {
+        dispatch({
+          type: DETAILSTRAVEL,
+          payload: {
+            priceTravel: {
+              priceTravel: priceminimun,
               priceBase: pricebase,
               pricecKilometer: km,
               priceMinimun: priceminimun,
               priceMinute: minutes
             }
-          })
-          setPrice(total)
-        }
+          }
+        });
+        /**Seteamos el precios */
+        // setPrice(`${symbol} ${priceminimun}`)
+        setPrice(priceminimun);
+      } else {
+        dispatch({
+          type: DETAILSTRAVEL,
+          payload: {
+            priceTravel: total,
+            priceBase: pricebase,
+            pricecKilometer: km,
+            priceMinimun: priceminimun,
+            priceMinute: minutes
+          }
+        });
+        setPrice(total);
       }
-    }, [loading]
-  )
-
+    }
+  }, [loading, data]);
   if (error) {
-    props.error(error)
-    return <View />
+    props.error(error);
+    return <View />;
   }
-  if (loading && !data) return <Loader size='small' />
-
+  if (loading && !data) return <Loader size="small" />;
   return (
     <Text
       allowFontScaling={false}
       style={{
-        fontFamily: 'Lato-Bold',
+        fontFamily: "Lato-Bold",
         color: Theme.COLORS.colorParagraph,
         fontSize: 18
       }}
-    >C$ {Math.ceil(price)}
+    >
+      {`${symbol} ${Math.ceil(price)}`}
     </Text>
-  )
-}
-
-export default PriceService
+  );
+};
+export default PriceService;

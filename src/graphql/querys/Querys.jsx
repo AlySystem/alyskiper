@@ -208,3 +208,24 @@ export const GETPACKAGES = gql`
     }
   }
 `
+export const CALCULATETARIFF = gql`
+  query CalculateTariff(
+    $ip: String!
+    $idcategoriaviaje: Int!
+    $lat: Float!
+    $lng: Float!
+  ) {
+    CalculateTariff(
+      ip: $ip
+      idcategoriaviaje: $idcategoriaviaje
+      lat: $lat
+      lng: $lng
+    ) {
+      pricebase
+      priceminute
+      priceckilometer
+      priceminimun
+      symbol
+    }
+  }
+`;
