@@ -13,6 +13,7 @@ import { CALCULATETARIFF } from "../../graphql/querys/Querys";
 import Loader from "../loader/Loader";
 // Import hooks
 import { useLocation } from "../../hooks/useLocation";
+
 const PriceService = props => {
   const dispatch = useDispatch();
   const { steps } = useSelector(state => state.direction);
@@ -28,8 +29,6 @@ const PriceService = props => {
       if (location.latitude) {
         const { latitude, longitude } = location;
         publicIP().then(ipAddress => {
-          console.log(ipAddress);
-          console.log(ipAddress.toString());
           CalculateTariff({
             variables: {
               ip: ipAddress.toString(),
@@ -100,7 +99,6 @@ const PriceService = props => {
     }
   }, [loading, data]);
   if (error) {
-    console.log(error);
     props.error(error);
     return <View />;
   }
