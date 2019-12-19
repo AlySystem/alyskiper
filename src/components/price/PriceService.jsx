@@ -20,6 +20,7 @@ const PriceService = props => {
   const [price, setPrice] = useState("")
   const [symbol, setSymbol] = useState("")
   const [lastPrice, setLastPrice] = useState("")
+  const [state, setState] = useState(1)
   const { location } = useLocation()
   const [ipAddressState, setIp] = useState('')
   const [CalculateTariff, { loading, data, error }] = useLazyQuery(
@@ -52,18 +53,22 @@ const PriceService = props => {
   // Volvemos a calcular la tarifa cuando cambie el tipo de viaje
   useEffect(
     () => {
-      // console.log(location, ipAddressState)
-      CalculateTariff({
-        variables: {
-          ip: ipAddressState,
-          idcategoriaviaje: props.categoryId,
-          lat: latitude,
-          lng: longitude
-        }
-      })
+      if (props.categoryId !== state) {
+
+        setState(props.categoryId)
+
+        CalculateTariff({
+          variables: {
+            ip: ipAddressState,
+            idcategoriaviaje: props.categoryId,
+            lat: latitude,
+            lng: longitude
+          }
+        })
+
+      }
     },
     [props.categoryId]
-
   )
 
   // Calculamos el precio segun la distancia y el tipo de viaje
@@ -106,7 +111,7 @@ const PriceService = props => {
           }
         })
         /**Seteamos el precios */
-        // setPrice(`${symbol} ${priceminimun}`)
+
         setPrice(priceminimun)
       } else {
         dispatch({
@@ -131,7 +136,7 @@ const PriceService = props => {
   }
 
   // Mostramos el loader cuando los datos estan cargando
-  if (loading && !data) return <Loader size="small" />
+  if (loading && !data && price !== 0) return <Loader size="small" />
 
   // Retornamos los precios cuando todo este correcto
   return (
