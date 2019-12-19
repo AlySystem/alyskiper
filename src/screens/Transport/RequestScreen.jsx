@@ -29,7 +29,6 @@ import Loader from '../../components/loader/Loader'
 import { Theme } from '../../constants/Theme'
 
 const RequestScreen = props => {
-
   const dispatch = useDispatch()
   const { goBack, navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
@@ -37,7 +36,7 @@ const RequestScreen = props => {
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
   const { silver, golden, vip, president } = useSelector(state => state.drivers)
-  const [GenerateTravel, { error, loading, data }] = useMutation(GENERATETRAVEL)
+  const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL)
   useNotification(navigate, latitude, longitude)
 
   if (error) {
@@ -115,31 +114,33 @@ const RequestScreen = props => {
         break
     }
 
-    console.log(driverNearby.driverId)
-
-    PublicIp().then(
-      _ip => {
-        GenerateTravel({
-          variables: {
-            inputviaje: {
-              idusers: userId,
-              iddriver: driverNearby.driveId,
-              lat_initial: start_location.lat,
-              lng_initial: start_location.lng,
-              lat_final: end_location.lat,
-              lng_final: end_location.lng,
-              distance: parseInt(distance.value),
-              time: duration.value,
-              address_initial: start_address,
-              address_final: end_address,
-              idcurrency: 2,
-              idpayment_methods: 2,
-              categoryId: categoryId
-            },
-            ip: _ip
-          }
-        })
-      })
+    if (driverNearby === undefined || driverNearby !== null || driverNearby.length > 0) {
+      console.log(orderDistance)
+      console.log(driverNearby)
+      // PublicIp().then(
+      //   _ip => {
+      //     GenerateTravel({
+      //       variables: {
+      //         inputviaje: {
+      //           idusers: userId,
+      //           iddriver: driverNearby.driveId,
+      //           lat_initial: start_location.lat,
+      //           lng_initial: start_location.lng,
+      //           lat_final: end_location.lat,
+      //           lng_final: end_location.lng,
+      //           distance: parseInt(distance.value),
+      //           time: duration.value,
+      //           address_initial: start_address,
+      //           address_final: end_address,
+      //           idcurrency: 2,
+      //           idpayment_methods: 2,
+      //           categoryId: categoryId
+      //         },
+      //         ip: _ip
+      //       }
+      //     })
+      //   })
+    }
   }, [])
 
   return (
