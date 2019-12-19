@@ -140,6 +140,8 @@ const RequestScreen = props => {
       //       }
       //     })
       //   })
+    } else {
+      console.log('no hay driver disponibles')
     }
   }, [])
 
