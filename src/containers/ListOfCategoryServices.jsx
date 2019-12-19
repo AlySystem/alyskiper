@@ -117,63 +117,61 @@ const ListOfCategoryServices = props => {
               </Text>
             </View>
           ) : (
-            <>
-              <View style={styles.containerHeader}>
-                <Text style={styles.textPrice}>Precio estimado</Text>
-                <View style={{ marginVertical: 2 }} />
-                <PriceService
-                  categoryId={selectCategory}
-                  navigation={props.navigation}
-                  error={(error) => setError(error)}
-                />
-              </View>
-              <View style={styles.containerRow}>
-                <View>
-                  <Text style={styles.category}>CATEGORIAS</Text>
-                  <Picker
-                    selectedValue={selectCategory}
-                    style={{
-                      textAlign: 'right',
-                      height: 50,
-                      width: 200,
-                      color: Theme.COLORS.colorSecondary,
-                      fontFamily: 'Lato-Regular',
-                      borderColor: Theme.COLORS.colorSecondary,
-                      borderWidth: 1
-                    }}
-                    mode='dialog'
-                    onValueChange={(itemValue, itemIndex) =>
-                      setSelectCategory(itemValue)}
-                  >
-                    {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
-                      <Picker.Item
-                        key={category.id}
-                        label={category.name.toUpperCase()}
-                        value={category.id}
-                      />
-                    ))}
-                  </Picker>
+              <>
+                <View style={styles.containerHeader}>
+                  <Text style={styles.textPrice}>Precio estimado</Text>
+                  <View style={{ marginVertical: 2 }} />
+                  <PriceService
+                    categoryId={selectCategory}
+                    navigation={props.navigation}
+                    error={(error) => setError(error)}
+                  />
                 </View>
-                <Payment />
-              </View>
-              <View style={{
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginVertical: 20
-              }}
-              >
-                <IconButton
-                  message='PEDIR SKIPER'
-                  isActiveIcon
-                  iconName='check'
-                  onPress={handleOnSubmit}
-                  isLoading={false}
-                  stylesButton={styles.button}
-                />
-              </View>
-            </>
-          )}
+                <View style={styles.containerRow}>
+                  <View>
+                    <Text style={styles.category}>CATEGORIAS</Text>
+                    <Picker
+                      selectedValue={selectCategory}
+                      style={{
+                        textAlign: 'right',
+                        height: 50,
+                        width: 200,
+                        color: Theme.COLORS.colorSecondary,
+                        fontFamily: 'Lato-Regular',
+                        borderColor: Theme.COLORS.colorSecondary,
+                        borderWidth: 1
+                      }}
+                      mode='dialog'
+                      onValueChange={(itemValue, itemIndex) => setSelectCategory(itemValue)}>
+                      {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
+                        <Picker.Item
+                          key={category.id}
+                          label={category.name.toUpperCase()}
+                          value={category.id}
+                        />
+                      ))}
+                    </Picker>
+                  </View>
+                  <Payment />
+                </View>
+                <View style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginVertical: 20
+                }}
+                >
+                  <IconButton
+                    message='PEDIR SKIPER'
+                    isActiveIcon
+                    iconName='check'
+                    onPress={handleOnSubmit}
+                    isLoading={false}
+                    stylesButton={styles.button}
+                  />
+                </View>
+              </>
+            )}
         </View>
       </Background>
     </Animatable.View>
