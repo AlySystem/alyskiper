@@ -114,32 +114,34 @@ const RequestScreen = props => {
         break
     }
 
-    if (driverNearby === undefined || driverNearby !== null || driverNearby.length > 0) {
+    if (driverNearby !== undefined && driverNearby !== null) {
+      console.log(driverWithInRadius)
       console.log(orderDistance)
-      console.log(driverNearby)
-      // PublicIp().then(
-      //   _ip => {
-      //     GenerateTravel({
-      //       variables: {
-      //         inputviaje: {
-      //           idusers: userId,
-      //           iddriver: driverNearby.driveId,
-      //           lat_initial: start_location.lat,
-      //           lng_initial: start_location.lng,
-      //           lat_final: end_location.lat,
-      //           lng_final: end_location.lng,
-      //           distance: parseInt(distance.value),
-      //           time: duration.value,
-      //           address_initial: start_address,
-      //           address_final: end_address,
-      //           idcurrency: 2,
-      //           idpayment_methods: 2,
-      //           categoryId: categoryId
-      //         },
-      //         ip: _ip
-      //       }
-      //     })
-      //   })
+      console.log(driverNearby['driveId'])
+
+      PublicIp().then(
+        _ip => {
+          GenerateTravel({
+            variables: {
+              inputviaje: {
+                idusers: userId,
+                iddriver: driverNearby['driveId'],
+                lat_initial: start_location.lat,
+                lng_initial: start_location.lng,
+                lat_final: end_location.lat,
+                lng_final: end_location.lng,
+                distance: parseInt(distance.value),
+                time: duration.value,
+                address_initial: start_address,
+                address_final: end_address,
+                idcurrency: 2,
+                idpayment_methods: 2,
+                categoryId: categoryId
+              },
+              ip: _ip
+            }
+          })
+        })
     } else {
       console.log('no hay driver disponibles')
     }

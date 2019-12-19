@@ -80,20 +80,18 @@ export const useNotification = (navigate, latitude, longitude, navigation) => {
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
-          break;
+          break
+        case 10:
+          navigate('Home')
+
+          notification('AlySkiper', 'Su viaje ha sido finalizado.')
+          pubnub.unsubscribe({
+            channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
+          })
+          break
       }
     }
   })
-
-  // useEffect(
-  //   () => {
-  //     if (status !== 0) {
-  //       return { status, idTravel, loading, error }
-  //     }
-  //   }, [status]
-  // )
-
-  // console.log('DATA -' + data !== undefined ? data.skiperTravel.skiperTravelsTracing[0].travelstatus.id : '0')
 
   return { idTravel, loading, error }
 }
