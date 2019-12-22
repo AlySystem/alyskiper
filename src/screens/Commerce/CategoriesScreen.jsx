@@ -54,9 +54,9 @@ const CommerceCategoriesScreen = props => {
 		<Background>
 			<View style={styles.screen}>
 				<Header stylesContainer={styles.container} isActiveImage onPress={() => props.navigation.pop()} />
-				<ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='always'>
+				<ScrollView style={{ width: '100%' }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='always'>
 					{data.categoriesCommerce.map(category => (
-						<TouchableOpacity key={category.id} style={styles.category} onPress={() => handleOnPress(item.id)}>
+						<TouchableOpacity key={category.id} style={styles.category} onPress={() => handleOnPress(category.id)}>
 							<Image
 								progressiveRenderingEnabled={true}
 								resizeMode="cover"
@@ -79,14 +79,11 @@ const styles = StyleSheet.create({
 	screen: {
 		backgroundColor: 'rgba(0,0,0,.5)',
 		alignItems: 'center',
+		justifyContent: 'center',
 		flex: 1
 	},
 	category: {
 		backgroundColor: Theme.COLORS.colorMainDark,
-		borderWidth: 1,
-		borderColor: Theme.COLORS.colorSecondary,
-		marginVertical: 10,
-		borderRadius: 5,
 		position: 'relative',
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -102,7 +99,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Theme.COLORS.colorMainAlt
 	},
 	name: {
-		fontFamily: 'Lato-Regular',
+		fontFamily: 'Archistico',
 		textTransform: 'uppercase',
 		fontWeight: 'bold',
 		fontSize: Theme.SIZES.title,
@@ -114,7 +111,7 @@ const styles = StyleSheet.create({
 		height: '100%'
 	},
 	overlay: {
-		backgroundColor: 'rgba(0, 0, 0, 0.8)',
+		backgroundColor: 'rgba(0, 0, 0, 0.4	)',
 		position: 'absolute',
 		width: '100%',
 		height: '100%'
