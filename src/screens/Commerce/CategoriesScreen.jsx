@@ -22,7 +22,7 @@ import { Theme } from '../../constants/Theme'
 
 const CommerceCategoriesScreen = props => {
 	const { navigate } = props.navigation
-	const { loading, data, error } = useQuery(CATEGORIESCOMMERCE)
+	const { loading, data } = useQuery(CATEGORIESCOMMERCE)
 
 	if (loading) {
 		return (
@@ -59,7 +59,7 @@ const CommerceCategoriesScreen = props => {
 							<Text style={styles.name}>{item.name}</Text>
 						</TouchableOpacity>
 					)}
-					keyExtractor={(item, index) => index.toString()}
+					keyExtractor={(_, index) => index.toString()}
 				/>
 			</View>
 		</Background>
@@ -73,17 +73,9 @@ const styles = StyleSheet.create({
 	},
 	category: {
 		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	containerImage: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		width: '100%',
-		height: '100%',
 		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'rgba(21,21,21,.5)'
+		width: 400,
+		height: 200
 	},
 	container: {
 		flexDirection: 'row-reverse',
@@ -100,8 +92,8 @@ const styles = StyleSheet.create({
 		color: Theme.COLORS.colorSecondary
 	},
 	image: {
-		resizeMode: 'contain',
-		width: 230,
+		resizeMode: 'cover',
+		width: 210,
 		height: 180
 	}
 })
