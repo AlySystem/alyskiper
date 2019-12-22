@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
 import { useSelector, useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'

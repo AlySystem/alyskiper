@@ -33,6 +33,7 @@ import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 import BillTransport from '../../screens/Transport/BillTransportScreen'
 import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
 import WalletScreen from '../../screens/Wallet/WalletScreen'
+import TabStack from '../tabs/TabStack'
 
 import OrderTracingScreen from '../../screens/Commerce/OrderTracingScreen'
 
@@ -206,6 +207,12 @@ const StackNavigation = createStackNavigator({
   Wallet: {
     screen: WalletScreen,
     navigationOptions
+  },
+  Category: {
+    screen: TabStack,
+    navigationOptions: {
+      header: null
+    }
   }
 })
 

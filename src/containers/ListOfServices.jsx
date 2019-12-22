@@ -5,13 +5,11 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native'
-import { useSelector } from 'react-redux'
-import { showMessage } from 'react-native-flash-message'
 
 // Import icons
 import iconMessage from '../../assets/images/img-icon-message.png'
-import iconCommerce from '../../assets/images/img-icon-commerce.png'
 import iconTransport from '../../assets/images/img-icon-transport.png'
+import iconSkiper from '../../assets/images/img-alyskiper.png'
 import Picture from '../components/picture/Picture'
 
 // Import theme
@@ -26,9 +24,11 @@ const items = [
   },
   {
     key: 2,
-    icon: iconCommerce,
-    title: 'Comercios',
-    routeName: 'Commerce'
+    icon: '',
+    image: iconSkiper,
+    title: '',
+    subTitle: 'Categorias',
+    routeName: 'Category'
   },
   {
     key: 3,
@@ -39,25 +39,9 @@ const items = [
 ]
 
 const ListOfServices = props => {
+
   const handleOnSelect = (item) => {
-    // if (travel !== null && travel !== undefined) {
-    //   return showMessage({
-    //     message: 'Acceso denegado',
-    //     description: 'Tienes un viaje en curso',
-    //     backgroundColor: 'red',
-    //     color: '#fff',
-    //     icon: 'danger',
-    //     duration: 4000,
-    //     titleStyle: {
-    //       fontFamily: 'Lato-Bold'
-    //     },
-    //     textStyle: {
-    //       fontFamily: 'Lato-Regular'
-    //     }
-    //   })
-    // } else {
     return props.navigate(item)
-    // }
   }
 
   return (
@@ -69,12 +53,17 @@ const ListOfServices = props => {
             key={item.key}
             style={styles.containerImage}
           >
-            <Picture
-              source={item.icon}
-              styles={styles.image}
-            />
+            {item.icon ? (
+              <Picture source={item.icon} styles={styles.image} />
+            ) : (
+                <Picture source={item.image} styles={styles.stylesImage} />
+              )}
             <View style={{ paddingVertical: 5 }} />
-            <Text allowFontScaling={false} style={styles.title}>{item.title}</Text>
+            {item.title ? (
+              <Text allowFontScaling={false} style={styles.title}>{item.title}</Text>
+            ) : (
+                <Text allowFontScaling={false} style={styles.stylesTitle}>{item.subTitle}</Text>
+              )}
           </TouchableOpacity>
         ))}
       </View>
@@ -94,10 +83,21 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60
   },
+  stylesImage: {
+    height: 85,
+    width: 85,
+    marginTop: -10
+  },
   title: {
     color: Theme.COLORS.colorParagraph,
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.small
+  },
+  stylesTitle: {
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    marginTop: -14
   }
 })
 

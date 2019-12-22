@@ -13,6 +13,7 @@ import Button from '../button/Button'
 import Logo from '../../../assets/images/logo.png'
 
 const Header = props => {
+
   return (
     <View style={props.stylesContainer || styles.container}>
       {props.isActiveImage && (
