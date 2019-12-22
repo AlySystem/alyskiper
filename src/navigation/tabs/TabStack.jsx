@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs'
 // Import screen
 import HistoryScreen from '../../screens/Commerce/HistoryScreen'
 import CategoriesScreen from '../../screens/Commerce/CategoriesScreen'
+import ActiveScreen from '../../screens/Commerce/ActiveScreen'
 
 // Import components
 import Icon from '../../components/icon/Icon'
@@ -29,6 +30,13 @@ const TabStacks = createBottomTabNavigator({
     navigationOptions: {
       title: 'Historial',
       tabBarIcon: <Icon iconName='history' iconSize={25} iconColor={Theme.COLORS.colorSecondary} />,
+    }
+  },
+  Active: {
+    screen: ActiveScreen,
+    navigationOptions: {
+      title: 'Ordenes',
+      tabBarIcon: <Icon iconName='notifications-active' iconSize={25} iconColor={Theme.COLORS.colorSecondary} />
     }
   }
 }, {
