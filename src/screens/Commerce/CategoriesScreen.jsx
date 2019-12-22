@@ -55,20 +55,25 @@ const CommerceCategoriesScreen = props => {
 			<View style={styles.screen}>
 				<Header stylesContainer={styles.container} isActiveImage onPress={() => props.navigation.pop()} />
 				<ScrollView style={{ width: '100%' }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='always'>
-					{data.categoriesCommerce.map(category => (
-						<TouchableOpacity key={category.id} style={styles.category} onPress={() => handleOnPress(category.id)}>
-							<Image
-								progressiveRenderingEnabled={true}
-								resizeMode="cover"
-								style={styles.image}
-								source={{ uri: category.url_img_category }} />
-							<View style={styles.overlay} />
+					{
+						data.categoriesCommerce.map(
+							category => (
+								<TouchableOpacity key={category.id} style={styles.category} onPress={() => handleOnPress(category.id)}>
+									<Image
+										progressiveRenderingEnabled={true}
+										resizeMode="cover"
+										style={styles.image}
+										source={{ uri: category.url_img_category }} />
 
-							<Text style={styles.name}>
-								{category.name}
-							</Text>
-						</TouchableOpacity>
-					))}
+									<View style={styles.overlay} />
+
+									<Text style={styles.name}>
+										{category.name}
+									</Text>
+								</TouchableOpacity>
+							)
+						)
+					}
 				</ScrollView>
 			</View>
 		</Background>
