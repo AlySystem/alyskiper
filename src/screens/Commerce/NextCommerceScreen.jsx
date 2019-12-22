@@ -2,7 +2,8 @@ import React from 'react'
 import {
     View,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    Text
 } from 'react-native'
 
 // Import components
@@ -55,6 +56,16 @@ const NextCommerceScreen = props => {
                             />
                         ))}
                     </ScrollView>
+                </View>
+
+                <View style={{ marginVertical: 25, alignItems: 'center', paddingVertical: 10, backgroundColor: 'rgba(250, 250, 250, 0.1)' }}>
+                    <Text
+                        style={{
+                            color: '#FFF',
+                            fontSize: 44,
+                        }}>
+                        Proximamente
+                    </Text>
                 </View>
             </View>
         </Background>
