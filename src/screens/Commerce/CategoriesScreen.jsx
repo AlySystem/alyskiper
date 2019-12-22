@@ -2,22 +2,65 @@ import React from 'react'
 import {
 	View,
 	Text,
-	StyleSheet
+	StyleSheet,
+	FlatList,
+	TouchableOpacity
 } from 'react-native'
+import { useQuery } from '@apollo/react-hooks'
 
 // Import components
 import Background from '../../components/background/Background'
 import Header from '../../components/header/Header'
+import Loader from '../../components/loader/Loader'
+import Picture from '../../components/picture/Picture'
+
+// Import query
+import { CATEGORIESCOMMERCE } from '../../graphql/querys/Querys'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
 const CommerceCategoriesScreen = props => {
+	const { navigate } = props.navigation
+	const { loading, data, error } = useQuery(CATEGORIESCOMMERCE)
+
+	if (loading) {
+		return (
+			<Background>
+				<View style={styles.screen}>
+					<Header stylesContainer={styles.container} isActiveImage onPress={() => props.navigation.pop()} />
+					<View style={{
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'center'
+					}}>
+						<Loader />
+					</View>
+				</View>
+			</Background>
+		)
+	}
+
+	const handleOnPress = (id) => {
+		if (id === 1) {
+			navigate('Commerce')
+		}
+	}
 
 	return (
 		<Background>
 			<View style={styles.screen}>
 				<Header stylesContainer={styles.container} isActiveImage onPress={() => props.navigation.pop()} />
+				<FlatList
+					data={data.categoriesCommerce}
+					renderItem={({ item }) => (
+						<TouchableOpacity onPress={() => handleOnPress(item.id)}>
+							<Picture source={{ uri: item.url_img_category }} />
+							<Text style={styles.name}>{item.name}</Text>
+						</TouchableOpacity>
+					)}
+					keyExtractor={(item, index) => index.toString()}
+				/>
 			</View>
 		</Background>
 	)
@@ -33,11 +76,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		width: '100%',
-		position: 'absolute',
-		top: 0,
-		left: 0,
 		paddingVertical: 12,
 		backgroundColor: Theme.COLORS.colorMainAlt
+	},
+	name: {
+		fontFamily: 'Lato-Regular',
+		fontSize: Theme.SIZES.small,
+		color: Theme.COLORS.colorSecondary
 	}
 })
 

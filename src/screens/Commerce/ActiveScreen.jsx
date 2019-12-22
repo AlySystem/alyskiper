@@ -33,9 +33,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		width: '100%',
-		position: 'absolute',
-		top: 0,
-		left: 0,
 		paddingVertical: 12,
 		backgroundColor: Theme.COLORS.colorMainAlt
 	}

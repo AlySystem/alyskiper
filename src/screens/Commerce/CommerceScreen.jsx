@@ -16,7 +16,7 @@ import ListOfFavorite from '../../containers/ListOfFavorite'
 
 // Import components
 import Background from '../../components/background/Background'
-import ToolBar from '../../components/header/ToolBar'
+import Header from '../../components/header/Header'
 import DropDown from '../../components/dropdown/DropDown'
 
 // Import theme
@@ -38,11 +38,7 @@ const CommerceScreen = props => {
   return (
     <Background>
       <View style={styles.screen}>
-        <ToolBar
-          navigation={props.navigation}
-          setDropDown={setDropDown}
-          dropDown={dropDown}
-        />
+        <Header stylesContainer={styles.container} isActiveImage onPress={() => props.navigation.pop()} />
         {location && (
           <>
             <ScrollView keyboardShouldPersistTaps='always'>
@@ -91,7 +87,15 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorParagraph,
     fontSize: Theme.SIZES.small,
     paddingVertical: 15
-  }
+  },
+  container: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    paddingVertical: 12,
+    backgroundColor: Theme.COLORS.colorMainAlt
+  },
 })
 
 export default CommerceScreen
