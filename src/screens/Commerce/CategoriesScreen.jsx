@@ -48,7 +48,6 @@ const CommerceCategoriesScreen = props => {
 		if (id === 1) {
 			return navigate('Commerce')
 		} else {
-			console.log('entre')
 			return navigate('NextCommerce')
 		}
 	}
