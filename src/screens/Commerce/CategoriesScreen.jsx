@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
 	View,
 	Text,
 	StyleSheet,
-	FlatList,
+	ScrollView,
 	TouchableOpacity,
 	Image,
-	ActivityIndicator
+	Dimensions
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
 
@@ -14,14 +14,14 @@ import { useQuery } from '@apollo/react-hooks'
 import Background from '../../components/background/Background'
 import Header from '../../components/header/Header'
 import Loader from '../../components/loader/Loader'
-import Picture from '../../components/picture/Picture'
 
 // Import query
 import { CATEGORIESCOMMERCE } from '../../graphql/querys/Querys'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-import { ScrollView } from 'react-native-gesture-handler'
+
+const { height } = Dimensions.get('window')
 
 const CommerceCategoriesScreen = props => {
 	const { navigate } = props.navigation
@@ -50,53 +50,26 @@ const CommerceCategoriesScreen = props => {
 		}
 	}
 
-	const CategoryComponent = (item, key) => {
-		// const [loader, setLoader] = useState(true)
-
-		console.log(item)
-
-
-		return (
-			<TouchableOpacity key={key} style={styles.category} onPress={() => handleOnPress(item.id)}>
-				{/* {
-					loader &&
-					<ActivityIndicator color="#FFF" size="small" />
-				} */}
-
-				<Image
-					progressiveRenderingEnabled={true}
-					resizeMode="cover"
-					style={styles.image}
-					source={{ uri: item.url_img_category }} />
-
-				<View style={styles.overlay} />
-
-				{/* <Image progressiveRenderingEnabled={true} resizeMode="contain" styles={styles.image} source={require('../../../assets/images/img-icon-vip.png')} /> */}
-
-				<Text style={styles.name}>
-					{item.name}
-				</Text>
-			</TouchableOpacity>
-		)
-	}
-
 	return (
 		<Background>
 			<View style={styles.screen}>
 				<Header stylesContainer={styles.container} isActiveImage onPress={() => props.navigation.pop()} />
+				<ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='always'>
+					{data.categoriesCommerce.map(category => (
+						<TouchableOpacity key={category.id} style={styles.category} onPress={() => handleOnPress(item.id)}>
+							<Image
+								progressiveRenderingEnabled={true}
+								resizeMode="cover"
+								style={styles.image}
+								source={{ uri: category.url_img_category }} />
+							<View style={styles.overlay} />
 
-					{
-						data.categoriesCommerce.map(CategoryComponent)
-					}
-				{/* <ScrollView style={{ width: '100%', height: '100%' }}>
-
-				</ScrollView> */}
-
-				{/* <FlatList
-					data={data.categoriesCommerce}
-					renderItem={CategoryComponent}
-					keyExtractor={(_, index) => index.toString()}
-				/> */}
+							<Text style={styles.name}>
+								{category.name}
+							</Text>
+						</TouchableOpacity>
+					))}
+				</ScrollView>
 			</View>
 		</Background>
 	)
@@ -117,8 +90,8 @@ const styles = StyleSheet.create({
 		position: 'relative',
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: '80%',
-		height: '50%'
+		width: '100%',
+		height: height * 0.5
 	},
 	container: {
 		flexDirection: 'row-reverse',
@@ -133,23 +106,16 @@ const styles = StyleSheet.create({
 		textTransform: 'uppercase',
 		fontWeight: 'bold',
 		fontSize: Theme.SIZES.title,
-		color: Theme.COLORS.colorSecondary,
-		// borderWidth: 1,
-		// borderColor: Theme.COLORS.colorSecondary,
+		color: Theme.COLORS.colorSecondary
 	},
 	image: {
-		// backgroundColor: 'red',
 		position: 'absolute',
-		// flex: 1,
-
 		width: '100%',
 		height: '100%'
 	},
 	overlay: {
 		backgroundColor: 'rgba(0, 0, 0, 0.8)',
 		position: 'absolute',
-		// flex: 1,
-
 		width: '100%',
 		height: '100%'
 	}
