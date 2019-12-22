@@ -26,9 +26,7 @@ import { Theme } from '../../constants/Theme'
 import { useLocation } from '../../hooks/useLocation'
 
 const CommerceScreen = props => {
-  const { navigate } = props.navigation
   const [categoryId, setCategoryId] = useState(0)
-  const [dropDown, setDropDown] = useState(false)
   const { location } = useLocation()
 
   const handleOnPress = (categoryId) => {
@@ -40,36 +38,24 @@ const CommerceScreen = props => {
       <View style={styles.screen}>
         <Header stylesContainer={styles.container} isActiveImage onPress={() => props.navigation.pop()} />
         {location && (
-          <>
-            <ScrollView keyboardShouldPersistTaps='always'>
-              <ListOfCategory handleOnPress={handleOnPress} />
-              {!categoryId && (
-                <>
-                  <View style={{ marginVertical: 20 }}>
-                    <ListOfSwiper />
-                  </View>
-                  <ListOfPromotion />
-                </>
-              )}
-              <ListOfFavorite />
-              <View style={{ paddingVertical: 10 }} />
-              <ListOfCommerce
-                location={location}
-                categoryId={categoryId}
-                navigation={props.navigation}
-              />
-            </ScrollView>
-            {dropDown && (
-              <DropDown>
-                <TouchableOpacity onPress={() => navigate('Address')}>
-                  <Text allowFontScaling={false} style={styles.textItem}>Agregar direcciones</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Text allowFontScaling={false} style={styles.textItem}>Buscar</Text>
-                </TouchableOpacity>
-              </DropDown>
+          <ScrollView keyboardShouldPersistTaps='always'>
+            <ListOfCategory handleOnPress={handleOnPress} />
+            {!categoryId && (
+              <>
+                <View style={{ marginVertical: 20 }}>
+                  <ListOfSwiper />
+                </View>
+                <ListOfPromotion />
+              </>
             )}
-          </>
+            <ListOfFavorite />
+            <View style={{ paddingVertical: 10 }} />
+            <ListOfCommerce
+              location={location}
+              categoryId={categoryId}
+              navigation={props.navigation}
+            />
+          </ScrollView>
         )}
       </View>
     </Background>

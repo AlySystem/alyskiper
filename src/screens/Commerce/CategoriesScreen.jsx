@@ -54,8 +54,8 @@ const CommerceCategoriesScreen = props => {
 				<FlatList
 					data={data.categoriesCommerce}
 					renderItem={({ item }) => (
-						<TouchableOpacity onPress={() => handleOnPress(item.id)}>
-							<Picture source={{ uri: item.url_img_category }} />
+						<TouchableOpacity style={styles.category} onPress={() => handleOnPress(item.id)}>
+							<Picture styles={styles.image} source={{ uri: item.url_img_category }} />
 							<Text style={styles.name}>{item.name}</Text>
 						</TouchableOpacity>
 					)}
@@ -71,6 +71,20 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0,0,0,.5)',
 		flex: 1
 	},
+	category: {
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	containerImage: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100%',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(21,21,21,.5)'
+	},
 	container: {
 		flexDirection: 'row-reverse',
 		justifyContent: 'space-between',
@@ -81,8 +95,14 @@ const styles = StyleSheet.create({
 	},
 	name: {
 		fontFamily: 'Lato-Regular',
+		textTransform: 'uppercase',
 		fontSize: Theme.SIZES.small,
 		color: Theme.COLORS.colorSecondary
+	},
+	image: {
+		resizeMode: 'contain',
+		width: 230,
+		height: 180
 	}
 })
 
