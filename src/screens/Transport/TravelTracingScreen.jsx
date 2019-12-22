@@ -99,7 +99,7 @@ const TravelTracingScreen = props => {
           channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
         },
 
-        function(status, response) {
+        function (status, response) {
           if (response !== undefined) {
             if (
               `Driver_${idTravel || data.getTravelByUserId.id}` in
@@ -107,7 +107,7 @@ const TravelTracingScreen = props => {
             ) {
               const channels =
                 response.channels[
-                  `Driver_${idTravel || data.getTravelByUserId.id}`
+                `Driver_${idTravel || data.getTravelByUserId.id}`
                 ];
               if (channels !== undefined) {
                 const drive = channels.occupants.filter(
@@ -154,7 +154,7 @@ const TravelTracingScreen = props => {
       {
         text: "No",
         style: "cancel",
-        onPress: () => {}
+        onPress: () => { }
       },
       {
         text: "Si, Cancelar",

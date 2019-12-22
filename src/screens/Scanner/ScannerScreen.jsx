@@ -21,6 +21,7 @@ import { TRAVELTRACING } from '../../graphql/mutations/Mutations'
 import Loader from '../../components/loader/Loader'
 import InputControl from '../../components/input/InputControl'
 import IconButton from '../../components/button/IconButton'
+import Background from '../../components/background/Background'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -63,7 +64,6 @@ const ScannerScreen = props => {
     const scannerQR = event.nativeEvent.codeStringValue.split(' ')
     const idTravel = parseInt(scannerQR[0])
     const idUser = parseInt(scannerQR[1])
-    console.log(idUser, idTravel, latitude, longitude)
 
     if (idUser !== userId) {
       showMessage({
@@ -179,7 +179,6 @@ const ScannerScreen = props => {
         }
       })
       .catch(error => {
-        console.log(error, 'error')
         if (error) {
           showMessage({
             message: 'Error',
@@ -243,35 +242,38 @@ const ScannerScreen = props => {
         />
       )}
       {manualQR && (
-        <View style={{
-          flex: 1,
-          backgroundColor: Theme.COLORS.colorMainAlt,
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingHorizontal: 20
-        }}
-        >
-          <Text style={{
-            color: Theme.COLORS.colorParagraph,
-            fontFamily: 'Lato-Bold',
-            fontSize: Theme.SIZES.small
+        <Background>
+          <View style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,.5)',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 20
           }}
-          />
-          <InputControl
-            value={codeQR}
-            setValue={setCodeQR}
-            placeholder='Ingresa el codigo'
-            placeholderTextColor={Theme.COLORS.colorParagraph}
-            onChangeText={value => setCodeQR(value)}
-            keyboardType="numeric"
-            isActiveButton
-          />
-          <IconButton
-            isActiveIcon
-            message='CONFIRMAR'
-            onPress={handleOnSubmit}
-          />
-        </View>
+          >
+            <Text style={{
+              color: Theme.COLORS.colorParagraph,
+              fontFamily: 'Lato-Bold',
+              fontSize: Theme.SIZES.small
+            }}
+            />
+            <InputControl
+              value={codeQR}
+              setValue={setCodeQR}
+              placeholder='Ingresa el codigo'
+              placeholderTextColor={Theme.COLORS.colorParagraph}
+              onChangeText={value => setCodeQR(value)}
+              keyboardType='numeric'
+              isActiveButton
+              stylesInput={styles.stylesInput}
+            />
+            <IconButton
+              isActiveIcon
+              message='CONFIRMAR'
+              onPress={handleOnSubmit}
+            />
+          </View>
+        </Background>
       )}
     </View>
   )
@@ -282,6 +284,19 @@ const styles = StyleSheet.create({
     color: Theme.COLORS.colorParagraph,
     fontFamily: 'Lato-Regular',
     fontSize: Theme.SIZES.normal
+  },
+  stylesInput: {
+    backgroundColor: Theme.COLORS.colorMainDark,
+    borderRadius: 100,
+    paddingLeft: 55,
+    paddingRight: 50,
+    paddingVertical: 12,
+    borderWidth: 0.3,
+    borderColor: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Regular',
+    fontSize: Theme.SIZES.small,
+    color: Theme.COLORS.colorParagraph,
+    marginBottom: 20
   }
 })
 

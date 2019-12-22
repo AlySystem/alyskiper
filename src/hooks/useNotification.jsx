@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
 import { useSelector, useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
@@ -15,7 +15,6 @@ import { notification } from '../hooks/usePushNotification'
 export const useNotification = (navigate, latitude, longitude, navigation) => {
   const dispatch = useDispatch()
   const { userId, firstName } = useSelector(state => state.user)
-  // const [status, setStatus] = useState(0)
   const [idTravel, setIdTravel] = useState()
 
   const pubnub = new PubNubReact({
@@ -26,12 +25,11 @@ export const useNotification = (navigate, latitude, longitude, navigation) => {
     uuid: firstName
   })
 
-  const { loading, error, data } = useSubscription(GETNOTIFICATIONTRAVEL, {
+  const { loading, error } = useSubscription(GETNOTIFICATIONTRAVEL, {
     variables: { idusuario: userId },
     onSubscriptionData: ({ subscriptionData }) => {
       const { travelstatus: { id } } = subscriptionData.data.skiperTravel.skiperTravelsTracing[0]
       setIdTravel(subscriptionData.data.skiperTravel.id)
-
       dispatch({ type: 'ESTADOVIAJE', payload: { id } })
 
       switch (id) {
@@ -49,19 +47,16 @@ export const useNotification = (navigate, latitude, longitude, navigation) => {
               fontFamily: 'Lato-Regular'
             }
           })
-          navigate('Transport')
-          break
+          return navigate('Transport')
         case 3:
-          // ACA QUEDAMOS 3:10 AM
           dispatch({
             type: ACTIVETRAVEL,
             payload: { travel: idTravel }
           })
           notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
-          navigate('TravelTrancing', {
+          return navigate('TravelTrancing', {
             idTravel: idTravel
           })
-          break
         case 4:
           notification('AlySkiper', 'El conductor ya se encuentra cerca de ti.')
           navigate('Scanner', { latitude: latitude, longitude: longitude })
@@ -71,24 +66,19 @@ export const useNotification = (navigate, latitude, longitude, navigation) => {
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
-          navigate('FinalTravel')
-          break
+          return navigate('FinalTravel')
         case 9:
-          navigate('Home')
-
           notification('AlySkiper', 'Su viaje ha sido cancelado.')
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
-          break
+          return navigate('Home')
         case 10:
-          navigate('Home')
-
           notification('AlySkiper', 'Su viaje ha sido finalizado.')
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
-          break
+          return navigate('FinalTravel')
       }
     }
   })

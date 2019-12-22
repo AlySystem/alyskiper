@@ -228,4 +228,14 @@ export const CALCULATETARIFF = gql`
       symbol
     }
   }
-`;
+`
+
+export const CATEGORIESCOMMERCE = gql`
+  query {
+    categoriesCommerce {
+      id
+      name
+      url_img_category
+    }
+  }
+`

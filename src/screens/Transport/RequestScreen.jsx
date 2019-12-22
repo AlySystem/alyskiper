@@ -54,7 +54,7 @@ const RequestScreen = props => {
         fontFamily: 'Lato-Regular'
       }
     })
-    return goBack()
+    props.navigation.pop()
   }
 
   const handleOnCancel = () => {
@@ -64,19 +64,20 @@ const RequestScreen = props => {
     dispatch({
       type: REMOVELOCATION
     })
-    // goBack()
     props.navigation.pop()
   }
 
   useEffect(() => {
     const driverWithInRadius = []
     const { categoryId } = travel
+    let categoryName = ''
     let orderDistance = null
     let driverNearby = null
     const { duration, distance, end_address, start_address, start_location, end_location } = steps
 
     switch (categoryId) {
       case 1:
+        categoryName = 'SILVER'
         silver.map(drive => {
           if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
             driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
@@ -86,6 +87,7 @@ const RequestScreen = props => {
         driverNearby = orderDistance[0]
         break
       case 2:
+        categoryName = 'GOLDEN'
         golden.map(drive => {
           if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
             driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
@@ -95,6 +97,7 @@ const RequestScreen = props => {
         driverNearby = orderDistance[0]
         break
       case 3:
+        categoryName = 'VIP'
         vip.map(drive => {
           if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
             driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
@@ -104,6 +107,7 @@ const RequestScreen = props => {
         driverNearby = orderDistance[0]
         break
       case 4:
+        categoryName = 'PRESIDENT'
         president.map(drive => {
           if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
             driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
@@ -115,10 +119,6 @@ const RequestScreen = props => {
     }
 
     if (driverNearby !== undefined && driverNearby !== null) {
-      console.log(driverWithInRadius)
-      console.log(orderDistance)
-      console.log(driverNearby['driveId'])
-
       PublicIp().then(
         _ip => {
           GenerateTravel({
@@ -143,7 +143,21 @@ const RequestScreen = props => {
           })
         })
     } else {
-      console.log('no hay driver disponibles')
+      showMessage({
+        message: 'Error',
+        description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
+        backgroundColor: 'red',
+        color: '#fff',
+        icon: 'danger',
+        duration: 8000,
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+      props.navigation.pop()
     }
   }, [])
 

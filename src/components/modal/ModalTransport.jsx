@@ -31,9 +31,7 @@ const ModalTransport = props => {
         margin: 0
       }}
     >
-      <Background
-        source={require('../../../assets/images/img-background-alyskiper.png')}
-      >
+      <Background source={require('../../../assets/images/img-background-alyskiper.png')}>
         <View style={styles.container}>
           <Icon
             iconName='close'
@@ -73,9 +71,7 @@ const ModalTransport = props => {
             }}
           >DIRECCIONES
           </Text>
-          <ListOfAddress
-            navigation={navigation}
-          />
+          <ListOfAddress navigation={navigation} />
         </View>
       </Background>
     </Modal>
