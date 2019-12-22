@@ -33,6 +33,7 @@ import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 import BillTransport from '../../screens/Transport/BillTransportScreen'
 import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
 import WalletScreen from '../../screens/Wallet/WalletScreen'
+import NextCommerceScreen from '../../screens/Commerce/NextCommerceScreen'
 import TabStack from '../tabs/TabStack'
 
 import OrderTracingScreen from '../../screens/Commerce/OrderTracingScreen'
@@ -151,6 +152,10 @@ const StackNavigation = createStackNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  NextCommerce: {
+    screen: NextCommerceScreen,
+    navigationOptions
   },
   ProfileCommerce: {
     screen: ProfileCommerceScreen,

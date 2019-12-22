@@ -46,7 +46,10 @@ const CommerceCategoriesScreen = props => {
 
 	const handleOnPress = (id) => {
 		if (id === 1) {
-			navigate('Commerce')
+			return navigate('Commerce')
+		} else {
+			console.log('entre')
+			return navigate('NextCommerce')
 		}
 	}
 
