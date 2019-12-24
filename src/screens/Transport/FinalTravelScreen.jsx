@@ -28,7 +28,7 @@ const FinalTravelScreen = props => {
   const [SkiperRating, { loading }] = useMutation(SKIPERATING)
   const [star, setStar] = useState(3.5)
   const [value, setValue] = useState('')
-  const { drive } = useSelector(state => state.travel)
+  const { drive, travel } = useSelector(state => state.travel)
   const { userId } = useSelector(state => state.user)
 
   const handleOnSubmit = () => {
@@ -58,7 +58,8 @@ const FinalTravelScreen = props => {
               fontFamily: 'Lato-Regular'
             }
           })
-          return navigate('BillTransport', { idTravel: drive.id })
+          console.log(drive)
+          return navigate('BillTransport', { idTravel: drive.id, category: travel.categoryId })
         }
       })
       .catch(error => {
@@ -76,7 +77,7 @@ const FinalTravelScreen = props => {
               fontFamily: 'Lato-Regular'
             }
           })
-          return navigate('BillTransport')
+          // return navigate('BillTransport')
         }
       })
   }

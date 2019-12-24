@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   View,
   Text,
   StyleSheet
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 
 // Import actions types
@@ -25,10 +25,22 @@ import { Theme } from '../../constants/Theme'
 const BillTransportScreen = props => {
   const { navigate } = props.navigation
   const idTravel = props.navigation.getParam('idTravel')
-  // console.log(idTravel)
+  const category = props.navigation.getParam('category')
+  // const [category] = useState(props.category)
+  useSelector(x => console.log(x))
   const dispatch = useDispatch()
 
-  const { loading, error, data } = useQuery(INVOICE, { variables: { idservice: idTravel } })
+  const { loading, error, data } = useQuery(INVOICE, {
+    variables: {
+      idservice: idTravel
+    }
+  })
+
+  useEffect(
+    () => {
+      console.log(data)
+    }, [data]
+  )
 
   if (error) {
     showMessage({
@@ -113,7 +125,24 @@ const BillTransportScreen = props => {
 
           <View style={styles.container}>
             <Text allowFontScaling={false} style={styles.text}>CATEGORIA</Text>
-            <Text allowFontScaling={false} style={styles.textCategory}>SILVER</Text>
+            {/* <Text allowFontScaling={false} style={styles.textCategory}>{category.toUpperCase()}</Text> */}
+            <Text allowFontScaling={false} style={styles.textCategory}>
+              {
+                category === 1 && 'SILVER'
+              }
+
+              {
+                category === 2 && 'GOLDEN'
+              }
+
+              {
+                category === 3 && 'VIP'
+              }
+
+              {
+                category === 4 && 'PRESIDENT'
+              }
+            </Text>
           </View>
 
           <View style={styles.container}>

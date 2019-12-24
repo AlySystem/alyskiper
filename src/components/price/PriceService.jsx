@@ -74,6 +74,8 @@ const PriceService = props => {
 
   // Calculamos el precio segun la distancia y el tipo de viaje
   useEffect(() => {
+    console.log(data)
+
     if (
       loading === false &&
       data &&
@@ -139,7 +141,7 @@ const PriceService = props => {
   }
 
   // Mostramos el loader cuando los datos estan cargando
-  if (loading && !data && price !== 0) return <Loader size="small" />
+  if (loading && !data && price === 0) return <Loader size="small" />
 
   // Retornamos los precios cuando todo este correcto
   return (
