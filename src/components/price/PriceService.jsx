@@ -13,6 +13,7 @@ import { CALCULATETARIFF } from "../../graphql/querys/Querys"
 import Loader from "../loader/Loader"
 // Import hooks
 import { useLocation } from "../../hooks/useLocation"
+import { FetchType } from "apollo-boost"
 
 const PriceService = props => {
   const dispatch = useDispatch()
@@ -126,6 +127,8 @@ const PriceService = props => {
         })
         setPrice(total)
       }
+
+      console.log(price)
     }
   }, [loading, data])
 

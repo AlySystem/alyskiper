@@ -1,7 +1,8 @@
 import React from 'react'
 import {
   StyleSheet,
-  View
+  View,
+  Linking
 } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
@@ -51,7 +52,8 @@ const items = [
     key: 6,
     name: 'Soporte',
     icon: 'verified-user',
-    routeName: 'Support'
+    routeName: 'Support',
+    action: () => Linking.openURL('whatsapp://send?phone=+50660727720')
   },
   {
     key: 7,
@@ -94,7 +96,13 @@ const ListOfItems = (props) => {
               routeName={item.routeName}
               name={item.name}
               icon={item.icon}
-              onPress={() => navigate(item.routeName)}
+              onPress={() => {
+                if (item.action) {
+                  item.action()
+                } else {
+                  navigate(item.routeName)
+                }
+              }}
             />
           ))}
           <View style={styles.containerItems}>
