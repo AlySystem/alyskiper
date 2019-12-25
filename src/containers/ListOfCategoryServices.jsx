@@ -31,6 +31,21 @@ import Picture from '../components/picture/Picture'
 
 const { height } = Dimensions.get('window')
 
+const ErrorView = () => (
+  <View style={{ justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+    <Picture
+      styles={{ width: 100, height: 100, resizeMode: 'contain' }}
+      source={require('../../assets/images/img-alyskiper-error.png')} />
+
+    <View style={{ marginVertical: 10 }} />
+
+    <Text style={{ color: Theme.COLORS.colorParagraph, fontFamily: 'Lato-Regular', textAlign: 'center', fontSize: Theme.SIZES.small }}>
+      AlySkiper no esta disponible en tu zona.
+    </Text>
+
+  </View>
+)
+
 const ListOfCategoryServices = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
@@ -61,6 +76,7 @@ const ListOfCategoryServices = props => {
   }
 
   const handleOnSubmit = () => {
+    // Guardamos la categoria del viaje
     dispatch({
       type: DETAILSTRAVEL,
       payload: {
@@ -70,6 +86,8 @@ const ListOfCategoryServices = props => {
         }
       }
     })
+
+    // Guardamos la locacion inicial (lugar actual del usuario)
     dispatch({
       type: LOCATION,
       payload: {
@@ -79,6 +97,8 @@ const ListOfCategoryServices = props => {
         longitudeDelta: 0.0134
       }
     })
+
+    // Navegamos a la pantalla RequestScreen (ejecuta todo el proceso del viaje)
     navigate('Request')
   }
 
@@ -90,88 +110,66 @@ const ListOfCategoryServices = props => {
     >
       <Background source={require('../../assets/images/img-background-alyskiper.png')}>
         <View style={styles.layout}>
-          {error ? (
-            <View style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              width: '100%'
-            }}
-            >
-              <Picture
-                styles={{
-                  width: 100,
-                  height: 100,
-                  resizeMode: 'contain'
-                }}
-                source={require('../../assets/images/img-alyskiper-error.png')}
-              />
-              <View style={{ marginVertical: 10 }} />
-              <Text style={{
-                color: Theme.COLORS.colorParagraph,
-                fontFamily: 'Lato-Regular',
-                textAlign: 'center',
-                fontSize: Theme.SIZES.small
-              }}
-              >AlySkiper no esta disponible en tu zona.
-              </Text>
-            </View>
-          ) : (
-              <>
-                <View style={styles.containerHeader}>
-                  <Text style={styles.textPrice}>Precio estimado</Text>
-                  <View style={{ marginVertical: 2 }} />
-                  <PriceService
-                    categoryId={selectCategory}
-                    navigation={props.navigation}
-                    error={(error) => setError(error)}
-                  />
+          {
+            // Si hay un error renderizamos la pantalla
+            error &&
+            <ErrorView />
+          }
+
+          {
+            // si no hay errores 
+            !error &&
+            <>
+              <View style={styles.containerHeader}>
+                <Text style={styles.textPrice}>Precio estimado</Text>
+                <View style={{ marginVertical: 2 }} />
+                <PriceService
+                  categoryId={selectCategory}
+                  navigation={props.navigation}
+                  error={(error) => setError(error)}
+                />
+              </View>
+
+              <View style={styles.containerRow}>
+                <View>
+                  <Text style={styles.category}>CATEGORIAS</Text>
+                  <Picker
+                    selectedValue={selectCategory}
+                    style={{
+                      textAlign: 'right',
+                      height: 50,
+                      width: 200,
+                      color: Theme.COLORS.colorSecondary,
+                      fontFamily: 'Lato-Regular',
+                      borderColor: Theme.COLORS.colorSecondary,
+                      borderWidth: 1
+                    }}
+                    mode='dialog'
+                    onValueChange={(itemValue) => setSelectCategory(itemValue)}>
+                    {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
+                      <Picker.Item
+                        key={category.id}
+                        label={category.name.toUpperCase()}
+                        value={category.id}
+                      />
+                    ))}
+                  </Picker>
                 </View>
-                <View style={styles.containerRow}>
-                  <View>
-                    <Text style={styles.category}>CATEGORIAS</Text>
-                    <Picker
-                      selectedValue={selectCategory}
-                      style={{
-                        textAlign: 'right',
-                        height: 50,
-                        width: 200,
-                        color: Theme.COLORS.colorSecondary,
-                        fontFamily: 'Lato-Regular',
-                        borderColor: Theme.COLORS.colorSecondary,
-                        borderWidth: 1
-                      }}
-                      mode='dialog'
-                      onValueChange={(itemValue, itemIndex) => setSelectCategory(itemValue)}>
-                      {data.skipercattravels.filter(item => item.btaxy === true).map(category => (
-                        <Picker.Item
-                          key={category.id}
-                          label={category.name.toUpperCase()}
-                          value={category.id}
-                        />
-                      ))}
-                    </Picker>
-                  </View>
-                  <Payment />
-                </View>
-                <View style={{
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginVertical: 20
-                }}
-                >
-                  <IconButton
-                    message='PEDIR SKIPER'
-                    isActiveIcon
-                    iconName='check'
-                    onPress={handleOnSubmit}
-                    isLoading={false}
-                    stylesButton={styles.button}
-                  />
-                </View>
-              </>
-            )}
+                <Payment />
+              </View>
+
+              <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', marginVertical: 20 }}>
+                <IconButton
+                  message='PEDIR SKIPER'
+                  isActiveIcon
+                  iconName='check'
+                  onPress={handleOnSubmit}
+                  isLoading={false}
+                  stylesButton={styles.button}
+                />
+              </View>
+            </>
+          }
         </View>
       </Background>
     </Animatable.View>

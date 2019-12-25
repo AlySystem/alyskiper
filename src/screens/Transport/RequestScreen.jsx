@@ -35,27 +35,50 @@ const RequestScreen = props => {
   const { travel } = useSelector(state => state.travel)
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
-  const { silver, golden, vip, president } = useSelector(state => state.drivers)
-  const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL)
-  useNotification(navigate, latitude, longitude)
+  useSelector(state => {
+    console.log(state.drivers)
+  })
 
-  if (error) {
-    showMessage({
-      message: 'Error',
-      description: `${error}`,
-      backgroundColor: 'red',
-      color: '#fff',
-      icon: 'danger',
-      duration: 8000,
-      titleStyle: {
-        fontFamily: 'Lato-Bold'
-      },
-      textStyle: {
-        fontFamily: 'Lato-Regular'
+  const { silver, golden, vip, president } = useSelector(state => {
+    // Verificamos si hay drivers
+    // Si no hay drivers, retornamos todos los drivers en arreglos vacios
+    // esto para que no reviente
+    if (state.drivers.length === 0) {
+      return {
+        silver: [],
+        golden: [],
+        vip: [],
+        president: []
       }
-    })
-    props.navigation.pop()
-  }
+    } else {
+      return state.drivers
+    }
+  })
+
+  const [GenerateTravel] = useMutation(GENERATETRAVEL, {
+    onError: ({ message }) => {
+      // Cuando encontramos un error al ejecutar la mutation
+      // Mostramos el mensaje y vamos hacia atras
+      showMessage({
+        message: 'Error',
+        description: `${message}`,
+        backgroundColor: 'red',
+        color: '#fff',
+        icon: 'danger',
+        duration: 8000,
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+
+      props.navigation.pop()
+    }
+  })
+
+  useNotification(navigate, latitude, longitude)
 
   const handleOnCancel = () => {
     dispatch({
@@ -77,48 +100,62 @@ const RequestScreen = props => {
 
     switch (categoryId) {
       case 1:
-        categoryName = 'SILVER'
-        silver.map(drive => {
-          if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
-            driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
-          }
-        })
-        orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
-        driverNearby = orderDistance[0]
+        if (silver) {
+          categoryName = 'SILVER'
+          silver.map(drive => {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
+              driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
+            }
+          })
+          orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
+          driverNearby = orderDistance[0]
+        }
+
         break
       case 2:
-        categoryName = 'GOLDEN'
-        golden.map(drive => {
-          if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
-            driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
-          }
-        })
-        orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
-        driverNearby = orderDistance[0]
+        if (golden) {
+          categoryName = 'GOLDEN'
+          golden.map(drive => {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
+              driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
+            }
+          })
+          orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
+          driverNearby = orderDistance[0]
+        }
+
         break
       case 3:
-        categoryName = 'VIP'
-        vip.map(drive => {
-          if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
-            driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
-          }
-        })
-        orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
-        driverNearby = orderDistance[0]
+        if (vip) {
+          categoryName = 'VIP'
+          vip.map(drive => {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
+              driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
+            }
+          })
+          orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
+          driverNearby = orderDistance[0]
+        }
+
         break
       case 4:
-        categoryName = 'PRESIDENT'
-        president.map(drive => {
-          if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
-            driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
-          }
-        })
-        orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
-        driverNearby = orderDistance[0]
+        if (president) {
+          categoryName = 'PRESIDENT'
+          president.map(drive => {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
+              driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
+            }
+          })
+          orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
+          driverNearby = orderDistance[0]
+        }
+
         break
     }
 
-    if (driverNearby !== undefined && driverNearby !== null) {
+    if (driverNearby !== null) {
+      // Si hay driver cerca, generamos el el viaje
+
       PublicIp().then(
         _ip => {
           GenerateTravel({
@@ -143,10 +180,11 @@ const RequestScreen = props => {
           })
         })
     } else {
+      // Mostramos un mensaje de error 
       showMessage({
         message: 'Error',
         description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
-        backgroundColor: 'red',
+        backgroundColor: '#e67e22',
         color: '#fff',
         icon: 'danger',
         duration: 8000,
@@ -157,6 +195,7 @@ const RequestScreen = props => {
           fontFamily: 'Lato-Regular'
         }
       })
+
       props.navigation.pop()
     }
   }, [])

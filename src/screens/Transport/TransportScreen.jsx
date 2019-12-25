@@ -48,6 +48,14 @@ import Picture from '../../components/picture/Picture'
 
 const { height, width } = Dimensions.get('window')
 
+const ModalLoader = () => {
+  return (
+    <View style={{ position: 'absolute', justifyContent: 'center', alignItems: 'center', width: '100%', height: '50%' }}>
+      <Loader color={Theme.COLORS.colorSecondary} />
+    </View>
+  )
+}
+
 const TransportScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
@@ -60,16 +68,21 @@ const TransportScreen = props => {
   const [isLoading, setIsLoading] = useState(false)
   const { silver, golden, vip, president } = usePubnub()
   const [, setDetails] = useState('')
+
+  // En estos marcadores crearemos un arreglo de referencias
+  // Esto es debido a que se ocupa la misma referencia para muchos marcadores
   const markerSilver = useRef(null)
   const markerGolden = useRef(null)
   const markerVip = useRef(null)
   const markerPresident = useRef(null)
 
   const mapView = useRef(null)
-  let backHandler
 
-  useEffect(() => {
-    const verifyCity = () => {
+  // Revision de aca, del porque no puede solicitar driver cuando
+  // no tiene una ciudad
+  useEffect(
+    () => {
+      // Esto es cuando el usuario no hay una ciudad
       if (city_id === null || city_id === undefined) {
         Alert.alert(
           'ADVERTENCIA',
@@ -85,13 +98,28 @@ const TransportScreen = props => {
           { cancelable: false }
         )
       }
-    }
-    verifyCity()
-  }, [city_id])
+    },
+    [city_id]
+  )
+
+  // Funcion que destruye el viaje marcado en cache
+  const destroyMarkedTravel = () => {
+    setDestination(null)
+
+    dispatch({
+      type: REMOVEDIRECTION
+    })
+  }
+
+  // Cuando vamos retrosedemos en la pantalla
+  // destruimos el viaje en cache
+  BackHandler.addEventListener('hardwareBackPress', destroyMarkedTravel)
+
 
   const handleDirecctions = async (placeId, details) => {
     setIsLoading(true)
 
+    // Obtenemos la direccion Actual del usuario
     const { latitude, longitude } = location
     const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
 
@@ -133,34 +161,15 @@ const TransportScreen = props => {
     }
   }
 
+  // Verificamos si hay un lugar marcado 
+  // Este dato lo obtenemos desde el cache de redux
+  // BUG ACA - CUANDO SE MARCA EN ESTADOS UNIDOS
   useEffect(() => {
     if (directions !== null) {
       const { placeId, address } = directions
       handleDirecctions(placeId, address)
     }
   }, [directions])
-
-  useEffect(() => {
-    backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      setDestination(null)
-      dispatch({
-        type: REMOVEDIRECTION
-      })
-      navigate('home')
-      return false
-    })
-    return () => {
-      backHandler.remove()
-    }
-  }, [])
-
-  const handleBack = () => {
-    setDestination(null)
-
-    dispatch({
-      type: REMOVEDIRECTION
-    })
-  }
 
   useEffect(() => {
     if (silver) {
@@ -210,22 +219,19 @@ const TransportScreen = props => {
 
   return (
     <View style={styles.screen}>
-      <ModalTransport
-        navigation={props.navigation}
-        isVisible={isVisible}
-        setIsVisible={setIsVisible}
-        location={location}
-      />
-      {!loading && (
-        <Map
-          mapView={mapView}
-          location={location}
-        >
-          {silver && (
-            silver.map(drive => {
-              return (
+      <ModalTransport navigation={props.navigation} isVisible={isVisible} setIsVisible={setIsVisible} location={location} />
+
+      {
+        // Si ya cargo los datos, renderizamos el mapa
+        !loading &&
+        <Map mapView={mapView} location={location}>
+          {
+            // Renderizamos todos los conductores silver
+            silver &&
+            silver.map(
+              (drive, index) => (
                 <Marker.Animated
-                  key={drive.uuid}
+                  key={index}
                   coordinate={{
                     latitude: drive.state.coords.latitude,
                     longitude: drive.state.coords.longitude
@@ -244,97 +250,115 @@ const TransportScreen = props => {
                   />
                 </Marker.Animated>
               )
-            })
-          )}
+            )
+          }
 
-          {golden && (
-            golden.map(drive => (
-              <Marker.Animated
-                style={styles.marker}
-                key={drive.uuid}
-                coordinate={{
-                  latitude: drive.state.coords.latitude,
-                  longitude: drive.state.coords.longitude
-                }}
-                ref={markerGolden}
-                title={`${drive.state.firstname} ${drive.state.lastname}`}
-                description='GOLDEN'
-              >
-                <Image
-                  style={{
-                    width: 35,
-                    height: 35,
-                    resizeMode: 'contain'
+          {
+            // Renderizamos todos los conductores golden
+            golden &&
+            golden.map(
+              (drive, index) => (
+                <Marker.Animated
+                  style={styles.marker}
+                  key={index}
+                  coordinate={{
+                    latitude: drive.state.coords.latitude,
+                    longitude: drive.state.coords.longitude
                   }}
-                  source={goldenMarker}
-                />
-              </Marker.Animated>
-            ))
-          )}
+                  ref={markerGolden}
+                  title={`${drive.state.firstname} ${drive.state.lastname}`}
+                  description='GOLDEN'
+                >
+                  <Image
+                    style={{
+                      width: 35,
+                      height: 35,
+                      resizeMode: 'contain'
+                    }}
+                    source={goldenMarker}
+                  />
+                </Marker.Animated>
+              ))
+          }
 
-          {vip && (
-            vip.map(drive => (
-              <Marker.Animated
-                style={styles.marker}
-                key={drive.uuid}
-                coordinate={{
-                  latitude: drive.state.coords.latitude,
-                  longitude: drive.state.coords.longitude
-                }}
-                title={`${drive.state.firstname} ${drive.state.lastname}`}
-                description='VIP'
-                ref={markerVip}
-              >
-                <Image
-                  style={{
-                    width: 35,
-                    height: 35,
-                    resizeMode: 'contain'
+          {
+            // Renderizamos todos los conductores vip
+            vip &&
+            vip.map(
+              drive => (
+                <Marker.Animated
+                  style={styles.marker}
+                  key={drive.uuid}
+                  coordinate={{
+                    latitude: drive.state.coords.latitude,
+                    longitude: drive.state.coords.longitude
                   }}
-                  source={vipMarker}
-                />
-              </Marker.Animated>
-            ))
-          )}
+                  title={`${drive.state.firstname} ${drive.state.lastname}`}
+                  description='VIP'
+                  ref={markerVip}
+                >
+                  <Image
+                    style={{
+                      width: 35,
+                      height: 35,
+                      resizeMode: 'contain'
+                    }}
+                    source={vipMarker}
+                  />
+                </Marker.Animated>
+              )
+            )
+          }
 
-          {president && (
-            president.map(drive => (
-              <Marker.Animated
-                style={styles.marker}
-                key={drive.uuid}
-                coordinate={{
-                  latitude: drive.state.coords.latitude,
-                  longitude: drive.state.coords.longitude
-                }}
-                ref={markerPresident}
-                title={`${drive.state.firstname} ${drive.state.lastname}`}
-                description='PRESIDENT'
-              >
-                <Image
-                  style={{
-                    width: 35,
-                    height: 35,
-                    resizeMode: 'contain'
-                  }}
-                  source={presidentMarker}
-                />
-              </Marker.Animated>
-            ))
-          )}
+          {
+            // Renderizamos todos los president
+            president && (
+              president.map(
+                (drive, index) => (
+                  <Marker.Animated
+                    style={styles.marker}
+                    key={index}
+                    coordinate={{
+                      latitude: drive.state.coords.latitude,
+                      longitude: drive.state.coords.longitude
+                    }}
+                    ref={markerPresident}
+                    title={`${drive.state.firstname} ${drive.state.lastname}`}
+                    description='PRESIDENT'
+                  >
+                    <Image
+                      style={{
+                        width: 35,
+                        height: 35,
+                        resizeMode: 'contain'
+                      }}
+                      source={presidentMarker}
+                    />
+                  </Marker.Animated>
+                )
+              )
+            )
+          }
 
-          {destination && (
+          {
+            // Si hay destino, dibujamos la linea de recorrido
+            destination &&
             <Polyline
               coordinates={destination}
               strokeWidth={3}
               strokeColor={Theme.COLORS.colorSecondary}
             />
-          )}
+          }
         </Map>
-      )}
-      {destination ? (
+
+      }
+
+      {
+        // Si hay destino, renderizar boton de atras y precios
+        destination &&
         <>
           <Button
-            onPress={handleBack}
+            onPress={destroyMarkedTravel}
             iconName='arrow-back'
             iconSize={30}
             stylesButton={styles.buttonBack}
@@ -345,22 +369,19 @@ const TransportScreen = props => {
             navigation={props.navigation}
           />
         </>
-      ) : isLoading ? (
-        <View style={{
-          position: 'absolute',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: '50%'
-        }}
-        >
-          <Loader color={Theme.COLORS.colorSecondary} />
-        </View>
-      ) : city_id && (
-        <TouchableOpacity
-          onPress={() => setIsVisible(!isVisible)}
-          style={styles.containerInput}
-        >
+      }
+
+      {
+        // Si esta cargando y no hay destino
+        // mostramos el loader
+        (isLoading && !destination) &&
+        <ModalLoader />
+      }
+
+      {
+        // Renderizamos barra de busqueda
+        city_id &&
+        <TouchableOpacity onPress={() => setIsVisible(!isVisible)} style={styles.containerInput}>
           <View pointerEvents='none'>
             <InputControl
               stylesContainer={styles.container}
@@ -374,7 +395,8 @@ const TransportScreen = props => {
             />
           </View>
         </TouchableOpacity>
-      )}
+      }
+
       <Picture
         source={require('../../../assets/images/img-logo-alysystem.png')}
         styles={styles.logo}

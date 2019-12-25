@@ -24,9 +24,7 @@ const PriceService = props => {
   const [state, setState] = useState(1)
   const { location } = useLocation()
   const [ipAddressState, setIp] = useState('')
-  const [CalculateTariff, { loading, data, error }] = useLazyQuery(
-    CALCULATETARIFF
-  )
+  const [CalculateTariff, { loading, data, error }] = useLazyQuery(CALCULATETARIFF)
 
   const { latitude, longitude } = location
 
@@ -74,8 +72,6 @@ const PriceService = props => {
 
   // Calculamos el precio segun la distancia y el tipo de viaje
   useEffect(() => {
-    console.log(data)
-
     if (
       loading === false &&
       data &&
@@ -129,19 +125,18 @@ const PriceService = props => {
         })
         setPrice(total)
       }
-
-      console.log(price)
     }
   }, [loading, data])
 
   // Si hay errores mostramos el mensaje de error
   if (error) {
+    // Ejecutamos la pantalla de error de ListOfCategoryService
     props.error(error)
     return <View />
   }
 
   // Mostramos el loader cuando los datos estan cargando
-  if (loading && !data && price === 0) return <Loader size="small" />
+  if (loading && !data || price === '' || price === '0') return <Loader size="small" />
 
   // Retornamos los precios cuando todo este correcto
   return (

@@ -25,6 +25,7 @@ const ModalTransport = props => {
 
   return (
     <Modal
+      onBackdropPress={() => setIsVisible(false)}
       isVisible={isVisible}
       animationInTiming={700}
       style={{

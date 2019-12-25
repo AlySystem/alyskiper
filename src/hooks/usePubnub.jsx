@@ -65,6 +65,8 @@ export const usePubnub = () => {
         }
 
         setDrivers({ silver, golden, vip, president })
+
+        console.log(silver, golden, vip, president)
         dispatch({
           type: DRIVERS,
           payload: {
