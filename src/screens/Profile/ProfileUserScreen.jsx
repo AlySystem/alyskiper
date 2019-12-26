@@ -4,7 +4,8 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Image
 } from 'react-native'
 import { useMutation } from '@apollo/react-hooks'
 import { showMessage } from 'react-native-flash-message'
@@ -34,18 +35,39 @@ import { UPDATEUSER } from '../../graphql/mutations/Mutations'
 // Import utils
 import { setAsyncStorage, removeAsyncStorage } from '../../utils/AsyncStorage'
 import { keys } from '../../utils/keys'
+import Axios from 'axios'
 
 const { height } = Dimensions.get('window')
 
 const ProfileUserScreen = props => {
-  const userData = useSelector(state => state.user)
+  const userData = useSelector(state => {
+    console.log(state.user)
+
+    return state.user
+  })
   const dispatch = useDispatch()
   const [, setError] = useState(null)
   const [cityId, setCityId] = useState(userData.city_id)
   const [isLoading, setIsLoading] = useState(false)
-  const [UpdateUser, { loading }] = useMutation(UPDATEUSER)
+  const [UpdateUser, { loading }] = useMutation(UPDATEUSER, {
+    onError: ({ message }) => {
+      showMessage({
+        message: 'AlySkiper',
+        description: message,
+        backgroundColor: '#e67e22',
+        color: '#fff',
+        icon: 'warning',
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+    }
+  })
 
-  const [photo, setPhoto] = useState({ uri: userData.avatar })
+  const [photo, setPhoto] = useState(userData.avatar)
   const options = {
     title: 'Seleccionar imagen',
     takePhotoButtonTitle: 'Tomar foto',
@@ -58,15 +80,10 @@ const ProfileUserScreen = props => {
   }
 
   const selectPhoto = () => {
-    console.log('entrre')
     ImagePicker.showImagePicker(options, response => {
-      console.log('Response = ', response)
       if (response.didCancel) {
-        console.log('User cancelled image picker')
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error)
       } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton)
       } else {
         const image = {
           uri: response.uri,
@@ -76,26 +93,21 @@ const ProfileUserScreen = props => {
 
         const imgBody = new FormData()
         imgBody.append('image', image)
-        const url = 'https://backend-subir-imagenes.herokuapp.com/upload'
         setIsLoading(true)
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Accept: 'application/json'
-          },
-          body: imgBody
-        })
-          .then(response => response.json())
-          .then(result => {
-            const uri = result[0].path
-            setPhoto({ uri })
-            setIsLoading(false)
-          })
-          .catch(error => {
-            setError(error)
-            setIsLoading(false)
-          })
+
+        Axios.post('https://upload-files-alysystem.herokuapp.com/uploads/file', imgBody)
+          .then(
+            ({ data: urlResponse }) => {
+              console.log(urlResponse)
+              setPhoto(urlResponse)
+              setIsLoading(false)
+            }
+          ).catch(
+            () => {
+              setError(error)
+              setIsLoading(false)
+            }
+          )
       }
     })
   }
@@ -182,23 +194,24 @@ const ProfileUserScreen = props => {
   }
 
   const handleOnSubmit = async () => {
-    const result = await UpdateUser({
-      variables: {
-        input: {
-          id: userData.userId,
-          firstname: name,
-          lastname: lastName,
-          username: userName,
-          email: email,
-          avatar: photo.uri,
-          phone: userData.phoneNumber,
-          country_id: userData.country_id,
-          city_id: cityId
-        }
+    const variables = {
+      input: {
+        id: userData.userId,
+        firstname: name,
+        lastname: lastName,
+        username: userName,
+        email: email,
+        avatar: photo,
+        phone: userData.phoneNumber,
+        country_id: userData.country_id,
+        city_id: cityId
       }
-    })
+    }
+
+    const result = await UpdateUser({ variables })
 
     if (result.data) {
+
       const payload = {
         auth: true,
         userId: result.data.updateUser.id,
@@ -237,6 +250,7 @@ const ProfileUserScreen = props => {
           fontFamily: 'Lato-Regular'
         }
       })
+
       props.navigation.goBack()
     }
   }
@@ -255,11 +269,21 @@ const ProfileUserScreen = props => {
             <Text allowFontScaling={false} style={styles.description}>Toda tu informacion personal</Text>
           </View>
           <View style={styles.containerImage}>
-            <FastImage
-              style={styles.image}
-              source={photo}
-              resizeMode={FastImage.resizeMode.cover}
-            />
+            {
+              photo !== "" &&
+              <Image
+                style={styles.image}
+                source={{ uri: photo }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+            }
+
+            {
+              !photo &&
+              <View style={styles.imageContainer}>
+                <Text allowFontScaling={false} style={styles.textAvatar}>{`${userData.firstName[0]}${userData.lastName[0]}`}</Text>
+              </View>
+            }
 
             {isLoading && (
               <View style={{
@@ -406,6 +430,22 @@ const styles = StyleSheet.create({
     borderColor: Theme.COLORS.colorSecondary,
     borderWidth: 1
   },
+  imageContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 100,
+    backgroundColor: Theme.COLORS.colorMain,
+    justifyContent: 'center',
+    alignContent: 'center',
+    borderColor: Theme.COLORS.colorSecondary,
+    borderWidth: 1
+  },
+  textAvatar: {
+    color: Theme.COLORS.colorSecondary,
+    fontFamily: 'Lato-Bold',
+    textAlign: 'center',
+    fontSize: Theme.SIZES.title
+  },
   containerImage: {
     position: 'relative',
     width: 80,
@@ -413,7 +453,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    bottom: 0,
+    bottom: -10,
     right: 0
   },
   layout: {
