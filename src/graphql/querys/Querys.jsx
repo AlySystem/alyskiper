@@ -236,6 +236,8 @@ export const CATEGORIESCOMMERCE = gql`
       id
       name
       url_img_category
+    	state
+    	url_img_category_temp
     }
   }
 `

@@ -44,11 +44,15 @@ const CommerceCategoriesScreen = props => {
 		)
 	}
 
-	const handleOnPress = (id) => {
-		if (id === 1) {
+	const handleOnPress = (index) => {
+		const item = data.categoriesCommerce[index]
+
+		if (item.state) {
 			return navigate('Commerce')
 		} else {
-			return navigate('NextCommerce')
+			return navigate('NextCommerce', {
+				image: item.url_img_category_temp
+			})
 		}
 	}
 
@@ -59,8 +63,8 @@ const CommerceCategoriesScreen = props => {
 				<ScrollView style={{ width: '100%' }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='always'>
 					{
 						data.categoriesCommerce.map(
-							category => (
-								<TouchableOpacity key={category.id} style={styles.category} onPress={() => handleOnPress(category.id)}>
+							(category, index) => (
+								<TouchableOpacity key={category.id} style={styles.category} onPress={() => handleOnPress(index)}>
 									<Image
 										progressiveRenderingEnabled={true}
 										resizeMode="cover"

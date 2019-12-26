@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     View,
     StyleSheet,
     ScrollView,
-    Text
+    Image,
+    ActivityIndicator
 } from 'react-native'
 
 // Import components
@@ -16,6 +17,7 @@ import ListOfSwiper from '../../containers/ListOfSwiper'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+import { RFValue } from 'react-native-responsive-fontsize'
 
 const items = [
     {
@@ -36,38 +38,48 @@ const items = [
     }
 ]
 
-const NextCommerceScreen = props => {
+const NextCommerceScreen = (navigation) => {
+    const [loading, setLoading] = useState(true)
+
     return (
         <Background>
-            <View style={styles.screen}>
-                <View style={styles.card}>
-                    <ListOfSwiper />
-                </View>
-                <View style={styles.container}>
-                    <Title
-                        title='Promociones'
-                        styles={styles.title}
-                    />
-                    <ScrollView horizontal keyboardShouldPersistTaps='always'>
-                        {items.map((item, index) => (
-                            <Promotion
-                                key={index}
-                                source={{ uri: item.img }}
-                            />
-                        ))}
-                    </ScrollView>
-                </View>
+            <ScrollView>
+                <View style={styles.screen}>
+                    <View style={styles.card}>
+                        <ListOfSwiper />
+                    </View>
+                    <View style={styles.container}>
+                        <Title
+                            title='Promociones'
+                            styles={styles.title}
+                        />
+                        <ScrollView horizontal keyboardShouldPersistTaps='always'>
+                            {items.map((item, index) => (
+                                <Promotion
+                                    key={index}
+                                    source={{ uri: item.img }}
+                                />
+                            ))}
+                        </ScrollView>
+                    </View>
 
-                <View style={{ marginVertical: 25, alignItems: 'center', paddingVertical: 10, backgroundColor: 'rgba(250, 250, 250, 0.1)' }}>
-                    <Text
-                        style={{
-                            color: '#FFF',
-                            fontSize: 44,
-                        }}>
-                        Proximamente
-                    </Text>
+                    <View style={{ marginVertical: 0, alignItems: 'center', paddingVertical: 10 }}>
+                        {
+                            loading &&
+                            <ActivityIndicator size="large" color="#FFF" />
+                        }
+
+                        <Image
+                            onLoadEnd={() => setLoading(false)}
+                            style={{
+                                resizeMode: 'contain',
+                                width: '100%',
+                                height: RFValue(300)
+                            }}
+                            source={{ uri: navigation.navigation.state.params.image }} />
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
         </Background>
     )
 }
