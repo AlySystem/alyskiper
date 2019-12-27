@@ -40,11 +40,7 @@ import Axios from 'axios'
 const { height } = Dimensions.get('window')
 
 const ProfileUserScreen = props => {
-  const userData = useSelector(state => {
-    console.log(state.user)
-
-    return state.user
-  })
+  const userData = useSelector(state => state.user)
   const dispatch = useDispatch()
   const [, setError] = useState(null)
   const [cityId, setCityId] = useState(userData.city_id)
@@ -98,7 +94,6 @@ const ProfileUserScreen = props => {
         Axios.post('https://upload-files-alysystem.herokuapp.com/uploads/file', imgBody)
           .then(
             ({ data: urlResponse }) => {
-              console.log(urlResponse)
               setPhoto(urlResponse)
               setIsLoading(false)
             }

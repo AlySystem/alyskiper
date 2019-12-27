@@ -47,10 +47,7 @@ const TravelTracingScreen = props => {
   const [errorTravel, setErrorTravel] = useState(false);
   const [driver, setDriver] = useState();
   const [idTravel] = useState(props.navigation.getParam("idTravel"));
-  const [
-    TravelTracing,
-    { loading: loadingTracing, data: dataTravel, error: errorTravelMutation }
-  ] = useMutation(TRAVELTRACING);
+  const [TravelTracing, { loading: loadingTracing, data: dataTravel, error: errorTravelMutation }] = useMutation(TRAVELTRACING);
   const [GetTravelByUserId, { data, loading }] = useLazyQuery(
     GETTRAVELBYUSERID,
     {
@@ -63,8 +60,8 @@ const TravelTracingScreen = props => {
   useNotification(navigate, location.latitude, location.longitude);
 
   const pubnub = new PubNubReact({
-    publishKey: "pub-c-bd68b062-738a-44e5-91a1-cfdab437d40f",
-    subscribeKey: "sub-c-41661912-108b-11ea-9132-cacb72695e2d",
+    publishKey: "pub-c-8d32c173-3d6f-4e37-8ebb-fcdec30b11df",
+    subscribeKey: "sub-c-a79fe382-282a-11ea-9e12-76e5f2bf83fc",
     subscribeRequestTimeout: 60000,
     presenceTimeout: 122,
     uuid: `${firstName}${userId}`

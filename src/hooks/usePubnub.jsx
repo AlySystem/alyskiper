@@ -13,26 +13,37 @@ export const usePubnub = () => {
   const { firstName } = useSelector(state => state.user)
   const [drivers, setDrivers] = useState({})
   const pubnub = new PubNubReact({
-    publishKey: 'pub-c-bd68b062-738a-44e5-91a1-cfdab437d40f',
-    subscribeKey: 'sub-c-41661912-108b-11ea-9132-cacb72695e2d',
+    publishKey: 'pub-c-8d32c173-3d6f-4e37-8ebb-fcdec30b11df',
+    subscribeKey: 'sub-c-a79fe382-282a-11ea-9e12-76e5f2bf83fc',
+    // publishKey: 'pub-c-bd68b062-738a-44e5-91a1-cfdab437d40f',
+    // subscribeKey: 'sub-c-41661912-108b-11ea-9132-cacb72695e2d',
     subscribeRequestTimeout: 60000,
     presenceTimeout: 122,
     uuid: firstName
   })
 
+  const allChanels = [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`]
+
   useEffect(() => {
     pubnub.subscribe({
-      channels: [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`],
+      channels: allChanels,
       withPresence: true
     })
 
-    pubnub.hereNow({
-      includeUUIDs: true,
-      includeState: true,
-      channels: [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`]
-    },
+    // console.log(pubnub)
+    // pubnub.getMessage(keys.channels.drivers.silver, (msg) => {
+    //   console.log(msg);
+    // })
 
-    function (status, response) {
+    // pubnub.addListener({
+    //   status: function (statusEvent) {
+    //     console.log(statusEvent)
+    //   },
+    // })
+
+    pubnub.hereNow({ includeUUIDs: true, includeState: true, channels: allChanels }, (status, response) => {
+      // console.log(status)
+
       let silver, golden, vip, president
 
       if (response !== undefined) {
@@ -66,7 +77,6 @@ export const usePubnub = () => {
 
         setDrivers({ silver, golden, vip, president })
 
-        console.log(silver, golden, vip, president)
         dispatch({
           type: DRIVERS,
           payload: {
@@ -76,30 +86,13 @@ export const usePubnub = () => {
             president
           }
         })
-        // console.log('SILVER', silver)
-        // console.log('GOLDEN', golden)
-        // console.log('VIP', vip)
-        // console.log('PRESIDENT', president)
       }
+
+      // pubnub.unsubscribe({
+      //   channels: [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`]
+      // })
     })
 
-    pubnub.addListener({
-      status: function (statusEvent) {
-
-      },
-      message: function (message) {
-
-      },
-      presence: function (presenceEvent) {
-        // console.log(presenceEvent)
-      }
-    })
-
-    // return () => {
-    //   pubnub.unsubscribe({
-    //     channels: [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`]
-    //   })
-    // }
   }, [drivers])
 
   return { silver: drivers.silver, golden: drivers.golden, vip: drivers.vip, president: drivers.president }
