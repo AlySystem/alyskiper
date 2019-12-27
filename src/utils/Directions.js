@@ -3,6 +3,7 @@ import PolyLine from '@mapbox/polyline'
 import { keys } from '../utils/keys'
 
 export const routeDirection = async (placeId, latitude, longitude) => {
+  console.log(placeId, latitude, longitude)
   try {
     const apiUrl = `${keys.googleMaps.directions}json?origin=${latitude}, ${longitude}&destination=place_id:${placeId}&key=${keys.googleMaps.apiKey}`
     const response = await fetch(apiUrl)

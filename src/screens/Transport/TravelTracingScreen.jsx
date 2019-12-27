@@ -60,8 +60,8 @@ const TravelTracingScreen = props => {
   useNotification(navigate, location.latitude, location.longitude);
 
   const pubnub = new PubNubReact({
-    publishKey: "pub-c-8d32c173-3d6f-4e37-8ebb-fcdec30b11df",
-    subscribeKey: "sub-c-a79fe382-282a-11ea-9e12-76e5f2bf83fc",
+    publishKey: 'pub-c-2ed1b9dc-e811-411f-99f5-01a3addeda39',
+    subscribeKey: 'sub-c-8a28b1d0-28d4-11ea-894a-b6462cb07a90',
     subscribeRequestTimeout: 60000,
     presenceTimeout: 122,
     uuid: `${firstName}${userId}`

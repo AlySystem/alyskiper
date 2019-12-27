@@ -61,7 +61,7 @@ const TransportScreen = props => {
   const { navigate } = props.navigation
   const { location, loading } = useWatchLocation()
   // useNotification(navigate, location.latitude, location.longitude, props.navigation)
-  const { firstName, city_id } = useSelector(state => state.user)
+  const { firstName } = useSelector(state => state.user)
   const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)
   const [destination, setDestination] = useState(null)
@@ -77,31 +77,6 @@ const TransportScreen = props => {
   const markerPresident = useRef(null)
 
   const mapView = useRef(null)
-
-  // Revision de aca, del porque no puede solicitar driver cuando
-  // no tiene una ciudad
-  useEffect(
-    () => {
-      // Esto es cuando el usuario no hay una ciudad
-      if (city_id === null || city_id === undefined) {
-        Alert.alert(
-          'ADVERTENCIA',
-          'Para usar nuestros servicios complete su perfil.',
-          [
-            {
-              text: 'Cancel',
-              onPress: () => navigate('Home'),
-              style: 'cancel'
-            },
-            { text: 'OK', onPress: () => navigate('ProfileUser') }
-          ],
-          { cancelable: false }
-        )
-      }
-    },
-    [city_id]
-  )
-
   // Funcion que destruye el viaje marcado en cache
   const destroyMarkedTravel = () => {
     setDestination(null)
@@ -109,6 +84,10 @@ const TransportScreen = props => {
     dispatch({
       type: REMOVEDIRECTION
     })
+
+    props.navigation.pop()
+
+    return true
   }
 
   // Cuando vamos retrosedemos en la pantalla
@@ -120,44 +99,46 @@ const TransportScreen = props => {
     setIsLoading(true)
 
     // Obtenemos la direccion Actual del usuario
-    const { latitude, longitude } = location
-    const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
+    if (location.latitude) {
+      const { latitude, longitude } = location
 
-    if (pointCoords === null || steps === null) {
-      Alert.alert(
-        'Atencion',
-        'La conexion ha fallado',
-        [
-          {
-            text: 'Ok',
-            style: 'default',
-            onPress: () => { }
-          },
-          {
-            text: 'Reintentar',
-            style: 'default',
-            onPress: () => handleDirecctions(placeId, details)
+      const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
+      if (pointCoords === null || steps === null) {
+        Alert.alert(
+          'Atencion',
+          'La conexion ha fallado',
+          [
+            {
+              text: 'Ok',
+              style: 'default',
+              onPress: () => { }
+            },
+            {
+              text: 'Reintentar',
+              style: 'default',
+              onPress: () => handleDirecctions(placeId, details)
+            }
+          ]
+        )
+      } else {
+        setIsLoading(false)
+        setDestination(pointCoords)
+        setDetails(details)
+        dispatch({
+          type: DIRECTION,
+          payload: {
+            steps
           }
-        ]
-      )
-    } else {
-      setIsLoading(false)
-      setDestination(pointCoords)
-      setDetails(details)
-      dispatch({
-        type: DIRECTION,
-        payload: {
-          steps
-        }
-      })
-      mapView.current.fitToCoordinates(pointCoords, {
-        edgePadding: {
-          right: getPixelSize(50),
-          left: getPixelSize(50),
-          top: getPixelSize(50),
-          bottom: getPixelSize(250)
-        }
-      })
+        })
+        mapView.current.fitToCoordinates(pointCoords, {
+          edgePadding: {
+            right: getPixelSize(50),
+            left: getPixelSize(50),
+            top: getPixelSize(50),
+            bottom: getPixelSize(250)
+          }
+        })
+      }
     }
   }
 
@@ -380,7 +361,7 @@ const TransportScreen = props => {
 
       {
         // Renderizamos barra de busqueda
-        city_id &&
+        !destination &&
         <TouchableOpacity onPress={() => setIsVisible(!isVisible)} style={styles.containerInput}>
           <View pointerEvents='none'>
             <InputControl
