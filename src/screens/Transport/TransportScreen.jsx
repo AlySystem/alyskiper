@@ -78,12 +78,14 @@ const TransportScreen = props => {
 
   const mapView = useRef(null)
   // Funcion que destruye el viaje marcado en cache
-  const destroyMarkedTravel = () => {
+  const destroyMarkedTravel = async () => {
     setDestination(null)
 
-    dispatch({
+    await dispatch({
       type: REMOVEDIRECTION
     })
+
+    console.log('pop')
 
     props.navigation.pop()
 
