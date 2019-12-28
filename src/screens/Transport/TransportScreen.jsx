@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { Polyline, Marker } from 'react-native-maps'
+import Geolocation from 'react-native-geolocation-service'
 
 // Import actions
 import { REMOVEDIRECTION, DIRECTION } from '../../store/actionTypes'
@@ -58,9 +59,7 @@ const ModalLoader = () => {
 
 const TransportScreen = props => {
   const dispatch = useDispatch()
-  const { navigate } = props.navigation
-  const { location, loading } = useWatchLocation()
-  // useNotification(navigate, location.latitude, location.longitude, props.navigation)
+  const { location } = useWatchLocation()
   const { firstName } = useSelector(state => state.user)
   const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)
@@ -97,51 +96,53 @@ const TransportScreen = props => {
   BackHandler.addEventListener('hardwareBackPress', destroyMarkedTravel)
 
 
-  const handleDirecctions = async (placeId, details) => {
+  const handleDirecctions = (placeId, details) => {
     setIsLoading(true)
 
-    // Obtenemos la direccion Actual del usuario
-    if (location.latitude) {
-      const { latitude, longitude } = location
-
-      const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
-      if (pointCoords === null || steps === null) {
-        Alert.alert(
-          'Atencion',
-          'La conexion ha fallado',
-          [
-            {
-              text: 'Ok',
-              style: 'default',
-              onPress: () => { }
-            },
-            {
-              text: 'Reintentar',
-              style: 'default',
-              onPress: () => handleDirecctions(placeId, details)
+    Geolocation.getCurrentPosition(
+      async ({ coords: { latitude, longitude } }) => {
+        const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
+        if (pointCoords === null || steps === null) {
+          Alert.alert(
+            'Atencion',
+            'La conexion ha fallado',
+            [
+              {
+                text: 'Ok',
+                style: 'default',
+                onPress: () => { }
+              },
+              {
+                text: 'Reintentar',
+                style: 'default',
+                onPress: () => handleDirecctions(placeId, details)
+              }
+            ]
+          )
+        } else {
+          setIsLoading(false)
+          setDestination(pointCoords)
+          setDetails(details)
+          dispatch({
+            type: DIRECTION,
+            payload: {
+              steps
             }
-          ]
-        )
-      } else {
-        setIsLoading(false)
-        setDestination(pointCoords)
-        setDetails(details)
-        dispatch({
-          type: DIRECTION,
-          payload: {
-            steps
-          }
-        })
-        mapView.current.fitToCoordinates(pointCoords, {
-          edgePadding: {
-            right: getPixelSize(50),
-            left: getPixelSize(50),
-            top: getPixelSize(50),
-            bottom: getPixelSize(250)
-          }
-        })
-      }
-    }
+          })
+          mapView.current.fitToCoordinates(pointCoords, {
+            edgePadding: {
+              right: getPixelSize(50),
+              left: getPixelSize(50),
+              top: getPixelSize(50),
+              bottom: getPixelSize(250)
+            }
+          })
+        }
+      }, error => {
+        if (error) return <Error title='Error' description='Oh no, ocurrio un error al momento de obtener tu ubicacion, intente de nuevo o mas tarde.' />
+        setError(true)
+      }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 20 }
+    )
   }
 
   // Verificamos si hay un lugar marcado 
@@ -206,7 +207,7 @@ const TransportScreen = props => {
 
       {
         // Si ya cargo los datos, renderizamos el mapa
-        !loading &&
+        location.latitude &&
         <Map mapView={mapView} location={location}>
           {
             // Renderizamos todos los conductores silver

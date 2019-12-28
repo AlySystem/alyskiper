@@ -27,7 +27,7 @@ import IconFont from "react-native-vector-icons/FontAwesome5";
 
 // Import custom hooks
 import { useNotification } from "../../hooks/useNotification";
-import { useLocation } from "../../hooks/useLocation";
+import { useWatchLocation } from "../../hooks/useWatchLocation";
 
 // Import query
 import { GETTRAVELBYUSERID } from "../../graphql/querys/Querys";
@@ -42,7 +42,7 @@ const TravelTracingScreen = props => {
   const { navigate } = props.navigation;
   const { userId, firstName } = useSelector(state => state.user);
   const { id } = useSelector(state => state.status);
-  const { location } = useLocation();
+  const { location } = useWatchLocation();
   const [showDetails, setShowDetails] = useState(false);
   const [errorTravel, setErrorTravel] = useState(false);
   const [driver, setDriver] = useState();
