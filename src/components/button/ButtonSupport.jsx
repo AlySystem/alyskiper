@@ -12,7 +12,7 @@ import { RFValue } from 'react-native-responsive-fontsize'
 // Import image whatsapp
 import ImageWhatsapp from '../../../assets/images/img-support.png'
 
-const ButtonWhatsapp = ({ xIndex: zIndex = 100, bottom = 0 }) => {
+const ButtonWhatsapp = ({ xIndex: zIndex = 100, bottom = 0, right = 0 }) => {
     const [visible, setVisible] = useState(true)
 
     const Styles = StyleSheet.create({
@@ -22,7 +22,7 @@ const ButtonWhatsapp = ({ xIndex: zIndex = 100, bottom = 0 }) => {
             alignItems: 'center',
             justifyContent: 'center',
             bottom: bottom || 20,
-            right: 20,
+            right: right || 20,
             zIndex,
         },
         Texts: {
@@ -58,9 +58,9 @@ const ButtonWhatsapp = ({ xIndex: zIndex = 100, bottom = 0 }) => {
             {
                 visible &&
                 <TouchableOpacity onPress={OpenWhatsapp} style={Styles.ButtonContainer}>
-                    <Text style={Styles.Texts}>Soporte</Text>
-
                     <Image style={Styles.Image} source={ImageWhatsapp} />
+
+                    <Text style={Styles.Texts}>Soporte</Text>
                 </TouchableOpacity>
             }
         </>

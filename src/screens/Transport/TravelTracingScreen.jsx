@@ -228,7 +228,7 @@ const TravelTracingScreen = props => {
         </Map>
       )}
 
-      <ButtonSupport bottom='10' />
+      <ButtonSupport right='70%' bottom='18%' />
 
       <TouchableOpacity
         style={{
