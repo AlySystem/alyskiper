@@ -35,9 +35,6 @@ const RequestScreen = props => {
   const { travel } = useSelector(state => state.travel)
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
-  useSelector(state => {
-    console.log(state.drivers)
-  })
 
   const { silver, golden, vip, president } = useSelector(state => {
     // Verificamos si hay drivers
@@ -55,13 +52,14 @@ const RequestScreen = props => {
     }
   })
 
-  const [GenerateTravel] = useMutation(GENERATETRAVEL, {
+  const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL, {
     onError: ({ message }) => {
       // Cuando encontramos un error al ejecutar la mutation
       // Mostramos el mensaje y vamos hacia atras
+      console.log(message)
       showMessage({
         message: 'Error',
-        description: `${message}`,
+        description: 'No hay conductores cerca en tu zona., por favor selecciona otra de nuestras categorias.',
         backgroundColor: 'red',
         color: '#fff',
         icon: 'danger',
@@ -77,7 +75,6 @@ const RequestScreen = props => {
       props.navigation.pop()
     }
   })
-
   useNotification(navigate, latitude, longitude)
 
   const handleOnCancel = () => {

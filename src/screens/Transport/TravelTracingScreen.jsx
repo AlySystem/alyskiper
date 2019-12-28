@@ -24,6 +24,7 @@ import Button from "../../components/button/Button";
 import { Map } from "../../components/map/MapView";
 import Picture from "../../components/picture/Picture";
 import IconFont from "react-native-vector-icons/FontAwesome5";
+import ButtonSupport from '../../components/button/ButtonSupport'
 
 // Import custom hooks
 import { useNotification } from "../../hooks/useNotification";
@@ -35,7 +36,6 @@ import { TRAVELTRACING } from "../../graphql/mutations/Mutations";
 
 // Import theme
 import { Theme } from "../../constants/Theme";
-import { showMessage } from "react-native-flash-message";
 
 const TravelTracingScreen = props => {
   const dispatch = useDispatch();
@@ -227,6 +227,8 @@ const TravelTracingScreen = props => {
             })}
         </Map>
       )}
+
+      <ButtonSupport bottom='10' />
 
       <TouchableOpacity
         style={{
