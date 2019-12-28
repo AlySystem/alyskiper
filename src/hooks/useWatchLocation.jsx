@@ -6,7 +6,7 @@ import Error from '../screens/TemplateError/TemplateError'
 
 export const useWatchLocation = () => {
   let watchId
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [location, setLocation] = useState({
     latitude: null,
@@ -17,7 +17,6 @@ export const useWatchLocation = () => {
 
   useEffect(() => {
     const fetchLocation = async () => {
-      setLoading(true)
       watchId = Geolocation.watchPosition(
         ({ coords: { latitude, longitude } }) => {
           setLocation({
@@ -26,7 +25,6 @@ export const useWatchLocation = () => {
             latitudeDelta: 0.0143,
             longitudeDelta: 0.0134
           })
-          setLoading(false)
         }, error => {
           if (error) return <Error title='Error' description='Oh no, ocurrio un error al momento de obtener tu ubicacion, intente de nuevo o mas tarde.' />
           setError(true)
@@ -38,7 +36,7 @@ export const useWatchLocation = () => {
     return () => {
       Geolocation.clearWatch(watchId)
     }
-  }, [watchId])
+  }, [])
 
   return { error, loading, location }
 }

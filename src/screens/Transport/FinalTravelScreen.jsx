@@ -58,7 +58,6 @@ const FinalTravelScreen = props => {
               fontFamily: 'Lato-Regular'
             }
           })
-          console.log(drive)
           return navigate('BillTransport', { idTravel: drive.id, category: travel.categoryId })
         }
       })
@@ -77,7 +76,7 @@ const FinalTravelScreen = props => {
               fontFamily: 'Lato-Regular'
             }
           })
-          // return navigate('BillTransport')
+          return navigate('BillTransport')
         }
       })
   }
@@ -87,6 +86,14 @@ const FinalTravelScreen = props => {
       <View style={styles.screen}>
         <ScrollView keyboardShouldPersistTaps='always' contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.layout}>
+            <Text onPress={() => navigate('BillTransport', { idTravel: drive.id, category: travel.categoryId })} style={{
+              color: Theme.COLORS.colorSecondary,
+              fontFamily: 'Lato-Regular',
+              fontSize: Theme.SIZES.normal,
+              position: 'absolute',
+              top: 20,
+              right: 10
+            }}>Omitir</Text>
             <Text allowFontScaling={false} style={styles.title}>COMPLETADO</Text>
             <View style={{ marginVertical: 10 }} />
             <LazyImage
