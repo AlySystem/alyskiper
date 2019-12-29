@@ -84,10 +84,11 @@ const ResetScreen = props => {
 
         if (result.data.changePasswordByEmail === 1) {
           showMessage({
-            message: 'AlySkiper',
-            description: 'Su contraseña fue actualizada correctamente.',
+            message: 'VERIFICACION DE CUENTA',
+            description: 'Hemos enviado un correo para confirmar su cambio de contraseña.',
             backgroundColor: 'green',
             color: '#fff',
+            duration: 8000,
             icon: 'success',
             titleStyle: {
               fontFamily: 'Lato-Bold'
