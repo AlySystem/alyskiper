@@ -36,12 +36,6 @@ const ListOfCommerce = props => {
         alignItems: 'center'
       }}
       >
-        <Text style={{
-          color: Theme.COLORS.colorParagraph,
-          fontFamily: 'Lato-Regular'
-        }}
-        >SERVER INTERNAL ERROR
-        </Text>
       </View>
     )
   }
