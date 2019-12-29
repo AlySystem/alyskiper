@@ -59,7 +59,7 @@ const RequestScreen = props => {
       console.log(message)
       showMessage({
         message: 'Error',
-        description: 'No hay conductores cerca en tu zona., por favor selecciona otra de nuestras categorias.',
+        description: 'No hay conductores cerca en tu zona, por favor selecciona otra de nuestras categorias.',
         backgroundColor: 'red',
         color: '#fff',
         icon: 'danger',
@@ -150,7 +150,7 @@ const RequestScreen = props => {
         break
     }
 
-    if (driverNearby !== null) {
+    if (driverNearby !== null && driverNearby !== undefined) {
       // Si hay driver cerca, generamos el el viaje
 
       PublicIp().then(

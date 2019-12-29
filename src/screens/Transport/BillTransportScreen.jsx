@@ -26,21 +26,16 @@ const BillTransportScreen = props => {
   const { navigate } = props.navigation
   const idTravel = props.navigation.getParam('idTravel')
   const category = props.navigation.getParam('category')
-  // const [category] = useState(props.category)
   useSelector(x => console.log(x))
   const dispatch = useDispatch()
+
+  console.log(idTravel, category)
 
   const { loading, error, data } = useQuery(INVOICE, {
     variables: {
       idservice: idTravel
     }
   })
-
-  useEffect(
-    () => {
-      console.log(data)
-    }, [data]
-  )
 
   if (error) {
     showMessage({
