@@ -83,7 +83,6 @@ const TransportScreen = props => {
   // destruimos el viaje en cache
   BackHandler.addEventListener('hardwareBackPress', destroyMarkedTravel)
 
-
   const handleDirecctions = (placeId, details) => {
     setIsLoading(true)
 

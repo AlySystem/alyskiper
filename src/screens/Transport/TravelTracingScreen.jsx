@@ -11,6 +11,7 @@ import { Marker } from "react-native-maps";
 import { useLazyQuery, useMutation } from "@apollo/react-hooks";
 import { useSelector, useDispatch } from "react-redux";
 import PubNubReact from "pubnub-react";
+import { showMessage } from 'react-native-flash-message'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 // Import actions
@@ -156,8 +157,8 @@ const TravelTracingScreen = props => {
       {
         text: "Si, Cancelar",
         style: "default",
-        onPress: async () => {
-          await TravelTracing({
+        onPress: () => {
+          TravelTracing({
             variables: {
               input: {
                 idtravel: idTravel || data.getTravelByUserId.id,
@@ -166,9 +167,26 @@ const TravelTracingScreen = props => {
                 lng: location.longitude
               }
             }
-          });
-
-          return navigate("Home");
+          })
+            .then(result => {
+              return navigate("Home");
+            })
+            .catch(error => {
+              showMessage({
+                message: 'Opss',
+                description: 'Ocurrio un error, intente de nuevo o mas tarde.',
+                backgroundColor: 'red',
+                color: '#fff',
+                icon: 'danger',
+                duration: 4000,
+                titleStyle: {
+                  fontFamily: 'Lato-Bold'
+                },
+                textStyle: {
+                  fontFamily: 'Lato-Regular'
+                }
+              })
+            })
         }
       }
     ]);
