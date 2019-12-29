@@ -150,6 +150,8 @@ const RequestScreen = props => {
         break
     }
 
+    console.log(driverNearby)
+
     if (driverNearby !== null && driverNearby !== undefined) {
       // Si hay driver cerca, generamos el el viaje
 

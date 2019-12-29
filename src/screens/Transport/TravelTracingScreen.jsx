@@ -210,7 +210,7 @@ const TravelTracingScreen = props => {
           {driver &&
             driver.map(drive => {
               return (
-                <Marker.Animated
+                <Marker
                   ref={marker}
                   key={`${drive.uuid}${drive.state.lastname}`}
                   coordinate={{
@@ -222,7 +222,7 @@ const TravelTracingScreen = props => {
                     style={styles.drive}
                     source={require("../../../assets/images/img-icon-silver.png")}
                   />
-                </Marker.Animated>
+                </Marker>
               );
             })}
         </Map>
