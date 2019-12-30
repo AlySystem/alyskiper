@@ -47,7 +47,7 @@ const TravelTracingScreen = props => {
   const [errorTravel, setErrorTravel] = useState(false);
   const [driver, setDriver] = useState();
   const [idTravel] = useState(props.navigation.getParam("idTravel"));
-  const [TravelTracing, { loading: loadingTracing, data: dataTravel, error: errorTravelMutation }] = useMutation(TRAVELTRACING);
+  const [TravelTracing] = useMutation(TRAVELTRACING);
   const [GetTravelByUserId, { data, loading }] = useLazyQuery(
     GETTRAVELBYUSERID,
     {
@@ -157,8 +157,10 @@ const TravelTracingScreen = props => {
         text: "Si, Cancelar",
         style: "default",
         onPress: async () => {
-          await TravelTracing({
-            variables: {
+          console.log(location)
+
+          if (location.latitude) {
+            const variables = {
               input: {
                 idtravel: idTravel || data.getTravelByUserId.id,
                 idtravelstatus: "CANCELADO",
@@ -166,9 +168,24 @@ const TravelTracingScreen = props => {
                 lng: location.longitude
               }
             }
-          });
 
-          return navigate("Home");
+            await TravelTracing({ variables })
+
+            return navigate("Home");
+          } else {
+            Alert.alert(
+              'Error al obtener locacion',
+              'Intente de nuevo',
+              [
+                {
+                  text: 'Ok',
+                  style: 'default',
+                  onPress: () => { }
+                }
+              ]
+            )
+          }
+
         }
       }
     ]);

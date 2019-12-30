@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -26,20 +26,26 @@ const BillTransportScreen = props => {
   const { navigate } = props.navigation
   const idTravel = props.navigation.getParam('idTravel')
   const category = props.navigation.getParam('category')
+  const [data, setData] = useState(null)
   useSelector(x => console.log(x))
   const dispatch = useDispatch()
 
   console.log(idTravel, category)
 
-  const { loading, error, data } = useQuery(INVOICE, {
+  const { loading, error } = useQuery(INVOICE, {
     variables: {
       idservice: idTravel
+    },
+    onCompleted: (data) => {
+      console.log(data)
+
+      setData(data)
     }
   })
 
   if (error) {
     showMessage({
-      message: 'Error',
+      message: 'Alyskiper',
       description: 'Oh no, ocurrio un error. No hemos podido mostrar la factura',
       backgroundColor: 'red',
       color: '#fff',
@@ -96,55 +102,59 @@ const BillTransportScreen = props => {
   return (
     <Background>
       <View style={styles.screen}>
-        <View style={styles.layout}>
-          <View style={styles.container}>
-            <View style={styles.itemAlt}>
-              <Text allowFontScaling={false} style={styles.text}>DURACION</Text>
-              <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.duration}</Text>
+        {
+          data &&
+          <View style={styles.layout}>
+            <View style={styles.container}>
+              <View style={styles.itemAlt}>
+                <Text allowFontScaling={false} style={styles.text}>DURACION</Text>
+                <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.duration}</Text>
+              </View>
+              <View style={styles.item}>
+                <Text allowFontScaling={false} style={styles.text}>DISTANCIA</Text>
+                <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.distance}</Text>
+              </View>
             </View>
-            <View style={styles.item}>
-              <Text allowFontScaling={false} style={styles.text}>DISTANCIA</Text>
-              <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.distance}</Text>
+
+            <View style={styles.containerAddress}>
+              <Text allowFontScaling={false} style={styles.text}>ORIGEN</Text>
+              <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_initial}</Text>
+            </View>
+
+            <View style={styles.containerAddress}>
+              <Text allowFontScaling={false} style={styles.text}>DESTINO</Text>
+              <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_final}</Text>
+            </View>
+
+            <View style={styles.container}>
+              <Text allowFontScaling={false} style={styles.text}>CATEGORIA</Text>
+              {/* <Text allowFontScaling={false} style={styles.textCategory}>{category.toUpperCase()}</Text> */}
+              <Text allowFontScaling={false} style={styles.textCategory}>
+                {
+                  category === 1 && 'SILVER'
+                }
+
+                {
+                  category === 2 && 'GOLDEN'
+                }
+
+                {
+                  category === 3 && 'VIP'
+                }
+
+                {
+                  category === 4 && 'PRESIDENT'
+                }
+              </Text>
+            </View>
+
+            <View style={styles.container}>
+              <Text allowFontScaling={false} style={styles.text}>TOTAL</Text>
+              <Text allowFontScaling={false} style={styles.textValue}>{data.getInvoinceByIdservice.anyservice.total}</Text>
             </View>
           </View>
+        }
 
-          <View style={styles.containerAddress}>
-            <Text allowFontScaling={false} style={styles.text}>ORIGEN</Text>
-            <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_initial}</Text>
-          </View>
-
-          <View style={styles.containerAddress}>
-            <Text allowFontScaling={false} style={styles.text}>DESTINO</Text>
-            <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_final}</Text>
-          </View>
-
-          <View style={styles.container}>
-            <Text allowFontScaling={false} style={styles.text}>CATEGORIA</Text>
-            {/* <Text allowFontScaling={false} style={styles.textCategory}>{category.toUpperCase()}</Text> */}
-            <Text allowFontScaling={false} style={styles.textCategory}>
-              {
-                category === 1 && 'SILVER'
-              }
-
-              {
-                category === 2 && 'GOLDEN'
-              }
-
-              {
-                category === 3 && 'VIP'
-              }
-
-              {
-                category === 4 && 'PRESIDENT'
-              }
-            </Text>
-          </View>
-
-          <View style={styles.container}>
-            <Text allowFontScaling={false} style={styles.text}>TOTAL</Text>
-            <Text allowFontScaling={false} style={styles.textValue}>{data.getInvoinceByIdservice.anyservice.total}</Text>
-          </View>
-        </View>
         <View style={{
           width: '100%',
           alignItems: 'center'

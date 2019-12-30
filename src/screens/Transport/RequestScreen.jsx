@@ -30,7 +30,7 @@ import { Theme } from '../../constants/Theme'
 
 const RequestScreen = props => {
   const dispatch = useDispatch()
-  const { goBack, navigate } = props.navigation
+  const { navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
   const { travel } = useSelector(state => state.travel)
   const { steps } = useSelector(state => state.direction)
@@ -52,15 +52,14 @@ const RequestScreen = props => {
     }
   })
 
-  const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL, {
+  const [GenerateTravel] = useMutation(GENERATETRAVEL, {
     onError: ({ message }) => {
       // Cuando encontramos un error al ejecutar la mutation
       // Mostramos el mensaje y vamos hacia atras
-      console.log(message)
       showMessage({
-        message: 'Error',
+        message: 'Mensaje de Skiper',
         description: 'No hay conductores cerca en tu zona, por favor selecciona otra de nuestras categorias.',
-        backgroundColor: 'red',
+        backgroundColor: '#7f8c8d',
         color: '#fff',
         icon: 'danger',
         duration: 8000,
@@ -179,9 +178,9 @@ const RequestScreen = props => {
     } else {
       // Mostramos un mensaje de error 
       showMessage({
-        message: 'Error',
+        message: 'Skiper',
         description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
-        backgroundColor: '#e67e22',
+        backgroundColor: '#7f8c8d',
         color: '#fff',
         icon: 'danger',
         duration: 8000,
