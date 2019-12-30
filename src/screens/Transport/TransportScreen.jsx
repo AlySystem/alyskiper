@@ -27,7 +27,6 @@ import InputControl from '../../components/input/InputControl'
 import ModalTransport from '../../components/modal/ModalTransport'
 import Button from '../../components/button/Button'
 import Loader from '../../components/loader/Loader'
-// import AnimatedPolyline from '../../components/polyline/AnimtedPolyline'
 
 // Import image
 import silverMarker from '../../../assets/images/img-icon-silver.png'
@@ -44,7 +43,6 @@ import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
 // Import utils
 import { getPixelSize } from '../../utils/Pixel'
 import { routeDirection } from '../../utils/Directions'
-// import { useNotification } from '../../hooks/useNotification'
 import Picture from '../../components/picture/Picture'
 
 const { height, width } = Dimensions.get('window')
@@ -68,13 +66,6 @@ const TransportScreen = props => {
   const { silver, golden, vip, president } = usePubnub()
   const [, setDetails] = useState('')
 
-  // En estos marcadores crearemos un arreglo de referencias
-  // Esto es debido a que se ocupa la misma referencia para muchos marcadores
-  const markerSilver = useRef(null)
-  const markerGolden = useRef(null)
-  const markerVip = useRef(null)
-  const markerPresident = useRef(null)
-
   const mapView = useRef(null)
   // Funcion que destruye el viaje marcado en cache
   const destroyMarkedTravel = async () => {
@@ -83,9 +74,6 @@ const TransportScreen = props => {
     await dispatch({
       type: REMOVEDIRECTION
     })
-
-    console.log('pop')
-
     props.navigation.pop()
 
     return true
@@ -94,7 +82,6 @@ const TransportScreen = props => {
   // Cuando vamos retrosedemos en la pantalla
   // destruimos el viaje en cache
   BackHandler.addEventListener('hardwareBackPress', destroyMarkedTravel)
-
 
   const handleDirecctions = (placeId, details) => {
     setIsLoading(true)
@@ -155,52 +142,6 @@ const TransportScreen = props => {
     }
   }, [directions])
 
-  useEffect(() => {
-    if (silver) {
-      if (markerSilver.current !== null) {
-        silver.map(drive => {
-          markerSilver.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
-          // const doAnimation = drive => {
-          // }
-          // doAnimation(drive)
-        })
-      }
-    }
-
-    if (golden) {
-      if (markerGolden.current !== null) {
-        golden.map(drive => {
-          markerGolden.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
-          // const doAnimation = drive => {
-          // }
-          // doAnimation(drive)
-        })
-      }
-    }
-
-    if (vip) {
-      if (markerVip.current !== null) {
-        vip.map(drive => {
-          markerVip.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
-          // const doAnimation = drive => {
-          // }
-          // doAnimation(drive)
-        })
-      }
-    }
-
-    if (president) {
-      if (markerPresident.current !== null) {
-        president.map(drive => {
-          markerPresident.current._component.animateMarkerToCoordinate({ latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 500)
-          // const doAnimation = drive => {
-          // }
-          // doAnimation(drive)
-        })
-      }
-    }
-  }, [silver, golden, vip, president])
-
   return (
     <View style={styles.screen}>
       <ModalTransport navigation={props.navigation} isVisible={isVisible} setIsVisible={setIsVisible} location={location} />
@@ -214,7 +155,7 @@ const TransportScreen = props => {
             silver &&
             silver.map(
               (drive, index) => (
-                <Marker.Animated
+                <Marker
                   key={index}
                   coordinate={{
                     latitude: drive.state.coords.latitude,
@@ -232,7 +173,7 @@ const TransportScreen = props => {
                     }}
                     source={silverMarker}
                   />
-                </Marker.Animated>
+                </Marker>
               )
             )
           }
@@ -242,7 +183,7 @@ const TransportScreen = props => {
             golden &&
             golden.map(
               (drive, index) => (
-                <Marker.Animated
+                <Marker
                   style={styles.marker}
                   key={index}
                   coordinate={{
@@ -261,7 +202,7 @@ const TransportScreen = props => {
                     }}
                     source={goldenMarker}
                   />
-                </Marker.Animated>
+                </Marker>
               ))
           }
 
@@ -270,7 +211,7 @@ const TransportScreen = props => {
             vip &&
             vip.map(
               drive => (
-                <Marker.Animated
+                <Marker
                   style={styles.marker}
                   key={drive.uuid}
                   coordinate={{
@@ -289,7 +230,7 @@ const TransportScreen = props => {
                     }}
                     source={vipMarker}
                   />
-                </Marker.Animated>
+                </Marker>
               )
             )
           }
@@ -299,7 +240,7 @@ const TransportScreen = props => {
             president && (
               president.map(
                 (drive, index) => (
-                  <Marker.Animated
+                  <Marker
                     style={styles.marker}
                     key={index}
                     coordinate={{
@@ -318,7 +259,7 @@ const TransportScreen = props => {
                       }}
                       source={presidentMarker}
                     />
-                  </Marker.Animated>
+                  </Marker>
                 )
               )
             )
