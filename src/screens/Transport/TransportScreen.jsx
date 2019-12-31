@@ -65,8 +65,6 @@ const TransportScreen = props => {
   const [isLoading, setIsLoading] = useState(false)
   const { silver, golden, vip, president } = usePubnub()
 
-  const [, setDetails] = useState('')
-
   const mapView = useRef(null)
   // Funcion que destruye el viaje marcado en cache
   const destroyMarkedTravel = async () => {
@@ -117,7 +115,6 @@ const TransportScreen = props => {
         } else {
           setIsLoading(false)
           setDestination(pointCoords)
-          setDetails(details)
           dispatch({
             type: DIRECTION,
             payload: {

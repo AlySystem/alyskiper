@@ -10,6 +10,7 @@ import { showMessage } from 'react-native-flash-message'
 import { CameraKitCameraScreen } from 'react-native-camera-kit'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
+import Geolocation from 'react-native-geolocation-service'
 
 // Import utils
 import { permissionCamera } from '../../utils/PermissionCamera'
@@ -29,8 +30,6 @@ import { Theme } from '../../constants/Theme'
 const ScannerScreen = props => {
   const { navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
-  const latitude = props.navigation.getParam('latitude')
-  const longitude = props.navigation.getParam('longitude')
   const [manualQR, setManualQR] = useState(false)
   const [codeQR, setCodeQR] = useState('')
   const [TravelTracing, { loading }] = useMutation(TRAVELTRACING)
@@ -40,24 +39,6 @@ const ScannerScreen = props => {
     }
     verifyPermission()
   }, [])
-
-  // if (error) {
-  //   console.log(error)
-  //   showMessage({
-  //     message: 'AlySkiper',
-  //     description: 'Ya se ha confirmado el viaje, no necesita volver a ingresar el codigo de confirmacion.',
-  //     backgroundColor: 'green',
-  //     color: '#fff',
-  //     duration: 8000,
-  //     icon: 'success',
-  //     titleStyle: {
-  //       fontFamily: 'Lato-Bold'
-  //     },
-  //     textStyle: {
-  //       fontFamily: 'Lato-Regular'
-  //     }
-  //   })
-  // }
 
   const handleOnReadyCode = async event => {
     Vibration.vibrate(1000)
@@ -83,45 +64,51 @@ const ScannerScreen = props => {
       return
     }
 
-    TravelTracing({ variables: { input: { idtravel: idTravel, idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
-      .then(result => {
-        const { data } = result
-        const id = data.registerTravelsTracing.id
-        if (id !== null || id !== undefined) {
-          showMessage({
-            message: 'AlySkiper',
-            description: 'El codigo se ha verificado correctamente.',
-            backgroundColor: 'green',
-            color: '#fff',
-            icon: 'success',
-            duration: 8000,
-            titleStyle: {
-              fontFamily: 'Lato-Bold'
-            },
-            textStyle: {
-              fontFamily: 'Lato-Regular'
+    Geolocation.getCurrentPosition(
+      async ({ coords: { latitude, longitude } }) => {
+        TravelTracing({ variables: { input: { idtravel: idTravel, idtravelstatus: 'CONFIRMADO', lat: latitude, lng: longitude } } })
+          .then(result => {
+            const { data } = result
+            const id = data.registerTravelsTracing.id
+            if (id !== null || id !== undefined) {
+              showMessage({
+                message: 'AlySkiper',
+                description: 'El codigo se ha verificado correctamente.',
+                backgroundColor: 'green',
+                color: '#fff',
+                icon: 'success',
+                duration: 8000,
+                titleStyle: {
+                  fontFamily: 'Lato-Bold'
+                },
+                textStyle: {
+                  fontFamily: 'Lato-Regular'
+                }
+              })
+              return navigate('TravelTrancing')
             }
           })
-          navigate('TravelTrancing')
-        }
-      })
-      .catch(error => {
-        if (error) {
-          showMessage({
-            message: 'Error',
-            description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
-            backgroundColor: 'red',
-            color: '#fff',
-            icon: 'danger',
-            titleStyle: {
-              fontFamily: 'Lato-Bold'
-            },
-            textStyle: {
-              fontFamily: 'Lato-Regular'
+          .catch(error => {
+            if (error) {
+              showMessage({
+                message: 'Error',
+                description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
+                backgroundColor: 'red',
+                color: '#fff',
+                icon: 'danger',
+                titleStyle: {
+                  fontFamily: 'Lato-Bold'
+                },
+                textStyle: {
+                  fontFamily: 'Lato-Regular'
+                }
+              })
             }
           })
-        }
-      })
+      }, error => {
+        if (error) return <Error title='Error' description='Oh no, ocurrio un error al momento de obtener tu ubicacion, intente de nuevo o mas tarde.' />
+      }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 20 }
+    )
   }
 
   const handleOnSubmit = async () => {
@@ -147,54 +134,69 @@ const ScannerScreen = props => {
       return
     }
 
-    TravelTracing({
-      variables: {
-        input: {
-          idtravel: idTravel,
-          idtravelstatus: 'CONFIRMADO',
-          lat: latitude,
-          lng: longitude
-        }
-      }
-    })
-      .then(result => {
-        const { data } = result
-        const id = data.registerTravelsTracing.id
-        if (id !== null || id !== undefined) {
-          showMessage({
-            message: 'AlySkiper',
-            description: 'El codigo se ha verificado correctamente.',
-            backgroundColor: 'green',
-            color: '#fff',
-            icon: 'success',
-            duration: 8000,
-            titleStyle: {
-              fontFamily: 'Lato-Bold'
-            },
-            textStyle: {
-              fontFamily: 'Lato-Regular'
+    Geolocation.getCurrentPosition(
+      async ({ coords: { latitude, longitude } }) => {
+        console.log({
+          input: {
+            idtravel: idTravel,
+            idtravelstatus: 'CONFIRMADO',
+            lat: latitude,
+            lng: longitude
+          }
+        })
+        TravelTracing({
+          variables: {
+            input: {
+              idtravel: idTravel,
+              idtravelstatus: 'CONFIRMADO',
+              lat: latitude,
+              lng: longitude
+            }
+          }
+        })
+          .then(result => {
+            const { data } = result
+            const id = data.registerTravelsTracing.id
+            if (id !== null || id !== undefined) {
+              showMessage({
+                message: 'AlySkiper',
+                description: 'El codigo se ha verificado correctamente.',
+                backgroundColor: 'green',
+                color: '#fff',
+                icon: 'success',
+                duration: 8000,
+                titleStyle: {
+                  fontFamily: 'Lato-Bold'
+                },
+                textStyle: {
+                  fontFamily: 'Lato-Regular'
+                }
+              })
+              return navigate('TravelTrancing')
             }
           })
-          return navigate('TravelTrancing')
-        }
-      })
-      .catch(error => {
-        if (error) {
-          showMessage({
-            message: 'Error',
-            description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
-            backgroundColor: 'red',
-            color: '#fff',
-            icon: 'danger',
-            titleStyle: {
-              fontFamily: 'Lato-Bold'
-            },
-            textStyle: {
-              fontFamily: 'Lato-Regular'
+          .catch(error => {
+            if (error) {
+              console.log(error)
+              showMessage({
+                message: 'Error',
+                description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
+                backgroundColor: 'red',
+                color: '#fff',
+                icon: 'danger',
+                titleStyle: {
+                  fontFamily: 'Lato-Bold'
+                },
+                textStyle: {
+                  fontFamily: 'Lato-Regular'
+                }
+              })
             }
           })
-        }
-      })
+      }, error => {
+        if (error) return <Error title='Error' description='Oh no, ocurrio un error al momento de obtener tu ubicacion, intente de nuevo o mas tarde.' />
+      }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 20 }
+    )
   }
 
   if (loading) {

@@ -1,23 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
   StyleSheet
 } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation, useSubscription } from '@apollo/react-hooks'
 import { showMessage } from 'react-native-flash-message'
-import PublicIp from 'react-native-public-ip'
 import { isPointWithinRadius, orderByDistance } from 'geolib'
 
 // Import querys
 import { GENERATETRAVEL } from '../../graphql/mutations/Mutations'
 
-// Import actions
-import { REMOVEDETAILSTRAVEL, REMOVELOCATION } from '../../store/actionTypes'
+// Import subscription
+import { GETNOTIFICATIONTRAVEL } from '../../graphql/subscription/Subcription'
 
-// Import hooks
-import { useNotification } from '../../hooks/useNotification'
+// Import actions
+import { REMOVEDETAILSTRAVEL, REMOVELOCATION, ACTIVETRAVEL } from '../../store/actionTypes'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -28,14 +27,18 @@ import Loader from '../../components/loader/Loader'
 // Import theme
 import { Theme } from '../../constants/Theme'
 
+// Import utils
+import { notification } from '../../hooks/usePushNotification'
+
 const RequestScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
-  const { userId, userToken } = useSelector(state => state.user)
-  console.log(userToken)
+  const { userId } = useSelector(state => state.user)
   const { travel } = useSelector(state => state.travel)
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
+  const { data } = useSubscription(GETNOTIFICATIONTRAVEL, { variables: { idusuario: userId } })
+  const [loop, setLoop] = useState(null)
 
   const { silver, golden, vip, president } = useSelector(state => {
     // Verificamos si hay drivers
@@ -52,43 +55,55 @@ const RequestScreen = props => {
       return state.drivers
     }
   })
-
-  // const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL, {
-  //   onError: ({ message }) => {
-  //     // Cuando encontramos un error al ejecutar la mutation
-  //     // Mostramos el mensaje y vamos hacia atras
-  //     console.log(message)
-  //     showMessage({
-  //       message: 'Mensaje de Skiper',
-  //       description: 'No hay conductores cerca en tu zona, por favor selecciona otra de nuestras categorias.',
-  //       backgroundColor: '#7f8c8d',
-  //       color: '#fff',
-  //       icon: 'danger',
-  //       duration: 8000,
-  //       titleStyle: {
-  //         fontFamily: 'Lato-Bold'
-  //       },
-  //       textStyle: {
-  //         fontFamily: 'Lato-Regular'
-  //       }
-  //     })
-
-  //     props.navigation.pop()
-  //   }
-  // })
-  const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL)
-  console.log(error)
-  useNotification(navigate, latitude, longitude)
+  const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL, { onError: error => console.log(error) })
 
   const handleOnCancel = () => {
     dispatch({
-      type: REMOVEDETAILSTRAVEL
+      type: REMOVEDETAILSTRAVEL,
     })
     dispatch({
       type: REMOVELOCATION
     })
     props.navigation.pop()
   }
+
+  useEffect(() => {
+    if (props.navigation.isFocused()) {
+      if (data) {
+        const { travelstatus: { id } } = data.skiperTravel.skiperTravelsTracing[0]
+
+        switch (id) {
+          case 2:
+            showMessage({
+              message: 'Oppsss',
+              description: 'Tu solicitud fue rechazada, por favor intente de nuevo.',
+              backgroundColor: 'red',
+              color: '#fff',
+              duration: 8000,
+              icon: 'danger',
+              titleStyle: {
+                fontFamily: 'Lato-Bold'
+              },
+              textStyle: {
+                fontFamily: 'Lato-Regular'
+              }
+            })
+            props.navigation.pop()
+            break
+          case 3:
+            dispatch({
+              type: ACTIVETRAVEL,
+              payload: { travel: data.skiperTravel.id }
+            })
+            notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
+            navigate('TravelTrancing', {
+              idTravel: data.skiperTravel.id
+            })
+            break
+        }
+      }
+    }
+  }, [data])
 
   useEffect(() => {
     const driverWithInRadius = []
@@ -154,11 +169,9 @@ const RequestScreen = props => {
     }
 
     if (driverNearby !== null && driverNearby !== undefined) {
-      // Si hay driver cerca, generamos el el viaje
-      console.log(driverNearby)
-      PublicIp().then(
-        _ip => {
-          console.log({
+      do {
+        GenerateTravel({
+          variables: {
             inputviaje: {
               idusers: userId,
               iddriver: driverNearby['driveId'],
@@ -174,32 +187,12 @@ const RequestScreen = props => {
               idpayment_methods: 2,
               categoryId: categoryId
             },
-            ip: _ip
-          })
-          GenerateTravel({
-            variables: {
-              inputviaje: {
-                idusers: userId,
-                iddriver: driverNearby['driveId'],
-                lat_initial: start_location.lat,
-                lng_initial: start_location.lng,
-                lat_final: end_location.lat,
-                lng_final: end_location.lng,
-                distance: parseInt(distance.value),
-                time: duration.value,
-                address_initial: start_address,
-                address_final: end_address,
-                idcurrency: 2,
-                idpayment_methods: 2,
-                categoryId: categoryId,
-                total: 80
-              },
-              ip: _ip
-            }
-          })
+            ip: ' '
+          }
         })
+      } while (loop !== null)
     } else {
-      // Mostramos un mensaje de error 
+      // Mostramos un mensaje de error
       showMessage({
         message: 'Skiper',
         description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
@@ -217,7 +210,7 @@ const RequestScreen = props => {
 
       props.navigation.pop()
     }
-  }, [])
+  }, [error])
 
   return (
     <Background>

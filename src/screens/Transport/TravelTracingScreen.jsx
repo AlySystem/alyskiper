@@ -50,7 +50,6 @@ const TravelTracingScreen = props => {
   const [idTravel] = useState(props.navigation.getParam("idTravel"));
   const [TravelTracing] = useMutation(TRAVELTRACING, {
     onError: (error) => {
-      console.log(error)
       showMessage({
         message: 'Opss',
         description: 'Ocurrio un error, intente de nuevo o mas tarde.',
@@ -91,11 +90,9 @@ const TravelTracingScreen = props => {
     }
   );
 
-  console.log(id)
-
   const mapView = useRef(null);
   const marker = useRef(null);
-  useNotification(navigate, location.latitude, location.longitude);
+  useNotification(navigate, location.latitude, location.longitude, props.navigation);
 
   const pubnub = new PubNubReact({
     publishKey: 'pub-c-2ed1b9dc-e811-411f-99f5-01a3addeda39',
@@ -157,7 +154,7 @@ const TravelTracingScreen = props => {
     } else {
       setErrorTravel(true);
     }
-  }, [driver, data]);
+  }, [data]);
 
   if (loading) {
     return (
@@ -203,8 +200,6 @@ const TravelTracingScreen = props => {
               lng: location.longitude
             }
           }
-
-          console.log(variables)
 
           TravelTracing({ variables })
         }

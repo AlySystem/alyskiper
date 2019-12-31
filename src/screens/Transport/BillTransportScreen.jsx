@@ -27,7 +27,6 @@ const BillTransportScreen = props => {
   const idTravel = props.navigation.getParam('idTravel')
   const category = props.navigation.getParam('category')
   const [data, setData] = useState(null)
-  useSelector(x => console.log(x))
   const dispatch = useDispatch()
 
   console.log(idTravel, category)
@@ -37,8 +36,6 @@ const BillTransportScreen = props => {
       idservice: idTravel
     },
     onCompleted: (data) => {
-      console.log(data)
-
       setData(data)
     }
   })

@@ -32,6 +32,16 @@ const FinalTravelScreen = props => {
   const { userId } = useSelector(state => state.user)
 
   const handleOnSubmit = () => {
+
+    console.log({
+      input: {
+        iddriver: drive.skiperagent.id,
+        iduser: userId,
+        ratingNumber: parseFloat(star),
+        comments: value || ' ',
+        status: true
+      }
+    })
     SkiperRating({
       variables: {
         input: {
