@@ -181,7 +181,6 @@ const RequestScreen = props => {
                 ip: _ip
               }
             })
-              .catch(error => )
           })
 
       } while (error !== null)
