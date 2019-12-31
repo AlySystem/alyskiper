@@ -38,7 +38,6 @@ const RequestScreen = props => {
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
   const { data } = useSubscription(GETNOTIFICATIONTRAVEL, { variables: { idusuario: userId } })
-  const [loop, setLoop] = useState(null)
 
   const { silver, golden, vip, president } = useSelector(state => {
     // Verificamos si hay drivers
@@ -55,7 +54,7 @@ const RequestScreen = props => {
       return state.drivers
     }
   })
-  const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL, { onError: error => console.log(error) })
+  const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL)
 
   const handleOnCancel = () => {
     dispatch({
@@ -104,6 +103,26 @@ const RequestScreen = props => {
       }
     }
   }, [data])
+
+  useEffect(() => {
+    if (error) {
+      showMessage({
+        message: 'Skiper',
+        description: 'No hay conductores en tu zona, por favor selecciona otra de nuestras categorias.',
+        backgroundColor: '#7f8c8d',
+        color: '#fff',
+        icon: 'danger',
+        duration: 8000,
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+      props.navigation.pop()
+    }
+  }, [error])
 
   useEffect(() => {
     const driverWithInRadius = []
@@ -169,28 +188,26 @@ const RequestScreen = props => {
     }
 
     if (driverNearby !== null && driverNearby !== undefined) {
-      do {
-        GenerateTravel({
-          variables: {
-            inputviaje: {
-              idusers: userId,
-              iddriver: driverNearby['driveId'],
-              lat_initial: start_location.lat,
-              lng_initial: start_location.lng,
-              lat_final: end_location.lat,
-              lng_final: end_location.lng,
-              distance: parseInt(distance.value),
-              time: duration.value,
-              address_initial: start_address,
-              address_final: end_address,
-              idcurrency: 2,
-              idpayment_methods: 2,
-              categoryId: categoryId
-            },
-            ip: ' '
-          }
-        })
-      } while (loop !== null)
+      GenerateTravel({
+        variables: {
+          inputviaje: {
+            idusers: userId,
+            iddriver: driverNearby['driveId'],
+            lat_initial: start_location.lat,
+            lng_initial: start_location.lng,
+            lat_final: end_location.lat,
+            lng_final: end_location.lng,
+            distance: parseInt(distance.value),
+            time: duration.value,
+            address_initial: start_address,
+            address_final: end_address,
+            idcurrency: 2,
+            idpayment_methods: 2,
+            categoryId: categoryId
+          },
+          ip: ' '
+        }
+      })
     } else {
       // Mostramos un mensaje de error
       showMessage({
@@ -210,7 +227,7 @@ const RequestScreen = props => {
 
       props.navigation.pop()
     }
-  }, [error])
+  }, [])
 
   return (
     <Background>
