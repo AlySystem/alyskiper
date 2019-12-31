@@ -161,7 +161,6 @@ const TransportScreen = props => {
                     latitude: drive.state.coords.latitude,
                     longitude: drive.state.coords.longitude
                   }}
-                  ref={markerSilver}
                   title={`${drive.state.firstname} ${drive.state.lastname}`}
                   description='SILVER'
                 >
@@ -190,7 +189,6 @@ const TransportScreen = props => {
                     latitude: drive.state.coords.latitude,
                     longitude: drive.state.coords.longitude
                   }}
-                  ref={markerGolden}
                   title={`${drive.state.firstname} ${drive.state.lastname}`}
                   description='GOLDEN'
                 >
@@ -220,7 +218,6 @@ const TransportScreen = props => {
                   }}
                   title={`${drive.state.firstname} ${drive.state.lastname}`}
                   description='VIP'
-                  ref={markerVip}
                 >
                   <Image
                     style={{
@@ -247,7 +244,6 @@ const TransportScreen = props => {
                       latitude: drive.state.coords.latitude,
                       longitude: drive.state.coords.longitude
                     }}
-                    ref={markerPresident}
                     title={`${drive.state.firstname} ${drive.state.lastname}`}
                     description='PRESIDENT'
                   >

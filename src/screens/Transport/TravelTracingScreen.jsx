@@ -56,6 +56,8 @@ const TravelTracingScreen = props => {
     }
   );
 
+  console.log(id)
+
   const mapView = useRef(null);
   const marker = useRef(null);
   useNotification(navigate, location.latitude, location.longitude);
@@ -288,7 +290,8 @@ const TravelTracingScreen = props => {
         </Text>
       </TouchableOpacity>
 
-      {id >= 3 && id <= 4 && (
+      {
+        (id >= 3 && id <= 4) &&
         <TouchableOpacity
           style={{
             alignItems: "center",
@@ -313,7 +316,7 @@ const TravelTracingScreen = props => {
             Cancelar Viaje
           </Text>
         </TouchableOpacity>
-      )}
+      }
 
       {errorTravel && (
         <View

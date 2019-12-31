@@ -57,9 +57,10 @@ const items = [
   },
   {
     key: 7,
-    name: 'Legal',
+    name: 'Politicas de Privacidad',
     icon: 'security',
-    routeName: 'Legal'
+    routeName: 'Legal',
+    action: () => Linking.openURL('https://alyskiper.com/politicas')
   }
 ]
 
