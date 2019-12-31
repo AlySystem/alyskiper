@@ -48,7 +48,42 @@ const TravelTracingScreen = props => {
   const [errorTravel, setErrorTravel] = useState(false);
   const [driver, setDriver] = useState();
   const [idTravel] = useState(props.navigation.getParam("idTravel"));
-  const [TravelTracing] = useMutation(TRAVELTRACING);
+  const [TravelTracing] = useMutation(TRAVELTRACING, {
+    onError: (error) => {
+      console.log(error)
+      showMessage({
+        message: 'Opss',
+        description: 'Ocurrio un error, intente de nuevo o mas tarde.',
+        backgroundColor: 'red',
+        color: '#fff',
+        icon: 'danger',
+        duration: 4000,
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+    },
+    onCompleted: () => {
+      showMessage({
+        message: 'Skiper',
+        description: 'Haz cancelado el viaje.',
+        backgroundColor: '#e67e22',
+        color: '#fff',
+        icon: 'danger',
+        autoHide: false,
+        titleStyle: {
+          fontFamily: 'Lato-Bold'
+        },
+        textStyle: {
+          fontFamily: 'Lato-Regular'
+        }
+      })
+      return navigate("Home");
+    }
+  });
   const [GetTravelByUserId, { data, loading }] = useLazyQuery(
     GETTRAVELBYUSERID,
     {
@@ -160,35 +195,18 @@ const TravelTracingScreen = props => {
         text: "Si, Cancelar",
         style: "default",
         onPress: () => {
-          TravelTracing({
-            variables: {
-              input: {
-                idtravel: idTravel || data.getTravelByUserId.id,
-                idtravelstatus: "CANCELADO",
-                lat: location.latitude,
-                lng: location.longitude
-              }
+          const variables = {
+            input: {
+              idtravel: idTravel || data.getTravelByUserId.id,
+              idtravelstatus: "CANCELADO",
+              lat: location.latitude,
+              lng: location.longitude
             }
-          })
-            .then(result => {
-              return navigate("Home");
-            })
-            .catch(error => {
-              showMessage({
-                message: 'Opss',
-                description: 'Ocurrio un error, intente de nuevo o mas tarde.',
-                backgroundColor: 'red',
-                color: '#fff',
-                icon: 'danger',
-                duration: 4000,
-                titleStyle: {
-                  fontFamily: 'Lato-Bold'
-                },
-                textStyle: {
-                  fontFamily: 'Lato-Regular'
-                }
-              })
-            })
+          }
+
+          console.log(variables)
+
+          TravelTracing({ variables })
         }
       }
     ]);
