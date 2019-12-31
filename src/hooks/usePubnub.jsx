@@ -28,19 +28,7 @@ export const usePubnub = () => {
       withPresence: true
     })
 
-    // console.log(pubnub)
-    // pubnub.getMessage(keys.channels.drivers.silver, (msg) => {
-    //   console.log(msg);
-    // })
-
-    // pubnub.addListener({
-    //   status: function (statusEvent) {
-    //     console.log(statusEvent)
-    //   },
-    // })
-
     pubnub.hereNow({ includeUUIDs: true, includeState: true, channels: allChanels }, (status, response) => {
-      // console.log(status)
 
       let silver, golden, vip, president
 

@@ -76,6 +76,7 @@ const RequestScreen = props => {
   //   }
   // })
   const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL)
+  console.log(error)
   useNotification(navigate, latitude, longitude)
 
   const handleOnCancel = () => {
@@ -157,34 +158,49 @@ const RequestScreen = props => {
     if (driverNearby !== null && driverNearby !== undefined) {
       // Si hay driver cerca, generamos el el viaje
 
-      do {
-        PublicIp().then(
-          _ip => {
-            GenerateTravel({
-              variables: {
-                inputviaje: {
-                  idusers: userId,
-                  iddriver: driverNearby['driveId'],
-                  lat_initial: start_location.lat,
-                  lng_initial: start_location.lng,
-                  lat_final: end_location.lat,
-                  lng_final: end_location.lng,
-                  distance: parseInt(distance.value),
-                  time: duration.value,
-                  address_initial: start_address,
-                  address_final: end_address,
-                  idcurrency: 2,
-                  idpayment_methods: 2,
-                  categoryId: categoryId,
-                  total: 80
-                },
-                ip: _ip
-              }
-            })
-              .catch(error => )
+      PublicIp().then(
+        _ip => {
+          console.log({
+            inputviaje: {
+              idusers: userId,
+              iddriver: driverNearby['driveId'],
+              lat_initial: start_location.lat,
+              lng_initial: start_location.lng,
+              lat_final: end_location.lat,
+              lng_final: end_location.lng,
+              distance: parseInt(distance.value),
+              time: duration.value,
+              address_initial: start_address,
+              address_final: end_address,
+              idcurrency: 2,
+              idpayment_methods: 2,
+              categoryId: categoryId,
+              total: 80
+            },
+            ip: _ip
           })
-
-      } while (error !== null)
+          GenerateTravel({
+            variables: {
+              inputviaje: {
+                idusers: userId,
+                iddriver: driverNearby['driveId'],
+                lat_initial: start_location.lat,
+                lng_initial: start_location.lng,
+                lat_final: end_location.lat,
+                lng_final: end_location.lng,
+                distance: parseInt(distance.value),
+                time: duration.value,
+                address_initial: start_address,
+                address_final: end_address,
+                idcurrency: 2,
+                idpayment_methods: 2,
+                categoryId: categoryId,
+                total: 80
+              },
+              ip: _ip
+            }
+          })
+        })
     } else {
       // Mostramos un mensaje de error 
       showMessage({
