@@ -66,7 +66,6 @@ const InputControl = (props) => {
             ref={props.references}
             style={props.stylesInput}
           />
-
         )}
       {
         isActiveIcon && (

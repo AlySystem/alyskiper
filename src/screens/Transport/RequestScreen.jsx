@@ -52,28 +52,30 @@ const RequestScreen = props => {
     }
   })
 
-  const [GenerateTravel] = useMutation(GENERATETRAVEL, {
-    onError: ({ message }) => {
-      // Cuando encontramos un error al ejecutar la mutation
-      // Mostramos el mensaje y vamos hacia atras
-      showMessage({
-        message: 'Mensaje de Skiper',
-        description: 'No hay conductores cerca en tu zona, por favor selecciona otra de nuestras categorias.',
-        backgroundColor: '#7f8c8d',
-        color: '#fff',
-        icon: 'danger',
-        duration: 8000,
-        titleStyle: {
-          fontFamily: 'Lato-Bold'
-        },
-        textStyle: {
-          fontFamily: 'Lato-Regular'
-        }
-      })
+  // const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL, {
+  //   onError: ({ message }) => {
+  //     // Cuando encontramos un error al ejecutar la mutation
+  //     // Mostramos el mensaje y vamos hacia atras
+  //     console.log(message)
+  //     showMessage({
+  //       message: 'Mensaje de Skiper',
+  //       description: 'No hay conductores cerca en tu zona, por favor selecciona otra de nuestras categorias.',
+  //       backgroundColor: '#7f8c8d',
+  //       color: '#fff',
+  //       icon: 'danger',
+  //       duration: 8000,
+  //       titleStyle: {
+  //         fontFamily: 'Lato-Bold'
+  //       },
+  //       textStyle: {
+  //         fontFamily: 'Lato-Regular'
+  //       }
+  //     })
 
-      props.navigation.pop()
-    }
-  })
+  //     props.navigation.pop()
+  //   }
+  // })
+  const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL)
   useNotification(navigate, latitude, longitude)
 
   const handleOnCancel = () => {
@@ -99,7 +101,7 @@ const RequestScreen = props => {
         if (silver) {
           categoryName = 'SILVER'
           silver.map(drive => {
-            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 25000)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
             }
           })
@@ -112,7 +114,7 @@ const RequestScreen = props => {
         if (golden) {
           categoryName = 'GOLDEN'
           golden.map(drive => {
-            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 25000)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
             }
           })
@@ -125,7 +127,7 @@ const RequestScreen = props => {
         if (vip) {
           categoryName = 'VIP'
           vip.map(drive => {
-            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 25000)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
             }
           })
@@ -138,7 +140,7 @@ const RequestScreen = props => {
         if (president) {
           categoryName = 'PRESIDENT'
           president.map(drive => {
-            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 6000)) {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 25000)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
             }
           })
@@ -150,33 +152,39 @@ const RequestScreen = props => {
     }
 
     console.log(driverNearby)
+    console.log(orderDistance)
 
     if (driverNearby !== null && driverNearby !== undefined) {
       // Si hay driver cerca, generamos el el viaje
 
-      PublicIp().then(
-        _ip => {
-          GenerateTravel({
-            variables: {
-              inputviaje: {
-                idusers: userId,
-                iddriver: driverNearby['driveId'],
-                lat_initial: start_location.lat,
-                lng_initial: start_location.lng,
-                lat_final: end_location.lat,
-                lng_final: end_location.lng,
-                distance: parseInt(distance.value),
-                time: duration.value,
-                address_initial: start_address,
-                address_final: end_address,
-                idcurrency: 2,
-                idpayment_methods: 2,
-                categoryId: categoryId
-              },
-              ip: _ip
-            }
+      do {
+        PublicIp().then(
+          _ip => {
+            GenerateTravel({
+              variables: {
+                inputviaje: {
+                  idusers: userId,
+                  iddriver: driverNearby['driveId'],
+                  lat_initial: start_location.lat,
+                  lng_initial: start_location.lng,
+                  lat_final: end_location.lat,
+                  lng_final: end_location.lng,
+                  distance: parseInt(distance.value),
+                  time: duration.value,
+                  address_initial: start_address,
+                  address_final: end_address,
+                  idcurrency: 2,
+                  idpayment_methods: 2,
+                  categoryId: categoryId,
+                  total: 80
+                },
+                ip: _ip
+              }
+            })
+              .catch(error => )
           })
-        })
+
+      } while (error !== null)
     } else {
       // Mostramos un mensaje de error 
       showMessage({

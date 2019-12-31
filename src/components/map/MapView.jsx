@@ -26,18 +26,6 @@ export const Map = props => {
     });
   };
 
-  // useEffect(() => {
-  //   const animateMarker = () => {
-  //     if (markerUser.current) {
-  //       if (Platform.OS === 'android') {
-  //         console.log('User... ', location.latitude, location.longitude)
-  //         markerUser.current._component.animateMarkerToCoordinate({ latitude: location.latitude, longitude: location.longitude }, 500)
-  //       }
-  //     }
-  //   }
-  //   animateMarker()
-  // }, [location])
-
   return (
     <View style={{ flex: 1 }}>
       <MapView

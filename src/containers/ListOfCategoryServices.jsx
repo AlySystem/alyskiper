@@ -99,7 +99,7 @@ const ListOfCategoryServices = props => {
     })
 
     // Navegamos a la pantalla RequestScreen (ejecuta todo el proceso del viaje)
-    navigate('Request')
+    navigate('RequestDriver')
   }
 
   return (
