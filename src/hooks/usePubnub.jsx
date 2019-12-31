@@ -73,13 +73,9 @@ export const usePubnub = () => {
           }
         })
       }
-
-      // pubnub.unsubscribe({
-      //   channels: [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`]
-      // })
     })
 
-  }, [drivers])
+  }, [])
 
   return { silver: drivers.silver, golden: drivers.golden, vip: drivers.vip, president: drivers.president }
 }

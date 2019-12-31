@@ -64,6 +64,7 @@ const TransportScreen = props => {
   const [destination, setDestination] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const { silver, golden, vip, president } = usePubnub()
+
   const [, setDetails] = useState('')
 
   const mapView = useRef(null)
@@ -81,7 +82,14 @@ const TransportScreen = props => {
 
   // Cuando vamos retrosedemos en la pantalla
   // destruimos el viaje en cache
-  BackHandler.addEventListener('hardwareBackPress', destroyMarkedTravel)
+  useEffect(() => {
+    const id = BackHandler.addEventListener('hardwareBackPress', destroyMarkedTravel)
+    return () => {
+      if (id) {
+        id.remove()
+      }
+    }
+  }, [])
 
   const handleDirecctions = (placeId, details) => {
     setIsLoading(true)

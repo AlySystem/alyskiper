@@ -27,12 +27,10 @@ import { Theme } from '../../constants/Theme'
 const RequestDriverScreen = props => {
     const radius = 25000
     const [categoryName, setCategoryName] = useState('')
-    const [final, setFinal] = useState(false)
     let orderDistance = null
-    let driverNearby = null
-    // const [orderDistance, setOrderDistance] = useState([])
-    // const [driverNearby, setDriverNearby] = useState(null)
-    const [driverWithInRadius, setDriverWithInRadius] = useState([])
+    const [final, setFinal] = useState(false)
+    const driverWithInRadius = []
+    const [driverNearby, setDriverNearby] = useState(null)
     const dispatch = useDispatch()
     const { navigate } = props.navigation
     const { userId } = useSelector(state => state.user)
@@ -70,18 +68,11 @@ const RequestDriverScreen = props => {
                     setCategoryName('SILVER')
                     silver.map(drive => {
                         if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.latitude, longitude: drive.longitude }, radius)) {
-                            setDriverWithInRadius(driverWithInRadius.push({ driveId: drive.driveId, latitude: drive.latitude, longitude: drive.longitude }))
+                            driverWithInRadius.push({ driveId: drive.driveId, latitude: drive.latitude, longitude: drive.longitude })
                         }
                     })
                     orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
-                    driverNearby = orderDistance[0]
-
-
-                    console.log(driverNearby)
-                    console.log(orderDistance)
-
-                    // orderDistance = orderByDistance({ latitude, longitude }, driverWithInRadius)
-                    // driverNearby = orderDistance[0]
+                    setDriverNearby(orderDistance[0])
                 }
 
                 break
@@ -129,61 +120,59 @@ const RequestDriverScreen = props => {
         setFinal(true)
     }, [])
 
-    // useEffect(() => {
-    //     if (final) {
-    //         if (driverNearby !== null && driverNearby !== undefined) {
-    //             const { categoryId } = travel
-    //             const { duration, distance, end_address, start_address, start_location, end_location } = steps
-    //             PublicIp().then(
-    //                 _ip => {
-    //                     // do {
-    //                     GenerateTravel({
-    //                         variables: {
-    //                             inputviaje: {
-    //                                 idusers: userId,
-    //                                 iddriver: driverNearby['driveId'],
-    //                                 lat_initial: start_location.lat,
-    //                                 lng_initial: start_location.lng,
-    //                                 lat_final: end_location.lat,
-    //                                 lng_final: end_location.lng,
-    //                                 distance: parseInt(distance.value),
-    //                                 time: duration.value,
-    //                                 address_initial: start_address,
-    //                                 address_final: end_address,
-    //                                 idcurrency: 2,
-    //                                 idpayment_methods: 2,
-    //                                 categoryId: categoryId
-    //                             },
-    //                             ip: _ip
-    //                         }
-    //                     })
-    //                         .catch(error => {
-    //                             const newArray = orderDistance.filter(status => status.driveId !== driverNearby['driveId'])
-    //                             console.log('Nuevo arreglo: ', newArray)
-    //                             setOrderDistance()
-    //                         })
-    //                     // } while (error !== null && error !== undefined)
-    //                 })
-    //         } else {
-    //             showMessage({
-    //                 message: 'Skiper',
-    //                 description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
-    //                 backgroundColor: '#7f8c8d',
-    //                 color: '#fff',
-    //                 icon: 'danger',
-    //                 duration: 8000,
-    //                 titleStyle: {
-    //                     fontFamily: 'Lato-Bold'
-    //                 },
-    //                 textStyle: {
-    //                     fontFamily: 'Lato-Regular'
-    //                 }
-    //             })
+    useEffect(() => {
+        if (final) {
+            if (driverNearby !== null && driverNearby !== undefined) {
+                const { categoryId } = travel
+                const { duration, distance, end_address, start_address, start_location, end_location } = steps
+                // do {
+                GenerateTravel({
+                    variables: {
+                        inputviaje: {
+                            idusers: userId,
+                            iddriver: driverNearby['driveId'],
+                            lat_initial: start_location.lat,
+                            lng_initial: start_location.lng,
+                            lat_final: end_location.lat,
+                            lng_final: end_location.lng,
+                            distance: parseInt(distance.value),
+                            time: duration.value,
+                            address_initial: start_address,
+                            address_final: end_address,
+                            idcurrency: 2,
+                            idpayment_methods: 2,
+                            categoryId: categoryId
+                        },
+                        ip: ' '
+                    }
+                })
+                    .catch(error => {
+                        const newArray = orderDistance.filter(status => status.driveId !== driverNearby['driveId'])
+                        console.log('Nuevo arreglo: ', newArray)
+                        orderByDistance = newArray
+                        driverNearby = orderByDistance[0]
+                    })
+                // } while (error !== null && error !== undefined)
+            } else {
+                showMessage({
+                    message: 'Skiper',
+                    description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
+                    backgroundColor: '#7f8c8d',
+                    color: '#fff',
+                    icon: 'danger',
+                    duration: 8000,
+                    titleStyle: {
+                        fontFamily: 'Lato-Bold'
+                    },
+                    textStyle: {
+                        fontFamily: 'Lato-Regular'
+                    }
+                })
 
-    //             props.navigation.pop()
-    //         }
-    //     }
-    // }, [final])
+                props.navigation.pop()
+            }
+        }
+    }, [driverNearby, final, error])
 
 
     const handleOnCancel = () => {
@@ -199,8 +188,6 @@ const RequestDriverScreen = props => {
     return (
         <View>
             <Text>Cargando</Text>
-            <Text>{JSON.stringify(orderDistance, null, 4)}</Text>
-            <Text>Driver {driverNearby}</Text>
         </View>
     )
 }

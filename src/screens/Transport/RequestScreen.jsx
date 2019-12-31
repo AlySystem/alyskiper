@@ -31,7 +31,8 @@ import { Theme } from '../../constants/Theme'
 const RequestScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
-  const { userId } = useSelector(state => state.user)
+  const { userId, userToken } = useSelector(state => state.user)
+  console.log(userToken)
   const { travel } = useSelector(state => state.travel)
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
@@ -152,12 +153,9 @@ const RequestScreen = props => {
         break
     }
 
-    console.log(driverNearby)
-    console.log(orderDistance)
-
     if (driverNearby !== null && driverNearby !== undefined) {
       // Si hay driver cerca, generamos el el viaje
-
+      console.log(driverNearby)
       PublicIp().then(
         _ip => {
           console.log({
@@ -174,8 +172,7 @@ const RequestScreen = props => {
               address_final: end_address,
               idcurrency: 2,
               idpayment_methods: 2,
-              categoryId: categoryId,
-              total: 80
+              categoryId: categoryId
             },
             ip: _ip
           })
