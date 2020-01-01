@@ -29,8 +29,6 @@ const BillTransportScreen = props => {
   const [data, setData] = useState(null)
   const dispatch = useDispatch()
 
-  console.log(idTravel, category)
-
   const { loading, error } = useQuery(INVOICE, {
     variables: {
       idservice: idTravel

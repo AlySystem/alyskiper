@@ -66,20 +66,6 @@ const TravelTracingScreen = props => {
       })
     },
     onCompleted: () => {
-      showMessage({
-        message: 'Skiper',
-        description: 'Haz cancelado el viaje.',
-        backgroundColor: '#e67e22',
-        color: '#fff',
-        icon: 'danger',
-        autoHide: false,
-        titleStyle: {
-          fontFamily: 'Lato-Bold'
-        },
-        textStyle: {
-          fontFamily: 'Lato-Regular'
-        }
-      })
       return navigate("Home");
     }
   });

@@ -29,8 +29,11 @@ import { Theme } from '../../constants/Theme'
 
 // Import utils
 import { notification } from '../../hooks/usePushNotification'
+import ValidateSkiperDrive from '../../graphql/mutations/ValidateSkiperDrive'
+
 
 const RequestScreen = props => {
+  const MaxDistance = 25000
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
@@ -38,6 +41,13 @@ const RequestScreen = props => {
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
   const { data } = useSubscription(GETNOTIFICATIONTRAVEL, { variables: { idusuario: userId } })
+
+  // Mutation que valida si el drive esta disponible
+  const [ValidateDrive] = useMutation(ValidateSkiperDrive, {
+    onError: ({ message }) => {
+      console.log(message)
+    }
+  })
 
   const { silver, golden, vip, president } = useSelector(state => {
     // Verificamos si hay drivers
@@ -60,9 +70,11 @@ const RequestScreen = props => {
     dispatch({
       type: REMOVEDETAILSTRAVEL,
     })
+
     dispatch({
       type: REMOVELOCATION
     })
+
     props.navigation.pop()
   }
 
@@ -128,16 +140,26 @@ const RequestScreen = props => {
     const driverWithInRadius = []
     const { categoryId } = travel
     let categoryName = ''
-    let orderDistance = null
+    let orderDistance = []
+    let accept = false
     let driverNearby = null
     const { duration, distance, end_address, start_address, start_location, end_location } = steps
 
     switch (categoryId) {
+
+      // Driver.map(drive => {
+      //  -- Si esta dentro del radio 
+      //   if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
+      //  -- Agregarlo al arreglo de id, conductores
+      //     driverWithInRadius.push(drive.state.SkiperAgentId)
+      //   }
+      // })
+
       case 1:
         if (silver) {
           categoryName = 'SILVER'
           silver.map(drive => {
-            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 25000)) {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
             }
           })
@@ -150,7 +172,7 @@ const RequestScreen = props => {
         if (golden) {
           categoryName = 'GOLDEN'
           golden.map(drive => {
-            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 25000)) {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
             }
           })
@@ -163,7 +185,7 @@ const RequestScreen = props => {
         if (vip) {
           categoryName = 'VIP'
           vip.map(drive => {
-            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 25000)) {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
             }
           })
@@ -176,7 +198,7 @@ const RequestScreen = props => {
         if (president) {
           categoryName = 'PRESIDENT'
           president.map(drive => {
-            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, 25000)) {
+            if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
             }
           })
@@ -187,12 +209,72 @@ const RequestScreen = props => {
         break
     }
 
-    if (driverNearby !== null && driverNearby !== undefined) {
+    console.log(orderDistance)
+    const execute = async () => {
+      try {
+        if (orderDistance.length > 0) {
+          for (let i = 0; i < orderDistance.length; i++) {
+            console.log(i, accept)
+            const data = orderDistance[i]
+
+            const variables = {
+              iddriver: data['driveId'],
+              lat_initial: data['latitude'],
+              lng_initial: data['longitude'],
+              time: duration.value,
+              distance: parseInt(distance.value),
+              idcurrency: 2,
+            }
+
+            await ValidateDrive({ variables }).then(
+              ({ data: response }) => {
+                if (response) {
+                  if (response.ValidateDriveAvailable) {
+                    accept = true
+                    executeTravel(data['driveId'])
+                    console.log(data['driveId'] + ' - ' + response.ValidateDriveAvailable)
+                  }
+                }
+              }
+            ).catch(() => { })
+
+            if (accept) break;
+          }
+
+        }
+        else {
+          // Mostramos un mensaje de error
+          showMessage({
+            message: 'Skiper',
+            description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
+            backgroundColor: '#7f8c8d',
+            color: '#fff',
+            icon: 'danger',
+            duration: 8000,
+            titleStyle: {
+              fontFamily: 'Lato-Bold'
+            },
+            textStyle: {
+              fontFamily: 'Lato-Regular'
+            }
+          })
+
+          props.navigation.pop()
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    execute()
+
+    const executeTravel = (id) => {
       GenerateTravel({
         variables: {
           inputviaje: {
             idusers: userId,
-            iddriver: driverNearby['driveId'],
+            iddriver: id,
             lat_initial: start_location.lat,
             lng_initial: start_location.lng,
             lat_final: end_location.lat,
@@ -208,25 +290,8 @@ const RequestScreen = props => {
           ip: ' '
         }
       })
-    } else {
-      // Mostramos un mensaje de error
-      showMessage({
-        message: 'Skiper',
-        description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
-        backgroundColor: '#7f8c8d',
-        color: '#fff',
-        icon: 'danger',
-        duration: 8000,
-        titleStyle: {
-          fontFamily: 'Lato-Bold'
-        },
-        textStyle: {
-          fontFamily: 'Lato-Regular'
-        }
-      })
-
-      props.navigation.pop()
     }
+
   }, [])
 
   return (
@@ -234,22 +299,18 @@ const RequestScreen = props => {
       <View style={styles.screen}>
         <View style={styles.layout}>
           <Picture source={require('../../../assets/images/img-alyskiper-masked.png')} />
+
           <View style={{ marginVertical: 5 }} />
+
           <Loader />
+
           <View style={{ marginVertical: 10 }} />
-          <Text style={{
-            color: Theme.COLORS.colorParagraph,
-            fontFamily: 'Lato-Bold',
-            fontSize: Theme.SIZES.normal
-          }}
-          >SOLICITANDO SKIPER...
+
+          <Text style={{ color: Theme.COLORS.colorParagraph, fontFamily: 'Lato-Bold', fontSize: Theme.SIZES.normal }}>
+            SOLICITANDO SKIPER...
           </Text>
           <View style={styles.containerButton}>
-            <IconButton
-              isActiveIcon
-              onPress={handleOnCancel}
-              message='CANCELAR SKIPER'
-            />
+            <IconButton isActiveIcon onPress={handleOnCancel} message='CANCELAR SKIPER' />
           </View>
         </View>
       </View>
