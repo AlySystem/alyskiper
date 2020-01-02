@@ -4,8 +4,8 @@ import {
   Text,
   StyleSheet
 } from 'react-native'
-import { useQuery } from '@apollo/react-hooks'
-import { useDispatch, useSelector } from 'react-redux'
+import { useQuery, useLazyQuery } from '@apollo/react-hooks'
+import { useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 
 // Import actions types
@@ -29,14 +29,47 @@ const BillTransportScreen = props => {
   const [data, setData] = useState(null)
   const dispatch = useDispatch()
 
-  const { loading, error } = useQuery(INVOICE, {
-    variables: {
-      idservice: idTravel
-    },
+  console.log(idTravel)
+
+  const [execute, { loading, error }] = useLazyQuery(INVOICE, {
     onCompleted: (data) => {
+      console.log(data)
       setData(data)
     }
   })
+
+  useEffect(
+    () => {
+      const e = async () => {
+        await execute({
+          variables: {
+            idservice: idTravel
+          }
+        })
+      }
+
+      e()
+    }, []
+  )
+
+  useEffect(
+    () => {
+      return () => {
+        dispatch({
+          type: REMOVEDIRECTION
+        })
+        dispatch({
+          type: REMOVEDETAILSTRAVEL
+        })
+        dispatch({
+          type: REMOVELOCATION
+        })
+        dispatch({
+          type: REMOVEACTIVETRAVEL
+        })
+      }
+    }, []
+  )
 
   if (error) {
     showMessage({
@@ -55,42 +88,7 @@ const BillTransportScreen = props => {
     navigate('Home')
   }
 
-  if (loading) {
-    return (
-      <View style={{
-        flex: 1,
-        backgroundColor: Theme.COLORS.colorMainAlt,
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
-      >
-        <Text style={{
-          color: Theme.COLORS.colorParagraph,
-          fontFamily: 'Lato-Regular',
-          fontSize: Theme.SIZES.small
-        }}
-        >Cargando factura...
-        </Text>
-        <View style={{ marginVertical: 5 }} />
-        <Loader />
-      </View>
-    )
-  }
-
   const handleOnConfirm = () => {
-    dispatch({
-      type: REMOVEDIRECTION
-    })
-    dispatch({
-      type: REMOVEDETAILSTRAVEL
-    })
-    dispatch({
-      type: REMOVELOCATION
-    })
-    dispatch({
-      type: REMOVEACTIVETRAVEL
-    })
-
     return navigate('Home', { remove: true })
   }
 
@@ -98,63 +96,69 @@ const BillTransportScreen = props => {
     <Background>
       <View style={styles.screen}>
         {
-          data &&
-          <View style={styles.layout}>
-            <View style={styles.container}>
-              <View style={styles.itemAlt}>
-                <Text allowFontScaling={false} style={styles.text}>DURACION</Text>
-                <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.duration}</Text>
+          (data) ?
+            <View style={styles.layout}>
+              <View style={styles.container}>
+                <View style={styles.itemAlt}>
+                  <Text allowFontScaling={false} style={styles.text}>DURACION</Text>
+                  <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.duration.toString()}</Text>
+                </View>
+                <View style={styles.item}>
+                  <Text allowFontScaling={false} style={styles.text}>DISTANCIA</Text>
+                  <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.distance.toString()}</Text>
+                </View>
               </View>
-              <View style={styles.item}>
-                <Text allowFontScaling={false} style={styles.text}>DISTANCIA</Text>
-                <Text allowFontScaling={false} style={styles.value}>{data.getInvoinceByIdservice.anyservice.distance}</Text>
+
+              <View style={styles.containerAddress}>
+                <Text allowFontScaling={false} style={styles.text}>ORIGEN</Text>
+                <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_initial}</Text>
+              </View>
+
+              <View style={styles.containerAddress}>
+                <Text allowFontScaling={false} style={styles.text}>DESTINO</Text>
+                <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_final}</Text>
+              </View>
+
+              <View style={styles.container}>
+                <Text allowFontScaling={false} style={styles.text}>CATEGORIA</Text>
+                <Text allowFontScaling={false} style={styles.textCategory}>
+                  {
+                    category === 1 && 'SILVER'
+                  }
+
+                  {
+                    category === 2 && 'GOLDEN'
+                  }
+
+                  {
+                    category === 3 && 'VIP'
+                  }
+
+                  {
+                    category === 4 && 'PRESIDENT'
+                  }
+                </Text>
+              </View>
+
+              <View style={styles.container}>
+                <Text allowFontScaling={false} style={styles.text}>TOTAL</Text>
+                <Text allowFontScaling={false} style={styles.textValue}>{data.getInvoinceByIdservice.anyservice.total.toString()}</Text>
               </View>
             </View>
 
-            <View style={styles.containerAddress}>
-              <Text allowFontScaling={false} style={styles.text}>ORIGEN</Text>
-              <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_initial}</Text>
-            </View>
-
-            <View style={styles.containerAddress}>
-              <Text allowFontScaling={false} style={styles.text}>DESTINO</Text>
-              <Text allowFontScaling={false} style={styles.textAddress}>{data.getInvoinceByIdservice.anyservice.address_final}</Text>
-            </View>
-
-            <View style={styles.container}>
-              <Text allowFontScaling={false} style={styles.text}>CATEGORIA</Text>
-              {/* <Text allowFontScaling={false} style={styles.textCategory}>{category.toUpperCase()}</Text> */}
-              <Text allowFontScaling={false} style={styles.textCategory}>
-                {
-                  category === 1 && 'SILVER'
-                }
-
-                {
-                  category === 2 && 'GOLDEN'
-                }
-
-                {
-                  category === 3 && 'VIP'
-                }
-
-                {
-                  category === 4 && 'PRESIDENT'
-                }
+            :
+            <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: Theme.COLORS.colorParagraph, fontFamily: 'Lato-Regular', fontSize: Theme.SIZES.small }}>
+                Cargando factura...
               </Text>
-            </View>
 
-            <View style={styles.container}>
-              <Text allowFontScaling={false} style={styles.text}>TOTAL</Text>
-              <Text allowFontScaling={false} style={styles.textValue}>{data.getInvoinceByIdservice.anyservice.total}</Text>
+              <View style={{ marginVertical: 5 }} />
+
+              <Loader />
             </View>
-          </View>
         }
 
-        <View style={{
-          width: '100%',
-          alignItems: 'center'
-        }}
-        >
+        <View style={{ width: '100%', alignItems: 'center' }}>
           <IconButton
             message='CONFIRMAR'
             isActiveIcon
