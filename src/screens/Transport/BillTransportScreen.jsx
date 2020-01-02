@@ -31,7 +31,7 @@ const BillTransportScreen = props => {
 
   console.log(idTravel)
 
-  const [execute, { loading, error }] = useLazyQuery(INVOICE, {
+  const [execute, { error }] = useLazyQuery(INVOICE, {
     onCompleted: (data) => {
       console.log(data)
       setData(data)
