@@ -35,7 +35,6 @@ import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen
 import WalletScreen from '../../screens/Wallet/WalletScreen'
 import NextCommerceScreen from '../../screens/Commerce/NextCommerceScreen'
 import TabStack from '../tabs/TabStack'
-import RequestDriverScreen from '../../screens/Transport/RequestDriverScreen'
 
 import OrderTracingScreen from '../../screens/Commerce/OrderTracingScreen'
 
@@ -220,10 +219,6 @@ const StackNavigation = createStackNavigator({
       header: null
     }
   },
-  RequestDriver: {
-    screen: RequestDriverScreen,
-    navigationOptions
-  }
 })
 
 const styles = StyleSheet.create({

@@ -183,15 +183,6 @@ const RequestScreen = props => {
     const { duration, distance, end_address, start_address, start_location, end_location } = steps
 
     switch (categoryId) {
-
-      // Driver.map(drive => {
-      //  -- Si esta dentro del radio 
-      //   if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
-      //  -- Agregarlo al arreglo de id, conductores
-      //     driverWithInRadius.push(drive.state.SkiperAgentId)
-      //   }
-      // })
-
       case 1:
         if (silver) {
           categoryName = 'SILVER'
@@ -307,17 +298,16 @@ const RequestScreen = props => {
           // Mostramos un mensaje de error
           showMessage({
             message: `Skiper ${categoryName}`,
-            description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
-            backgroundColor: '#7f8c8d',
-            color: '#fff',
+            description: `No hay Skipers ${categoryName} cerca, por favor selecciona otra de nuestras categorias.`,
+            backgroundColor: categoryColor,
+            color: categoryName === 'GOLDEN' ? '#3d3d3d' : '#fff',
             icon: 'danger',
             duration: 8000,
             titleStyle: {
-              fontFamily: 'Lato-Bold',
-              color: categoryColor
+              fontWeight: 'bold',
             },
             textStyle: {
-              fontFamily: 'Lato-Regular'
+              paddingRight: 10
             }
           })
 
