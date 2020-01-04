@@ -232,7 +232,7 @@ const SignUpScreen = props => {
             if (error.message === 'This email or phone is already exist in the database!') {
               showMessage({
                 message: 'Error',
-                description: 'El correo ya esta registrado.',
+                description: 'El correo o numero de telefono ya esta registrado.',
                 backgroundColor: 'red',
                 color: '#fff',
                 icon: 'danger',
@@ -342,28 +342,6 @@ const SignUpScreen = props => {
                 errorText={userNameIsValid.message}
               />
 
-              <View style={styles.containerRow}>
-                <ModalPicker
-                  handleOnSelect={handleOnSelectPhone}
-                />
-                <InputControl
-                  stylesContainer={styles.containerInput}
-                  value={numberPhone}
-                  isActiveIcon
-                  iconName='phone'
-                  iconSize={22}
-                  stylesIcon={styles.icon}
-                  placeholder='7728  9801'
-                  placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
-                  onChangeText={handleOnChange}
-                  keyboardType='number-pad'
-                  stylesError={styles.stylesError}
-                  stylesInput={[styles.input, { borderColor: numberPhoneIsValid.errorStyle ? Theme.COLORS.colorSecondary : 'red' }]}
-                  isValid={numberPhoneIsValid.isValid}
-                  errorText={numberPhoneIsValid.message}
-                />
-              </View>
-
               <InputControl
                 value={email}
                 setValue={setEmail}
@@ -380,6 +358,28 @@ const SignUpScreen = props => {
                 isValid={emailIsValid.isValid}
                 errorText={emailIsValid.message}
               />
+
+              <View style={styles.containerRow}>
+                <ModalPicker
+                  handleOnSelect={handleOnSelectPhone}
+                />
+                <InputControl
+                  stylesContainer={styles.containerInput}
+                  value={numberPhone}
+                  isActiveIcon
+                  iconName='phone'
+                  iconSize={22}
+                  stylesIcon={styles.icon}
+                  placeholder='7728 9801'
+                  placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
+                  onChangeText={handleOnChange}
+                  keyboardType='number-pad'
+                  stylesError={styles.stylesError}
+                  stylesInput={[styles.input, { borderColor: numberPhoneIsValid.errorStyle ? Theme.COLORS.colorSecondary : 'red' }]}
+                  isValid={numberPhoneIsValid.isValid}
+                  errorText={numberPhoneIsValid.message}
+                />
+              </View>
 
               <ModalPicker
                 activeCountry

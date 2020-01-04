@@ -10,7 +10,7 @@ import { showMessage } from 'react-native-flash-message'
 import { isPointWithinRadius, orderByDistance } from 'geolib'
 
 // Import querys
-import { GENERATETRAVEL } from '../../graphql/mutations/Mutations'
+import { GENERATETRAVEL, TRAVELTRACING } from '../../graphql/mutations/Mutations'
 
 // Import subscription
 import { GETNOTIFICATIONTRAVEL } from '../../graphql/subscription/Subcription'
@@ -40,7 +40,9 @@ const RequestScreen = props => {
   const { travel } = useSelector(state => state.travel)
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
+  const [idTravel, setIdTravel] = useState(0)
   const { data } = useSubscription(GETNOTIFICATIONTRAVEL, { variables: { idusuario: userId } })
+  const [RegisterTravel] = useMutation(TRAVELTRACING)
 
   // Mutation que valida si el drive esta disponible
   const [ValidateDrive] = useMutation(ValidateSkiperDrive, {
@@ -66,24 +68,55 @@ const RequestScreen = props => {
   })
   const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL)
 
-  const handleOnCancel = () => {
-    dispatch({
-      type: REMOVEDETAILSTRAVEL,
-    })
+  const handleOnCancel = async () => {
+    await RegisterTravel({
+      variables: {
+        input: {
+          idtravel: idTravel,
+          idtravelstatus: 'CANCELADO',
+          lat: latitude,
+          lng: longitude,
+        }
+      }
+    }).then(
+      () => {
+        dispatch({
+          type: REMOVEDETAILSTRAVEL,
+        })
 
-    dispatch({
-      type: REMOVELOCATION
-    })
+        dispatch({
+          type: REMOVELOCATION
+        })
 
-    props.navigation.pop()
+        props.navigation.pop()
+      }
+    ).catch(
+      () => {
+        showMessage({
+          message: 'Skiper',
+          description: 'Tu solicitud no puede ser cancelada.',
+          backgroundColor: '#d35400',
+          color: '#fff',
+          duration: 5000,
+          icon: 'info',
+        })
+      }
+    )
+
+
   }
 
   useEffect(() => {
     if (props.navigation.isFocused()) {
       if (data) {
         const { travelstatus: { id } } = data.skiperTravel.skiperTravelsTracing[0]
+        dispatch({ type: 'ESTADOVIAJE', payload: { id } })
+
 
         switch (id) {
+          case 1:
+            setIdTravel(data.skiperTravel.id)
+            break;
           case 2:
             showMessage({
               message: 'Oppsss',
@@ -239,6 +272,25 @@ const RequestScreen = props => {
             ).catch(() => { })
 
             if (accept) break;
+
+            if (i === (orderDistance.length - 1)) {
+              showMessage({
+                message: 'Skiper',
+                description: `No hay conductores disponibles en tu zona para la categoria, por favor selecciona otra de nuestras categorias.`,
+                backgroundColor: '#7f8c8d',
+                color: '#fff',
+                icon: 'danger',
+                duration: 8000,
+                titleStyle: {
+                  fontFamily: 'Lato-Bold'
+                },
+                textStyle: {
+                  fontFamily: 'Lato-Regular'
+                }
+              })
+
+              props.navigation.pop()
+            }
           }
 
         }

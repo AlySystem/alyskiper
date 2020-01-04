@@ -76,6 +76,10 @@ const TravelTracingScreen = props => {
     }
   );
 
+  useEffect(
+    () => console.log(id), [id]
+  )
+
   const mapView = useRef(null);
   const marker = useRef(null);
   useNotification(navigate, location.latitude, location.longitude, props.navigation);
@@ -272,18 +276,10 @@ const TravelTracingScreen = props => {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.containerButton}
-        onPress={handleToggleModal}
-      >
-        <View
-          style={{
-            backgroundColor: Theme.COLORS.colorSecondary,
-            borderRadius: 100,
-            width: 100,
-            height: 8
-          }}
-        />
+      <TouchableOpacity style={styles.containerButton} onPress={handleToggleModal}>
+
+        <View style={{ backgroundColor: Theme.COLORS.colorMainDark, borderRadius: 100, width: 100, height: 8 }} />
+
         <Text allowFontScaling={false} style={styles.text}>
           Toca para mostrar detalles
         </Text>
@@ -291,25 +287,7 @@ const TravelTracingScreen = props => {
 
       {
         (id >= 3 && id <= 4) &&
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            backgroundColor: Theme.COLORS.colorMainDark,
-            borderColor: Theme.COLORS.colorSecondary,
-            borderWidth: 1,
-            elevation: 10,
-            borderRadius: 25,
-            flexDirection: "row",
-            position: "absolute",
-            top: 10,
-            left: 10,
-            height: 50,
-            width: 170,
-            justifyContent: "space-around",
-            paddingHorizontal: 18
-          }}
-          onPress={cancelTrip}
-        >
+        <TouchableOpacity style={styles.buttonCancel} onPress={cancelTrip}>
           <IconFont name="car" size={18} color={Theme.COLORS.colorSecondary} />
           <Text style={{ color: Theme.COLORS.colorSecondary }}>
             Cancelar Viaje
@@ -381,6 +359,22 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     resizeMode: "contain"
+  },
+  buttonCancel: {
+    alignItems: "center",
+    backgroundColor: Theme.COLORS.colorMainDark,
+    borderColor: Theme.COLORS.colorSecondary,
+    borderWidth: 1,
+    elevation: 10,
+    borderRadius: 25,
+    flexDirection: "row",
+    position: "absolute",
+    top: 10,
+    left: 10,
+    height: 50,
+    width: 170,
+    justifyContent: "space-around",
+    paddingHorizontal: 18
   }
 });
 
