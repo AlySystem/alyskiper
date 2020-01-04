@@ -176,6 +176,7 @@ const RequestScreen = props => {
     const driverWithInRadius = []
     const { categoryId } = travel
     let categoryName = ''
+    let categoryColor = ''
     let orderDistance = []
     let accept = false
     let driverNearby = null
@@ -194,6 +195,7 @@ const RequestScreen = props => {
       case 1:
         if (silver) {
           categoryName = 'SILVER'
+          categoryColor = '#7f8c8d'
           silver.map(drive => {
             if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
@@ -207,6 +209,7 @@ const RequestScreen = props => {
       case 2:
         if (golden) {
           categoryName = 'GOLDEN'
+          categoryColor = '#f1c40f'
           golden.map(drive => {
             if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
@@ -220,6 +223,7 @@ const RequestScreen = props => {
       case 3:
         if (vip) {
           categoryName = 'VIP'
+          categoryColor = '#8e44ad'
           vip.map(drive => {
             if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
@@ -233,6 +237,7 @@ const RequestScreen = props => {
       case 4:
         if (president) {
           categoryName = 'PRESIDENT'
+          categoryColor = '#2980b9'
           president.map(drive => {
             if (isPointWithinRadius({ latitude, longitude }, { latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }, MaxDistance)) {
               driverWithInRadius.push({ driveId: drive.state.SkiperAgentId, latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude })
@@ -278,14 +283,15 @@ const RequestScreen = props => {
 
             if (i === (orderDistance.length - 1)) {
               showMessage({
-                message: 'Skiper',
-                description: `No hay conductores disponibles en tu zona para la categoria, por favor selecciona otra de nuestras categorias.`,
+                message: `Skiper ${categoryName}`,
+                description: `No hay conductores disponibles en tu zona, por favor selecciona otra de nuestras categorias.`,
                 backgroundColor: '#7f8c8d',
                 color: '#fff',
                 icon: 'danger',
                 duration: 8000,
                 titleStyle: {
-                  fontFamily: 'Lato-Bold'
+                  fontFamily: 'Lato-Bold',
+                  color: categoryColor
                 },
                 textStyle: {
                   fontFamily: 'Lato-Regular'
@@ -300,14 +306,15 @@ const RequestScreen = props => {
         else {
           // Mostramos un mensaje de error
           showMessage({
-            message: 'Skiper',
+            message: `Skiper ${categoryName}`,
             description: `No hay conductores cerca en tu zona para la categoria ${categoryName}, por favor selecciona otra de nuestras categorias.`,
             backgroundColor: '#7f8c8d',
             color: '#fff',
             icon: 'danger',
             duration: 8000,
             titleStyle: {
-              fontFamily: 'Lato-Bold'
+              fontFamily: 'Lato-Bold',
+              color: categoryColor
             },
             textStyle: {
               fontFamily: 'Lato-Regular'
