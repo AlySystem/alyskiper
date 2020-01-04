@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet
 } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, useStore } from 'react-redux'
 import { useMutation, useSubscription } from '@apollo/react-hooks'
 import { showMessage } from 'react-native-flash-message'
 import { isPointWithinRadius, orderByDistance } from 'geolib'
@@ -41,6 +41,8 @@ const RequestScreen = props => {
   const { steps } = useSelector(state => state.direction)
   const { latitude, longitude } = useSelector(state => state.location)
   const [idTravel, setIdTravel] = useState(0)
+  const [message, setMessage] = useState('Buscando Skiper...')
+  const [disabled, setDisabled] = useState(false)
   const { data } = useSubscription(GETNOTIFICATIONTRAVEL, { variables: { idusuario: userId } })
   const [RegisterTravel] = useMutation(TRAVELTRACING)
 
@@ -69,6 +71,7 @@ const RequestScreen = props => {
   const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL)
 
   const handleOnCancel = async () => {
+    setDisabled(true)
     await RegisterTravel({
       variables: {
         input: {
@@ -102,7 +105,7 @@ const RequestScreen = props => {
         })
       }
     )
-
+    setDisabled(false)
 
   }
 
@@ -242,12 +245,11 @@ const RequestScreen = props => {
         break
     }
 
-    console.log(orderDistance)
     const execute = async () => {
       try {
         if (orderDistance.length > 0) {
           for (let i = 0; i < orderDistance.length; i++) {
-            console.log(i, accept)
+            setMessage(`Solicitando Skipers ${i + 1} de ${orderDistance.length}`)
             const data = orderDistance[i]
 
             const variables = {
@@ -263,6 +265,7 @@ const RequestScreen = props => {
               ({ data: response }) => {
                 if (response) {
                   if (response.ValidateDriveAvailable) {
+                    setMessage(`Esperando respuesta de Skiper`)
                     accept = true
                     executeTravel(data['driveId'])
                     console.log(data['driveId'] + ' - ' + response.ValidateDriveAvailable)
@@ -359,10 +362,10 @@ const RequestScreen = props => {
           <View style={{ marginVertical: 10 }} />
 
           <Text style={{ color: Theme.COLORS.colorParagraph, fontFamily: 'Lato-Bold', fontSize: Theme.SIZES.normal }}>
-            SOLICITANDO SKIPER...
+            {message}
           </Text>
           <View style={styles.containerButton}>
-            <IconButton isActiveIcon onPress={handleOnCancel} message='CANCELAR SKIPER' />
+            <IconButton isActiveIcon onPress={handleOnCancel} disabled={disabled} message='CANCELAR SKIPER' />
           </View>
         </View>
       </View>

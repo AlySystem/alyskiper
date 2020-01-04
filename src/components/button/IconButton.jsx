@@ -18,6 +18,7 @@ const IconButton = (props) => {
       onPress={props.onPress}
       style={props.stylesButton || styles.button}
       activeOpacity={props.activeOpacity}
+      disabled={props.disabled}
     >
       {!(props.isLoading) ? (
         <>
