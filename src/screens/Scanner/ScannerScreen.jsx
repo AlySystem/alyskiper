@@ -10,6 +10,7 @@ import { showMessage } from 'react-native-flash-message'
 import { CameraKitCameraScreen } from 'react-native-camera-kit'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
+import { TextInputMask } from 'react-native-masked-text'
 import Geolocation from 'react-native-geolocation-service'
 
 // Import utils
@@ -216,23 +217,13 @@ const ScannerScreen = props => {
   }
 
   return (
-    <View style={{
-      flex: 1,
-      backgroundColor: Theme.COLORS.colorMainAlt
-    }}
-    >
-      <TouchableOpacity
-        style={{
-          width: '100%',
-          marginVertical: 20,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-        onPress={() => setManualQR(!manualQR)}
-      >
+    <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt }}>
+      <TouchableOpacity style={styles.buttonToggle} onPress={() => setManualQR(!manualQR)}>
         <Text allowFontScaling={false} style={styles.text}>{manualQR ? 'ESCANEAR QR' : 'AGREGAR MANUAL'}</Text>
       </TouchableOpacity>
-      {!manualQR && (
+
+      {
+        !manualQR &&
         <CameraKitCameraScreen
           style={{ flex: 1 }}
           showFrame
@@ -242,23 +233,14 @@ const ScannerScreen = props => {
           colorForScannerFrame='black'
           onReadCode={handleOnReadyCode}
         />
-      )}
-      {manualQR && (
+
+      }
+
+      {
+        manualQR &&
         <Background>
-          <View style={{
-            flex: 1,
-            backgroundColor: 'rgba(0,0,0,.5)',
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingHorizontal: 20
-          }}
-          >
-            <Text style={{
-              color: Theme.COLORS.colorParagraph,
-              fontFamily: 'Lato-Bold',
-              fontSize: Theme.SIZES.small
-            }}
-            />
+          <View style={styles.manualContainer}>
+
             <InputControl
               value={codeQR}
               setValue={setCodeQR}
@@ -267,16 +249,16 @@ const ScannerScreen = props => {
               onChangeText={value => setCodeQR(value)}
               keyboardType='numeric'
               isActiveButton
-              stylesInput={styles.stylesInput}
-            />
+              stylesInput={styles.stylesInput} />
+
             <IconButton
               isActiveIcon
               message='CONFIRMAR'
-              onPress={handleOnSubmit}
-            />
+              onPress={handleOnSubmit} />
           </View>
         </Background>
-      )}
+
+      }
     </View>
   )
 }
@@ -299,6 +281,24 @@ const styles = StyleSheet.create({
     fontSize: Theme.SIZES.small,
     color: Theme.COLORS.colorParagraph,
     marginBottom: 20
+  },
+  buttonToggle: {
+    width: '100%',
+    marginVertical: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  manualContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20
+  },
+  textManual: {
+    color: Theme.COLORS.colorParagraph,
+    fontFamily: 'Lato-Bold',
+    fontSize: Theme.SIZES.small
   }
 })
 
