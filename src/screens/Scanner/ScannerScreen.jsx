@@ -32,6 +32,7 @@ const ScannerScreen = props => {
   const { navigate } = props.navigation
   const { userId } = useSelector(state => state.user)
   const [manualQR, setManualQR] = useState(false)
+  const [loader, setLoader] = useState(false)
   const [codeQR, setCodeQR] = useState('')
   const [TravelTracing, { loading }] = useMutation(TRAVELTRACING)
   useEffect(() => {
@@ -113,6 +114,7 @@ const ScannerScreen = props => {
   }
 
   const handleOnSubmit = async () => {
+    setLoader(true)
     const result = codeQR.split('-')
     const idTravel = parseInt(result[0])
     const idUser = parseInt(result[1])
@@ -198,6 +200,8 @@ const ScannerScreen = props => {
         if (error) return <Error title='Error' description='Oh no, ocurrio un error al momento de obtener tu ubicacion, intente de nuevo o mas tarde.' />
       }, { timeout: 2000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 20 }
     )
+
+    setLoader(false)
   }
 
   if (loading) {
@@ -252,6 +256,7 @@ const ScannerScreen = props => {
               stylesInput={styles.stylesInput} />
 
             <IconButton
+              disabled={loader}
               isActiveIcon
               message='CONFIRMAR'
               onPress={handleOnSubmit} />

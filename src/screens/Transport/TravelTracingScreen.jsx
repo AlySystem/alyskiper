@@ -1,53 +1,54 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react"
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Image,
-  Alert
-} from "react-native";
-import { Marker } from "react-native-maps";
-import { useLazyQuery, useMutation } from "@apollo/react-hooks";
-import { useSelector, useDispatch } from "react-redux";
-import PubNubReact from "pubnub-react";
+  Alert,
+  BackHandler
+} from "react-native"
+import { Marker } from "react-native-maps"
+import { useLazyQuery, useMutation } from "@apollo/react-hooks"
+import { useSelector, useDispatch } from "react-redux"
+import PubNubReact from "pubnub-react"
 import { showMessage } from 'react-native-flash-message'
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 
 // Import actions
-import { DETAILSTRAVEL } from "../../store/actionTypes";
+import { DETAILSTRAVEL } from "../../store/actionTypes"
 
 // Import components
-import Loader from "../../components/loader/Loader";
-import Modal from "../../components/modal/Modal";
-import DetailsDrive from "../../components/details/DetailsDrive";
-import Button from "../../components/button/Button";
-import { Map } from "../../components/map/MapView";
-import Picture from "../../components/picture/Picture";
-import IconFont from "react-native-vector-icons/FontAwesome5";
+import Loader from "../../components/loader/Loader"
+import Modal from "../../components/modal/Modal"
+import DetailsDrive from "../../components/details/DetailsDrive"
+import Button from "../../components/button/Button"
+import { Map } from "../../components/map/MapView"
+import Picture from "../../components/picture/Picture"
+import IconFont from "react-native-vector-icons/FontAwesome5"
 import ButtonSupport from '../../components/button/ButtonSupport'
 
 // Import custom hooks
-import { useNotification } from "../../hooks/useNotification";
-import { useWatchLocation } from "../../hooks/useWatchLocation";
+import { useNotification } from "../../hooks/useNotification"
+import { useWatchLocation } from "../../hooks/useWatchLocation"
 
 // Import query
-import { GETTRAVELBYUSERID } from "../../graphql/querys/Querys";
-import { TRAVELTRACING } from "../../graphql/mutations/Mutations";
+import { GETTRAVELBYUSERID } from "../../graphql/querys/Querys"
+import { TRAVELTRACING } from "../../graphql/mutations/Mutations"
 
 // Import theme
-import { Theme } from "../../constants/Theme";
+import { Theme } from "../../constants/Theme"
 
 const TravelTracingScreen = props => {
-  const dispatch = useDispatch();
-  const { navigate } = props.navigation;
-  const { userId, firstName } = useSelector(state => state.user);
-  const { id } = useSelector(state => state.status);
-  const { location } = useWatchLocation();
-  const [showDetails, setShowDetails] = useState(false);
-  const [errorTravel, setErrorTravel] = useState(false);
-  const [driver, setDriver] = useState();
-  const [idTravel] = useState(props.navigation.getParam("idTravel"));
+  const dispatch = useDispatch()
+  const { navigate } = props.navigation
+  const { userId, firstName } = useSelector(state => state.user)
+  const { id } = useSelector(state => state.status)
+  const { location } = useWatchLocation()
+  const [showDetails, setShowDetails] = useState(false)
+  const [errorTravel, setErrorTravel] = useState(false)
+  const [driver, setDriver] = useState()
+  const [idTravel] = useState(props.navigation.getParam("idTravel"))
   const [TravelTracing] = useMutation(TRAVELTRACING, {
     onError: (error) => {
       showMessage({
@@ -66,23 +67,19 @@ const TravelTracingScreen = props => {
       })
     },
     onCompleted: () => {
-      return navigate("Home");
+      return navigate("Home")
     }
-  });
+  })
   const [GetTravelByUserId, { data, loading }] = useLazyQuery(
     GETTRAVELBYUSERID,
     {
       fetchPolicy: "no-cache"
     }
-  );
-
-  useEffect(
-    () => console.log(id), [id]
   )
 
-  const mapView = useRef(null);
-  const marker = useRef(null);
-  useNotification(navigate, location.latitude, location.longitude, props.navigation);
+  const mapView = useRef(null)
+  const marker = useRef(null)
+  useNotification(navigate, location.latitude, location.longitude, props.navigation)
 
   const pubnub = new PubNubReact({
     publishKey: 'pub-c-2ed1b9dc-e811-411f-99f5-01a3addeda39',
@@ -90,29 +87,39 @@ const TravelTracingScreen = props => {
     subscribeRequestTimeout: 60000,
     presenceTimeout: 122,
     uuid: `${firstName}${userId}`
-  });
+  })
 
   const handleToggleModal = () => {
-    setShowDetails(!showDetails);
-  };
+    setShowDetails(!showDetails)
+  }
 
   useEffect(() => {
-    GetTravelByUserId({ variables: { iduser: userId } });
-  }, []);
+    GetTravelByUserId({ variables: { iduser: userId } })
+
+    const HandledBackEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      props.navigation.popToTop()
+      // console.log('test')
+      return true
+    })
+
+    return () => {
+      HandledBackEvent.remove()
+    }
+  }, [])
 
   useEffect(() => {
     if (data && data.getTravelByUserId) {
-      setErrorTravel(false);
+      setErrorTravel(false)
       dispatch({
         type: DETAILSTRAVEL,
         payload: {
           drive: data.getTravelByUserId
         }
-      });
+      })
       pubnub.subscribe({
         channels: [`Driver_${idTravel || data.getTravelByUserId.id}`],
         withPresence: true
-      });
+      })
 
       pubnub.hereNow(
         {
@@ -130,45 +137,32 @@ const TravelTracingScreen = props => {
               const channels =
                 response.channels[
                 `Driver_${idTravel || data.getTravelByUserId.id}`
-                ];
+                ]
               if (channels !== undefined) {
                 const drive = channels.occupants.filter(
                   item => item.state !== undefined
-                );
-                setDriver(drive);
+                )
+                setDriver(drive)
               }
             }
           }
         }
-      );
+      )
     } else {
-      setErrorTravel(true);
+      setErrorTravel(true)
     }
-  }, [data]);
+  }, [data])
 
   if (loading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: Theme.COLORS.colorMainAlt,
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
+      <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt, justifyContent: "center", alignItems: "center" }}>
         <Loader />
         <View style={{ paddingVertical: 10 }} />
-        <Text
-          style={{
-            color: Theme.COLORS.colorParagraph,
-            fontFamily: "Lato-Bold",
-            fontSize: Theme.SIZES.normal
-          }}
-        >
+        <Text style={{ color: Theme.COLORS.colorParagraph, fontFamily: "Lato-Bold", fontSize: Theme.SIZES.normal }}>
           Cargando...
         </Text>
       </View>
-    );
+    )
   }
 
   const cancelTrip = () => {
@@ -194,8 +188,8 @@ const TravelTracingScreen = props => {
           TravelTracing({ variables })
         }
       }
-    ]);
-  };
+    ])
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt }}>
@@ -246,7 +240,7 @@ const TravelTracingScreen = props => {
                     source={require("../../../assets/images/img-icon-silver.png")}
                   />
                 </Marker>
-              );
+              )
             })}
         </Map>
       )}
@@ -334,8 +328,8 @@ const TravelTracingScreen = props => {
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   containerButton: {
@@ -376,6 +370,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingHorizontal: 18
   }
-});
+})
 
-export default TravelTracingScreen;
+export default TravelTracingScreen
