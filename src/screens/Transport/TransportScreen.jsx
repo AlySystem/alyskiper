@@ -44,6 +44,7 @@ import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
 import { getPixelSize } from '../../utils/Pixel'
 import { routeDirection } from '../../utils/Directions'
 import Picture from '../../components/picture/Picture'
+import TravelTracingScreen from './TravelTracingScreen'
 
 const { height, width } = Dimensions.get('window')
 
@@ -389,4 +390,18 @@ const styles = StyleSheet.create({
   }
 })
 
-export default TransportScreen
+
+const DecisionView = props => {
+  const { travel } = useSelector(state => {
+    console.log(state.travel)
+    return state.travel
+  })
+
+  if (travel) {
+    return <TravelTracingScreen {...props} />
+  } else {
+    return <TransportScreen {...props} />
+  }
+}
+
+export default DecisionView

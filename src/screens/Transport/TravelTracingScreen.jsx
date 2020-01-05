@@ -85,7 +85,7 @@ const TravelTracingScreen = props => {
     publishKey: 'pub-c-2ed1b9dc-e811-411f-99f5-01a3addeda39',
     subscribeKey: 'sub-c-8a28b1d0-28d4-11ea-894a-b6462cb07a90',
     subscribeRequestTimeout: 60000,
-    presenceTimeout: 122,
+    presenceTimeout: 20,
     uuid: `${firstName}${userId}`
   })
 
