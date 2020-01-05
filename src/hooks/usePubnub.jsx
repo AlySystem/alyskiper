@@ -15,8 +15,8 @@ export const usePubnub = () => {
   const pubnub = new PubNubReact({
     publishKey: 'pub-c-2ed1b9dc-e811-411f-99f5-01a3addeda39',
     subscribeKey: 'sub-c-8a28b1d0-28d4-11ea-894a-b6462cb07a90',
-    subscribeRequestTimeout: 60000,
-    presenceTimeout: 20,
+    // subscribeRequestTimeout: 60000,
+    // presenceTimeout: 20,
     uuid: firstName
   })
 
@@ -27,53 +27,57 @@ export const usePubnub = () => {
       channels: allChanels,
       withPresence: true
     })
+    let silver, golden, vip, president
 
-    pubnub.hereNow({ includeUUIDs: true, includeState: true, channels: allChanels }, (status, response) => {
-
-      let silver, golden, vip, president
-
-      if (response !== undefined) {
-        if ('SkiperDrive_1' in response.channels) {
-          const silverChannel = response.channels.SkiperDrive_1
-          if (silverChannel !== undefined) {
-            silver = silverChannel.occupants.filter(item => item.state !== undefined)
+    const interval = setInterval(() => {
+      pubnub.hereNow({ includeUUIDs: true, includeState: true, channels: allChanels }, (status, response) => {
+        if (response !== undefined) {
+          if ('SkiperDrive_1' in response.channels) {
+            const silverChannel = response.channels.SkiperDrive_1
+            if (silverChannel !== undefined) {
+              silver = silverChannel.occupants.filter(item => item.state !== undefined)
+            }
           }
+
+          if ('SkiperDrive_2' in response.channels) {
+            const goldenChannel = response.channels.SkiperDrive_2
+            if (goldenChannel !== undefined) {
+              golden = goldenChannel.occupants.filter(item => item.state !== undefined)
+            }
+          }
+
+          if ('SkiperDrive_3' in response.channels) {
+            const vipChannel = response.channels.SkiperDrive_3
+            if (vipChannel !== undefined) {
+              vip = vipChannel.occupants.filter(item => item.state !== undefined)
+            }
+          }
+
+          if ('SkiperDrive_4' in response.channels) {
+            const presidentChannel = response.channels.SkiperDrive_4
+            if (presidentChannel !== undefined) {
+              president = presidentChannel.occupants.filter(item => item.state !== undefined)
+            }
+          }
+
+          setDrivers({ silver, golden, vip, president })
+
+          dispatch({
+            type: DRIVERS,
+            payload: {
+              silver,
+              golden,
+              vip,
+              president
+            }
+          })
         }
+      })
+    }, 1000)
 
-        if ('SkiperDrive_2' in response.channels) {
-          const goldenChannel = response.channels.SkiperDrive_2
-          if (goldenChannel !== undefined) {
-            golden = goldenChannel.occupants.filter(item => item.state !== undefined)
-          }
-        }
-
-        if ('SkiperDrive_3' in response.channels) {
-          const vipChannel = response.channels.SkiperDrive_3
-          if (vipChannel !== undefined) {
-            vip = vipChannel.occupants.filter(item => item.state !== undefined)
-          }
-        }
-
-        if ('SkiperDrive_4' in response.channels) {
-          const presidentChannel = response.channels.SkiperDrive_4
-          if (presidentChannel !== undefined) {
-            president = presidentChannel.occupants.filter(item => item.state !== undefined)
-          }
-        }
-
-        setDrivers({ silver, golden, vip, president })
-
-        dispatch({
-          type: DRIVERS,
-          payload: {
-            silver,
-            golden,
-            vip,
-            president
-          }
-        })
-      }
-    })
+    return () => {
+      clearInterval(interval)
+    }
 
   }, [])
 

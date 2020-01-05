@@ -46,8 +46,6 @@ import { getPixelSize } from '../../utils/Pixel'
 import { routeDirection } from '../../utils/Directions'
 import Picture from '../../components/picture/Picture'
 import TravelTracingScreen from './TravelTracingScreen'
-import pubnubReact from 'pubnub-react'
-import { keys } from '../../utils/keys'
 
 const { height, width } = Dimensions.get('window')
 
@@ -67,24 +65,7 @@ const TransportScreen = props => {
   const [isVisible, setIsVisible] = useState(false)
   const [destination, setDestination] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  // const { silver, golden, vip, president } = usePubnub()
-
-  const allChanels = [`${keys.channels.drivers.silver}`, `${keys.channels.drivers.golden}`, `${keys.channels.drivers.vip}`, `${keys.channels.drivers.president}`]
-
-  const pubnub = new pubnubReact({
-    publishKey: 'pub-c-2ed1b9dc-e811-411f-99f5-01a3addeda39',
-    subscribeKey: 'sub-c-8a28b1d0-28d4-11ea-894a-b6462cb07a90',
-    // subscribeRequestTimeout: 60000,
-    // presenceTimeout: 20,
-    uuid: firstName
-  })
-
-  // Creamos estados para todas las categoria
-  // para todos los skiper
-  const [silver, setSilver] = useState([])
-  const [golden, setGolden] = useState([])
-  const [vip, setVip] = useState([])
-  const [president, setpresident] = useState([])
+  const { silver, golden, vip, president } = usePubnub()
 
   const mapView = useRef(null)
   // Funcion que destruye el viaje marcado en cache
@@ -108,64 +89,6 @@ const TransportScreen = props => {
         id.remove()
       }
     }
-  }, [])
-
-  useEffect(() => {
-    pubnub.subscribe({
-      channels: allChanels,
-      withPresence: true
-    })
-
-    const rastrear = setInterval(() => {
-      pubnub.hereNow({ includeUUIDs: true, includeState: true, channels: allChanels }, (status, response) => {
-        console.log(response)
-
-        if (response !== undefined) {
-          if ('SkiperDrive_1' in response.channels) {
-            const silverChannel = response.channels.SkiperDrive_1
-            if (silverChannel !== undefined) {
-              setSilver(silverChannel.occupants.filter(item => item.state !== undefined))
-            }
-          }
-
-          if ('SkiperDrive_2' in response.channels) {
-            const goldenChannel = response.channels.SkiperDrive_2
-            if (goldenChannel !== undefined) {
-              setGolden(goldenChannel.occupants.filter(item => item.state !== undefined))
-            }
-          }
-
-          if ('SkiperDrive_3' in response.channels) {
-            const vipChannel = response.channels.SkiperDrive_3
-            if (vipChannel !== undefined) {
-              setVip(vipChannel.occupants.filter(item => item.state !== undefined))
-            }
-          }
-
-          if ('SkiperDrive_4' in response.channels) {
-            const presidentChannel = response.channels.SkiperDrive_4
-            if (presidentChannel !== undefined) {
-              setpresident(presidentChannel.occupants.filter(item => item.state !== undefined))
-            }
-          }
-
-          dispatch({
-            type: DRIVERS,
-            payload: {
-              silver,
-              golden,
-              vip,
-              president
-            }
-          })
-        }
-      })
-    }, 1000)
-
-    return () => {
-      clearInterval(rastrear)
-    }
-
   }, [])
 
   const handleDirecctions = (placeId, details) => {
