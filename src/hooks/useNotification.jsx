@@ -11,6 +11,7 @@ import { ACTIVETRAVEL } from '../store/actionTypes'
 import { GETNOTIFICATIONTRAVEL } from '../graphql/subscription/Subcription'
 
 import { notification } from '../hooks/usePushNotification'
+import AsyncStorage from '@react-native-community/async-storage'
 
 export const useNotification = (navigate, latitude, longitude, navigation) => {
   const dispatch = useDispatch()
@@ -54,6 +55,7 @@ export const useNotification = (navigate, latitude, longitude, navigation) => {
             payload: { travel: idTravel }
           })
           notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
+          AsyncStorage.setItem('travel', 'true')
           return navigate('TravelTrancing', {
             idTravel: idTravel
           })
@@ -72,12 +74,14 @@ export const useNotification = (navigate, latitude, longitude, navigation) => {
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
+          AsyncStorage.removeItem('travel')
           return navigate('Home')
         case 10:
           notification('AlySkiper', 'Su viaje ha sido finalizado.')
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
+          AsyncStorage.removeItem('travel')
           return navigate('FinalTravel')
       }
     }

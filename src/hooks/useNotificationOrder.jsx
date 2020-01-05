@@ -9,6 +9,7 @@ import { STATUSORDER, REMOVESTATUSORDER } from '../store/actionTypes'
 import { GETNOTIFICATIONORDER } from '../graphql/subscription/Subcription'
 
 import { notification } from './usePushNotification'
+import { AsyncStorage } from 'react-native'
 
 export const useNotificationOrder = (idCommerce, navigate) => {
   const dispatch = useDispatch()
@@ -21,7 +22,7 @@ export const useNotificationOrder = (idCommerce, navigate) => {
       const { name, id } = subscriptionData.data.skiperOrders.skiperOrderTracing[0].orderStatus
       switch (id) {
         case 1:
-          console.log(name)
+          
           dispatch({
             type: STATUSORDER,
             payload: {
@@ -32,7 +33,7 @@ export const useNotificationOrder = (idCommerce, navigate) => {
           })
           break
         case 2:
-          console.log(name)
+          
           dispatch({
             type: STATUSORDER,
             payload: {
@@ -54,7 +55,7 @@ export const useNotificationOrder = (idCommerce, navigate) => {
             }
           })
           notification('AlySkiper', 'Tu orden fue aceptada con exito.')
-          console.log(name)
+          AsyncStorage.setItem('travel', 'true')
           break
         case 4:
           dispatch({
@@ -65,7 +66,6 @@ export const useNotificationOrder = (idCommerce, navigate) => {
               date: `${date.getHours()}:${date.getMinutes()}`
             }
           })
-          console.log(name)
           break
         case 5:
           dispatch({
@@ -76,7 +76,7 @@ export const useNotificationOrder = (idCommerce, navigate) => {
               date: `${date.getHours()}:${date.getMinutes()}`
             }
           })
-          console.log(name)
+          AsyncStorage.removeItem('travel')
           break
         case 6:
           dispatch({
@@ -87,8 +87,7 @@ export const useNotificationOrder = (idCommerce, navigate) => {
               date: `${date.getHours()}:${date.getMinutes()}`
             }
           })
-          notification('AlySkiper', 'Tu orden esta en camino.')
-          console.log(name)
+          notification('AlySkiper', 'Tu orden esta en camino.')          
           break
         case 7:
           dispatch({
@@ -98,8 +97,7 @@ export const useNotificationOrder = (idCommerce, navigate) => {
               code: 7,
               date: `${date.getHours()}:${date.getMinutes()}`
             }
-          })
-          console.log(name)
+          })          
           break
       }
     }

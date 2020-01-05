@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  AsyncStorage
 } from 'react-native'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import { useMutation, useSubscription } from '@apollo/react-hooks'
@@ -143,6 +144,7 @@ const RequestScreen = props => {
               payload: { travel: data.skiperTravel.id }
             })
             notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
+            AsyncStorage.setItem('travel', 'true')
             navigate('TravelTrancing', {
               idTravel: data.skiperTravel.id
             })
@@ -255,6 +257,7 @@ const RequestScreen = props => {
               time: duration.value,
               distance: parseInt(distance.value),
               idcurrency: 2,
+              idcategoryTravel: travel.categoryId
             }
 
             await ValidateDrive({ variables }).then(
@@ -264,7 +267,6 @@ const RequestScreen = props => {
                     setMessage(`Esperando respuesta de Skiper`)
                     accept = true
                     executeTravel(data['driveId'])
-                    console.log(data['driveId'] + ' - ' + response.ValidateDriveAvailable)
                   }
                 }
               }

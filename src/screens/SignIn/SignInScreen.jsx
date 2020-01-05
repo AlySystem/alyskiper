@@ -13,6 +13,7 @@ import * as Animatable from 'react-native-animatable'
 import { showMessage } from 'react-native-flash-message'
 import { useMutation } from '@apollo/react-hooks'
 import { useDispatch } from 'react-redux'
+import DeviceInfo from 'react-native-device-info'
 
 // Actions types
 import { USERDATA } from '../../store/actionTypes'
@@ -208,6 +209,9 @@ const SignInScreen = props => {
               >
                 <Text allowFontScaling={false} style={styles.text}>¿Olvido su contraseña?</Text>
               </TouchableOpacity>
+
+              <Text style={{ color: '#FFF', marginTop: 20 }}>{DeviceInfo.getVersion()}</Text>
+
             </Animatable.View>
           </View>
         </ScrollView>
