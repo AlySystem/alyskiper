@@ -39,6 +39,8 @@ import { TRAVELTRACING } from "../../graphql/mutations/Mutations"
 // Import theme
 import { Theme } from "../../constants/Theme"
 
+// const iconS
+
 const TravelTracingScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
@@ -76,7 +78,7 @@ const TravelTracingScreen = props => {
       fetchPolicy: "no-cache"
     }
   )
-
+  let interval = null
   const mapView = useRef(null)
   const marker = useRef(null)
   useNotification(navigate, location.latitude, location.longitude, props.navigation)
@@ -121,14 +123,14 @@ const TravelTracingScreen = props => {
         withPresence: true
       })
 
-      pubnub.hereNow(
-        {
+      interval = setInterval(() => {
+        pubnub.hereNow({
           includeUUIDs: true,
           includeState: true,
           channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
-        },
+        }, (status, response) => {
+          console.log(response)
 
-        function (status, response) {
           if (response !== undefined) {
             if (
               `Driver_${idTravel || data.getTravelByUserId.id}` in
@@ -146,10 +148,17 @@ const TravelTracingScreen = props => {
               }
             }
           }
-        }
-      )
+        })
+      }, 1000)
     } else {
       setErrorTravel(true)
+    }
+
+
+    return () => {
+      if (interval !== null) {
+        clearInterval(interval)
+      }
     }
   }, [data])
 
@@ -234,7 +243,8 @@ const TravelTracingScreen = props => {
                     latitude: drive.state.coords.latitude,
                     longitude: drive.state.coords.longitude
                   }}
-                >
+                  title={`Tu conductor`}
+                  description={`${drive.state.firstname} ${drive.state.lastname}`}>
                   <Image
                     style={styles.drive}
                     source={require("../../../assets/images/img-icon-silver.png")}

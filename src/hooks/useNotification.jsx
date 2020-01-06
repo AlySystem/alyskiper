@@ -68,6 +68,7 @@ export const useNotification = (navigate, latitude, longitude, navigation) => {
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
+          AsyncStorage.removeItem('travel')
           return navigate('FinalTravel')
         case 9:
           notification('AlySkiper', 'Su viaje ha sido cancelado.')
