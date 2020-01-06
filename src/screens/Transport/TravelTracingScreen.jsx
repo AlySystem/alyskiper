@@ -129,8 +129,6 @@ const TravelTracingScreen = props => {
           includeState: true,
           channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
         }, (status, response) => {
-          console.log(response)
-
           if (response !== undefined) {
             if (
               `Driver_${idTravel || data.getTravelByUserId.id}` in
@@ -247,7 +245,7 @@ const TravelTracingScreen = props => {
                   description={`${drive.state.firstname} ${drive.state.lastname}`}>
                   <Image
                     style={styles.drive}
-                    source={require("../../../assets/images/img-icon-silver.png")}
+                    source={require("../../../assets/images/img-travel.png")}
                   />
                 </Marker>
               )
