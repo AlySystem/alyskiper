@@ -241,3 +241,16 @@ export const CATEGORIESCOMMERCE = gql`
     }
   }
 `
+
+export const GETUSERWALLET = gql`
+  query getWallet($id: Int!) {
+    GetUserWalletsCrypto(id: $id){
+      skiperWallet{
+        amount_crypto
+        currencyID{
+          name
+        }
+      }
+    }
+  }
+`

@@ -47,6 +47,7 @@ import logo from '../../../assets/images/logo.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+import Wallet from '../../screens/Wallet/Wallet'
 
 const navigationOptions = ({ navigation }) => {
   return {
@@ -210,7 +211,7 @@ const StackNavigation = createStackNavigator({
     }
   },
   Wallet: {
-    screen: WalletScreen,
+    screen: Wallet,
     navigationOptions
   },
   Category: {

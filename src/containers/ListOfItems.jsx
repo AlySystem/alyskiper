@@ -38,7 +38,7 @@ const items = [
   },
   {
     key: 4,
-    name: 'Wallets',
+    name: 'AlyPay',
     icon: 'account-balance-wallet',
     routeName: 'Wallet'
   },
