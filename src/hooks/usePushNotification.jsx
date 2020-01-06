@@ -9,9 +9,9 @@ import { Theme } from '../constants/Theme'
 
 export const configure = () => {
   PushNotification.configure({
-    onRegister: function (token) {
+    onRegister: (token) => {
     },
-    onNotification: function (notification) {
+    onNotification: (notification) => {
       notification.finish(PushNotificationIOS.FetchResult.NoData)
     },
     permissions: {

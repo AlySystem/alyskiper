@@ -33,6 +33,7 @@ import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 import BillTransport from '../../screens/Transport/BillTransportScreen'
 import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
 import DetailsCrypto from '../../screens/AlyPay/DetailsCripto'
+import CryptoPackages from '../../screens/AlyPay/CryptoPackages'
 import NextCommerceScreen from '../../screens/Commerce/NextCommerceScreen'
 import TabStack from '../tabs/TabStack'
 
@@ -133,6 +134,10 @@ const StackNavigation = createStackNavigator({
   },
   DetailsCrypto: {
     screen: DetailsCrypto,
+    navigationOptions
+  },
+  CryptoPackages: {
+    screen: CryptoPackages,
     navigationOptions
   },
   PaymentMethod: {

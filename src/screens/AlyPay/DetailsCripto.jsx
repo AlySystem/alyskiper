@@ -16,7 +16,7 @@ import ImageBackground from '../../../assets/images/background-alymoney.png'
 import ImageAlyPay from '../../../assets/images/alypay.png'
 import { Theme } from '../../constants/Theme'
 
-const DetailsCrypto = () => {
+const DetailsCrypto = (props) => {
     // Obtenemos el id del usuario de redux
     // const { userId } = useSelector(storage => storage.user)
     const userId = 637
@@ -71,7 +71,7 @@ const DetailsCrypto = () => {
             fontSize: RFValue(22)
         },
         buttons: {
-            backgroundColor: Theme.COLORS.colorMain,
+            backgroundColor: Theme.COLORS.colorMain + '88',
             borderColor: 'blue',
             borderWidth: 1,
             borderRadius: 5,
@@ -127,12 +127,12 @@ const DetailsCrypto = () => {
 
             <View style={Styles.containerButtons}>
                 <View>
-                    <TouchableOpacity style={Styles.buttons}>
-                        <Text style={Styles.buttonsText}>Comprar paquetes de monedas</Text>
+                    <TouchableOpacity onPress={() => props.navigation.navigate('CryptoPackages')} style={Styles.buttons}>
+                        <Text style={Styles.buttonsText}>Recargar saldo</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={Styles.buttons}>
-                        <Text style={Styles.buttonsText}>Enviar monedas</Text>
+                        <Text style={Styles.buttonsText}>Transferir saldo</Text>
                     </TouchableOpacity>
                 </View>
 
