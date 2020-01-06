@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, Image } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { useQuery } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
@@ -8,12 +8,15 @@ import { showMessage } from 'react-native-flash-message'
 // Import components
 import Background from '../../components/background/Background'
 
-// Import Assets
-import ImageBackground from '../../../assets/images/background-alycoin.png'
+// Import Apollo query
 import { GETUSERWALLET } from '../../graphql/querys/Querys'
+
+// Import Assets
+import ImageBackground from '../../../assets/images/background-alymoney.png'
+import ImageAlyPay from '../../../assets/images/alypay.png'
 import { Theme } from '../../constants/Theme'
 
-const AlyPay = () => {
+const DetailsCrypto = () => {
     // Obtenemos el id del usuario de redux
     // const { userId } = useSelector(storage => storage.user)
     const userId = 637
@@ -38,11 +41,11 @@ const AlyPay = () => {
 
     // Estilos generales
     const Styles = StyleSheet.create({
-        textTitle: {
+        imageAly: {
             alignSelf: 'center',
-            color: '#FFF',
-            marginVertical: RFValue(25),
-            fontSize: RFValue(24),
+            height: RFValue(100),
+            resizeMode: 'contain',
+            width: RFValue(180),
         },
         container: {
             alignItems: 'center'
@@ -102,7 +105,7 @@ const AlyPay = () => {
 
     return (
         <Background source={ImageBackground}>
-            <Text style={Styles.textTitle}>AlyPay</Text>
+            <Image style={Styles.imageAly} source={ImageAlyPay} />
 
             <View style={Styles.container}>
                 {
@@ -141,4 +144,4 @@ const AlyPay = () => {
     )
 }
 
-export default AlyPay
+export default DetailsCrypto

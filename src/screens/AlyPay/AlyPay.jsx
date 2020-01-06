@@ -18,42 +18,37 @@ import ImageAlyPay from '../../../assets/images/alypay.png'
 import ItemCommission from '../../components/item/ItemCommission'
 import { RFValue } from 'react-native-responsive-fontsize'
 
-const AlyPay = props => {
+const AlyPay = (props) => {
   const items = [
     {
       img: require('../../../assets/images/img-logo-alycoin-alt.png'),
       name: 'Alycoin',
       symbol: 'ALY',
       price: 1,
-      percent_change: 0.30
     },
     {
       img: require('../../../assets/images/img-logo-bitcoin.png'),
       name: 'Bitcoin',
       symbol: 'BTC',
       price: 8030,
-      percent_change: 1.80
     },
     {
       img: require('../../../assets/images/img-logo-dash.png'),
       name: 'Dash',
       symbol: 'DASH',
       price: 120,
-      percent_change: 1.0
     },
     {
       img: require('../../../assets/images/img-logo-ethereum.png'),
       name: 'Ethereum',
       symbol: 'ETH',
       price: 140,
-      percent_change: 0.90
     },
     {
       img: require('../../../assets/images/img-logo-litecoin.png'),
       name: 'Litecoin',
       symbol: 'LTC',
       price: 180,
-      percent_change: 1.20
     }
   ]
 
@@ -67,12 +62,12 @@ const AlyPay = props => {
             {
               items.map((item, key) => (
                 <ItemCommission
+                  onPress={() => props.navigation.navigate('DetailsCrypto')}
                   key={key}
                   name={item.name}
                   symbol={item.symbol}
-                  source={item.img}
+                  picture={item.img}
                   price={item.price}
-                  percent_change={item.percent_change}
                 />
               ))
             }

@@ -32,7 +32,7 @@ import MapAddressScreen from '../../screens/Address/MapAddressScreen'
 import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 import BillTransport from '../../screens/Transport/BillTransportScreen'
 import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
-// import WalletScreen from '../../screens/AlyPay/WalletScreen'
+import DetailsCrypto from '../../screens/AlyPay/DetailsCripto'
 import NextCommerceScreen from '../../screens/Commerce/NextCommerceScreen'
 import TabStack from '../tabs/TabStack'
 
@@ -129,6 +129,10 @@ const StackNavigation = createStackNavigator({
   },
   AlyPay: {
     screen: AlyPay,
+    navigationOptions
+  },
+  DetailsCrypto: {
+    screen: DetailsCrypto,
     navigationOptions
   },
   PaymentMethod: {

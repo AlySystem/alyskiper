@@ -12,28 +12,25 @@ import Picture from '../picture/Picture'
 // Import theme
 import { Theme } from '../../constants/Theme'
 
-const ItemCommission = props => {
+const ItemCommission = ({ picture = 1, name = '', symbol = '', price = 0, totalCrypto = 0.000502254351, onPress = () => { } }) => {
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.containerLeft}>
         <Picture
-          source={props.source}
+          source={picture}
           styles={styles.image}
         />
         <View>
-          <Text allowFontScaling={false} style={styles.name}>{props.name}</Text>
+          <Text allowFontScaling={false} style={styles.name}>{name}</Text>
           <View style={{ paddingVertical: 2 }} />
-          <Text allowFontScaling={false} style={styles.symbol}>{props.symbol}</Text>
+          <Text allowFontScaling={false} style={styles.symbol}>{symbol}</Text>
         </View>
       </View>
 
-      <View style={styles.containerCenter}>
-        <Text allowFontScaling={false} style={styles.price}>${props.price}</Text>
-        <Text allowFontScaling={false} style={styles.percentChange}>{props.percent_change}</Text>
-      </View>
-      <View style={styles.containerAbsolute}>
-        <Text allowFontScaling={false} style={styles.total}>TOTAL:</Text>
-        <Text allowFontScaling={false} style={styles.total}>3.4345903823</Text>
+      <View style={styles.containerRight}>
+        <Text allowFontScaling={false} style={styles.price}>${price.toString()}</Text>
+        <View style={{ paddingVertical: 2 }} />
+        <Text allowFontScaling={false} style={styles.total}>Total: {totalCrypto.toString()}</Text>
       </View>
     </TouchableOpacity>
   )
@@ -75,17 +72,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Bold',
     fontSize: Theme.SIZES.small
   },
-  percentChange: {
-    color: 'green'
-  },
-  containerCenter: {
-    width: '30%'
-  },
-  containerAbsolute: {
-    position: 'absolute',
-    bottom: 10,
-    right: 20,
-    flexDirection: 'row'
+  containerRight: {
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   total: {
     color: Theme.COLORS.colorParagraph,
