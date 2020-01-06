@@ -177,3 +177,14 @@ export const GENERATEORDER = gql`
     }
   }
 `
+export const ValidateHash = gql`
+mutation validateHash($hash: String!, $crypto: String!, $total_real: Float, $total_crypto: Float, $lat: Float, $long: Float, $ip: String, $email: String) {
+    validateHash(hash: $hash, crypto: $crypto, total_real: $total_real, total_crypto: $total_crypto, lat: $lat, long: $long, ip: $ip, email: $email) {
+        id
+        amount
+        date_in
+        minimun
+        bretirar
+    }
+}
+`

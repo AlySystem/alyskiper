@@ -8,6 +8,6 @@ module.exports = {
     })
   },
   resolver: {
-    sourceExts: ['jsx', 'js', 'ts', 'json', 'png', 'jpeg', 'jpg']
+    sourceExts: ['jsx', 'js', 'ts', 'tsx', 'json', 'png', 'jpeg', 'jpg']
   }
 }

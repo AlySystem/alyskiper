@@ -254,3 +254,28 @@ export const GETUSERWALLET = gql`
     }
   }
 `
+
+export const GetPackage = gql`
+query {
+    GetPackages{
+        id
+        name
+        price
+        img_url
+    }
+}
+`
+
+export const GetAmountByCrypto = gql`
+query getAmountByCrypto ($crypto: String, $amount: Float, $iduser: Int, $idcountry: Int, $idpackage: Int) {
+  getAmountByCrypto(crypto: $crypto, amount: $amount, iduser: $iduser, idcountry: $idcountry, idpackage: $idpackage) {
+    crypto
+    company
+    walletReceive
+    amounSend
+    numberFact
+    nameUser
+    state
+  }
+}
+`
