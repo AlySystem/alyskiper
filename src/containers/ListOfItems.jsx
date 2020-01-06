@@ -25,38 +25,27 @@ import { Theme } from '../constants/Theme'
 
 const items = [
   {
-    key: 2,
     name: 'Metodo de pago',
     icon: 'credit-card',
     routeName: 'PaymentMethod'
   },
   {
-    key: 3,
-    name: 'AlyMoney',
-    icon: '',
-    routeName: 'AlyMoney'
-  },
-  {
-    key: 4,
     name: 'AlyPay',
-    icon: 'account-balance-wallet',
-    routeName: 'Wallet'
+    icon: '',
+    routeName: 'AlyPay'
   },
   {
-    key: 5,
     name: 'Invitar amigos',
     icon: 'card-giftcard',
     routeName: 'InvitedFriend'
   },
   {
-    key: 6,
     name: 'Soporte',
     icon: 'verified-user',
     routeName: 'Support',
     action: () => Linking.openURL('whatsapp://send?phone=+50660727720')
   },
   {
-    key: 7,
     name: 'Politicas de Privacidad',
     icon: 'security',
     routeName: 'Legal',
@@ -91,9 +80,9 @@ const ListOfItems = (props) => {
             email={userData.email}
             onPress={() => navigate('ProfileUser')}
           />
-          {items.map(item => (
+          {items.map((item, key) => (
             <Item
-              key={item.key}
+              key={key}
               routeName={item.routeName}
               name={item.name}
               icon={item.icon}

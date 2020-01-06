@@ -14,10 +14,7 @@ import { Theme } from '../../constants/Theme'
 
 const ItemCommission = props => {
   return (
-    <TouchableOpacity
-      onPress={props.onPress}
-      style={styles.container}
-    >
+    <TouchableOpacity onPress={props.onPress} style={styles.container}>
       <View style={styles.containerLeft}>
         <Picture
           source={props.source}
@@ -44,25 +41,25 @@ const ItemCommission = props => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 20,
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    width: '100%',
-    backgroundColor: Theme.COLORS.colorMain,
-    marginBottom: 20,
+    backgroundColor: Theme.COLORS.colorMainDark + 'cc',
+    borderRadius: 15,
     flexDirection: 'row',
-    borderRadius: 15
+    justifyContent: 'space-between',
+    paddingHorizontal: 8,
+    paddingVertical: 20,
+    marginBottom: 20,
+    width: '100%',
   },
   image: {
-    resizeMode: 'contain',
-    width: 70,
     height: 70,
-    marginRight: 5
+    resizeMode: 'contain',
+    marginRight: 5,
+    width: 70,
   },
   containerLeft: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   name: {
     color: Theme.COLORS.colorParagraph,
@@ -71,7 +68,7 @@ const styles = StyleSheet.create({
   },
   symbol: {
     color: Theme.COLORS.colorParagraph,
-    fontFamily: 'Lato-Regular'
+    fontFamily: 'Lato-Regular',
   },
   price: {
     color: Theme.COLORS.colorSecondary,

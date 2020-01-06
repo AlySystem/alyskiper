@@ -16,13 +16,9 @@ import ListOfCryptocurrency from '../../containers/ListOfCryptocurrency'
 
 const CommissionScreen = props => {
   return (
-    <Background
-      source={require('../../../assets/images/img-background-alyskiper.png')}
-    >
+    <Background source={require('../../../assets/images/img-background-alyskiper.png')}>
       <View style={styles.screen}>
-        <ScrollView
-          keyboardShouldPersistTaps='always'
-        >
+        <ScrollView keyboardShouldPersistTaps='always'>
           <View style={styles.layout}>
             <ListOfCryptocurrency />
           </View>

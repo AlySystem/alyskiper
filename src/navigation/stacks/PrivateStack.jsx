@@ -25,14 +25,14 @@ import CryptoWalletScreen from '../../screens/CryptoWallet/CryptoWalletScreen'
 import ProductScreen from '../../screens/Product/ProductScreen'
 import AddressScreen from '../../screens/Address/AddressScreen'
 import NotificationScreen from '../../screens/Notification/NotificationScreen'
-import AlyMoneyScreen from '../../screens/AlyMoney/AlyMoneyScreen'
+import AlyPay from '../../screens/AlyPay/AlyPay'
 import ScannerScreen from '../../screens/Scanner/ScannerScreen'
 import AddAddressScreen from '../../screens/Address/AddAddressScreen'
 import MapAddressScreen from '../../screens/Address/MapAddressScreen'
 import CreditCardScreen from '../../screens/CreditCard/CreditCardScreen'
 import BillTransport from '../../screens/Transport/BillTransportScreen'
 import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
-import WalletScreen from '../../screens/Wallet/WalletScreen'
+// import WalletScreen from '../../screens/AlyPay/WalletScreen'
 import NextCommerceScreen from '../../screens/Commerce/NextCommerceScreen'
 import TabStack from '../tabs/TabStack'
 
@@ -47,7 +47,6 @@ import logo from '../../../assets/images/logo.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-import Wallet from '../../screens/Wallet/Wallet'
 
 const navigationOptions = ({ navigation }) => {
   return {
@@ -128,8 +127,8 @@ const StackNavigation = createStackNavigator({
     screen: NotificationScreen,
     navigationOptions
   },
-  AlyMoney: {
-    screen: AlyMoneyScreen,
+  AlyPay: {
+    screen: AlyPay,
     navigationOptions
   },
   PaymentMethod: {
@@ -209,10 +208,6 @@ const StackNavigation = createStackNavigator({
     navigationOptions: {
       header: null
     }
-  },
-  Wallet: {
-    screen: Wallet,
-    navigationOptions
   },
   Category: {
     screen: TabStack,

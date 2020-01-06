@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { useQuery } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
@@ -13,13 +13,10 @@ import ImageBackground from '../../../assets/images/background-alycoin.png'
 import { GETUSERWALLET } from '../../graphql/querys/Querys'
 import { Theme } from '../../constants/Theme'
 
-const Wallet = () => {
+const AlyPay = () => {
     // Obtenemos el id del usuario de redux
     // const { userId } = useSelector(storage => storage.user)
     const userId = 637
-    // const [data, setData] = useState({
-    //     currencyID: {}
-    // })
 
     // Ejecutamos la query
     const { loading, data } = useQuery(GETUSERWALLET, {
@@ -36,24 +33,8 @@ const Wallet = () => {
                 color: '#fff',
                 icon: 'danger'
             })
-        },
-        // onCompleted: (dataResponse) => {
-        //     if (dataResponse) {
-        //         setData(dataResponse.GetUserWalletsCrypto.skiperWallet[0])
-        //         console.log(dataResponse.GetUserWalletsCrypto.skiperWallet[0])
-        //     } else {
-        //         showMessage({
-        //             message: 'Advertencia',
-        //             description: 'No se ha encontrado wallet, contacte a soporte',
-        //             backgroundColor: '#3498db',
-        //             color: '#fff',
-        //             icon: 'info'
-        //         })
-        //     }
-        // }
+        }
     })
-
-    console.log(data)
 
     // Estilos generales
     const Styles = StyleSheet.create({
@@ -66,6 +47,14 @@ const Wallet = () => {
         container: {
             alignItems: 'center'
         },
+        containerButtons: {
+            alignSelf: 'center',
+            flex: 1,
+            marginTop: RFValue(20),
+            marginBottom: RFValue(20),
+            width: '80%',
+            justifyContent: 'space-between',
+        },
         row: {
             borderBottomColor: Theme.COLORS.colorSecondary,
             borderBottomWidth: 1,
@@ -77,12 +66,43 @@ const Wallet = () => {
         textRow: {
             color: Theme.COLORS.colorSecondary,
             fontSize: RFValue(22)
+        },
+        buttons: {
+            backgroundColor: Theme.COLORS.colorMain,
+            borderColor: 'blue',
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingVertical: RFValue(10),
+            paddingHorizontal: RFValue(15),
+            borderRadius: 25,
+            marginBottom: 15,
+            // width: '65%'
+        },
+        buttonsText: {
+            color: Theme.COLORS.colorSecondary,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            fontSize: RFValue(12),
+            textTransform: 'uppercase',
+        },
+        buttonRetirement: {
+            backgroundColor: Theme.COLORS.colorMain,
+            borderRadius: 25,
+            paddingVertical: RFValue(10),
+            paddingHorizontal: RFValue(15),
+        },
+        buttonRetirementText: {
+            color: Theme.COLORS.colorSecondary,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            fontSize: RFValue(12),
+            textTransform: 'uppercase',
         }
     })
 
     return (
         <Background source={ImageBackground}>
-            <Text style={Styles.textTitle}>Wallet</Text>
+            <Text style={Styles.textTitle}>AlyPay</Text>
 
             <View style={Styles.container}>
                 {
@@ -101,8 +121,24 @@ const Wallet = () => {
                         </>
                 }
             </View>
+
+            <View style={Styles.containerButtons}>
+                <View>
+                    <TouchableOpacity style={Styles.buttons}>
+                        <Text style={Styles.buttonsText}>Comprar paquetes de monedas</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={Styles.buttons}>
+                        <Text style={Styles.buttonsText}>Enviar monedas</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity style={Styles.buttons}>
+                    <Text style={Styles.buttonRetirementText}>Hacer retiros</Text>
+                </TouchableOpacity>
+            </View>
         </Background>
     )
 }
 
-export default Wallet
+export default AlyPay
