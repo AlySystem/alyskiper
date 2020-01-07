@@ -3,8 +3,9 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  Image,
+  Image
 } from 'react-native'
+import { RFValue } from 'react-native-responsive-fontsize'
 
 // Import components
 import Background from '../../components/background/Background'
@@ -14,11 +15,11 @@ import ImageBackground from '../../../assets/images/background-alymoney.png'
 import ImageAlyPay from '../../../assets/images/alypay.png'
 
 // Import containers
-// import ListOfCryptocurrency from '../../containers/ListOfCryptocurrency'
 import ItemCommission from '../../components/item/ItemCommission'
-import { RFValue } from 'react-native-responsive-fontsize'
+import PinAuth from './AuthPin'
 
 const AlyPay = (props) => {
+
   const items = [
     {
       img: require('../../../assets/images/img-logo-alycoin-alt.png'),
@@ -54,6 +55,8 @@ const AlyPay = (props) => {
 
   return (
     <Background source={ImageBackground}>
+      <PinAuth />
+
       <View style={styles.screen}>
         <ScrollView keyboardShouldPersistTaps='always'>
           <Image style={styles.imageAly} source={ImageAlyPay} />

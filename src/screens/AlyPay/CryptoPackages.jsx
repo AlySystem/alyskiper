@@ -61,7 +61,7 @@ const { height, width } = Dimensions.get('window')
 
 const DEFAULT = 'bitcoin'
 
-const CoinsComponent = ({ data, onClick }) => {
+const CoinsComponent = React.memo(({ data, onClick }) => {
 	const { img_url, name, price } = data
 	const [loading, setLoading] = useState(true)
 
@@ -117,7 +117,7 @@ const CoinsComponent = ({ data, onClick }) => {
 			</View>
 		</TouchableOpacity>
 	)
-}
+})
 
 const BuyCredits = (props) => {
 
@@ -166,10 +166,10 @@ const BuyCredits = (props) => {
 	const [publicIp, setPublicIp] = useState('')
 
 	/**Los datos para manejar la peticion de los pquetes */
-	const { loading, data: dataPackage, error: errorQuery } = useQuery(GetPackage)
+	const { loading, data: dataPackage, error: errorQuery } = useQuery(GetPackage, { partialRefetch: true })
 
 	/**Preparamos la peticion de Graphl para ejecutarla, estos datos seran preparados para la factura */
-	const [_getAmountByCrypto, { loading: loadingGetAmount, data: dataGetAmount, error: errorGetAmount }] = useLazyQuery(GetAmountByCrypto, {
+	const [_getAmountByCrypto, { loading: loadingGetAmount }] = useLazyQuery(GetAmountByCrypto, {
 		onError: err => {
 			Alert.alert(
 				'Error',
@@ -219,10 +219,10 @@ const BuyCredits = (props) => {
 	})
 
 	/**Obetenemos el token, la ciudad de redux */
-	// const { token, country, email } = useSelector(x => x.Usuario)
+	const { userToken, country_id, email } = useSelector(x => x.user)
 
 	/**Obtenemos la Posicion */
-	// const { latitude, longitude } = useSelector(x => x.Position)
+	const { latitude, longitude } = useSelector(x => x.location)
 
 	/**Cargando los datos mientras se ejecuta la factura */
 	const [loadingBill, setLoadingBill] = useState(false)
@@ -295,6 +295,9 @@ const BuyCredits = (props) => {
 			Ip().then(ip => setPublicIp(ip)).catch(() => { })
 
 
+			return () => {
+				clearInterval(countDown)
+			}
 		}, []
 	)
 
@@ -309,34 +312,34 @@ const BuyCredits = (props) => {
 	const AlertExpiration = () => {
 		setBack()
 
-		Alert.alert(
-			'Tiempo vencido',
-			'El tiempo para confirmar factura se ha vencido',
-			[
-				{
-					onPress: () => { },
-					style: 'default',
-					text: 'Ok'
-				}
-			]
-		)
+		if (ShowBill) {
+			Alert.alert(
+				'Tiempo vencido',
+				'El tiempo para confirmar factura se ha vencido',
+				[
+					{
+						onPress: () => { },
+						style: 'default',
+						text: 'Ok'
+					}
+				]
+			)
+		}
 	}
 
 	/**Abre la ventana de la factura */
-	const openBill = async () => {
+	const openBill = async ({ id, price }) => {
 		if (payMode !== 'default') {
 			// decode token
 			setLoadingBill(true)
-			const { sub } = jwt_decode(token)
-
-			// debugger
+			const { sub } = jwt_decode(userToken)
 
 			const variables = {
 				crypto: payMode,
-				amount: packageSelect.price,
+				amount: price,
 				iduser: sub,
-				idcountry: country.id,
-				idpackage: packageSelect.id,
+				idcountry: country_id,
+				idpackage: id,
 			}
 
 			// Execute funcition mutation
@@ -377,17 +380,6 @@ const BuyCredits = (props) => {
 			setLoadingBill(false)
 
 		} else {
-			// Alert.alert(
-			// 	'Seleccione un metodo de pago',
-			// 	'Para continuar, debe seleccionar un metodo de pago',
-			// 	[
-			// 		{
-			// 			onPress: () => { },
-			// 			text: 'Ok',
-			// 			style: 'default'
-			// 		}
-			// 	]
-			// )
 
 			showMessage({
 				message: 'Seleccione un metodo de pago',
@@ -413,7 +405,9 @@ const BuyCredits = (props) => {
 				email: emailTo
 			}
 
-			// console.log(variables)
+			console.log(variables)
+
+			return
 
 			validateHash({ variables })
 		} else {
@@ -488,8 +482,8 @@ const BuyCredits = (props) => {
 					}}>
 
 						<ScrollView style={{ paddingBottom: 20, overflow: 'visible' }}>
-							<TouchableOpacity style={{}} onPress={() => setBack()}>
-								<Icon color={COLORS.colorSecondary} size={RFValue(36)} name="arrow-back" />
+							<TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={setBack}>
+								<Icon color={COLORS.colorSecondary} size={RFValue(36)} name="close" />
 							</TouchableOpacity>
 
 							<View style={{ marginTop: 25, alignItems: 'center' }}>
@@ -685,17 +679,15 @@ const BuyCredits = (props) => {
 
 								<View style={{ justifyContent: 'center', alignItems: 'center' }}>
 									{
-										data.map(
-											(item, index) => (
-												<CoinsComponent
-													data={item}
-													onClick={() => {
-														setShowBill(true)
-														setPackageSelect(item)
-													}}
-													key={index} />
-											)
-										)
+										data.map((item, index) => (
+											<CoinsComponent
+												data={item}
+												onClick={() => {
+													openBill(item)
+													setPackageSelect(item)
+												}}
+												key={index} />
+										))
 									}
 								</View>
 							</React.Fragment>
