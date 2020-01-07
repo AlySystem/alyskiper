@@ -35,14 +35,14 @@ const PriceService = props => {
         publicIP().then(ipAddress => {
           setIp(ipAddress.toString())
 
-          CalculateTariff({
-            variables: {
-              ip: ipAddress.toString(),
-              idcategoriaviaje: props.categoryId,
-              lat: latitude,
-              lng: longitude
-            }
-          })
+          const variables = {
+            ip: ipAddress.toString(),
+            idcategoriaviaje: props.categoryId,
+            lat: latitude,
+            lng: longitude
+          }
+
+          CalculateTariff({ variables })
         })
       }
     }
@@ -56,14 +56,14 @@ const PriceService = props => {
 
         setState(props.categoryId)
 
-        CalculateTariff({
-          variables: {
-            ip: ipAddressState,
-            idcategoriaviaje: props.categoryId,
-            lat: latitude,
-            lng: longitude
-          }
-        })
+        const variables = {
+          ip: ipAddressState,
+          idcategoriaviaje: props.categoryId,
+          lat: latitude,
+          lng: longitude
+        }
+
+        CalculateTariff({ variables })
 
       }
     },
@@ -72,11 +72,7 @@ const PriceService = props => {
 
   // Calculamos el precio segun la distancia y el tipo de viaje
   useEffect(() => {
-    if (
-      loading === false &&
-      data &&
-      data.CalculateTariff.priceckilometer !== lastPrice
-    ) {
+    if (loading === false && data && data.CalculateTariff.priceckilometer !== lastPrice) {
       setLastPrice(data.CalculateTariff.priceckilometer)
       const { duration, distance } = steps
       const durationMin = duration.value / 60
@@ -86,7 +82,8 @@ const PriceService = props => {
         priceminute,
         priceckilometer,
         priceminimun,
-        symbol
+        symbol,
+        currencyID,
       } = data.CalculateTariff
       const minutes = durationMin * priceminute
       const km = distanceKm * priceckilometer
@@ -105,7 +102,9 @@ const PriceService = props => {
               priceBase: pricebase,
               pricecKilometer: km,
               priceMinimun: priceminimun,
-              priceMinute: minutes
+              priceMinute: minutes,
+              currencyID,
+              symbol,
             }
           }
         })
@@ -120,7 +119,9 @@ const PriceService = props => {
             priceBase: pricebase,
             pricecKilometer: km,
             priceMinimun: priceminimun,
-            priceMinute: minutes
+            priceMinute: minutes,
+            currencyID,
+            symbol,
           }
         })
         setPrice(total)

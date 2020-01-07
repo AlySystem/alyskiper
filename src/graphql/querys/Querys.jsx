@@ -225,6 +225,7 @@ export const CALCULATETARIFF = gql`
       priceminute
       priceckilometer
       priceminimun
+      currencyID
       symbol
     }
   }
