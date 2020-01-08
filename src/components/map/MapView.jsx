@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { Image, View, Platform } from "react-native";
+import React, { useRef } from "react";
+import { Image, View, } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Animatable from "react-native-animatable";
 

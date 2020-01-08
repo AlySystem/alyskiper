@@ -71,8 +71,6 @@ const TransportScreen = props => {
   const [isLoading, setIsLoading] = useState(false)
   const { silver, golden, vip, president } = usePubnub()
 
-  useSelector(state => console.log(state.user))
-
   const mapView = useRef(null)
   // Funcion que destruye el viaje marcado en cache
   const destroyMarkedTravel = async () => {
@@ -103,7 +101,7 @@ const TransportScreen = props => {
     Geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
         const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
-        console.log(pointCoords)
+        console.log([].length)
 
         if (pointCoords === null || steps === null) {
           Alert.alert(
@@ -285,7 +283,7 @@ const TransportScreen = props => {
                 strokeColor={Theme.COLORS.colorSecondary}
               />
 
-              {
+              {/* {
                 (avatar && destination[0]) &&
                 <Marker coordinate={{ latitude: destination[0].latitude, longitude: destination[0].longitude }}>
                   <View style={styles.markerUser}>
@@ -293,11 +291,11 @@ const TransportScreen = props => {
                     <Image source={{ uri: avatar }} style={styles.markerImage} />
                   </View>
                 </Marker>
-              }
+              } */}
 
               {
-                destination[2] &&
-                <Marker coordinate={{ latitude: destination[3].latitude, longitude: destination[3].longitude }}>
+                destination.length &&
+                <Marker coordinate={{ latitude: destination[destination.length - 1].latitude, longitude: destination[destination.length - 1].longitude }}>
                   <Image source={iconSkiper} style={styles.markerEnd} />
                 </Marker>
               }
@@ -417,6 +415,7 @@ const styles = StyleSheet.create({
   },
   markerUser: {
     position: 'relative',
+    marginTop: RFValue(-20),
   },
   markerImage: {
     width: RFValue(40),
