@@ -58,7 +58,7 @@ const RequestScreen = props => {
   // Mutation que valida si el drive esta disponible
   const [ValidateDrive] = useMutation(ValidateSkiperDrive, {
     onError: ({ message }) => {
-      console.log(message)
+      console.log('error al validar el driver ' + message)
       // showMessage({
       //   message: `Skiper`,
       //   description: `No se ha podido validar los skipers - ${message}`,
@@ -86,6 +86,7 @@ const RequestScreen = props => {
       return state.drivers
     }
   })
+
   const [GenerateTravel, { error }] = useMutation(GENERATETRAVEL)
 
   const handleOnCancel = async () => {
@@ -211,6 +212,7 @@ const RequestScreen = props => {
     let driverNearby = null
     let accept = false
     const { duration, distance, end_address, start_address, start_location, end_location } = steps
+    const currencyID = await AsyncStorage.getItem('currencyID')
 
     switch (categoryId) {
       case 1:
@@ -294,7 +296,7 @@ const RequestScreen = props => {
             lng_initial: data['longitude'],
             time: duration.value,
             distance: parseInt(distance.value),
-            idcurrency: priceTravel.currencyID,
+            idcurrency: Number(currencyID),
             idcategoryTravel: travel.categoryId
           }
 
@@ -317,12 +319,14 @@ const RequestScreen = props => {
                     time: duration.value,
                     address_initial: start_address,
                     address_final: end_address,
-                    idcurrency: priceTravel.currencyID,
+                    idcurrency: Number(currencyID),
                     idpayment_methods: 2,
                     categoryId: categoryId
                   },
                   ip: ' '
                 }
+
+                console.log(variables)
 
                 await GenerateTravel({ variables }).then(() => {
                   setMessage(`Esperando respuesta de Skiper`)

@@ -79,8 +79,11 @@ const TravelTracingScreen = props => {
     {
       fetchPolicy: "no-cache",
       onCompleted: (dataResponse) => {
-        if (dataResponse === null) {
+        console.log(dataResponse)
+        if (dataResponse.getTravelByUserId === null) {
           AsyncStorage.removeItem('travel')
+        } else {
+          AsyncStorage.setItem('travel', 'true')
         }
       }
     },
@@ -309,10 +312,10 @@ const TravelTracingScreen = props => {
             width: "100%",
             height: "100%",
             flex: 1,
-            zIndex: 100,
+            zIndex: 1000,
             position: "absolute",
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <Button

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Text, View } from "react-native"
+import AsyncStorage from '@react-native-community/async-storage'
 import { useLazyQuery } from "@apollo/react-hooks"
 import { useSelector, useDispatch } from "react-redux"
 import publicIP from "react-native-public-ip"
@@ -13,7 +14,6 @@ import { CALCULATETARIFF } from "../../graphql/querys/Querys"
 import Loader from "../loader/Loader"
 // Import hooks
 import { useLocation } from "../../hooks/useLocation"
-import { FetchType } from "apollo-boost"
 
 const PriceService = props => {
   const dispatch = useDispatch()
@@ -62,10 +62,7 @@ const PriceService = props => {
           lng: longitude
         }
 
-        console.log(variables)
-
         CalculateTariff({ variables })
-
       }
     },
     [props.categoryId]
@@ -94,15 +91,36 @@ const PriceService = props => {
       const total = minutes + km + pricebase
       setSymbol(symbol)
 
+      AsyncStorage.setItem('currencyID', currencyID.toString())
+
       /**
        * Si el total es menor al pecio minimo
        * siempre cobraremos el precio minimo
        */
-      dispatch({
-        type: DETAILSTRAVEL,
-        payload: {
-          priceTravel: {
-            priceTravel: (total < priceminimun) ? priceminimun : total,
+      
+      if (total < priceminimun) {
+        dispatch({
+          type: DETAILSTRAVEL,
+          payload: {
+            priceTravel: {
+              priceTravel: priceminimun,
+              priceBase: pricebase,
+              pricecKilometer: km,
+              priceMinimun: priceminimun,
+              priceMinute: minutes,
+              currencyID,
+              symbol,
+            }
+          }
+        })
+        /**Seteamos el precios */
+
+        setPrice(priceminimun)
+      } else {
+        dispatch({
+          type: DETAILSTRAVEL,
+          payload: {
+            priceTravel: total,
             priceBase: pricebase,
             pricecKilometer: km,
             priceMinimun: priceminimun,
@@ -110,11 +128,27 @@ const PriceService = props => {
             currencyID,
             symbol,
           }
-        }
-      })
-      /**Seteamos el precios */
+        })
+        setPrice(total)
+      }
 
-      setPrice(priceminimun)
+      // dispatch({
+      //   type: DETAILSTRAVEL,
+      //   payload: {
+      //     priceTravel: {
+      //       priceTravel: (total < priceminimun) ? priceminimun : total,
+      //       priceBase: pricebase,
+      //       pricecKilometer: km,
+      //       priceMinimun: priceminimun,
+      //       priceMinute: minutes,
+      //       currencyID,
+      //       symbol,
+      //     }
+      //   }
+      // })
+      // /**Seteamos el precios */
+
+      // setPrice(priceminimun)
     }
   }, [loading, data])
 
