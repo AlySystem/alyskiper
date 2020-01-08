@@ -79,11 +79,8 @@ const TravelTracingScreen = props => {
     {
       fetchPolicy: "no-cache",
       onCompleted: (dataResponse) => {
-        console.log(dataResponse)
-        if (dataResponse.getTravelByUserId === null) {
+        if (dataResponse === null) {
           AsyncStorage.removeItem('travel')
-        } else {
-          AsyncStorage.setItem('travel', 'true')
         }
       }
     },
@@ -106,6 +103,7 @@ const TravelTracingScreen = props => {
   }
 
   useEffect(() => {
+    console.log(userId)
     GetTravelByUserId({ variables: { iduser: userId } })
 
     const HandledBackEvent = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -206,7 +204,7 @@ const TravelTracingScreen = props => {
         isVisible={showDetails}
         backdropColor="#B4B3DB"
         style={{
-          backgroundColor: "rgba(0,0,0,.8)",
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
           margin: 0,
           justifyContent: "flex-start"
         }}
@@ -287,7 +285,7 @@ const TravelTracingScreen = props => {
 
       <TouchableOpacity style={styles.containerButton} onPress={handleToggleModal}>
 
-        <View style={{ backgroundColor: Theme.COLORS.colorMainDark, borderRadius: 100, width: 100, height: 8 }} />
+        <View style={{ backgroundColor: Theme.COLORS.colorSecondary, borderRadius: 100, width: 100, height: 8 }} />
 
         <Text allowFontScaling={false} style={styles.text}>
           Toca para mostrar detalles
