@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Dimensions,
   View,
-  Text
+  Text,
+  ActivityIndicator
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import { Picker } from '@react-native-community/picker'
@@ -50,7 +51,7 @@ const ListOfCategoryServices = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { latitude, longitude } = props.location
-  const [loadinPrice, setLoadingPrice] = useState(true)
+  const [loadingPrice, setLoadingPrice] = useState(true)
   const [selectCategory, setSelectCategory] = useState(1)
   const [error, setError] = useState(null)
   const { data, loading } = useQuery(CATEGORYTRAVEL)
@@ -105,7 +106,7 @@ const ListOfCategoryServices = props => {
   }
 
   return (
-    <Animatable.View animation='fadeInUp' iterationCount={1}style={styles.container}>
+    <Animatable.View animation='fadeInUp' iterationCount={1} style={styles.container}>
       <Background source={require('../../assets/images/img-background-alyskiper.png')}>
         <View style={styles.layout}>
           {
@@ -134,7 +135,7 @@ const ListOfCategoryServices = props => {
                   <Text style={styles.category}>CATEGORIAS</Text>
                   <Picker
                     selectedValue={selectCategory}
-                    enabled={!loadinPrice}
+                    enabled={!loadingPrice}
                     style={{
                       textAlign: 'right',
                       height: 50,
@@ -159,15 +160,18 @@ const ListOfCategoryServices = props => {
               </View>
 
               <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', marginVertical: 20 }}>
-                <IconButton
-                  message='PEDIR SKIPER'
-                  isActiveIcon
-                  iconName='check'
-                  onPress={handleOnSubmit}
-                  isLoading={loadinPrice}
-                  disabled={loadinPrice}
-                  stylesButton={styles.button}
-                />
+                {
+                  loadingPrice
+                    ? <ActivityIndicator color="#FFF" size="large" />
+                    : <IconButton
+                      message='PEDIR SKIPER'
+                      isActiveIcon
+                      iconName='check'
+                      onPress={handleOnSubmit}
+                      disabled={loadingPrice}
+                      stylesButton={styles.button}
+                    />
+                }
               </View>
             </>
           }

@@ -20,7 +20,6 @@ const PriceService = props => {
   const { steps } = useSelector(state => state.direction)
   const [price, setPrice] = useState("")
   const [symbol, setSymbol] = useState("")
-  const [lastPrice, setLastPrice] = useState("")
   const [state, setState] = useState(1)
   const { location } = useLocation()
   const [ipAddressState, setIp] = useState('')
@@ -63,6 +62,8 @@ const PriceService = props => {
           lng: longitude
         }
 
+        console.log(variables)
+
         CalculateTariff({ variables })
 
       }
@@ -76,8 +77,7 @@ const PriceService = props => {
       props.setLoading(loading)
     }
 
-    if (loading === false && data && data.CalculateTariff.priceckilometer !== lastPrice) {
-      setLastPrice(data.CalculateTariff.priceckilometer)
+    if (loading === false && data) {
       const { duration, distance } = steps
       const durationMin = duration.value / 60
       const distanceKm = distance.value / 1000
@@ -93,33 +93,16 @@ const PriceService = props => {
       const km = distanceKm * priceckilometer
       const total = minutes + km + pricebase
       setSymbol(symbol)
+
       /**
        * Si el total es menor al pecio minimo
        * siempre cobraremos el precio minimo
        */
-      if (total < priceminimun) {
-        dispatch({
-          type: DETAILSTRAVEL,
-          payload: {
-            priceTravel: {
-              priceTravel: priceminimun,
-              priceBase: pricebase,
-              pricecKilometer: km,
-              priceMinimun: priceminimun,
-              priceMinute: minutes,
-              currencyID,
-              symbol,
-            }
-          }
-        })
-        /**Seteamos el precios */
-
-        setPrice(priceminimun)
-      } else {
-        dispatch({
-          type: DETAILSTRAVEL,
-          payload: {
-            priceTravel: total,
+      dispatch({
+        type: DETAILSTRAVEL,
+        payload: {
+          priceTravel: {
+            priceTravel: (total < priceminimun) ? priceminimun : total,
             priceBase: pricebase,
             pricecKilometer: km,
             priceMinimun: priceminimun,
@@ -127,9 +110,11 @@ const PriceService = props => {
             currencyID,
             symbol,
           }
-        })
-        setPrice(total)
-      }
+        }
+      })
+      /**Seteamos el precios */
+
+      setPrice(priceminimun)
     }
   }, [loading, data])
 
