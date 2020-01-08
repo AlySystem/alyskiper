@@ -71,6 +71,9 @@ export const GETTRAVELBYUSERID = gql`
           id
           skiperVehicle {
             license_plate
+            uploadVehicleAppearanceDto {
+              url_img_vehicle_front              
+            }
             vehicleTrademark {
               name
             }

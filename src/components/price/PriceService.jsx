@@ -72,6 +72,10 @@ const PriceService = props => {
 
   // Calculamos el precio segun la distancia y el tipo de viaje
   useEffect(() => {
+    if (props.setLoading) {
+      props.setLoading(loading)
+    }
+
     if (loading === false && data && data.CalculateTariff.priceckilometer !== lastPrice) {
       setLastPrice(data.CalculateTariff.priceckilometer)
       const { duration, distance } = steps

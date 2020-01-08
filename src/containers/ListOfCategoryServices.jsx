@@ -50,6 +50,7 @@ const ListOfCategoryServices = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { latitude, longitude } = props.location
+  const [loadinPrice, setLoadingPrice] = useState(true)
   const [selectCategory, setSelectCategory] = useState(1)
   const [error, setError] = useState(null)
   const { data, loading } = useQuery(CATEGORYTRAVEL)
@@ -104,11 +105,7 @@ const ListOfCategoryServices = props => {
   }
 
   return (
-    <Animatable.View
-      animation='fadeInUp'
-      iterationCount={1}
-      style={styles.container}
-    >
+    <Animatable.View animation='fadeInUp' iterationCount={1}style={styles.container}>
       <Background source={require('../../assets/images/img-background-alyskiper.png')}>
         <View style={styles.layout}>
           {
@@ -125,6 +122,7 @@ const ListOfCategoryServices = props => {
                 <Text style={styles.textPrice}>Precio estimado</Text>
                 <View style={{ marginVertical: 2 }} />
                 <PriceService
+                  setLoading={setLoadingPrice}
                   categoryId={selectCategory}
                   navigation={props.navigation}
                   error={(error) => setError(error)}
@@ -136,6 +134,7 @@ const ListOfCategoryServices = props => {
                   <Text style={styles.category}>CATEGORIAS</Text>
                   <Picker
                     selectedValue={selectCategory}
+                    enabled={!loadinPrice}
                     style={{
                       textAlign: 'right',
                       height: 50,
@@ -165,7 +164,8 @@ const ListOfCategoryServices = props => {
                   isActiveIcon
                   iconName='check'
                   onPress={handleOnSubmit}
-                  isLoading={false}
+                  isLoading={loadinPrice}
+                  disabled={loadinPrice}
                   stylesButton={styles.button}
                 />
               </View>

@@ -13,6 +13,7 @@ import { Theme } from '../../constants/Theme'
 
 const DetailsDrive = props => {
   const drive = props.drive
+  console.log(drive)
   const { avatar, firstname, lastname } = drive.getTravelByUserId.skiperagent.user
   const { license_plate, vehicleModel, vehicleTrademark } = drive.getTravelByUserId.skiperagent.skiperVehicleAgent[0].skiperVehicle
 

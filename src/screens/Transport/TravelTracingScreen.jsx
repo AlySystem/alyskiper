@@ -38,6 +38,8 @@ import { TRAVELTRACING } from "../../graphql/mutations/Mutations"
 
 // Import theme
 import { Theme } from "../../constants/Theme"
+import { RFValue } from "react-native-responsive-fontsize"
+import AsyncStorage from "@react-native-community/async-storage"
 
 // const iconS
 
@@ -75,12 +77,20 @@ const TravelTracingScreen = props => {
   const [GetTravelByUserId, { data, loading }] = useLazyQuery(
     GETTRAVELBYUSERID,
     {
-      fetchPolicy: "no-cache"
-    }
+      fetchPolicy: "no-cache",
+      onCompleted: (dataResponse) => {
+        console.log(dataResponse)
+        if (dataResponse.getTravelByUserId === null) {
+          AsyncStorage.removeItem('travel')
+        } else {
+          AsyncStorage.setItem('travel', 'true')
+        }
+      }
+    },
   )
   let interval = null
   const mapView = useRef(null)
-  const marker = useRef(null)
+  const markerRef = useRef(null)
   useNotification(navigate, location.latitude, location.longitude, props.navigation)
 
   const pubnub = new PubNubReact({
@@ -124,25 +134,14 @@ const TravelTracingScreen = props => {
       })
 
       interval = setInterval(() => {
-        pubnub.hereNow({
-          includeUUIDs: true,
-          includeState: true,
-          channels: [`Driver_${idTravel || data.getTravelByUserId.id}`]
-        }, (status, response) => {
+        pubnub.hereNow({ includeUUIDs: true, includeState: true, channels: [`Driver_${idTravel || data.getTravelByUserId.id}`] }, (status, response) => {
           if (response !== undefined) {
-            if (
-              `Driver_${idTravel || data.getTravelByUserId.id}` in
-              response.channels
-            ) {
-              const channels =
-                response.channels[
-                `Driver_${idTravel || data.getTravelByUserId.id}`
-                ]
+            if (`Driver_${idTravel || data.getTravelByUserId.id}` in response.channels) {
+              const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
               if (channels !== undefined) {
-                const drive = channels.occupants.filter(
-                  item => item.state !== undefined
-                )
-                setDriver(drive)
+                const _drive = channels.occupants.filter(item => item.state !== undefined)
+
+                setDriver(_drive)
               }
             }
           }
@@ -173,29 +172,32 @@ const TravelTracingScreen = props => {
   }
 
   const cancelTrip = () => {
-    Alert.alert("Cancelar Viaje", "¿Esta seguro de cancelar tu viaje?", [
-      {
-        text: "No",
-        style: "cancel",
-        onPress: () => { }
-      },
-      {
-        text: "Si, Cancelar",
-        style: "default",
-        onPress: () => {
-          const variables = {
-            input: {
-              idtravel: idTravel || data.getTravelByUserId.id,
-              idtravelstatus: "CANCELADO",
-              lat: location.latitude,
-              lng: location.longitude
+    Alert.alert(
+      "Cancelar Viaje",
+      "¿Esta seguro de cancelar tu viaje? Esta cancelacion tendra un costo adicional al siguiente viaje",
+      [
+        {
+          text: "No",
+          style: "cancel",
+          onPress: () => { }
+        },
+        {
+          text: "Si, Cancelar",
+          style: "default",
+          onPress: () => {
+            const variables = {
+              input: {
+                idtravel: idTravel || data.getTravelByUserId.id,
+                idtravelstatus: "CANCELADO",
+                lat: location.latitude,
+                lng: location.longitude
+              }
             }
-          }
 
-          TravelTracing({ variables })
+            TravelTracing({ variables })
+          }
         }
-      }
-    ])
+      ])
   }
 
   return (
@@ -235,7 +237,7 @@ const TravelTracingScreen = props => {
             driver.map(drive => {
               return (
                 <Marker
-                  ref={marker}
+                  ref={markerRef}
                   key={`${drive.uuid}${drive.state.lastname}`}
                   coordinate={{
                     latitude: drive.state.coords.latitude,
@@ -243,13 +245,18 @@ const TravelTracingScreen = props => {
                   }}
                   title={`Tu conductor`}
                   description={`${drive.state.firstname} ${drive.state.lastname}`}>
-                  <Image
-                    style={styles.drive}
-                    source={require("../../../assets/images/img-travel.png")}
-                  />
+                  <View style={styles.containerMarker}>
+                    <View style={styles.subContainerMarker}>
+                      <Image
+                        style={styles.drive}
+                        source={require("../../../assets/images/img-travel.png")}
+                      />
+                    </View>
+                  </View>
                 </Marker>
               )
-            })}
+            })
+          }
         </Map>
       )}
 
@@ -358,9 +365,19 @@ const styles = StyleSheet.create({
     fontSize: Theme.SIZES.normal
   },
   drive: {
-    width: 40,
-    height: 40,
+    width: RFValue(25),
+    height: RFValue(25),
     resizeMode: "contain"
+  },
+  containerMarker: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    padding: RFValue(10),
+    borderRadius: RFValue(25),
+  },
+  subContainerMarker: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    padding: RFValue(10),
+    borderRadius: RFValue(50),
   },
   buttonCancel: {
     alignItems: "center",

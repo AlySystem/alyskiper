@@ -6,12 +6,14 @@ import {
   Dimensions,
   BackHandler,
   Image,
-  Alert,
-  AsyncStorage
+  Text,
+  Alert
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { Polyline, Marker } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service'
+import AsyncStorage from '@react-native-community/async-storage'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 // Import actions
 import { REMOVEDIRECTION, DIRECTION, DRIVERS } from '../../store/actionTypes'
@@ -34,6 +36,7 @@ import silverMarker from '../../../assets/images/img-icon-silver.png'
 import goldenMarker from '../../../assets/images/img-icon-golden.png'
 import vipMarker from '../../../assets/images/img-icon-vip.png'
 import presidentMarker from '../../../assets/images/img-icon-president.png'
+import iconSkiper from '../../../assets/images/icon-skiper-end.png'
 
 // Import hooks
 import { usePubnub } from '../../hooks/usePubnub'
@@ -46,6 +49,7 @@ import { getPixelSize } from '../../utils/Pixel'
 import { routeDirection } from '../../utils/Directions'
 import Picture from '../../components/picture/Picture'
 import TravelTracingScreen from './TravelTracingScreen'
+import { RFValue } from 'react-native-responsive-fontsize'
 
 const { height, width } = Dimensions.get('window')
 
@@ -60,12 +64,14 @@ const ModalLoader = () => {
 const TransportScreen = props => {
   const dispatch = useDispatch()
   const { location } = useWatchLocation()
-  const { firstName } = useSelector(state => state.user)
+  const { firstName, avatar } = useSelector(state => state.user)
   const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)
   const [destination, setDestination] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const { silver, golden, vip, president } = usePubnub()
+
+  useSelector(state => console.log(state.user))
 
   const mapView = useRef(null)
   // Funcion que destruye el viaje marcado en cache
@@ -97,6 +103,8 @@ const TransportScreen = props => {
     Geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
         const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
+        console.log(pointCoords)
+
         if (pointCoords === null || steps === null) {
           Alert.alert(
             'Atencion',
@@ -127,7 +135,7 @@ const TransportScreen = props => {
             edgePadding: {
               right: getPixelSize(50),
               left: getPixelSize(50),
-              top: getPixelSize(50),
+              top: getPixelSize(100),
               bottom: getPixelSize(250)
             }
           })
@@ -169,8 +177,7 @@ const TransportScreen = props => {
                     longitude: drive.state.coords.longitude
                   }}
                   title={`${drive.state.firstname} ${drive.state.lastname}`}
-                  description='SILVER'
-                >
+                  description='SILVER'>
                   <Image
                     style={{
                       width: 35,
@@ -271,11 +278,30 @@ const TransportScreen = props => {
           {
             // Si hay destino, dibujamos la linea de recorrido
             destination &&
-            <Polyline
-              coordinates={destination}
-              strokeWidth={3}
-              strokeColor={Theme.COLORS.colorSecondary}
-            />
+            <>
+              <Polyline
+                coordinates={destination}
+                strokeWidth={3}
+                strokeColor={Theme.COLORS.colorSecondary}
+              />
+
+              {
+                (avatar && destination[0]) &&
+                <Marker coordinate={{ latitude: destination[0].latitude, longitude: destination[0].longitude }}>
+                  <View style={styles.markerUser}>
+                    <Icon name="map-marker" color="#FFF" size={RFValue(80)} />
+                    <Image source={{ uri: avatar }} style={styles.markerImage} />
+                  </View>
+                </Marker>
+              }
+
+              {
+                destination[2] &&
+                <Marker coordinate={{ latitude: destination[3].latitude, longitude: destination[3].longitude }}>
+                  <Image source={iconSkiper} style={styles.markerEnd} />
+                </Marker>
+              }
+            </>
           }
         </Map>
 
@@ -388,7 +414,24 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: 30,
     width: 100
-  }
+  },
+  markerUser: {
+    position: 'relative',
+  },
+  markerImage: {
+    width: RFValue(40),
+    height: RFValue(40),
+    borderRadius: RFValue(25),
+    resizeMode: 'cover',
+    position: 'absolute',
+    top: RFValue(12),
+    left: '25%',
+  },
+  markerEnd: {
+    width: RFValue(40),
+    height: RFValue(40),
+    resizeMode: 'cover',
+  },
 })
 
 

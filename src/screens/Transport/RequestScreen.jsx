@@ -3,7 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  AsyncStorage
+  AsyncStorage,
+  BackHandler
 } from 'react-native'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import { useMutation, useSubscription } from '@apollo/react-hooks'
@@ -58,6 +59,15 @@ const RequestScreen = props => {
   const [ValidateDrive] = useMutation(ValidateSkiperDrive, {
     onError: ({ message }) => {
       console.log(message)
+      // showMessage({
+      //   message: `Skiper`,
+      //   description: `No se ha podido validar los skipers - ${message}`,
+      //   backgroundColor: '#d35400',
+      //   color: '#fff',
+      //   icon: 'danger'
+      // })
+
+      // props.navigation.popToTop()
     }
   })
 
@@ -80,39 +90,42 @@ const RequestScreen = props => {
 
   const handleOnCancel = async () => {
     setDisabled(true)
-    await RegisterTravel({
-      variables: {
-        input: {
-          idtravel: idTravel,
-          idtravelstatus: 'CANCELADO',
-          lat: latitude,
-          lng: longitude,
-        }
-      }
-    }).then(
-      () => {
-        dispatch({
-          type: REMOVEDETAILSTRAVEL,
-        })
 
-        dispatch({
-          type: REMOVELOCATION
-        })
+    const variables = {
+      input: {
+        idtravel: idTravel,
+        idtravelstatus: 'CANCELADO',
+        lat: latitude,
+        lng: longitude,
+      }
+    }
 
-        props.navigation.pop()
-      }
-    ).catch(
-      () => {
-        showMessage({
-          message: 'Skiper',
-          description: 'Tu solicitud no puede ser cancelada.',
-          backgroundColor: '#d35400',
-          color: '#fff',
-          duration: 5000,
-          icon: 'info',
-        })
-      }
-    )
+    console.log(variables)
+
+    await RegisterTravel({ variables }).then(() => {
+      dispatch({
+        type: REMOVEDETAILSTRAVEL,
+      })
+
+      dispatch({
+        type: REMOVELOCATION
+      })
+
+      props.navigation.pop()
+    }).catch((reason) => {
+      console.log(reason.message)
+
+      showMessage({
+        message: 'Skiper',
+        description: 'Tu solicitud no pudo ser cancelada.',
+        backgroundColor: '#d35400',
+        color: '#fff',
+        duration: 5000,
+        icon: 'info',
+      })
+
+      props.navigation.pop()
+    })
     setDisabled(false)
 
   }
@@ -189,7 +202,7 @@ const RequestScreen = props => {
   }, [error])
 
   /**Proceso que hace busqueda */
-  const executeAllProcces = (index) => {
+  const executeAllProcces = async (index) => {
     const driverWithInRadius = []
     const { categoryId } = travel
     let categoryName = ''
@@ -258,41 +271,60 @@ const RequestScreen = props => {
         break
     }
 
-    const execute = async () => {
-      try {
-        // Verificamos si hay conductores cerca con la categoria seleccionada
-        if (orderDistance.length > 0) {
+    try {
+      // Verificamos si hay conductores cerca con la categoria seleccionada
+      if (orderDistance.length > 0) {
 
-          setLengthAllDrivers(orderDistance.length)
+        setLengthAllDrivers(orderDistance.length)
 
-          // Recorremos todos los conductores
-          for (let i = index ? index : 0; i < orderDistance.length; i++) {
-            // Si no hay conductores dispoibles
+        // Recorremos todos los conductores
+        for (let i = index ? index : 0; i < orderDistance.length; i++) {
+          // Si no hay conductores dispoibles
 
-            // seteamos el texto que se mostrara al usuario 
-            setMessage(`Solicitando Skipers ${i + 1} de ${orderDistance.length}`)
+          // seteamos el texto que se mostrara al usuario 
+          setMessage(`Solicitando Skipers ${i + 1} de ${orderDistance.length}`)
 
-            // Los datos del conductor
-            const data = orderDistance[i]
+          // Los datos del conductor
+          const data = orderDistance[i]
 
-            // Todos los datos que ejecutamos para validar el conductor
-            const variables = {
-              iddriver: data['driveId'],
-              lat_initial: data['latitude'],
-              lng_initial: data['longitude'],
-              time: duration.value,
-              distance: parseInt(distance.value),
-              idcurrency: priceTravel.currencyID,
-              idcategoryTravel: travel.categoryId
-            }
+          // Todos los datos que ejecutamos para validar el conductor
+          const variables = {
+            iddriver: data['driveId'],
+            lat_initial: data['latitude'],
+            lng_initial: data['longitude'],
+            time: duration.value,
+            distance: parseInt(distance.value),
+            idcurrency: priceTravel.currencyID,
+            idcategoryTravel: travel.categoryId
+          }
 
-            // Validamos si el conductor esta dispobible y si tiene wallet 
-            await ValidateDrive({ variables }).then(async ({ data: response }) => {
-              // Validamos si hay respuesta
-              if (response) {
+          // Validamos si el conductor esta dispobible y si tiene wallet 
+          await ValidateDrive({ variables }).then(async ({ data: response }) => {
+            // Validamos si hay respuesta
+            if (response) {
+              // Validamos si hay respuesta y si esta disponible
+              if (response.ValidateDriveAvailable) {
+                // Ejecutamos la solicitud del viaje
+                const variables = {
+                  inputviaje: {
+                    idusers: userId,
+                    iddriver: data['driveId'],
+                    lat_initial: start_location.lat,
+                    lng_initial: start_location.lng,
+                    lat_final: end_location.lat,
+                    lng_final: end_location.lng,
+                    distance: parseInt(distance.value),
+                    time: duration.value,
+                    address_initial: start_address,
+                    address_final: end_address,
+                    idcurrency: priceTravel.currencyID,
+                    idpayment_methods: 2,
+                    categoryId: categoryId
+                  },
+                  ip: ' '
+                }
 
-                // Validamos si hay respuesta y si esta disponible
-                if (response.ValidateDriveAvailable) {
+                await GenerateTravel({ variables }).then(() => {
                   setMessage(`Esperando respuesta de Skiper`)
 
                   // Con esta variable rompemos el bucle para solicitar el viaje
@@ -301,74 +333,49 @@ const RequestScreen = props => {
                   // Seteamos el ultimo consuctor
                   setLastIndex(i)
 
-                  // Ejecutamos la solicitud del viaje
-                  await executeTravel(data['driveId'])
-                }
+                }).catch((reason) => {
+                  console.log(reason)
+                })
               }
-            }).catch(() => { })
-
-            // Si encontro un driver disponible, rompemos el bucle
-            if (accept) break;
-
-          }
-        } else {
-          // Mostramos un mensaje de error
-          showMessage({
-            message: `Skiper ${categoryName}`,
-            description: `No hay Skipers ${categoryName} cerca, por favor selecciona otra de nuestras categorias.`,
-            backgroundColor: categoryColor,
-            color: categoryName === 'GOLDEN' ? '#3d3d3d' : '#fff',
-            icon: 'danger',
-            duration: 8000,
-            titleStyle: {
-              fontWeight: 'bold',
-            },
-            textStyle: {
-              paddingRight: 10
             }
-          })
+          }).catch(() => { })
 
-          // Navegamos una ventana atras
-          props.navigation.pop()
+          // Si encontro un driver disponible, rompemos el bucle
+          if (accept) break;
+
         }
+      } else {
+        // Mostramos un mensaje de error
+        showMessage({
+          message: `Skiper ${categoryName}`,
+          description: `No hay Skipers ${categoryName} cerca, por favor selecciona otra de nuestras categorias.`,
+          backgroundColor: categoryColor,
+          color: categoryName === 'GOLDEN' ? '#3d3d3d' : '#fff',
+          icon: 'danger',
+          duration: 8000,
+          titleStyle: {
+            fontWeight: 'bold',
+          },
+          textStyle: {
+            paddingRight: 10
+          }
+        })
 
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    execute()
-
-    const executeTravel = (id) => {
-      const variables = {
-        inputviaje: {
-          idusers: userId,
-          iddriver: id,
-          lat_initial: start_location.lat,
-          lng_initial: start_location.lng,
-          lat_final: end_location.lat,
-          lng_final: end_location.lng,
-          distance: parseInt(distance.value),
-          time: duration.value,
-          address_initial: start_address,
-          address_final: end_address,
-          idcurrency: priceTravel.currencyID,
-          idpayment_methods: 2,
-          categoryId: categoryId
-        },
-        ip: ' '
+        // Navegamos una ventana atras
+        props.navigation.pop()
       }
 
-      GenerateTravel({ variables }).then((data) => console.log(data)).catch((reason) => console.log(reason))
-
-      // return new Promise((resolve, reject) => {
-
-      // })
+    } catch (error) {
+      console.log(error)
     }
   }
 
   useEffect(() => {
     executeAllProcces()
+
+    const backHandledEvent = BackHandler.addEventListener('hardwareBackPress', () => true)
+
+    return () => backHandledEvent.remove()
 
   }, [])
 
