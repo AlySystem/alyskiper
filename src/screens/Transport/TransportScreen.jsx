@@ -13,7 +13,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Polyline, Marker } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service'
 import AsyncStorage from '@react-native-community/async-storage'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 // Import actions
 import { REMOVEDIRECTION, DIRECTION, DRIVERS } from '../../store/actionTypes'
@@ -50,6 +49,8 @@ import { routeDirection } from '../../utils/Directions'
 import Picture from '../../components/picture/Picture'
 import TravelTracingScreen from './TravelTracingScreen'
 import { RFValue } from 'react-native-responsive-fontsize'
+import { useQuery } from '@apollo/react-hooks'
+import { COMPROBATETRAVEL } from '../../graphql/querys/Querys'
 
 const { height, width } = Dimensions.get('window')
 
@@ -64,7 +65,7 @@ const ModalLoader = () => {
 const TransportScreen = props => {
   const dispatch = useDispatch()
   const { location } = useWatchLocation()
-  const { firstName, avatar } = useSelector(state => state.user)
+  const { firstName } = useSelector(state => state.user)
   const { directions } = useSelector(state => state.direction)
   const [isVisible, setIsVisible] = useState(false)
   const [destination, setDestination] = useState(null)
@@ -436,6 +437,20 @@ const styles = StyleSheet.create({
 
 const DecisionView = props => {
   const [travel, setTravel] = useState(true)
+  // useQuery(COMPROBATETRAVEL, {
+  //   onCompleted: async (data) => {
+  //     console.log(data)
+  //     // if (getTravelByUserId !== null) {
+  //     //   setTravel(true)
+  //     //   await AsyncStorage.setItem('travel', 'true')
+  //     // }
+  //     // else {
+  //     //   setTravel(false)
+  //     //   await AsyncStorage.removeItem('travel')
+  //     // }
+  //   }
+  // })
+
 
   const comprobateTravel = async () => {
     const e = await AsyncStorage.getItem('travel')
@@ -449,7 +464,8 @@ const DecisionView = props => {
 
   useEffect(() => {
     comprobateTravel()
-  })
+  }, [])
+
 
   if (travel) {
     return <TravelTracingScreen {...props} />

@@ -34,6 +34,7 @@ import BillTransport from '../../screens/Transport/BillTransportScreen'
 import PickerTransportScreen from '../../screens/Transport/PickerTransportScreen'
 import DetailsCrypto from '../../screens/AlyPay/DetailsCripto'
 import CryptoPackages from '../../screens/AlyPay/CryptoPackages'
+import TransferBalance from '../../screens/AlyPay/TransferBalance'
 import NextCommerceScreen from '../../screens/Commerce/NextCommerceScreen'
 import TabStack from '../tabs/TabStack'
 
@@ -48,6 +49,7 @@ import logo from '../../../assets/images/logo.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
+
 
 const navigationOptions = ({ navigation }) => {
   return {
@@ -142,6 +144,10 @@ const StackNavigation = createStackNavigator({
   },
   PaymentMethod: {
     screen: PaymentMethodScreen,
+    navigationOptions
+  },
+  TransferBalance: {
+    screen: TransferBalance,
     navigationOptions
   },
   CreditCard: {

@@ -102,6 +102,14 @@ export const GETTRAVELBYUSERID = gql`
   }
 `
 
+export const COMPROBATETRAVEL = gql`
+  query GetTravelByUserId ($iduser: Int!) {
+    getTravelByUserId(iduser: $iduser) {
+      id
+    }
+  }
+`
+
 export const GETFAVORITE = gql`
   query GetFavorite ($id_user: Int!) {
     getAllCommerceFavoriteByUserId(id_user: $id_user) {

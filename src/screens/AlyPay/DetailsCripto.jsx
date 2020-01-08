@@ -27,6 +27,7 @@ const DetailsCrypto = (props) => {
             id: userId
         },
         partialRefetch: true,
+        fetchPolicy: 'no-cache',
         onError: ({ message }) => {
             console.log(message)
             showMessage({
@@ -36,6 +37,9 @@ const DetailsCrypto = (props) => {
                 color: '#fff',
                 icon: 'danger'
             })
+        },
+        onCompleted: (data) => {
+            console.log(data)
         }
     })
 
@@ -131,7 +135,7 @@ const DetailsCrypto = (props) => {
                         <Text style={Styles.buttonsText}>Recargar saldo</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={Styles.buttons}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate('TransferBalance')} style={Styles.buttons}>
                         <Text style={Styles.buttonsText}>Transferir saldo</Text>
                     </TouchableOpacity>
                 </View>
