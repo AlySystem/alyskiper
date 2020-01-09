@@ -148,7 +148,9 @@ const StackNavigation = createStackNavigator({
   },
   TransferBalance: {
     screen: TransferBalance,
-    navigationOptions
+    navigationOptions: {
+      header: null,
+    }
   },
   CreditCard: {
     screen: CreditCardScreen,

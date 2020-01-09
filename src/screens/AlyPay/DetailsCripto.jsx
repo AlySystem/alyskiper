@@ -18,7 +18,8 @@ import { Theme } from '../../constants/Theme'
 
 const DetailsCrypto = (props) => {
     // Obtenemos el id del usuario de redux
-    // const { userId } = useSelector(storage => storage.user)
+    // const { userId: a } = useSelector(storage => storage.user)
+    // console.log(a)
     const userId = 637
 
     // Ejecutamos la query
