@@ -37,6 +37,7 @@ import CryptoPackages from '../../screens/AlyPay/CryptoPackages'
 import TransferBalance from '../../screens/AlyPay/TransferBalance'
 import NextCommerceScreen from '../../screens/Commerce/NextCommerceScreen'
 import TabStack from '../tabs/TabStack'
+import Retirement from '../../screens/AlyPay/Retirement'
 
 import OrderTracingScreen from '../../screens/Commerce/OrderTracingScreen'
 
@@ -49,7 +50,6 @@ import logo from '../../../assets/images/logo.png'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
-
 
 const navigationOptions = ({ navigation }) => {
   return {
@@ -230,6 +230,10 @@ const StackNavigation = createStackNavigator({
       header: null
     }
   },
+  Retirement: {
+    screen: Retirement,
+    navigationOptions
+  }
 })
 
 const styles = StyleSheet.create({
