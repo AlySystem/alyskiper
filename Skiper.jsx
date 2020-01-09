@@ -80,6 +80,7 @@ const client = new ApolloClient({
 
 const Skiper = () => {
   const { updatePending } = useVersionCode()
+  console.log(updatePending)
   configure();
   const { message, denied } = useStatusGps();
   const [isConnected, setIsConnected] = useState(true);
@@ -91,34 +92,26 @@ const Skiper = () => {
     return () => {
       unsubscribe();
     };
-  }, [setIsConnected]);
+  }, []);
 
   if (!isConnected)
-    return (
-      <TemplateError
-        isOnline
-        title="Ooppss!"
-        description="Revisa tu conexion a internet e intenta nuevamente."
-      />
-    );
+    return <TemplateError isOnline title="Ooppss!" description="Revisa tu conexion a internet e intenta nuevamente."/>
+    
   if (denied)
     return <TemplateError isGps title="Ooppss!" description={message} />;
 
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
-        {Platform.OS === "ios" ? (
-          <StatusBar barStyle="dark-content" />
-        ) : (
-          <StatusBar backgroundColor={Theme.COLORS.colorMainAlt} />
-        )}
+        {Platform.OS === "ios" 
+          ? ( <StatusBar barStyle="dark-content" /> ) 
+          : ( <StatusBar backgroundColor={Theme.COLORS.colorMainAlt} /> )}
         {updatePending && (
           <Modal
             style={{
-              backgroundColor: Theme.COLORS.colorMainDark,
               flex: 1,
               margin: 0,
-              backgroundColor: 'rgba(0,0,0,.1)'
+              backgroundColor: 'rgba(0,0,0,.7)',
             }}
             isVisible={true}
             animationInTiming={700}
@@ -135,10 +128,11 @@ const Skiper = () => {
               />
             </View>
             <View style={{
-              backgroundColor: Theme.COLORS.colorMainDark,
               height: 200,
               paddingVertical: 10,
-              justifyContent: 'space-evenly'
+              justifyContent: 'space-evenly',
+              position: 'relative',
+              top: -30
             }}>
               <Text style={{ 
                 color: Theme.COLORS.colorSecondary,
@@ -155,7 +149,7 @@ const Skiper = () => {
               }}>Se encontraron actualizaciones importantes, por favor actualiza para poder continuar.</Text>
               <View style={{ marginVertical: 5 }} />
               <View style={{ alignItems: 'center' }}>
-                <IconButton 
+                <IconButton
                   stylesButton={{
                     borderRadius: 100,
                     paddingHorizontal: 20,
