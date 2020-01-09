@@ -1,39 +1,73 @@
-import React, { useState } from 'react'
+import React, { useState, useReducer, useEffect } from 'react'
 import {
     View,
     Image,
     TextInput,
     StyleSheet,
     ScrollView,
-    ActivityIndicator,
     Text,
     KeyboardAvoidingView,
     Dimensions,
     TouchableOpacity,
+    Linking,
+    Keyboard,
+    BackHandler,
 } from 'react-native'
 import Background from '../../components/background/Background'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { showMessage } from 'react-native-flash-message'
-import { Picker } from '@react-native-community/picker'
+import validator from 'validator'
 import IconEnt from 'react-native-vector-icons/Entypo'
+import Modal from 'react-native-modal'
 
 // Import Assets
 import ImageBackground from '../../../assets/images/background-alymoney.png'
 import ImageAlyPay from '../../../assets/images/alypay.png'
+import BitCoinImage from '../../../assets/images/img-logo-bitcoin.png'
 
 // Imports Graphql
 import { useQuery } from '@apollo/react-hooks'
 import { GETUSERWALLET } from '../../graphql/querys/Querys'
 import { Theme } from '../../constants/Theme'
+import { useSelector } from 'react-redux'
 
 const { height, width } = Dimensions.get('window')
 
-const TransferBalance = () => {
-    const [cryptos, setCryptos] = useState([])
-    const [selectCrypto, setSelectCrypto] = useState(0)
-    const [comprobateEmail, setComprobateEmail] = useState(false)
+const ModalExit = React.memo(({ setVisible = () => { }, isVisible = false, goBack = () => { } }) => (
+    <Modal backdropOpacity={0.9} animationIn="fadeIn" onBackButtonPress={() => setVisible(false)} isVisible={isVisible} style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <Image source={ImageAlyPay} style={styles.imageAly} />
 
-    const { loading: loadingWallet } = useQuery(GETUSERWALLET, {
+        <Text style={stylesAskToLeave.titleError}>
+            Estas apunto de salir ¿descartar cambios?
+        </Text>
+
+        <TouchableOpacity onPress={goBack} style={[stylesAskToLeave.buttonOk, { marginTop: 10 }]}>
+            <Text style={stylesAskToLeave.textButtonOk}>
+                Salir
+            </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => setVisible(false)} style={[stylesAskToLeave.buttonCancel, { marginTop: 10 }]}>
+            <Text style={[stylesAskToLeave.titleError, { fontWeight: 'bold' }, { marginVertical: 0 }]}>
+                Cancelar
+            </Text>
+        </TouchableOpacity>
+    </Modal>
+))
+
+const TransferBalance = ({ navigation }) => {
+    const [cryptos, setCryptos] = useState([])
+    const [comprobateEmail, setComprobateEmail] = useState(false)
+    const [writingPing, setWritingPin] = useState(false)
+    const [alertExit, setAlertExit] = useState(false)
+    const { email } = useSelector(storage => storage.user)
+
+    // Form
+    const [amount, setAmount] = useState('')
+    const [emailSend, setEmailSend] = useState('')
+    const [securityPin, setSecurityPin] = useState('')
+
+    useQuery(GETUSERWALLET, {
         variables: {
             id: 708
         },
@@ -52,50 +86,90 @@ const TransferBalance = () => {
             })
         },
         onCompleted: (data) => {
-            // console.log(data)
+            console.log(data)
         }
     })
 
+    // Envia el pin de seguridad al correo electronico
+    const getPin = () => {
+        setWritingPin(true)
+        Keyboard.dismiss()
+
+        showMessage({
+            message: 'Skiper',
+            description: `Hemos enviado el pin de seguridad, toca para abrir ${email}`,
+            backgroundColor: '#27ae60',
+            color: '#fff',
+            icon: 'info',
+            duration: 5000,
+            onPress: () => {
+                Linking.openURL(`mailto:${email}`)
+            }
+        })
+    }
+
+    // Comprueba la informacion del correo electronico
+    const comprobateInfoByEmail = () => {
+        Keyboard.dismiss()
+
+        // Comprobamos si el correo es valido
+        if (validator.isEmail(emailSend)) {
+            setComprobateEmail(true)
+        } else {
+            // Generalmente este error se ejecuta cuando el usuario no tiene wallet
+            showMessage({
+                message: 'Skiper',
+                description: 'El correo que has escrito no es correcto',
+                backgroundColor: '#e67e22',
+                color: '#fff',
+                icon: 'danger'
+            })
+        }
+    }
+
+    const goBack = () => {
+        navigation.goBack()
+    }
+
+    useEffect(() => {
+        const backHandled = BackHandler.addEventListener('hardwareBackPress', () => {
+            setAlertExit(true)
+
+            return true
+        })
+
+        // Cuando el componente se desmonte
+        return () => {
+            backHandled.remove()
+        }
+    })
 
     return (
         <Background source={ImageBackground}>
-            <ScrollView style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <ModalExit setVisible={setAlertExit} goBack={goBack} isVisible={alertExit} />
+
+            <ScrollView style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} keyboardShouldPersistTaps="always">
                 <Image source={ImageAlyPay} style={styles.imageAly} />
 
-                <KeyboardAvoidingView behavior="height" style={styles.conatiner}>
+                <KeyboardAvoidingView style={styles.conatiner}>
                     {/* <TextInput /> */}
-                    <View style={styles.rows}>
-                        {/* {
-                                (loadingWallet && cryptos.length === 0)
-                                    ? <ActivityIndicator />
-                                    : <Picker onChangeValue={(e) => console.log(e)} style={styles.picker} selectValue={selectCrypto}>
-
-                                    </Picker>
-                            } */}
-
-                        <View style={styles.ContainerPicker}>
-                            {/* <Text style={styles.legendRow}>Digite un monto a transferir</Text> */}
-                            <Picker
-                                selectedValue={selectCrypto}
-                                style={styles.Picker}
-                            // onValueChange={onValueChange}
-                            >
-                                <Picker.Item value={0} label="Seleccionar Moneda" />
-                            </Picker>
-
-                            <IconEnt name="select-arrows" size={RFValue(14)} color="#FFF" style={{ position: 'absolute', right: 10, top: 15 }} />
-                        </View>
+                    <View style={[styles.rows, styles.rowCenter]}>
+                        <Image source={BitCoinImage} style={styles.imageCoin} />
+                        <Text style={styles.nameCoin}>Bitcoin</Text>
+                        <Text style={[styles.legendRow, { color: '#f1c40f' }]}>Saldo: 0.000540001</Text>
                     </View>
 
                     <View style={styles.rows}>
-                        <Text style={styles.legendRow}>Digite un monto a transferir</Text>
+                        <View style={styles.subRow}>
+                            <Text style={styles.legendRow}>Digite un monto a transferir</Text>
+                        </View>
 
                         <TextInput
                             // editable={selectCrypto !== 0}
                             keyboardType="number-pad"
                             placeholderTextColor="#7f8c8d"
-                            // value={name}
-                            // onChangeText={text => setName(text)}
+                            value={amount}
+                            onChangeText={text => setAmount(text)}
                             style={styles.textInput}
                             placeholder="Monto a transferir" />
                     </View>
@@ -107,15 +181,15 @@ const TransferBalance = () => {
                             // editable={selectCrypto !== 0}
                             keyboardType="email-address"
                             placeholderTextColor="#7f8c8d"
-                            // value={name}
-                            // onChangeText={text => setName(text)}
+                            value={emailSend}
+                            onChangeText={text => setEmailSend(text)}
                             style={styles.textInput}
                             placeholder="Correo electronico" />
 
                     </View>
 
                     <View style={styles.rows}>
-                        <TouchableOpacity style={styles.buttonComprobate} onPress={() => setComprobateEmail(true)}>
+                        <TouchableOpacity style={styles.buttonComprobate} onPress={comprobateInfoByEmail}>
                             <IconEnt name="email" color={Theme.COLORS.colorSecondary} size={RFValue(14)} />
                             <Text style={styles.textButtonComprobate}>Comprobar correo electronico</Text>
                         </TouchableOpacity>
@@ -123,35 +197,110 @@ const TransferBalance = () => {
 
                     {
                         comprobateEmail &&
-                        <View style={styles.rows}>
-                            <View style={styles.rowDescription}>
-                                <Text style={styles.descriptionKey}>Nombre</Text>
-                                <Text style={styles.descriptionValue}>Samuel Sobalvarro</Text>
+                        <>
+                            <View style={styles.rows}>
+                                <View style={styles.rowDescription}>
+                                    <Text style={styles.descriptionKey}>Nombre</Text>
+                                    <Text style={styles.descriptionValue}>Samuel Sobalvarro</Text>
+                                </View>
+
+                                <View style={styles.rowDescription}>
+                                    <Text style={styles.descriptionKey}>Telefono</Text>
+                                    <Text style={styles.descriptionValue}>+505 83805506</Text>
+                                </View>
+
+                                <View style={styles.rowDescription}>
+                                    <Text style={styles.descriptionKey}>Pais</Text>
+                                    <Text style={styles.descriptionValue}>Nicaragua</Text>
+                                </View>
                             </View>
 
-                            <View style={styles.rowDescription}>
-                                <Text style={styles.descriptionKey}>Telefono</Text>
-                                <Text style={styles.descriptionValue}>+505 83805506</Text>
-                            </View>
+                            {
+                                !writingPing &&
+                                <>
+                                    <View style={styles.rows}>
+                                        <Text style={styles.paragraph}>
+                                            Recibe un PIN de segurad en tu correo electronico para continuar la transaccion
+                                    </Text>
+                                    </View>
 
-                            <View style={styles.rowDescription}>
-                                <Text style={styles.descriptionKey}>Pais</Text>
-                                <Text style={styles.descriptionValue}>Nicaragua</Text>
-                            </View>
-                        </View>
+                                    <View style={styles.rows}>
+                                        <TouchableOpacity style={styles.buttonComprobate} onPress={getPin}>
+                                            <Text style={styles.textButtonPin}>Obtener PIN</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </>
+                            }
+
+                            {
+                                writingPing &&
+                                <>
+                                    <View style={styles.rows}>
+                                        <Text style={styles.legendRow}>Escribe el Pin de seguridad para continuar</Text>
+
+                                        <TextInput
+                                            // editable={selectCrypto !== 0}
+                                            keyboardType="numeric"
+                                            placeholderTextColor="#7f8c8d"
+                                            value={securityPin}
+                                            onChangeText={text => setSecurityPin(text)}
+                                            style={styles.textInput}
+                                            placeholder="PIN de seguridad" />
+
+                                    </View>
+                                    <View style={styles.rows}>
+                                        <TouchableOpacity style={styles.buttonComprobate}>
+                                            <Text style={styles.textButtonPin}>Enviar</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </>
+                            }
+                        </>
                     }
-
-                    <View style={styles.rows}>
-                        <Text style={styles.paragraph}>
-                            Recibe un PIN de segurad en tu correo electronico para continuar la transaccion
-                        </Text>
-                    </View>
 
                 </KeyboardAvoidingView>
             </ScrollView>
         </Background>
     )
 }
+
+/**Estilos de modal que se muesta cuando el usuario quiere salir */
+const stylesAskToLeave = StyleSheet.create({
+    title: {
+        textAlign: 'center',
+        fontSize: RFValue(24),
+        color: '#FFF',
+    },
+    titleError: {
+        fontSize: RFValue(18),
+        marginVertical: 10,
+        color: '#e74c3c',
+        textAlign: 'center',
+    },
+    buttonOk: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#c0392b',
+        borderRadius: 10,
+        padding: 10,
+        marginTop: RFValue(50),
+        width: '80%'
+    },
+    buttonCancel: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ecf0f1',
+        borderRadius: 10,
+        padding: 10,
+        marginTop: RFValue(50),
+        width: '80%'
+    },
+    textButtonOk: {
+        color: '#FFF',
+        fontSize: RFValue(18),
+        fontWeight: 'bold',
+    }
+})
 
 const styles = StyleSheet.create({
     imageAly: {
@@ -169,6 +318,23 @@ const styles = StyleSheet.create({
     rows: {
         width: '100%',
         marginVertical: RFValue(10),
+    },
+    rowCenter: {
+        alignItems: 'center',
+    },
+    subRow: {
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        width: '100%',
+    },
+    imageCoin: {
+        resizeMode: 'contain',
+        height: RFValue(150),
+        width: RFValue(150),
+    },
+    nameCoin: {
+        color: '#FFF',
+        fontSize: RFValue(24),
     },
     rowDescription: {
         paddingVertical: RFValue(10),
@@ -226,6 +392,11 @@ const styles = StyleSheet.create({
         width: '80%',
     },
     textButtonComprobate: {
+        color: Theme.COLORS.colorSecondary,
+        fontSize: RFValue(16),
+        marginLeft: 10,
+    },
+    textButtonPin: {
         color: Theme.COLORS.colorSecondary,
         fontSize: RFValue(16),
         marginLeft: 10,
