@@ -6,9 +6,14 @@ export const useVersionCode = () => {
 
     useEffect(() => {
         const checkVersionCode = async () => {
-            const version = await checkVersion()
-            console.log(version)
-            setUpdatePending(version.needsUpdate)
+            try {
+                const version = await checkVersion()
+                console.log(version)
+                setUpdatePending(version.needsUpdate)
+            } catch (error) {
+                console.log(error)
+                setUpdatePending(false)
+            }
         }
 
         checkVersionCode()
