@@ -87,7 +87,7 @@ const DetailsCrypto = (props) => {
             marginTop: RFValue(20),
             marginBottom: RFValue(20),
             width: '80%',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
         },
         row: {
             borderBottomColor: Theme.COLORS.colorSecondary,
@@ -95,7 +95,7 @@ const DetailsCrypto = (props) => {
             justifyContent: 'space-between',
             flexDirection: 'row',
             paddingVertical: RFValue(10),
-            width: '80%',
+            width: '80%'
         },
         textRow: {
             color: Theme.COLORS.colorSecondary,
@@ -130,7 +130,7 @@ const DetailsCrypto = (props) => {
             fontWeight: 'bold',
             textAlign: 'center',
             fontSize: RFValue(12),
-            textTransform: 'uppercase',
+            textTransform: 'uppercase'
         }
     })
 
@@ -179,7 +179,9 @@ const DetailsCrypto = (props) => {
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={Styles.buttons}>
+                <TouchableOpacity
+                    onPress={() => props.navigation.navigate('Retirement')}
+                 style={Styles.buttons}>
                     <Text style={Styles.buttonRetirementText}>Hacer retiros</Text>
                 </TouchableOpacity>
             </View>

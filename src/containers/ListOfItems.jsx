@@ -68,9 +68,7 @@ const ListOfItems = (props) => {
   }
 
   return (
-    <Background
-      source={require('../../assets/images/img-background-alyskiper.png')}
-    >
+    <Background source={require('../../assets/images/img-background-alyskiper.png')}>
       <View style={styles.container}>
         <View style={styles.containerFixed}>
           <Profile

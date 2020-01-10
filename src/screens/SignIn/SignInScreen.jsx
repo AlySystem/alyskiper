@@ -204,14 +204,11 @@ const SignInScreen = props => {
                 isLoading={loading}
               />
               <View style={{ paddingVertical: 10 }} />
-              <TouchableOpacity
-                onPress={() => navigate('Reset')}
-              >
+              <TouchableOpacity onPress={() => navigate('Reset')} >
                 <Text allowFontScaling={false} style={styles.text}>¿Olvido su contraseña?</Text>
               </TouchableOpacity>
 
               <Text style={{ color: '#FFF', marginTop: 20 }}>{DeviceInfo.getVersion()}</Text>
-
             </Animatable.View>
           </View>
         </ScrollView>
