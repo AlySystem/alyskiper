@@ -1,24 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Image,
+  ActivityIndicator
 } from 'react-native'
-
-// Import components
-import Picture from '../picture/Picture'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
 
-const ItemCommission = ({ picture = 1, name = '', symbol = '', price = 0, totalCrypto = 0.000502254351, onPress = () => { } }) => {
+const ItemCommission = ({ picture = '', name = '', symbol = '', onPress = () => { } }) => {
+  const [loadingImage, setLoadingImage] = useState(true)
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
+      {
+        loadingImage &&
+        <ActivityIndicator color="#FFF" size="small" />
+      }
       <View style={styles.containerLeft}>
-        <Picture
-          source={picture}
-          styles={styles.image}
+        <Image
+          onLoadEnd={() => setLoadingImage(false)}
+          source={{ uri: picture }}
+          style={styles.image}
         />
         <View>
           <Text allowFontScaling={false} style={styles.name}>{name}</Text>
@@ -28,9 +33,9 @@ const ItemCommission = ({ picture = 1, name = '', symbol = '', price = 0, totalC
       </View>
 
       <View style={styles.containerRight}>
-        <Text allowFontScaling={false} style={styles.price}>${price.toString()}</Text>
+        <Text allowFontScaling={false} style={styles.price}>0.0000045</Text>
         <View style={{ paddingVertical: 2 }} />
-        <Text allowFontScaling={false} style={styles.total}>Total: {totalCrypto.toString()}</Text>
+        <Text allowFontScaling={false} style={styles.total}>Total</Text>
       </View>
     </TouchableOpacity>
   )

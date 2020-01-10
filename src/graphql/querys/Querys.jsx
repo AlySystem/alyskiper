@@ -270,11 +270,22 @@ export const GETUSERWALLET = gql`
 export const GetPackage = gql`
 query {
     GetPackages{
-        id
-        name
-        price
-        img_url
+      id
+      name
+      price
+      img_url
     }
+}
+`
+
+export const GetCryptos = gql`
+query {
+  Cryptocurrency {
+    id
+    name
+    iso
+    url_img
+  }  
 }
 `
 

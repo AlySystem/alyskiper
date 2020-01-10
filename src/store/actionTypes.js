@@ -26,3 +26,7 @@ export const FAVORITE = 'FAVORITE'
 export const REMOVETRAVEL = 'REMOVETRAVEL'
 export const ADDRESS = 'ADDRESS'
 export const REMOVEADDRESS = 'REMOVEADDRESS'
+
+// Criptos
+export const SETCRYPTO = 'SETCRYPTO'
+export const REMOVECRYPTO = 'REMOVECRYPTO'

@@ -56,11 +56,12 @@ const ModalExit = React.memo(({ setVisible = () => { }, isVisible = false, goBac
 ))
 
 const TransferBalance = ({ navigation }) => {
-    const [cryptos, setCryptos] = useState([])
     const [comprobateEmail, setComprobateEmail] = useState(false)
     const [writingPing, setWritingPin] = useState(false)
     const [alertExit, setAlertExit] = useState(false)
     const { email } = useSelector(storage => storage.user)
+    const crypto = useSelector(storage => storage.crypto)
+    console.log(crypto)
 
     // Form
     const [amount, setAmount] = useState('')
@@ -152,10 +153,9 @@ const TransferBalance = ({ navigation }) => {
                 <Image source={ImageAlyPay} style={styles.imageAly} />
 
                 <KeyboardAvoidingView style={styles.conatiner}>
-                    {/* <TextInput /> */}
                     <View style={[styles.rows, styles.rowCenter]}>
-                        <Image source={BitCoinImage} style={styles.imageCoin} />
-                        <Text style={styles.nameCoin}>Bitcoin</Text>
+                        <Image source={{ uri: crypto.url_img }} style={styles.imageCoin} />
+                        <Text style={styles.nameCoin}>{crypto.name}</Text>
                         <Text style={[styles.legendRow, { color: '#f1c40f' }]}>Saldo: 0.000540001</Text>
                     </View>
 
@@ -185,7 +185,6 @@ const TransferBalance = ({ navigation }) => {
                             onChangeText={text => setEmailSend(text)}
                             style={styles.textInput}
                             placeholder="Correo electronico" />
-
                     </View>
 
                     <View style={styles.rows}>
@@ -383,7 +382,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: Theme.COLORS.colorMain + 'dd',
-        borderRadius: 5,
+        borderRadius: 25,
         borderColor: Theme.COLORS.colorSecondary,
         borderWidth: 1,
         justifyContent: 'center',

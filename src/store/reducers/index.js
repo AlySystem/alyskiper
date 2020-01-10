@@ -10,6 +10,7 @@ import { activeTravel } from './activeTravel'
 import { address } from './address'
 import { direction } from './direction'
 import { status } from './status'
+import { crypto } from './crypto'
 
 const reducers = combineReducers({
   user,
@@ -21,7 +22,8 @@ const reducers = combineReducers({
   activeTravel,
   address,
   direction,
-  status
+  status,
+  crypto
 })
 
 export default reducers

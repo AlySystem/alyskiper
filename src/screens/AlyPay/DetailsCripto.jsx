@@ -15,11 +15,14 @@ import { GETUSERWALLET } from '../../graphql/querys/Querys'
 import ImageBackground from '../../../assets/images/background-alymoney.png'
 import ImageAlyPay from '../../../assets/images/alypay.png'
 import { Theme } from '../../constants/Theme'
+import Axios from 'axios'
 
 const DetailsCrypto = (props) => {
     // Obtenemos el id del usuario de redux
     // const { userId: a } = useSelector(storage => storage.user)
-    // console.log(a)
+    const [currencyExchange, setCurrencyExchange] = useState('0')
+    const [loadingExchange, setloadingExchange] = useState(true)
+    const crypto = useSelector(storage => storage.crypto)
     const userId = 637
 
     // Ejecutamos la query
@@ -30,7 +33,6 @@ const DetailsCrypto = (props) => {
         partialRefetch: true,
         fetchPolicy: 'no-cache',
         onError: ({ message }) => {
-            console.log(message)
             showMessage({
                 message: 'Error',
                 description: 'Ha ocurrido un error al obtener la Wallet, contacte a soporte',
@@ -43,6 +45,30 @@ const DetailsCrypto = (props) => {
             console.log(data)
         }
     })
+
+    useEffect(() => {
+        if (data) {
+            const urlDivisa = 'https://api.coinmarketcap.com/v1/ticker/' + crypto.name
+
+            // Obtenemos la conversion de divisas
+            Axios.get(urlDivisa)
+                .then((response) => {
+                    // Obtenemos el precio de dolar
+                    const priceUSD = Number(response.data[0].price_usd)
+
+                    // Obtenemos la cantidad de crypto
+                    const currency = 0.0000045
+
+                    // Sacamos la conversion
+                    const total = (priceUSD * currency).toFixed(2)
+
+                    setCurrencyExchange(total)
+
+                })
+                .catch((reason) => console.log(reason))
+                .finally(() => setloadingExchange(false))
+        }
+    }, [data])
 
     // Estilos generales
     const Styles = StyleSheet.create({
@@ -125,6 +151,18 @@ const DetailsCrypto = (props) => {
                             <View style={Styles.row}>
                                 <Text style={Styles.textRow}>Saldo</Text>
                                 <Text style={Styles.textRow}>{data.GetUserWalletsCrypto.skiperWallet[0].amount_crypto}</Text>
+                            </View>
+
+                            <View style={Styles.row}>
+                                <Text style={Styles.textRow}>
+                                    {loadingExchange ? 'Cargando saldo en dolares' : 'Saldo en dolares'}
+                                </Text>
+
+                                {
+                                    loadingExchange
+                                        ? <ActivityIndicator color="#FFF" size="small" />
+                                        : <Text style={Styles.textRow}>{currencyExchange}</Text>
+                                }
                             </View>
                         </>
                 }
