@@ -326,8 +326,6 @@ const RequestScreen = props => {
                   ip: ' '
                 }
 
-                console.log(variables)
-
                 await GenerateTravel({ variables }).then(() => {
                   setMessage(`Esperando respuesta de Skiper`)
 

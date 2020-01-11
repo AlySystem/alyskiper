@@ -18,7 +18,6 @@ const DetailsDrive = props => {
   const drive = props.drive
   const { avatar, firstname, lastname } = drive.getTravelByUserId.skiperagent.user
   const { license_plate, vehicleModel, vehicleTrademark, uploadVehicleAppearance } = drive.getTravelByUserId.skiperagent.skiperVehicleAgent[0].skiperVehicle
-  console.log(drive)
 
   // console.log(imageVehicle)
 

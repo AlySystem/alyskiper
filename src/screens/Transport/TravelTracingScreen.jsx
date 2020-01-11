@@ -51,6 +51,7 @@ const TravelTracingScreen = props => {
   const { location } = useWatchLocation()
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErrorTravel] = useState(false)
+  const [showCancel, setCancel] = useState(false)
   const [driver, setDriver] = useState()
   const [idTravel] = useState(props.navigation.getParam("idTravel"))
   const [TravelTracing] = useMutation(TRAVELTRACING, {
@@ -79,10 +80,14 @@ const TravelTracingScreen = props => {
     {
       fetchPolicy: "no-cache",
       onCompleted: (dataResponse) => {
-        console.log(dataResponse)
         if (dataResponse.getTravelByUserId === null) {
           AsyncStorage.removeItem('travel')
         } else {
+          if (dataResponse.getTravelByUserId.skiperTravelsTracing[0].travelstatus.id === 3) {
+            setCancel(true)
+          } else {
+            setCancel(false)
+          }
           AsyncStorage.setItem('travel', 'true')
         }
       }
@@ -106,7 +111,6 @@ const TravelTracingScreen = props => {
   }
 
   useEffect(() => {
-    console.log(userId)
     GetTravelByUserId({ variables: { iduser: userId } })
 
     const HandledBackEvent = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -296,7 +300,7 @@ const TravelTracingScreen = props => {
       </TouchableOpacity>
 
       {
-        (id >= 3 && id <= 4) &&
+        showCancel &&
         <TouchableOpacity style={styles.buttonCancel} onPress={cancelTrip}>
           <IconFont name="car" size={18} color={Theme.COLORS.colorSecondary} />
           <Text style={{ color: Theme.COLORS.colorSecondary }}>
