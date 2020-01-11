@@ -52,25 +52,27 @@ export const Map = props => {
         </Marker.Animated>
         {children}
       </MapView>
-      <Animatable.View
-        style={{
-          position: "absolute",
-          bottom: 40,
-          right: 15,
-          backgroundColor: Theme.COLORS.colorMainAlt,
-          borderRadius: 200,
-          padding: 12
-        }}
-        animation="zoomIn"
-        iterationCount={1}
-      >
-        <Button
-          iconName="my-location"
-          iconSize={35}
-          iconColor={Theme.COLORS.colorSecondary}
-          onPress={centerToLocation}
-        />
-      </Animatable.View>
+      {props.centerLocation && (
+         <Animatable.View
+          style={{
+            position: "absolute",
+            bottom: 40,
+            right: 15,
+            backgroundColor: Theme.COLORS.colorMainAlt,
+            borderRadius: 200,
+            padding: 12
+          }}
+          animation="zoomIn"
+          iterationCount={1}
+        >
+          <Button
+            iconName="my-location"
+            iconSize={35}
+            iconColor={Theme.COLORS.colorSecondary}
+            onPress={centerToLocation}
+          />
+       </Animatable.View>
+      )}
     </View>
   );
 };

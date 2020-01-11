@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useMemo } from 'react'
 import {
   View,
   TouchableOpacity,
@@ -6,13 +6,13 @@ import {
   Dimensions,
   BackHandler,
   Image,
-  Text,
   Alert
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { Polyline, Marker } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service'
 import AsyncStorage from '@react-native-community/async-storage'
+import { RFValue } from 'react-native-responsive-fontsize'
 
 // Import actions
 import { REMOVEDIRECTION, DIRECTION, DRIVERS } from '../../store/actionTypes'
@@ -29,6 +29,7 @@ import InputControl from '../../components/input/InputControl'
 import ModalTransport from '../../components/modal/ModalTransport'
 import Button from '../../components/button/Button'
 import Loader from '../../components/loader/Loader'
+import Picture from '../../components/picture/Picture'
 
 // Import image
 import silverMarker from '../../../assets/images/img-icon-silver.png'
@@ -46,11 +47,7 @@ import ListOfCategoryServices from '../../containers/ListOfCategoryServices'
 // Import utils
 import { getPixelSize } from '../../utils/Pixel'
 import { routeDirection } from '../../utils/Directions'
-import Picture from '../../components/picture/Picture'
 import TravelTracingScreen from './TravelTracingScreen'
-import { RFValue } from 'react-native-responsive-fontsize'
-import { useQuery } from '@apollo/react-hooks'
-import { COMPROBATETRAVEL } from '../../graphql/querys/Querys'
 
 const { height, width } = Dimensions.get('window')
 
@@ -85,6 +82,25 @@ const TransportScreen = props => {
     return true
   }
 
+  const detroyTravelAnimation = async () => {
+    setDestination(null)
+    await dispatch({
+      type: REMOVEDIRECTION
+    })
+    centerToLocation()
+
+    return true
+  }
+
+  const listMemo = useMemo(() => {
+    return (
+      <ListOfCategoryServices 
+        location={location}
+        navigation={props.navigation}
+      />
+    )
+  }, [location])
+
   // Cuando vamos retrosedemos en la pantalla
   // destruimos el viaje en cache
   useEffect(() => {
@@ -102,7 +118,6 @@ const TransportScreen = props => {
     Geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
         const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
-        console.log([].length)
 
         if (pointCoords === null || steps === null) {
           Alert.alert(
@@ -146,6 +161,15 @@ const TransportScreen = props => {
     )
   }
 
+  const centerToLocation = () => {
+    mapView.current.animateToRegion({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      latitudeDelta: location.latitudeDelta,
+      longitudeDelta: location.longitudeDelta
+    });
+  }
+
   // Verificamos si hay un lugar marcado 
   // Este dato lo obtenemos desde el cache de redux
   // BUG ACA - CUANDO SE MARCA EN ESTADOS UNIDOS
@@ -163,7 +187,7 @@ const TransportScreen = props => {
       {
         // Si ya cargo los datos, renderizamos el mapa
         location.latitude &&
-        <Map mapView={mapView} location={location}>
+        <Map mapView={mapView} location={location} centerLocation={destination ? false : true}>
           {
             // Renderizamos todos los conductores silver
             silver &&
@@ -311,16 +335,14 @@ const TransportScreen = props => {
         destination &&
         <>
           <Button
-            onPress={destroyMarkedTravel}
+            onPress={detroyTravelAnimation}
             iconName='arrow-back'
             iconSize={30}
             stylesButton={styles.buttonBack}
-            iconColor={Theme.COLORS.colorParagraph}
+            iconColor={Theme.COLORS.colorSecondary}
           />
-          <ListOfCategoryServices
-            location={location}
-            navigation={props.navigation}
-          />
+          
+          {listMemo}
         </>
       }
 
@@ -387,9 +409,6 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 20
   },
-  container: {
-
-  },
   input: {
     backgroundColor: Theme.COLORS.colorMainDark,
     borderRadius: 100,
@@ -404,7 +423,8 @@ const styles = StyleSheet.create({
   buttonBack: {
     position: 'absolute',
     top: height * 0.02,
-    left: width * 0.05
+    left: width * 0.05,
+    zIndex: 101
   },
   logo: {
     position: 'absolute',

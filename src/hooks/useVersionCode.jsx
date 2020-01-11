@@ -8,7 +8,6 @@ export const useVersionCode = () => {
         const checkVersionCode = async () => {
             try {
                 const version = await checkVersion()
-                console.log(version)
                 setUpdatePending(version.needsUpdate)
             } catch (error) {
                 console.log(error)

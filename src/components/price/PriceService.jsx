@@ -1,179 +1,106 @@
-import React, { useEffect, useState } from "react"
-import { Text, View } from "react-native"
-import AsyncStorage from '@react-native-community/async-storage'
+import React, { useEffect, useState, useMemo } from "react"
+import { Text, View, StyleSheet } from "react-native"
 import { useLazyQuery } from "@apollo/react-hooks"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 import publicIP from "react-native-public-ip"
+
 // Impoer actions
 import { DETAILSTRAVEL } from "../../store/actionTypes"
+
 // Import theme
 import { Theme } from "../../constants/Theme"
+
 // Import querys
 import { CALCULATETARIFF } from "../../graphql/querys/Querys"
+
 // Import components
 import Loader from "../loader/Loader"
-// Import hooks
-import { useLocation } from "../../hooks/useLocation"
 
-const PriceService = props => {
-  const dispatch = useDispatch()
-  const { steps } = useSelector(state => state.direction)
-  const [price, setPrice] = useState("")
-  const [symbol, setSymbol] = useState("")
-  const [state, setState] = useState(1)
-  const { location } = useLocation()
-  const [ipAddressState, setIp] = useState('')
-  const [CalculateTariff, { loading, data, error }] = useLazyQuery(CALCULATETARIFF)
+const PriceService = (props) => {
+    const { steps } = useSelector(state => state.direction)
+    const [price, setPrice] = useState('')
+    const [symbol, setSymbol] = useState('')
+    const [CalculateTariff, { loading, error, data }] = useLazyQuery(CALCULATETARIFF)
 
-  const { latitude, longitude } = location
+    useEffect(() => {
+        publicIP()
+            .then(ipAddress => {
+                const { latitude, longitude } = props.location
+                const variables = {
+                    ip: ipAddress.toString(),
+                    idcategoriaviaje: props.categoryId,
+                    lat: latitude,
+                    lng: longitude
+                }
+    
+                CalculateTariff({ variables })
+            })
+    }, [])
 
-  // Volvemos a calcular la tarifa cuando cambie de locacion
-  useEffect(() => {
-    const calculateRate = async () => {
-      if (location.latitude) {
-        publicIP().then(ipAddress => {
-          setIp(ipAddress.toString())
+    useEffect(() => {
+        if (data !== null && data !== undefined) {
+            const { duration, distance } = steps
+            const durationMin = duration.value / 60
+            const distanceKm = distance.value / 1000
 
-          const variables = {
-            ip: ipAddress.toString(),
-            idcategoriaviaje: props.categoryId,
-            lat: latitude,
-            lng: longitude
-          }
+            const {  pricebase, priceminute, priceckilometer, priceminimun, symbol, currencyID, } = data.CalculateTariff
 
-          CalculateTariff({ variables })
-        })
-      }
-    }
-    calculateRate()
-  }, [location])
+            const minutes = durationMin * priceminute
+            const km = distanceKm * priceckilometer
+            const total = minutes + km + pricebase
 
-  // Volvemos a calcular la tarifa cuando cambie el tipo de viaje
-  useEffect(
-    () => {
-      if (props.categoryId !== state) {
+            setSymbol(symbol)
 
-        setState(props.categoryId)
-
-        const variables = {
-          ip: ipAddressState,
-          idcategoriaviaje: props.categoryId,
-          lat: latitude,
-          lng: longitude
-        }
-
-        CalculateTariff({ variables })
-      }
-    },
-    [props.categoryId]
-  )
-
-  // Calculamos el precio segun la distancia y el tipo de viaje
-  useEffect(() => {
-    if (props.setLoading) {
-      props.setLoading(loading)
-    }
-
-    if (loading === false && data) {
-      const { duration, distance } = steps
-      const durationMin = duration.value / 60
-      const distanceKm = distance.value / 1000
-      const {
-        pricebase,
-        priceminute,
-        priceckilometer,
-        priceminimun,
-        symbol,
-        currencyID,
-      } = data.CalculateTariff
-      const minutes = durationMin * priceminute
-      const km = distanceKm * priceckilometer
-      const total = minutes + km + pricebase
-      setSymbol(symbol)
-
-      AsyncStorage.setItem('currencyID', currencyID.toString())
-
-      /**
-       * Si el total es menor al pecio minimo
-       * siempre cobraremos el precio minimo
-       */
-      
-      if (total < priceminimun) {
-        dispatch({
-          type: DETAILSTRAVEL,
-          payload: {
-            priceTravel: {
-              priceTravel: priceminimun,
-              priceBase: pricebase,
-              pricecKilometer: km,
-              priceMinimun: priceminimun,
-              priceMinute: minutes,
-              currencyID,
-              symbol,
+            if (total < priceminimun) {
+                setPrice(priceminimun)
+                // props.onDetails({ 
+                //     priceTravel: {
+                //         priceTravel: priceminimun,
+                //         priceBase: pricebase,
+                //         pricecKilometer: km,
+                //         priceMinimun: priceminimun,
+                //         priceMinute: minutes,
+                //         currencyID,
+                //         symbol
+                //     }
+                // })
+            } else {
+                setPrice(total)
+                // props.onDetails({
+                //     priceTravel: {
+                //         priceTravel: total,
+                //         priceBase: pricebase,
+                //         pricecKilometer: km,
+                //         priceMinimun: priceminimun,
+                //         priceMinute: minutes,
+                //         currencyID,
+                //         symbol
+                //     }
+                // })
             }
-          }
-        })
-        /**Seteamos el precios */
+        }
+    }, [data])
 
-        setPrice(priceminimun)
-      } else {
-        dispatch({
-          type: DETAILSTRAVEL,
-          payload: {
-            priceTravel: total,
-            priceBase: pricebase,
-            pricecKilometer: km,
-            priceMinimun: priceminimun,
-            priceMinute: minutes,
-            currencyID,
-            symbol,
-          }
-        })
-        setPrice(total)
-      }
-
-      // dispatch({
-      //   type: DETAILSTRAVEL,
-      //   payload: {
-      //     priceTravel: {
-      //       priceTravel: (total < priceminimun) ? priceminimun : total,
-      //       priceBase: pricebase,
-      //       pricecKilometer: km,
-      //       priceMinimun: priceminimun,
-      //       priceMinute: minutes,
-      //       currencyID,
-      //       symbol,
-      //     }
-      //   }
-      // })
-      // /**Seteamos el precios */
-
-      // setPrice(priceminimun)
+    if (loading) return <Loader size='small' />
+    if (error) {
+        props.error(error)
+        return <View />
     }
-  }, [loading, data])
 
-  // Si hay errores mostramos el mensaje de error
-  if (error) {
-    // Ejecutamos la pantalla de error de ListOfCategoryService
-    props.error(error)
-    return <View />
-  }
 
-  // Mostramos el loader cuando los datos estan cargando
-  if (loading && !data || price === '' || price === '0') return <Loader size="small" />
-
-  // Retornamos los precios cuando todo este correcto
-  return (
-    <Text
-      allowFontScaling={false}
-      style={{
-        fontFamily: "Lato-Bold",
-        color: Theme.COLORS.colorParagraph,
-        fontSize: 18
-      }}
-    >
-      {`${symbol} ${Math.ceil(price)}`}
-    </Text>
-  )
+    return (
+        <Text allowFontScaling={false} style={styles.price}>
+            {`${symbol} ${price === '' ? '' : price.toFixed(2).toString()}`}
+        </Text>
+    )
 }
+
+const styles = StyleSheet.create({
+    price: {
+        fontFamily: "Lato-Bold",
+        color: Theme.COLORS.colorSecondary,
+        fontSize: 18
+    }
+})
+
 export default PriceService
