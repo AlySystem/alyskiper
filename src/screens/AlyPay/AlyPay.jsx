@@ -27,6 +27,7 @@ import ImageAlyPay from '../../../assets/images/alypay.png'
 // Import containers
 import ItemCommission from '../../components/item/ItemCommission'
 import PinAuth from './AuthPin'
+import CommingSoon from './commingSoon'
 
 
 
@@ -47,7 +48,9 @@ const AlyPay = (props) => {
 
   return (
     <Background source={ImageBackground}>
-      <PinAuth />
+      {/* <PinAuth /> */}
+
+      <CommingSoon />
 
       <View style={styles.screen}>
         <ScrollView keyboardShouldPersistTaps='always'>

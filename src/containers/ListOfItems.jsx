@@ -29,11 +29,11 @@ const items = [
     icon: 'credit-card',
     routeName: 'PaymentMethod'
   },
-  // {
-  //   name: 'AlyPay',
-  //   icon: '',
-  //   routeName: 'AlyPay'
-  // },
+  {
+    name: 'AlyPay',
+    icon: '',
+    routeName: 'AlyPay'
+  },
   {
     name: 'Invitar amigos',
     icon: 'card-giftcard',
