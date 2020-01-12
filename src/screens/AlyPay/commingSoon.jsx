@@ -14,7 +14,7 @@ const CommingSoon = () => {
             <Image style={styles.imageAly} source={ImageAlyPay} />
 
             <Text style={styles.text}>
-                Proximamente
+                Próximamente
             </Text>
         </View>
     )
