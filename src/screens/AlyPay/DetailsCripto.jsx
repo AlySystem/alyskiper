@@ -21,7 +21,7 @@ const DetailsCrypto = (props) => {
     // Obtenemos el id del usuario de redux
     // const { userId: a } = useSelector(storage => storage.user)
     const [currencyExchange, setCurrencyExchange] = useState('0')
-    const [loadingExchange, setloadingExchange] = useState(true)
+    const [loadingExchange, setloadingExchange] = useState(false)
     const crypto = useSelector(storage => storage.crypto)
     const userId = 637
 
@@ -51,22 +51,22 @@ const DetailsCrypto = (props) => {
             const urlDivisa = 'https://api.coinmarketcap.com/v1/ticker/' + crypto.name
 
             // Obtenemos la conversion de divisas
-            Axios.get(urlDivisa)
-                .then((response) => {
-                    // Obtenemos el precio de dolar
-                    const priceUSD = Number(response.data[0].price_usd)
+            // Axios.get(urlDivisa)
+            //     .then((response) => {
+            //         // Obtenemos el precio de dolar
+            //         const priceUSD = Number(response.data[0].price_usd)
 
-                    // Obtenemos la cantidad de crypto
-                    const currency = 0.0000045
+            //         // Obtenemos la cantidad de crypto
+            //         const currency = 0.0000045
 
-                    // Sacamos la conversion
-                    const total = (priceUSD * currency).toFixed(2)
+            //         // Sacamos la conversion
+            //         const total = (priceUSD * currency).toFixed(2)
 
-                    setCurrencyExchange(total)
+            //         setCurrencyExchange(total)
 
-                })
-                .catch((reason) => console.log(reason))
-                .finally(() => setloadingExchange(false))
+            //     })
+            //     .catch((reason) => console.log(reason))
+            //     .finally(() => setloadingExchange(false))
         }
     }, [data])
 

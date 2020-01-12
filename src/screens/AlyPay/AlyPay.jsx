@@ -47,7 +47,7 @@ const AlyPay = (props) => {
 
   return (
     <Background source={ImageBackground}>
-      {/* <PinAuth /> */}
+      <PinAuth />
 
       <View style={styles.screen}>
         <ScrollView keyboardShouldPersistTaps='always'>

@@ -10,7 +10,6 @@ import { showMessage } from 'react-native-flash-message'
 import { CameraKitCameraScreen } from 'react-native-camera-kit'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
-import { TextInputMask } from 'react-native-masked-text'
 import Geolocation from 'react-native-geolocation-service'
 
 // Import utils
