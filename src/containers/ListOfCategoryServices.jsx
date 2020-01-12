@@ -40,7 +40,7 @@ const ListOfCategoryServices = React.memo(props => {
 
     return (
         <Backdrop
-            closedHeight={40}
+            closedHeight={50}
             header={() => (
                 <View style={styles.closePlateContainer}>
                     <View style={styles.closePlate} />
@@ -50,30 +50,17 @@ const ListOfCategoryServices = React.memo(props => {
             handleOpen={() => console.log('handleOpen')}
             handleClose={() => console.log('handleClose')}
             onClose={() => console.log('onClose')}
-            swipeConfig={{
-                velocityThreshold: 0.3,
-                directionalOffsetThreshold: 80,
-            }}
-            animationConfig={{
-                speed: 14,
-                bounciness: 4,
-            }}
-            overlayColor="rgba(0,0,0,0.2)"
-            backdropStyle={{
-                backgroundColor: Theme.COLORS.colorMainDark
-            }}
+            swipeConfig={{ velocityThreshold: 0.3, directionalOffsetThreshold: 80 }}
+            animationConfig={{ speed: 14, bounciness: 4, }}
+            overlayColor='rgba(0,0,0,0. )'
+            backdropStyle={{ backgroundColor: Theme.COLORS.colorMainDark }}
         >
             {loading ? (
                 <View />
             ) : data.skipercattravels.filter(item => item.btaxy === true).map(category => (
-                <TouchableOpacity style={{ flexDirection: 'row'}} key={category.id} 
-                    onPress={() => {
-                        handleOnSubmit(category)
-                        console.log(category.id)
-                    }}>
+                <TouchableOpacity style={{ flexDirection: 'row'}} key={category.id}  onPress={() =>  handleOnSubmit(category)}>
                     <Text style={{color: 'white', fontSize: 40}}>{category.name}</Text>
                     <PriceService
-                       
                         categoryId={category.id}
                         navigation={props.navigation}
                         location={props.location}

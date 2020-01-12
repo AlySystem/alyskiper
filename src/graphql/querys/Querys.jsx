@@ -49,6 +49,7 @@ export const CATEGORYTRAVEL = gql`
       btaxy
       bdelivery
       btransporte
+      urlImgName
     }
   }
 `

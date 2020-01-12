@@ -13,15 +13,8 @@ import { Theme } from '../../constants/Theme'
 
 const ShowResult = props => {
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={props.onPress}
-    >
-      <Fontisto
-        name='clock'
-        color={Theme.COLORS.colorSecondaryAlt}
-        size={30}
-      />
+    <TouchableOpacity style={styles.container} onPress={props.onPress}>
+      <Fontisto name='clock' color={Theme.COLORS.colorSecondaryAlt} size={30} />
 
       <View style={styles.containerText}>
         <Text allowFontScaling={false} style={styles.title}>{props.title}</Text>

@@ -3,10 +3,10 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Text,
+  ProgressBarAndroid,
   Keyboard
 } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 // Import action types
 import { DIRECTION } from '../../store/actionTypes'
@@ -25,16 +25,18 @@ const Search = props => {
   const dispatch = useDispatch()
   const [value, setValue] = useState('')
   const { latitude, longitude } = props.location
-  const { iso } = useSelector(state => state.user)
+  const [isLoading, setIsLoading] = useState(false)
   const [predictions, setPredictions] = useState()
 
   const handleOnChange = async value => {
     setValue(value)
+    setIsLoading(true)
     const apiUrl = `${keys.googleMaps.autocomplete}json?input=${value}&location=${latitude}, ${longitude}&key=${keys.googleMaps.apiKey}&language=es&radius=2000`
     const response = await fetch(apiUrl)
     const data = await response.json()
 
     setPredictions(data.predictions)
+    setIsLoading(false)
   }
 
   return (
@@ -51,12 +53,10 @@ const Search = props => {
         stylesButton={styles.button}
         iconName='search'
         iconSize={25}
-        stylesIcon={{
-          position: 'absolute',
-          top: 10,
-          left: 20
-        }}
+        stylesIcon={{ position: 'absolute', top: 10, left: 20 }}
       />
+
+      {isLoading ? <ProgressBarAndroid style={{ height: 4 }} indeterminate color={Theme.COLORS.colorSecondary} styleAttr='Horizontal' /> : <View style={{ height: 4 }} />}
 
       <FlatList
         keyboardShouldPersistTaps='always'
@@ -83,13 +83,15 @@ const Search = props => {
           />
         )}
         keyExtractor={(item, index) => index.toString()}
-        ListEmptyComponent={<Text style={{ color: 'white' }}>No hay resultados</Text>}
       />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+  },
   containerPredictions: {
     backgroundColor: Theme.COLORS.colorMainAlt,
     paddingVertical: 10

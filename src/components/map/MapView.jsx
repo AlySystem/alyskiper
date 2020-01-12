@@ -40,16 +40,18 @@ export const Map = props => {
         showsMyLocationButton={false}
         onRegionChangeComplete={props.onLocationChange}
       >
-        <Marker.Animated ref={markerUser} coordinate={location}>
-          <Image
-            style={{
-              width: 35,
-              height: 35,
-              resizeMode: "contain"
-            }}
-            source={markerUserImage}
-          />
-        </Marker.Animated>
+        {props.centerLocation && (
+          <Marker.Animated ref={markerUser} coordinate={location}>
+            <Image
+              style={{
+                width: 35,
+                height: 35,
+                resizeMode: "contain"
+              }}
+              source={markerUserImage}
+            />
+          </Marker.Animated>
+        )}
         {children}
       </MapView>
       {props.centerLocation && (
@@ -60,7 +62,7 @@ export const Map = props => {
             right: 15,
             backgroundColor: Theme.COLORS.colorMainAlt,
             borderRadius: 200,
-            padding: 12
+            padding: 10
           }}
           animation="zoomIn"
           iterationCount={1}

@@ -9,22 +9,26 @@ export const useWatchLocation = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [location, setLocation] = useState({
-    latitude: null,
-    longitude: null,
+    latitude: 0,
+    longitude: 0,
     latitudeDelta: 0.0143,
-    longitudeDelta: 0.0134
+    longitudeDelta: 0.0134,
+    loading: false
   })
 
   useEffect(() => {
     const fetchLocation = async () => {
       watchId = Geolocation.watchPosition(
         ({ coords: { latitude, longitude } }) => {
-          setLocation({
-            latitude,
-            longitude,
-            latitudeDelta: 0.0143,
-            longitudeDelta: 0.0134
-          })
+          if (location.latitude !== latitude) {
+            setLocation({
+              latitude,
+              longitude,
+              latitudeDelta: 0.0143,
+              longitudeDelta: 0.0134,
+              loading: true
+            })
+          }
         }, error => {
           if (error) return <Error title='Error' description='Oh no, ocurrio un error al momento de obtener tu ubicacion, intente de nuevo o mas tarde.' />
           setError(true)

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import {
   View,
   StyleSheet,
@@ -67,24 +67,29 @@ const PickerTransportScreen = props => {
     navigate('Transport')
   }
 
+  useEffect(() => {
+    if (location.loading) {
+      mapView.current.animateToRegion(location, 1000)
+    }
+  }, [location])
+
   return (
     <View style={styles.screen}>
-      {location.latitude && (
-        <Map
-          location={changeLocation || location}
-          changeLocation={changeLocation}
-          mapView={mapView}
-          onLocationChange={onLocationChange}
-        >
-          <View style={styles.marker}>
-            <Icon name='map-pin' color={Theme.COLORS.colorSecondary} size={40} />
-          </View>
-        </Map>
-      )}
+      <Map
+        centerLocation
+        location={changeLocation || location}
+        changeLocation={changeLocation}
+        mapView={mapView}
+        onLocationChange={onLocationChange}
+      >
+        <View style={styles.marker}>
+          <Icon name='map-pin' color={Theme.COLORS.colorSecondary} size={40} />
+        </View>
+      </Map>
       <View style={styles.containerInput}>
         <InputControl
           value={value}
-          placeholder={isLoading ? 'Cargando...' : 'Resultado...'}
+          placeholder={isLoading ? 'Cargando...' : 'Cargando...'}
           placeholderTextColor={Theme.COLORS.colorParagraphSecondary}
           stylesInput={styles.stylesInput}
         />
@@ -104,7 +109,8 @@ const PickerTransportScreen = props => {
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1
+    flex: 1,
+    backgroundColor: Theme.COLORS.colorMainDark
   },
   marker: {
     position: 'absolute',

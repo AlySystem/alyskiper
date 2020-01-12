@@ -8,10 +8,11 @@ export const useLocation = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [location, setLocation] = useState({
-    latitude: null,
-    longitude: null,
+    latitude: 0,
+    longitude: 0,
     latitudeDelta: 0.0143,
-    longitudeDelta: 0.0134
+    longitudeDelta: 0.0134,
+    loading: false
   })
 
   useEffect(() => {
@@ -23,7 +24,8 @@ export const useLocation = () => {
             latitude,
             longitude,
             latitudeDelta: 0.0143,
-            longitudeDelta: 0.0134
+            longitudeDelta: 0.0134,
+            loading: true
           })
           setLoading(false)
         }, error => {

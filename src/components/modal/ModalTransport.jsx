@@ -13,9 +13,6 @@ import Icon from '../icon/Icon'
 import Search from '../search/Search'
 import Background from '../background/Background'
 
-// Import containers
-import ListOfAddress from '../../containers/ListOfAddress'
-
 // Import theme
 import { Theme } from '../../constants/Theme'
 
@@ -28,30 +25,20 @@ const ModalTransport = props => {
       onBackdropPress={() => setIsVisible(false)}
       isVisible={isVisible}
       animationInTiming={700}
-      style={{
-        margin: 0
-      }}
+      style={{ margin: 0 }}
     >
       <Background source={require('../../../assets/images/img-background-alyskiper.png')}>
         <View style={styles.container}>
-          <Icon
-            iconName='close'
-            iconSize={30}
-            onPress={() => setIsVisible(!isVisible)}
-            styles={{
-              paddingHorizontal: 10,
-              position: 'absolute',
-              top: 10,
-              left: 5
-            }}
-          />
-          <Search
-            navigation={navigation}
-            setIsVisible={setIsVisible}
-            isVisible={isVisible}
-            location={location}
-          />
-          <View style={{ marginVertical: 10 }} />
+          <View style={styles.button}>
+            <Icon
+              iconName='close'
+              iconSize={35}
+              onPress={() => setIsVisible(!isVisible)}
+            />
+          </View>
+          <View style={styles.containerHeader}>
+            <Search navigation={navigation} setIsVisible={setIsVisible} isVisible={isVisible} location={location} />
+          </View>
           <TouchableOpacity
             style={styles.containerText}
             onPress={() => {
@@ -63,16 +50,6 @@ const ModalTransport = props => {
             <Text style={styles.text}>Seleccionar punto en el mapa</Text>
           </TouchableOpacity>
           <View style={{ marginVertical: 10 }} />
-          <Text
-            allowFontScaling={false} style={{
-              color: Theme.COLORS.colorSecondary,
-              fontFamily: 'Lato-Bold',
-              fontSize: 18,
-              paddingHorizontal: 5
-            }}
-          >DIRECCIONES
-          </Text>
-          <ListOfAddress navigation={navigation} />
         </View>
       </Background>
     </Modal>
@@ -82,18 +59,44 @@ const ModalTransport = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
     paddingTop: 55,
-    backgroundColor: 'rgba(0,0,0,.5)'
+    backgroundColor: 'rgba(0,0,0,.5)',
+    position: 'relative'
   },
   containerText: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 10
   },
   text: {
     color: Theme.COLORS.colorParagraph,
     fontSize: Theme.SIZES.small,
     marginLeft: 10
+  },
+  containerHeader: {
+    position: 'relative',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    flexDirection: 'row-reverse',
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    paddingHorizontal: 10,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 50,
+    marginVertical: 4,
+    position: 'absolute',
+    right: 10,
+    top: 5
   }
 })
 
