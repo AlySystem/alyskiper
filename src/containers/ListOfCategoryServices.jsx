@@ -29,7 +29,10 @@ const ListOfCategoryServices = React.memo(props => {
     const { navigate } = props.navigation
     const dispatch = useDispatch()
     const [active, setActive] = useState(0)
+    const [location, setLocation] = useState()
+    const [category, setCategory] = useState()
     const { steps } = useSelector(state => state.direction)
+    const { duration, distance } = steps
     const [CategoryTravelsWhitPrice, { loading, error, data }] = useLazyQuery(CATEGORIESTRAVEL)
     
     useEffect(() => {
@@ -44,6 +47,7 @@ const ListOfCategoryServices = React.memo(props => {
                         distance: distance.value,
                         duration: duration.value
                     }})
+                    setLocation({ latitude, longitude })
                 }, error => {
                   props.navigation.pop()
                 }, { timeout: 20000, enableHighAccuracy: true, maximumAge: 100, distanceFilter: 0 }
@@ -65,16 +69,12 @@ const ListOfCategoryServices = React.memo(props => {
         )
     }
 
-    if (loading) {
-        return (
-            <Backdrop>
-                <SkeletonServices />
-            </Backdrop>
-        )
+    const handleSelect = (categoryId) => {
+        setActive(categoryId)
     }
-
-    const handleSelect = (category) => {
-        setActive(category.id)
+    
+    const handleOnSubmit = () => {
+        const { latitude, longitude } = location
         dispatch({
             type: DETAILSTRAVEL,
             payload: {
@@ -89,6 +89,7 @@ const ListOfCategoryServices = React.memo(props => {
               }
             }
         })
+
         dispatch({
             type: LOCATION,
             payload: {
@@ -98,8 +99,8 @@ const ListOfCategoryServices = React.memo(props => {
               longitudeDelta: 0.0134
             }
         })
-
-        // navigate('Request', {  })
+        
+        navigate('Request', { currency: category.currency })
     }
 
     return (
@@ -118,41 +119,51 @@ const ListOfCategoryServices = React.memo(props => {
             swipeConfig={{ velocityThreshold: 0.3, directionalOffsetThreshold: 80 }}
             animationConfig={{ speed: 14, bounciness: 4, }}
             overlayColor='rgba(0,0,0,0. )'
-            backdropStyle={{ backgroundColor: Theme.COLORS.colorMainDark, margin: 0, padding: 0 }}
+            backdropStyle={{ backgroundColor: 'rgba(0,0,0,.8)', margin: 0, padding: 0 }}
             style={{ margin: 0, padding: 0 }}
         >
-            {data && Object.keys(data.CategoryTravelsWhitPrice).map((category, index) => {
+            {loading ? (
+                <SkeletonServices />
+            ) : data && Object.keys(data.CategoryTravelsWhitPrice).map((category, index) => {
                 const result = data.CategoryTravelsWhitPrice[category]
                 const isActive = active === result.id
                 const color = isActive ? 'rgba(3,249,252,0.3)' : 'transparent'
 
                 if (result !== 'AllCategoryDto') {
                     return (
-                        <View key={index} style={{ backgroundColor: color }}>
-                            <TouchableOpacity style={styles.container} onPress={() => handleSelect(result)}>
+                        <TouchableOpacity key={index} style={{ backgroundColor: color, paddingHorizontal: 16 }} onPress={() => { 
+                            setCategory(result) 
+                            return handleSelect(result.id) 
+                        }}>
+                            <View style={styles.container}>
                                 <View style={styles.content}>
                                     <FastImage style={styles.image} source={{ uri: result.url_img_category }} resizeMode={FastImage.resizeMode.contain} />
                                     <View>
                                         <Text allowFontScaling={false} style={styles.name}>{result.name}</Text>
                                         <View style={{ marginVertical: 4 }} />
-                                        <Text allowFontScaling={false} style={styles.description}>Llegada: 7:48p. m.</Text>
+                                        <Text allowFontScaling={false} style={styles.description}>Llegada: {duration.text}</Text>
                                     </View>
                                 </View>
                                 <Text allowFontScaling={false} style={styles.total}>{`${result.symbol} ${Math.ceil(result.total)}`}</Text>
-                            </TouchableOpacity>
-                        </View>
+                            </View>
+                        </TouchableOpacity>
                     )
                 }
                 return null
             })}
-            <IconButton
-                message='PEDIR SKIPER'
-                stylesMessage={{  color: '#fff', fontSize: Theme.SIZES.normal, fontFamily: 'Lato-Bold', marginLeft: 8 }}
-                isActiveIcon
-                iconName='check'
-                onPress={() => {}}
-                stylesButton={styles.button}
-            />
+            
+            {!loading && (
+                <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <IconButton
+                    message='PEDIR SKIPER'
+                    stylesMessage={{  color: '#fff', fontSize: Theme.SIZES.xsmall, fontFamily: 'Lato-Bold', marginLeft: 8 }}
+                    isActiveIcon
+                    iconName='check'
+                    onPress={handleOnSubmit}
+                    stylesButton={styles.button}
+                />
+            </View>
+            )}
         </Backdrop>
     )
 })
@@ -179,8 +190,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 15,
-        paddingHorizontal: 16
+        paddingVertical: 15
     },
     image: {
         width: 52,
@@ -213,12 +223,16 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 10,
         paddingHorizontal: 20,
-        height: 55,
-        backgroundColor: Theme.COLORS.colorButton,
+        height: 50,
+        borderRadius: 200,
+        backgroundColor: Theme.COLORS.colorMainDark,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        width: '100%'
+        width: 220,
+        borderColor: Theme.COLORS.colorSecondary,
+        borderWidth: 0.5,
+        marginBottom: 5
     }
 })
 

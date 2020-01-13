@@ -14,7 +14,7 @@ import { Theme } from '../constants/Theme'
 
 const SkeletonServices = props => {
   return (
-    <Placeholder Animation={Fade} duration={900} >
+    <Placeholder Animation={Fade} duration={900} style={{ paddingHorizontal: 16 }} >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <PlaceholderLine style={{ borderRadius: 15, width: 55, height: 55, backgroundColor: Theme.COLORS.colorSecondaryAlt }} />
         <View style={{ marginLeft: 25, flexGrow: 1, flexShrink: 1, height: 50 }}>

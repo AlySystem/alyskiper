@@ -67,7 +67,7 @@ const TransportScreen = props => {
   const [isLoading, setIsLoading] = useState(false)
   const { silver, golden, vip, president } = usePubnub()
   const [addressDestination, setAddressDestination] = useState('')
-  const [steps, setSteps] = useState('')
+  const [destroy, setDestroy] = useState(false)
 
   const mapView = useRef(null)
   const markerDestination = useRef()
@@ -122,7 +122,6 @@ const TransportScreen = props => {
     Geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
         const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
-        setSteps(steps)
         if (pointCoords === null || steps === null) {
           Alert.alert(
             'Atencion',
@@ -176,13 +175,16 @@ const TransportScreen = props => {
     });
   }
 
-  // useEffect(() => {
-  //   if (location.loading) {
-  //     if (mapView.current !== null) {
-  //       mapView.current.animateToRegion(location, 2000)
-  //     }
-  //   }
-  // }, [location])
+  useEffect(() => {
+    if (location.loading) {
+      if (!destroy) {
+        if (mapView.current !== null) {
+          mapView.current.animateToRegion(location, 2000)
+          setDestroy(true)
+        }
+      }
+    }
+  }, [location])
 
   useEffect(() => {
     if (directions !== null) {
@@ -194,7 +196,7 @@ const TransportScreen = props => {
   return (
     <View style={styles.screen}>
       {search}
-      <Map mapView={mapView} location={location} centerLocation={destination ? false : true}>
+      <Map mapView={mapView} location={location} markerUser={destination ? false : true} centerLocation={destination ? false : true}>
         {silver &&
           silver.map(
             (drive, index) => (
@@ -322,7 +324,7 @@ const TransportScreen = props => {
           </>
         }
       </Map>
-
+      {destination && <View style={{ marginVertical: 25 }} />}
       {destination &&
         <>
           <Button
@@ -428,43 +430,4 @@ const styles = StyleSheet.create({
   }
 })
 
-
-const DecisionView = props => {
-  const [travel, setTravel] = useState(true)
-  // useQuery(COMPROBATETRAVEL, {
-  //   onCompleted: async (data) => {
-  //     console.log(data)
-  //     // if (getTravelByUserId !== null) {
-  //     //   setTravel(true)
-  //     //   await AsyncStorage.setItem('travel', 'true')
-  //     // }
-  //     // else {
-  //     //   setTravel(false)
-  //     //   await AsyncStorage.removeItem('travel')
-  //     // }
-  //   }
-  // })
-
-  const comprobateTravel = async () => {
-    const e = await AsyncStorage.getItem('travel')
-
-    if (e && e === 'true') {
-      setTravel(true)
-    } else {
-      setTravel(false)
-    }
-  }
-
-  useEffect(() => {
-    comprobateTravel()
-  }, [])
-
-
-  if (!travel) {
-    return <TransportScreen {...props} />
-  } else {
-    return <TravelTracingScreen {...props} />
-  }
-}
-
-export default DecisionView
+export default TransportScreen

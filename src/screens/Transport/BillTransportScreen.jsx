@@ -38,11 +38,14 @@ const BillTransportScreen = props => {
   useEffect(
     () => {
       const e = async () => {
-        await execute({
-          variables: {
-            idservice: idTravel
-          }
-        })
+        console.log(idTravel)
+        if (idTravel) {
+          await execute({
+            variables: {
+              idservice: idTravel
+            }
+          })
+        }
       }
 
       e()

@@ -8,12 +8,14 @@ import {
   Alert,
   BackHandler
 } from "react-native"
-import { Marker } from "react-native-maps"
+import { Marker, Callout } from "react-native-maps"
 import { useLazyQuery, useMutation } from "@apollo/react-hooks"
 import { useSelector, useDispatch } from "react-redux"
 import PubNubReact from "pubnub-react"
 import { showMessage } from 'react-native-flash-message'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import AsyncStorage from "@react-native-community/async-storage"
+import { getPreciseDistance } from 'geolib'
 
 // Import actions
 import { DETAILSTRAVEL } from "../../store/actionTypes"
@@ -40,7 +42,6 @@ import { TRAVELTRACING } from "../../graphql/mutations/Mutations"
 // Import theme
 import { Theme } from "../../constants/Theme"
 import { RFValue } from "react-native-responsive-fontsize"
-import AsyncStorage from "@react-native-community/async-storage"
 
 const TravelTracingScreen = props => {
   const dispatch = useDispatch()
@@ -52,6 +53,8 @@ const TravelTracingScreen = props => {
   const [errorTravel, setErrorTravel] = useState(false)
   const [showCancel, setCancel] = useState(false)
   const [driver, setDriver] = useState()
+  const { id } = useSelector(state => state.status)
+  const [destroy, setDestroy] = useState(false)
   const [idTravel] = useState(props.navigation.getParam("idTravel"))
   const [TravelTracing] = useMutation(TRAVELTRACING, {
     onError: (error) => {
@@ -81,6 +84,7 @@ const TravelTracingScreen = props => {
       onCompleted: (dataResponse) => {
         if (dataResponse.getTravelByUserId === null) {
           AsyncStorage.removeItem('travel')
+          setErrorTravel(true)
         } else {
           if (dataResponse.getTravelByUserId.skiperTravelsTracing[0].travelstatus.id === 3) {
             setCancel(true)
@@ -98,22 +102,14 @@ const TravelTracingScreen = props => {
   useNotification(navigate, location.latitude, location.longitude, props.navigation)
 
   const pubnub = new PubNubReact({
-    publishKey: 'pub-c-81a014c6-50ba-4add-9ec6-f19993758a73',
-    subscribeKey: 'sub-c-c74997b4-eb99-11e9-ad72-8e6732c0d56b',
+    publishKey: 'pub-c-79890746-813e-461c-8a18-c33bd2309b50',
+    subscribeKey: 'sub-c-3a83e92a-35b2-11ea-81d4-f6d34a0dd71d',
     subscribeRequestTimeout: 60000,
     presenceTimeout: 20,
     uuid: `${firstName}${userId}`
   })
 
-  const handleToggleModal = () =>  setShowDetails(!showDetails) 
-
-  useEffect(() => {
-    if (location.loading) {
-      if (mapView.current !== null) {
-        mapView.current.animateToRegion(location, 3000)
-      }
-    }
-  }, [location])
+  const handleToggleModal = () =>  setShowDetails(!showDetails)
 
   useEffect(() => {
     GetTravelByUserId({ variables: { iduser: userId } })
@@ -130,9 +126,20 @@ const TravelTracingScreen = props => {
   }, [])
 
   useEffect(() => {
-    if (data && data.getTravelByUserId) {
+    if (location.loading) {
+      if (!destroy) {
+        if (mapView.current !== null) {
+          mapView.current.animateToRegion(location, 2000)
+          setDestroy(true)
+        }
+      }
+    }
+  }, [location])
+
+  useEffect(() => {
+    if (data && data.getTravelByUserId !== null) {
       setErrorTravel(false)
-      setStatus(data.skiperTravelsTracing.travelstatus.id)
+      setStatus(data.getTravelByUserId.skiperTravelsTracing[0].travelstatus.id)
       dispatch({
         type: DETAILSTRAVEL,
         payload: {
@@ -151,18 +158,16 @@ const TravelTracingScreen = props => {
               const channels = response.channels[`Driver_${idTravel || data.getTravelByUserId.id}`]
               if (channels !== undefined) {
                 const _drive = channels.occupants.filter(item => item.state !== undefined)
-
+                if (markerRef.current !== null) {
+                  markerRef.current.showCallout()
+                }
                 setDriver(_drive)
               }
             }
           }
         })
       }, 1000)
-    } else {
-      setErrorTravel(true)
     }
-
-
     return () => {
       if (interval !== null) {
         clearInterval(interval)
@@ -211,112 +216,114 @@ const TravelTracingScreen = props => {
       ])
   }
 
+  if (errorTravel) {
+    return (
+      <Background>
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,.5)',
+            width: "100%",
+            height: "100%",
+            flex: 1,
+            zIndex: 1000,
+            position: "absolute",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            iconName="close"
+            stylesButton={{ position: "absolute", top: 8, left: 10 }}
+            iconSize={40}
+            onPress={() => props.navigation.goBack()}
+          />
+          <Picture source={require("../../../assets/images/img-alyskiper.png")} />
+          <View style={{ paddingVertical: 10 }} />
+          <Text style={{ color: Theme.COLORS.colorParagraph, fontFamily: "Lato-Bold", fontSize: Theme.SIZES.normal }} >
+            No hay viajes activos
+          </Text>
+        </View>
+      </Background>
+    )
+  }
+
   return (
     <>
-      {errorTravel ? (
-        <Background>
-          <View
-            style={{
-              backgroundColor: 'rgba(0,0,0,.5)',
-              width: "100%",
-              height: "100%",
-              flex: 1,
-              zIndex: 1000,
-              position: "absolute",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              iconName="close"
-              stylesButton={{ position: "absolute", top: 8, left: 10 }}
-              iconSize={40}
-              onPress={() => props.navigation.goBack()}
-            />
-            <Picture source={require("../../../assets/images/img-alyskiper.png")} />
-            <View style={{ paddingVertical: 10 }} />
-            <Text style={{ color: Theme.COLORS.colorParagraph, fontFamily: "Lato-Bold", fontSize: Theme.SIZES.normal }} >
-              No hay viajes activos
-            </Text>
-          </View>
-        </Background>
-      ) : (
-        <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt }}>
-          <Modal
-            isVisible={showDetails}
-            backdropColor="#B4B3DB"
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)', margin: 0, justifyContent: "flex-start" }}
-            backdropOpacity={0.8}
-            animationIn="zoomInDown"
-            animationOut="zoomOutUp"
-            animationInTiming={600}
-            animationOutTiming={600}
-            backdropTransitionInTiming={600}
-            backdropTransitionOutTiming={600}
-          >
-            <DetailsDrive drive={data} />
-            <Button
-              iconName="close"
-              iconSize={30}
-              onPress={handleToggleModal}
-              stylesButton={{ position: "absolute", top: 10, left: 12 }}
-            />
-          </Modal>
-          <Map mapView={mapView} location={location}>
-            {driver &&
-              driver.map(drive => {
-                return (
-                  <Marker
-                    ref={markerRef}
-                    key={`${drive.uuid}${drive.state.lastname}`}
-                    coordinate={{  latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }}
-                    title={`Tu conductor`}
-                    description={`${drive.state.firstname} ${drive.state.lastname}`}>
-                    <View style={styles.containerMarker}>
-                      <View style={styles.subContainerMarker}>
-                        <Image style={styles.drive} source={require("../../../assets/images/img-travel.png")} />
-                      </View>
+      <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt }}>
+        <Modal
+          isVisible={showDetails}
+          backdropColor="#B4B3DB"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)', margin: 0, justifyContent: "flex-start" }}
+          backdropOpacity={0.8}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}
+        >
+          <DetailsDrive drive={data} />
+          <Button
+            iconName="close"
+            iconSize={30}
+            onPress={handleToggleModal}
+            stylesButton={{ position: "absolute", top: 10, left: 12 }}
+          />
+        </Modal>
+        <Map mapView={mapView} location={location} markerUser centerLocation>
+          {driver &&
+            driver.map(drive => {
+              return (
+                <Marker
+                  ref={markerRef}
+                  key={`${drive.uuid}${drive.state.lastname}`}
+                  coordinate={{  latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }}
+                  title={`${drive.state.firstname} ${drive.state.lastname}`}
+                  description={`esta a ${getPreciseDistance({ latitude: location.latitude, longitude: location.longitude }, { latitude: driver[0].state.coords.latitude, longitude: driver[0].state.coords.longitude })} metros`}
+                >
+                  <View style={styles.containerMarker}>
+                    <View style={styles.subContainerMarker}>
+                      <Image style={styles.drive} source={require("../../../assets/images/img-travel.png")} />
                     </View>
-                  </Marker>
-                )
-              })
-            }
-          </Map>
-    
-          <ButtonSupport right='70%' bottom='18%' />
-    
-          {status === 4 && (
-            <TouchableOpacity
-              style={{
-                position: "absolute",
-                right: 20,
-                top: 15,
-                width: 40,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-              onPress={() => navigate("Scanner", { latitude: location.latitude, longitude: location.longitude })}
-            >
-              <Icon name="qrcode-scan" size={40} color={Theme.COLORS.colorSecondary} />
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity style={styles.containerButton} onPress={handleToggleModal}>
-            <View style={{ backgroundColor: Theme.COLORS.colorSecondary, borderRadius: 100, width: 100, height: 8 }} />
-            <Text allowFontScaling={false} style={styles.text}>
-              Toca para mostrar detalles
+                  </View>
+                </Marker>
+              )
+            })
+          }
+        </Map>
+  
+        <ButtonSupport right='70%' bottom='18%' />
+        {status === 4 || id === 4 ? (
+          <TouchableOpacity
+            style={{
+              position: "absolute",
+              right: 20,
+              top: 15,
+              width: 40,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+            onPress={() => navigate("Scanner", { latitude: location.latitude, longitude: location.longitude })}
+          >
+            <Icon name="qrcode-scan" size={40} color={Theme.COLORS.colorSecondary} />
+          </TouchableOpacity>
+        ) : null}
+        <TouchableOpacity style={styles.containerButton} onPress={handleToggleModal}>
+          <View style={{ backgroundColor: Theme.COLORS.colorSecondary, borderRadius: 100, width: 100, height: 8 }} />
+          <Text allowFontScaling={false} style={styles.text}>
+            Toca para mostrar detalles
+          </Text>
+        </TouchableOpacity>
+  
+        {status === 3 || id === 3 ? (
+          <TouchableOpacity style={styles.buttonCancel} onPress={cancelTrip}>
+            <IconFont name="car" size={18} color={Theme.COLORS.colorSecondary} />
+            <Text style={{ color: Theme.COLORS.colorSecondary }}>
+              Cancelar Viaje
             </Text>
           </TouchableOpacity>
-    
-          {showCancel &&
-            <TouchableOpacity style={styles.buttonCancel} onPress={cancelTrip}>
-              <IconFont name="car" size={18} color={Theme.COLORS.colorSecondary} />
-              <Text style={{ color: Theme.COLORS.colorSecondary }}>
-                Cancelar Viaje
-              </Text>
-            </TouchableOpacity>
-          }
-        </View>
-      )}
+        ) : null}
+      </View>
     </>
   )
 }
@@ -345,14 +352,14 @@ const styles = StyleSheet.create({
     resizeMode: "contain"
   },
   containerMarker: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    padding: RFValue(10),
-    borderRadius: RFValue(25),
+    // backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    // padding: RFValue(10),
+    // borderRadius: RFValue(25),
   },
   subContainerMarker: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    padding: RFValue(10),
-    borderRadius: RFValue(50),
+    // backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    // padding: RFValue(10),
+    // borderRadius: RFValue(50),
   },
   buttonCancel: {
     alignItems: "center",

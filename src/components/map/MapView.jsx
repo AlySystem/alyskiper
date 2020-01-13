@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Image, View, } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Animatable from "react-native-animatable";
@@ -15,7 +15,6 @@ import markerUserImage from "../../../assets/images/img-marker-user.png";
 
 export const Map = props => {
   const { children, location, mapView } = props;
-  const markerUser = useRef(null);
 
   const centerToLocation = () => {
     mapView.current.animateToRegion({
@@ -40,8 +39,8 @@ export const Map = props => {
         showsMyLocationButton={false}
         onRegionChangeComplete={props.onLocationChange}
       >
-        {props.centerLocation && (
-          <Marker.Animated ref={markerUser} coordinate={location}>
+        {props.markerUser && (
+          <Marker coordinate={location}>
             <Image
               style={{
                 width: 35,
@@ -50,7 +49,7 @@ export const Map = props => {
               }}
               source={markerUserImage}
             />
-          </Marker.Animated>
+          </Marker>
         )}
         {children}
       </MapView>

@@ -3,6 +3,8 @@ import { useSubscription } from '@apollo/react-hooks'
 import { useSelector, useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import PubNubReact from 'pubnub-react'
+import AsyncStorage from '@react-native-community/async-storage'
+import { removeAsyncStorage } from '../utils/AsyncStorage'
 
 // Import actions types
 import { ACTIVETRAVEL } from '../store/actionTypes'
@@ -11,7 +13,6 @@ import { ACTIVETRAVEL } from '../store/actionTypes'
 import { GETNOTIFICATIONTRAVEL } from '../graphql/subscription/Subcription'
 
 import { notification } from '../hooks/usePushNotification'
-import AsyncStorage from '@react-native-community/async-storage'
 
 export const useNotification = (navigate, latitude, longitude, navigation) => {
   const dispatch = useDispatch()
@@ -19,8 +20,8 @@ export const useNotification = (navigate, latitude, longitude, navigation) => {
   const [idTravel, setIdTravel] = useState()
 
   const pubnub = new PubNubReact({
-    publishKey: 'pub-c-8d32c173-3d6f-4e37-8ebb-fcdec30b11df',
-    subscribeKey: 'sub-c-a79fe382-282a-11ea-9e12-76e5f2bf83fc',
+    publishKey: 'pub-c-79890746-813e-461c-8a18-c33bd2309b50',
+    subscribeKey: 'sub-c-3a83e92a-35b2-11ea-81d4-f6d34a0dd71d',
     subscribeRequestTimeout: 60000,
     presenceTimeout: 122,
     uuid: firstName
@@ -49,40 +50,36 @@ export const useNotification = (navigate, latitude, longitude, navigation) => {
             }
           })
           return navigate('Transport')
-        case 3:
-          dispatch({
-            type: ACTIVETRAVEL,
-            payload: { travel: idTravel }
-          })
-          notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
-          AsyncStorage.setItem('travel', 'true')
-          return navigate('TravelTrancing', {
-            idTravel: idTravel
-          })
+          case 3:
+            dispatch({
+              type: ACTIVETRAVEL,
+              payload: { travel: idTravel }
+            })
+            notification('AlySkiper', 'Tu solicitud de viaje fue aceptada con exito.')
+            AsyncStorage.setItem('travel', 'true')
+            return navigate('TravelTrancing', {
+              idTravel: idTravel
+            })
         case 4:
           notification('AlySkiper', 'El conductor ya se encuentra cerca de ti.')
           navigate('Scanner', { latitude: latitude, longitude: longitude })
           break
         case 8:
-          notification('AlySkiper', 'Felicidades, has llegado a tu destino.')
-          pubnub.unsubscribe({
-            channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
-          })
-          AsyncStorage.removeItem('travel')
-          return navigate('FinalTravel')
+            notification('AlySkiper', 'Felicidades, has llegado a tu destino.')
+            pubnub.unsubscribe({
+              channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
+            })
+            return navigate('FinalTravel')
         case 9:
           notification('AlySkiper', 'Su viaje ha sido cancelado.')
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
-          AsyncStorage.removeItem('travel')
-          return navigate('Home')
         case 10:
           notification('AlySkiper', 'Su viaje ha sido finalizado.')
           pubnub.unsubscribe({
             channels: [`Driver_${idTravel || subscriptionData.data.skiperTravel.id}`]
           })
-          AsyncStorage.removeItem('travel')
           return navigate('FinalTravel')
       }
     }

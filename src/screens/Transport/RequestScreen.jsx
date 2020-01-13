@@ -3,13 +3,18 @@ import {
   View,
   Text,
   StyleSheet,
-  AsyncStorage,
-  BackHandler
+  BackHandler,
+  Dimensions
 } from 'react-native'
-import { useDispatch, useSelector, useStore } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useMutation, useSubscription } from '@apollo/react-hooks'
 import { showMessage } from 'react-native-flash-message'
 import { isPointWithinRadius, orderByDistance } from 'geolib'
+import AsyncStorage from '@react-native-community/async-storage'
+import LottieView from 'lottie-react-native'
+
+// Import animation
+import animation from '../../../animation.json'
 
 // Import querys
 import { GENERATETRAVEL, TRAVELTRACING } from '../../graphql/mutations/Mutations'
@@ -37,6 +42,8 @@ import ValidateSkiperDrive from '../../graphql/mutations/ValidateSkiperDrive'
 // let lastIndex = 0
 
 // let lengthAllDrivers = 0
+
+const { width } = Dimensions.get('window')
 
 const RequestScreen = props => {
   const MaxDistance = 25000
@@ -207,7 +214,7 @@ const RequestScreen = props => {
     let driverNearby = null
     let accept = false
     const { duration, distance, end_address, start_address, start_location, end_location } = steps
-    const currencyID = await AsyncStorage.getItem('currencyID')
+    const currencyID = props.navigation.getParam('currency')
 
     switch (categoryId) {
       case 1:
@@ -380,9 +387,20 @@ const RequestScreen = props => {
     <Background>
       <View style={styles.screen}>
         <View style={styles.layout}>
-          <Picture source={require('../../../assets/images/img-alyskiper-masked.png')} />
+          {/* <Picture source={require('../../../assets/images/img-alyskiper-masked.png')} />
           <View style={{ marginVertical: 5 }} />
-          <Loader />
+          <Loader /> */}
+          <LottieView
+            style={{
+              height: 300,
+              width: width,
+              position: 'relative',
+              top: 25
+            }}
+            source={animation}
+            autoPlay
+            loop
+          />
 
           <View style={{ marginVertical: 10 }} />
 

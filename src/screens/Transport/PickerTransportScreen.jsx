@@ -35,6 +35,7 @@ const PickerTransportScreen = props => {
   const [isLoading, setIsLoading] = useState(false)
   const [details, setDetails] = useState({})
   const mapView = useRef(null)
+  const [destroy, setDestroy] = useState(false)
 
   const onLocationChange = async location => {
     setChangeLocation(location)
@@ -69,8 +70,11 @@ const PickerTransportScreen = props => {
 
   useEffect(() => {
     if (location.loading) {
-      if (mapView.current !== null) {
-        mapView.current.animateToRegion(location, 2000)
+      if (!destroy) {
+        if (mapView.current !== null) {
+          mapView.current.animateToRegion(location, 2000)
+          setDestroy(true)
+        }
       }
     }
   }, [location])
@@ -78,6 +82,7 @@ const PickerTransportScreen = props => {
   return (
     <View style={styles.screen}>
       <Map
+        markerUser
         centerLocation
         location={changeLocation || location}
         changeLocation={changeLocation}

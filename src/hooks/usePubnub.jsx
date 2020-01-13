@@ -13,8 +13,8 @@ export const usePubnub = () => {
   const { firstName } = useSelector(state => state.user)
   const [drivers, setDrivers] = useState({})
   const pubnub = new PubNubReact({
-    publishKey: 'pub-c-81a014c6-50ba-4add-9ec6-f19993758a73',
-    subscribeKey: 'sub-c-c74997b4-eb99-11e9-ad72-8e6732c0d56b',
+    publishKey: 'pub-c-79890746-813e-461c-8a18-c33bd2309b50',
+    subscribeKey: 'sub-c-3a83e92a-35b2-11ea-81d4-f6d34a0dd71d',
     // subscribeRequestTimeout: 60000,
     // presenceTimeout: 20,
     uuid: firstName
@@ -32,6 +32,7 @@ export const usePubnub = () => {
     const interval = setInterval(() => {
       pubnub.hereNow({ includeUUIDs: true, includeState: true, channels: allChanels }, (status, response) => {
         if (response !== undefined) {
+          // console.log(response)
           if ('SkiperDrive_1' in response.channels) {
             const silverChannel = response.channels.SkiperDrive_1
             if (silverChannel !== undefined) {

@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { CameraKitCameraScreen } from 'react-native-camera-kit'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation, useSubscription } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
 import Geolocation from 'react-native-geolocation-service'
 
@@ -38,6 +38,20 @@ const ScannerScreen = props => {
   const [codeQR, setCodeQR] = useState('')
   const [TravelTracing, { loading }] = useMutation(TRAVELTRACING)
   const { data } = useSubscription(GETNOTIFICATIONTRAVEL, { variables: { idusuario: userId } })
+  
+  useEffect(() => {
+    if (props.navigation.isFocused()) {
+      if (data) {
+        const { travelstatus: { id } } = data.skiperTravel.skiperTravelsTracing[0]
+        switch (id) {
+          case 5:
+              props.navigation.goBack()
+            break
+        }
+      }
+    }
+  }, [data])
+  
   useEffect(() => {
     const verifyPermission = async () => {
       await permissionCamera()
@@ -137,19 +151,10 @@ const ScannerScreen = props => {
           fontFamily: 'Lato-Regular'
         }
       })
-      return
     }
 
     Geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
-        console.log({
-          input: {
-            idtravel: idTravel,
-            idtravelstatus: 'CONFIRMADO',
-            lat: latitude,
-            lng: longitude
-          }
-        })
         TravelTracing({
           variables: {
             input: {
@@ -183,7 +188,6 @@ const ScannerScreen = props => {
           })
           .catch(error => {
             if (error) {
-              console.log(error)
               showMessage({
                 message: 'Error',
                 description: 'No se ha podido generar el viaje, por favor pongase en contacto con soporte.',
@@ -223,27 +227,13 @@ const ScannerScreen = props => {
     )
   }
 
-  useEffect(() => {
-    if (props.navigation.isFocused()) {
-      if (data) {
-        const { travelstatus: { id } } = data.skiperTravel.skiperTravelsTracing[0]
-        switch (id) {
-          case 5:
-              props.navigation.goBack()   
-            break
-        }
-      }
-    }
-  }, [data])
-
   return (
     <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt }}>
       <TouchableOpacity style={styles.buttonToggle} onPress={() => setManualQR(!manualQR)}>
         <Text allowFontScaling={false} style={styles.text}>{manualQR ? 'ESCANEAR QR' : 'AGREGAR MANUAL'}</Text>
       </TouchableOpacity>
 
-      {
-        !manualQR &&
+      {!manualQR &&
         <CameraKitCameraScreen
           style={{ flex: 1 }}
           showFrame
@@ -253,11 +243,9 @@ const ScannerScreen = props => {
           colorForScannerFrame='black'
           onReadCode={handleOnReadyCode}
         />
-
       }
 
-      {
-        manualQR &&
+      {manualQR &&
         <Background>
           <View style={styles.manualContainer}>
 
