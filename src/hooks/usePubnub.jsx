@@ -13,8 +13,8 @@ export const usePubnub = () => {
   const { firstName } = useSelector(state => state.user)
   const [drivers, setDrivers] = useState({})
   const pubnub = new PubNubReact({
-    publishKey: 'pub-c-2ed1b9dc-e811-411f-99f5-01a3addeda39',
-    subscribeKey: 'sub-c-8a28b1d0-28d4-11ea-894a-b6462cb07a90',
+    publishKey: 'pub-c-81a014c6-50ba-4add-9ec6-f19993758a73',
+    subscribeKey: 'sub-c-c74997b4-eb99-11e9-ad72-8e6732c0d56b',
     // subscribeRequestTimeout: 60000,
     // presenceTimeout: 20,
     uuid: firstName

@@ -69,7 +69,9 @@ const PickerTransportScreen = props => {
 
   useEffect(() => {
     if (location.loading) {
-      mapView.current.animateToRegion(location, 1000)
+      if (mapView.current !== null) {
+        mapView.current.animateToRegion(location, 2000)
+      }
     }
   }, [location])
 

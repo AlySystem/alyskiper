@@ -24,16 +24,13 @@ import { Theme } from '../../constants/Theme'
 
 const BillTransportScreen = props => {
   const { navigate } = props.navigation
+  const [data, setData] = useState(null)
   const idTravel = props.navigation.getParam('idTravel')
   const category = props.navigation.getParam('category')
-  const [data, setData] = useState(null)
   const dispatch = useDispatch()
-
-  console.log(idTravel)
 
   const [execute, { error }] = useLazyQuery(INVOICE, {
     onCompleted: (data) => {
-      console.log(data)
       setData(data)
     }
   })
@@ -78,12 +75,8 @@ const BillTransportScreen = props => {
       backgroundColor: 'red',
       color: '#fff',
       icon: 'danger',
-      titleStyle: {
-        fontFamily: 'Lato-Bold'
-      },
-      textStyle: {
-        fontFamily: 'Lato-Regular'
-      }
+      titleStyle: { fontFamily: 'Lato-Bold' },
+      textStyle: { fontFamily: 'Lato-Regular' }
     })
     navigate('Home')
   }

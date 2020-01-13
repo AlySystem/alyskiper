@@ -10,7 +10,6 @@ import { showMessage } from 'react-native-flash-message'
 import { CameraKitCameraScreen } from 'react-native-camera-kit'
 import { useMutation } from '@apollo/react-hooks'
 import { useSelector } from 'react-redux'
-import { TextInputMask } from 'react-native-masked-text'
 import Geolocation from 'react-native-geolocation-service'
 
 // Import utils
@@ -25,6 +24,9 @@ import InputControl from '../../components/input/InputControl'
 import IconButton from '../../components/button/IconButton'
 import Background from '../../components/background/Background'
 
+// Import subscription
+import { GETNOTIFICATIONTRAVEL } from '../../graphql/subscription/Subcription'
+
 // Import theme
 import { Theme } from '../../constants/Theme'
 
@@ -35,6 +37,7 @@ const ScannerScreen = props => {
   const [loader, setLoader] = useState(false)
   const [codeQR, setCodeQR] = useState('')
   const [TravelTracing, { loading }] = useMutation(TRAVELTRACING)
+  const { data } = useSubscription(GETNOTIFICATIONTRAVEL, { variables: { idusuario: userId } })
   useEffect(() => {
     const verifyPermission = async () => {
       await permissionCamera()
@@ -219,6 +222,19 @@ const ScannerScreen = props => {
       </View>
     )
   }
+
+  useEffect(() => {
+    if (props.navigation.isFocused()) {
+      if (data) {
+        const { travelstatus: { id } } = data.skiperTravel.skiperTravelsTracing[0]
+        switch (id) {
+          case 5:
+              props.navigation.goBack()   
+            break
+        }
+      }
+    }
+  }, [data])
 
   return (
     <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt }}>

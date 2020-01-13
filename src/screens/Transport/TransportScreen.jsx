@@ -10,13 +10,12 @@ import {
   Text
 } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import { Polyline, Marker, Callout } from 'react-native-maps'
+import { Polyline, Marker } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service'
 import AsyncStorage from '@react-native-community/async-storage'
-import { RFValue } from 'react-native-responsive-fontsize'
 
 // Import actions
-import { REMOVEDIRECTION, DIRECTION, DRIVERS } from '../../store/actionTypes'
+import { REMOVEDIRECTION, DIRECTION } from '../../store/actionTypes'
 
 // Import theme
 import { Theme } from '../../constants/Theme'
@@ -30,7 +29,6 @@ import InputControl from '../../components/input/InputControl'
 import ModalTransport from '../../components/modal/ModalTransport'
 import Button from '../../components/button/Button'
 import Loader from '../../components/loader/Loader'
-import Picture from '../../components/picture/Picture'
 
 // Import image
 import silverMarker from '../../../assets/images/img-icon-silver.png'
@@ -69,6 +67,7 @@ const TransportScreen = props => {
   const [isLoading, setIsLoading] = useState(false)
   const { silver, golden, vip, president } = usePubnub()
   const [addressDestination, setAddressDestination] = useState('')
+  const [steps, setSteps] = useState('')
 
   const mapView = useRef(null)
   const markerDestination = useRef()
@@ -97,12 +96,9 @@ const TransportScreen = props => {
 
   const listMemo = useMemo(() => {
     return (
-      <ListOfCategoryServices 
-        location={location}
-        navigation={props.navigation}
-      />
+      <ListOfCategoryServices navigation={props.navigation} />
     )
-  }, [location])
+  }, [])
 
   const search = useMemo(() => {
     return (
@@ -126,7 +122,7 @@ const TransportScreen = props => {
     Geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
         const { pointCoords, steps } = await routeDirection(placeId, latitude, longitude)
-
+        setSteps(steps)
         if (pointCoords === null || steps === null) {
           Alert.alert(
             'Atencion',
@@ -146,7 +142,6 @@ const TransportScreen = props => {
           )
         } else {
           setIsLoading(false)
-          setDestination(pointCoords)
           dispatch({
             type: DIRECTION,
             payload: {
@@ -158,9 +153,10 @@ const TransportScreen = props => {
               right: getPixelSize(50),
               left: getPixelSize(50),
               top: getPixelSize(100),
-              bottom: getPixelSize(300)
+              bottom: getPixelSize(350)
             }
           })
+          setDestination(pointCoords)
           // markerDestination.current.showCallout()
           // markerLocation.current.showCallout()
         }
@@ -180,11 +176,13 @@ const TransportScreen = props => {
     });
   }
 
-  useEffect(() => {
-    if (location.loading) {
-      mapView.current.animateToRegion(location, 1000)
-    }
-  }, [location])
+  // useEffect(() => {
+  //   if (location.loading) {
+  //     if (mapView.current !== null) {
+  //       mapView.current.animateToRegion(location, 2000)
+  //     }
+  //   }
+  // }, [location])
 
   useEffect(() => {
     if (directions !== null) {

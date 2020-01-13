@@ -101,8 +101,6 @@ const RequestScreen = props => {
       }
     }
 
-    console.log(variables)
-
     await RegisterTravel({ variables }).then(() => {
       dispatch({
         type: REMOVEDETAILSTRAVEL,
@@ -114,8 +112,6 @@ const RequestScreen = props => {
 
       props.navigation.pop()
     }).catch((reason) => {
-      console.log(reason.message)
-
       showMessage({
         message: 'Skiper',
         description: 'Tu solicitud no pudo ser cancelada.',
@@ -136,7 +132,6 @@ const RequestScreen = props => {
       if (data) {
         const { travelstatus: { id } } = data.skiperTravel.skiperTravelsTracing[0]
         dispatch({ type: 'ESTADOVIAJE', payload: { id } })
-
 
         switch (id) {
           case 1:
@@ -386,9 +381,7 @@ const RequestScreen = props => {
       <View style={styles.screen}>
         <View style={styles.layout}>
           <Picture source={require('../../../assets/images/img-alyskiper-masked.png')} />
-
           <View style={{ marginVertical: 5 }} />
-
           <Loader />
 
           <View style={{ marginVertical: 10 }} />

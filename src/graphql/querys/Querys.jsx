@@ -303,3 +303,46 @@ query getAmountByCrypto ($crypto: String, $amount: Float, $iduser: Int, $idcount
   }
 }
 `
+
+export const CATEGORIESTRAVEL = gql`
+  query CategoryTravelsWhitPrice ($lat: Float!, $lng: Float!, $distance: Float!, $duration: Float!) {
+    CategoryTravelsWhitPrice(lat: $lat, lng: $lng, distance: $distance, duration: $duration) {
+      silver {
+        id
+        name
+        url_img_category
+        urlImgName
+        total
+        currency
+        symbol
+      }
+      golden {
+        id
+        name
+        url_img_category
+        urlImgName
+        total
+        currency
+        symbol
+      }
+      vip {
+        id
+        name
+        url_img_category
+        urlImgName
+        total
+        currency
+        symbol
+      }
+      president {
+        id
+        name
+        url_img_category
+        urlImgName
+        total
+        currency
+        symbol
+      }
+    }
+  }
+`

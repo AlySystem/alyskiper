@@ -27,6 +27,7 @@ import { Map } from "../../components/map/MapView"
 import Picture from "../../components/picture/Picture"
 import IconFont from "react-native-vector-icons/FontAwesome5"
 import ButtonSupport from '../../components/button/ButtonSupport'
+import Background from '../../components/background/Background'
 
 // Import custom hooks
 import { useNotification } from "../../hooks/useNotification"
@@ -41,14 +42,12 @@ import { Theme } from "../../constants/Theme"
 import { RFValue } from "react-native-responsive-fontsize"
 import AsyncStorage from "@react-native-community/async-storage"
 
-// const iconS
-
 const TravelTracingScreen = props => {
   const dispatch = useDispatch()
   const { navigate } = props.navigation
   const { userId, firstName } = useSelector(state => state.user)
-  const { id } = useSelector(state => state.status)
   const { location } = useWatchLocation()
+  const [status, setStatus] = useState('')
   const [showDetails, setShowDetails] = useState(false)
   const [errorTravel, setErrorTravel] = useState(false)
   const [showCancel, setCancel] = useState(false)
@@ -99,16 +98,22 @@ const TravelTracingScreen = props => {
   useNotification(navigate, location.latitude, location.longitude, props.navigation)
 
   const pubnub = new PubNubReact({
-    publishKey: 'pub-c-2ed1b9dc-e811-411f-99f5-01a3addeda39',
-    subscribeKey: 'sub-c-8a28b1d0-28d4-11ea-894a-b6462cb07a90',
+    publishKey: 'pub-c-81a014c6-50ba-4add-9ec6-f19993758a73',
+    subscribeKey: 'sub-c-c74997b4-eb99-11e9-ad72-8e6732c0d56b',
     subscribeRequestTimeout: 60000,
     presenceTimeout: 20,
     uuid: `${firstName}${userId}`
   })
 
-  const handleToggleModal = () => {
-    setShowDetails(!showDetails)
-  }
+  const handleToggleModal = () =>  setShowDetails(!showDetails) 
+
+  useEffect(() => {
+    if (location.loading) {
+      if (mapView.current !== null) {
+        mapView.current.animateToRegion(location, 3000)
+      }
+    }
+  }, [location])
 
   useEffect(() => {
     GetTravelByUserId({ variables: { iduser: userId } })
@@ -127,6 +132,7 @@ const TravelTracingScreen = props => {
   useEffect(() => {
     if (data && data.getTravelByUserId) {
       setErrorTravel(false)
+      setStatus(data.skiperTravelsTracing.travelstatus.id)
       dispatch({
         type: DETAILSTRAVEL,
         payload: {
@@ -206,148 +212,112 @@ const TravelTracingScreen = props => {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt }}>
-      <Modal
-        isVisible={showDetails}
-        backdropColor="#B4B3DB"
-        style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          margin: 0,
-          justifyContent: "flex-start"
-        }}
-        backdropOpacity={0.8}
-        animationIn="zoomInDown"
-        animationOut="zoomOutUp"
-        animationInTiming={600}
-        animationOutTiming={600}
-        backdropTransitionInTiming={600}
-        backdropTransitionOutTiming={600}
-      >
-        <DetailsDrive drive={data} />
-        <Button
-          iconName="close"
-          iconSize={30}
-          onPress={handleToggleModal}
-          stylesButton={{
-            position: "absolute",
-            top: 10,
-            left: 12
-          }}
-        />
-      </Modal>
-
-      {location.latitude && (
-        <Map mapView={mapView} location={location}>
-          {driver &&
-            driver.map(drive => {
-              return (
-                <Marker
-                  ref={markerRef}
-                  key={`${drive.uuid}${drive.state.lastname}`}
-                  coordinate={{
-                    latitude: drive.state.coords.latitude,
-                    longitude: drive.state.coords.longitude
-                  }}
-                  title={`Tu conductor`}
-                  description={`${drive.state.firstname} ${drive.state.lastname}`}>
-                  <View style={styles.containerMarker}>
-                    <View style={styles.subContainerMarker}>
-                      <Image
-                        style={styles.drive}
-                        source={require("../../../assets/images/img-travel.png")}
-                      />
-                    </View>
-                  </View>
-                </Marker>
-              )
-            })
-          }
-        </Map>
-      )}
-
-      <ButtonSupport right='70%' bottom='18%' />
-
-      <TouchableOpacity
-        style={{
-          position: "absolute",
-          right: 20,
-          top: 15,
-          width: 40,
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-        onPress={() =>
-          navigate("Scanner", {
-            latitude: location.latitude,
-            longitude: location.longitude
-          })
-        }
-      >
-        <Icon
-          name="qrcode-scan"
-          size={40}
-          color={Theme.COLORS.colorSecondary}
-        />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.containerButton} onPress={handleToggleModal}>
-
-        <View style={{ backgroundColor: Theme.COLORS.colorSecondary, borderRadius: 100, width: 100, height: 8 }} />
-
-        <Text allowFontScaling={false} style={styles.text}>
-          Toca para mostrar detalles
-        </Text>
-      </TouchableOpacity>
-
-      {
-        showCancel &&
-        <TouchableOpacity style={styles.buttonCancel} onPress={cancelTrip}>
-          <IconFont name="car" size={18} color={Theme.COLORS.colorSecondary} />
-          <Text style={{ color: Theme.COLORS.colorSecondary }}>
-            Cancelar Viaje
-          </Text>
-        </TouchableOpacity>
-      }
-
-      {errorTravel && (
-        <View
-          style={{
-            backgroundColor: "rgba(0,0,0,.8)",
-            width: "100%",
-            height: "100%",
-            flex: 1,
-            zIndex: 1000,
-            position: "absolute",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Button
-            iconName="close"
-            stylesButton={{
-              position: "absolute",
-              top: 8,
-              left: 10
-            }}
-            iconSize={40}
-            onPress={() => props.navigation.goBack()}
-          />
-          <Picture
-            source={require("../../../assets/images/img-alyskiper.png")}
-          />
-          <View style={{ paddingVertical: 10 }} />
-          <Text
+    <>
+      {errorTravel ? (
+        <Background>
+          <View
             style={{
-              color: Theme.COLORS.colorParagraph,
-              fontFamily: "Lato-Bold",
-              fontSize: Theme.SIZES.normal
+              backgroundColor: 'rgba(0,0,0,.5)',
+              width: "100%",
+              height: "100%",
+              flex: 1,
+              zIndex: 1000,
+              position: "absolute",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            No hay viajes activos
-          </Text>
+            <Button
+              iconName="close"
+              stylesButton={{ position: "absolute", top: 8, left: 10 }}
+              iconSize={40}
+              onPress={() => props.navigation.goBack()}
+            />
+            <Picture source={require("../../../assets/images/img-alyskiper.png")} />
+            <View style={{ paddingVertical: 10 }} />
+            <Text style={{ color: Theme.COLORS.colorParagraph, fontFamily: "Lato-Bold", fontSize: Theme.SIZES.normal }} >
+              No hay viajes activos
+            </Text>
+          </View>
+        </Background>
+      ) : (
+        <View style={{ flex: 1, backgroundColor: Theme.COLORS.colorMainAlt }}>
+          <Modal
+            isVisible={showDetails}
+            backdropColor="#B4B3DB"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)', margin: 0, justifyContent: "flex-start" }}
+            backdropOpacity={0.8}
+            animationIn="zoomInDown"
+            animationOut="zoomOutUp"
+            animationInTiming={600}
+            animationOutTiming={600}
+            backdropTransitionInTiming={600}
+            backdropTransitionOutTiming={600}
+          >
+            <DetailsDrive drive={data} />
+            <Button
+              iconName="close"
+              iconSize={30}
+              onPress={handleToggleModal}
+              stylesButton={{ position: "absolute", top: 10, left: 12 }}
+            />
+          </Modal>
+          <Map mapView={mapView} location={location}>
+            {driver &&
+              driver.map(drive => {
+                return (
+                  <Marker
+                    ref={markerRef}
+                    key={`${drive.uuid}${drive.state.lastname}`}
+                    coordinate={{  latitude: drive.state.coords.latitude, longitude: drive.state.coords.longitude }}
+                    title={`Tu conductor`}
+                    description={`${drive.state.firstname} ${drive.state.lastname}`}>
+                    <View style={styles.containerMarker}>
+                      <View style={styles.subContainerMarker}>
+                        <Image style={styles.drive} source={require("../../../assets/images/img-travel.png")} />
+                      </View>
+                    </View>
+                  </Marker>
+                )
+              })
+            }
+          </Map>
+    
+          <ButtonSupport right='70%' bottom='18%' />
+    
+          {status === 4 && (
+            <TouchableOpacity
+              style={{
+                position: "absolute",
+                right: 20,
+                top: 15,
+                width: 40,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+              onPress={() => navigate("Scanner", { latitude: location.latitude, longitude: location.longitude })}
+            >
+              <Icon name="qrcode-scan" size={40} color={Theme.COLORS.colorSecondary} />
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity style={styles.containerButton} onPress={handleToggleModal}>
+            <View style={{ backgroundColor: Theme.COLORS.colorSecondary, borderRadius: 100, width: 100, height: 8 }} />
+            <Text allowFontScaling={false} style={styles.text}>
+              Toca para mostrar detalles
+            </Text>
+          </TouchableOpacity>
+    
+          {showCancel &&
+            <TouchableOpacity style={styles.buttonCancel} onPress={cancelTrip}>
+              <IconFont name="car" size={18} color={Theme.COLORS.colorSecondary} />
+              <Text style={{ color: Theme.COLORS.colorSecondary }}>
+                Cancelar Viaje
+              </Text>
+            </TouchableOpacity>
+          }
         </View>
       )}
-    </View>
+    </>
   )
 }
 
